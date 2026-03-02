@@ -173,7 +173,12 @@ class RecurringIncomeService {
     public function getMonthlySummary(string $userId): array {
         $incomes = $this->findActive($userId);
         $totalMonthly = 0.0;
+        $expectedThisMonth = 0;
+        $receivedThisMonth = 0;
         $byFrequency = [];
+
+        $startOfMonth = date('Y-m-01');
+        $endOfMonth = date('Y-m-t');
 
         foreach ($incomes as $income) {
             $monthlyEquiv = $this->getMonthlyEquivalent($income);
@@ -188,9 +193,23 @@ class RecurringIncomeService {
             }
             $byFrequency[$freq]['count']++;
             $byFrequency[$freq]['totalMonthly'] += $monthlyEquiv;
+
+            $nextExpected = $income->getNextExpectedDate();
+            if ($nextExpected && $nextExpected >= $startOfMonth && $nextExpected <= $endOfMonth) {
+                $expectedThisMonth++;
+            }
+
+            $lastReceived = $income->getLastReceivedDate();
+            if ($lastReceived && $lastReceived >= $startOfMonth && $lastReceived <= $endOfMonth) {
+                $receivedThisMonth++;
+            }
         }
 
         return [
+            'activeCount' => count($incomes),
+            'expectedThisMonth' => $expectedThisMonth,
+            'receivedThisMonth' => $receivedThisMonth,
+            'monthlyTotal' => round($totalMonthly, 2),
             'totalCount' => count($incomes),
             'totalMonthly' => round($totalMonthly, 2),
             'totalYearly' => round($totalMonthly * 12, 2),
