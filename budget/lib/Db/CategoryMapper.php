@@ -99,7 +99,14 @@ class CategoryMapper extends QBMapper {
             ->where($qb->expr()->eq('t.category_id', $qb->createNamedParameter($categoryId, IQueryBuilder::PARAM_INT)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
-            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')));
+            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('t.status', $qb->createNamedParameter('scheduled')),
+                    $qb->expr()->isNull('t.status'),
+                    $qb->expr()->lte('t.date', $qb->createNamedParameter(date('Y-m-d')))
+                )
+            );
 
         $result = $qb->executeQuery();
         $sum = $result->fetchOne();

@@ -1113,7 +1113,7 @@ style('budget', 'budget-main');
                                 <select id="account-filter-status">
                                     <option value="">All</option>
                                     <option value="cleared">Cleared</option>
-                                    <option value="pending">Pending</option>
+                                    <option value="scheduled">Scheduled</option>
                                 </select>
                             </div>
                             <div class="filter-group">
@@ -1246,7 +1246,7 @@ style('budget', 'budget-main');
                             <select id="filter-status">
                                 <option value="">All</option>
                                 <option value="cleared">Cleared</option>
-                                <option value="pending">Pending</option>
+                                <option value="scheduled">Scheduled</option>
                             </select>
                         </div>
 

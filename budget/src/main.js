@@ -1089,6 +1089,9 @@ class BudgetApp {
             if (this.transactionFilters?.amountMax) {
                 params.append('amountMax', this.transactionFilters.amountMax);
             }
+            if (this.transactionFilters?.status) {
+                params.append('status', this.transactionFilters.status);
+            }
 
             // Add sorting parameters
             if (this.currentSort) {
@@ -1142,17 +1145,7 @@ class BudgetApp {
 
         let filtered = [...this.transactions];
 
-        // Category, type, and amount filters are handled server-side.
-        // Only apply filters here that the backend doesn't support.
-
-        if (this.transactionFilters.status) {
-            const today = new Date().toISOString().split('T')[0];
-            if (this.transactionFilters.status === 'pending') {
-                filtered = filtered.filter(t => t.date > today);
-            } else if (this.transactionFilters.status === 'cleared') {
-                filtered = filtered.filter(t => t.date <= today);
-            }
-        }
+        // Category, type, amount, and status filters are handled server-side.
 
         // Apply sorting
         if (this.currentSort?.field) {

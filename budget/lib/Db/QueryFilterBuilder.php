@@ -98,6 +98,23 @@ class QueryFilterBuilder {
             ));
         }
 
+        // Status filter (cleared/scheduled)
+        if (!empty($filters['status'])) {
+            if ($filters['status'] === 'scheduled') {
+                $qb->andWhere($qb->expr()->eq(
+                    "{$alias}.status",
+                    $qb->createNamedParameter('scheduled')
+                ));
+            } elseif ($filters['status'] === 'cleared') {
+                $qb->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq("{$alias}.status", $qb->createNamedParameter('cleared')),
+                        $qb->expr()->isNull("{$alias}.status")
+                    )
+                );
+            }
+        }
+
         // Vendor filter
         if (!empty($filters['vendor'])) {
             $qb->andWhere($qb->expr()->eq(
@@ -153,6 +170,7 @@ class QueryFilterBuilder {
             'account' => "{$alias}.account_id",
             'vendor' => "{$alias}.vendor",
             'reconciled' => "{$alias}.reconciled",
+            'status' => "{$alias}.status",
         ];
 
         $dbSortField = $sortFieldMap[$sortField] ?? "{$alias}.date";
@@ -190,6 +208,7 @@ class QueryFilterBuilder {
             'amountMax',
             'search',
             'reconciled',
+            'status',
             'vendor',
             'tagIds',
         ];
@@ -210,6 +229,7 @@ class QueryFilterBuilder {
             'account',
             'vendor',
             'reconciled',
+            'status',
         ];
     }
 }

@@ -9112,17 +9112,17 @@ button.danger:hover {
     background: var(--color-primary-element-lighter, rgba(0, 130, 201, 0.15));
 }
 
-/* Pending (future-dated) transaction styling */
-.pending-transaction {
+/* Scheduled transaction styling */
+.scheduled-transaction {
     opacity: 0.65;
     font-style: italic;
 }
 
-.pending-transaction:hover {
+.scheduled-transaction:hover {
     opacity: 0.85;
 }
 
-.pending-badge {
+.scheduled-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -9138,13 +9138,13 @@ button.danger:hover {
     margin-left: 6px;
 }
 
-/* Also style pending rows in the main transactions table (non-account view) */
-tr.pending-transaction {
+/* Also style scheduled rows in the main transactions table (non-account view) */
+tr.scheduled-transaction {
     opacity: 0.65;
     font-style: italic;
 }
 
-tr.pending-transaction:hover {
+tr.scheduled-transaction:hover {
     opacity: 0.85;
 }
 

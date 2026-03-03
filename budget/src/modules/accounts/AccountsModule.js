@@ -544,7 +544,7 @@ export default class AccountsModule {
             const filters = this.accountFilters || {};
             if (filters.category) params.set('category', filters.category);
             if (filters.type) params.set('type', filters.type);
-            if (filters.status) params.set('reconciled', filters.status === 'cleared' ? '1' : '0');
+            if (filters.status) params.set('status', filters.status);
             if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
             if (filters.dateTo) params.set('dateTo', filters.dateTo);
             if (filters.amountMin) params.set('amountMin', filters.amountMin);
@@ -625,13 +625,13 @@ export default class AccountsModule {
             const amount = parseFloat(transaction.amount) || 0;
             const currency = this.currentAccount?.currency || this.getPrimaryCurrency();
             const category = this.categories?.find(c => c.id === transaction.categoryId);
-            const isPending = transaction.date > today;
-            const pendingBadge = isPending ? '<span class="pending-badge">Pending</span>' : '';
+            const isScheduled = transaction.status === 'scheduled';
+            const scheduledBadge = isScheduled ? '<span class="scheduled-badge">Scheduled</span>' : '';
 
             return `
-                <tr class="transaction-row${isPending ? ' pending-transaction' : ''}" data-transaction-id="${transaction.id}">
+                <tr class="transaction-row${isScheduled ? ' scheduled-transaction' : ''}" data-transaction-id="${transaction.id}">
                     <td class="date-column">
-                        <span class="transaction-date">${this.formatDate(transaction.date)}</span>${pendingBadge}
+                        <span class="transaction-date">${this.formatDate(transaction.date)}</span>${scheduledBadge}
                     </td>
                     <td class="description-column">
                         <div class="transaction-description">

@@ -16489,7 +16489,7 @@ var AccountsModule = /*#__PURE__*/function () {
               filters = this.accountFilters || {};
               if (filters.category) params.set('category', filters.category);
               if (filters.type) params.set('type', filters.type);
-              if (filters.status) params.set('reconciled', filters.status === 'cleared' ? '1' : '0');
+              if (filters.status) params.set('status', filters.status);
               if (filters.dateFrom) params.set('dateFrom', filters.dateFrom);
               if (filters.dateTo) params.set('dateTo', filters.dateTo);
               if (filters.amountMin) params.set('amountMin', filters.amountMin);
@@ -16589,9 +16589,9 @@ var AccountsModule = /*#__PURE__*/function () {
         var category = (_this4$categories = _this4.categories) === null || _this4$categories === void 0 ? void 0 : _this4$categories.find(function (c) {
           return c.id === transaction.categoryId;
         });
-        var isPending = transaction.date > today;
-        var pendingBadge = isPending ? '<span class="pending-badge">Pending</span>' : '';
-        return "\n                <tr class=\"transaction-row".concat(isPending ? ' pending-transaction' : '', "\" data-transaction-id=\"").concat(transaction.id, "\">\n                    <td class=\"date-column\">\n                        <span class=\"transaction-date\">").concat(_this4.formatDate(transaction.date), "</span>").concat(pendingBadge, "\n                    </td>\n                    <td class=\"description-column\">\n                        <div class=\"transaction-description\">\n                            <span class=\"description-main\">").concat(transaction.description || 'No description', "</span>\n                            ").concat(transaction.vendor ? "<span class=\"vendor-name\">".concat(transaction.vendor, "</span>") : '', "\n                        </div>\n                    </td>\n                    <td class=\"category-column\">\n                        <span class=\"category-name ").concat(category ? '' : 'uncategorized', "\">\n                            ").concat(category ? category.name : 'Uncategorized', "\n                        </span>\n                        <div class=\"transaction-tags-display\" data-transaction-id=\"").concat(transaction.id, "\" style=\"margin-top: 4px;\"></div>\n                    </td>\n                    <td class=\"amount-column\">\n                        <span class=\"transaction-amount ").concat(transaction.type, "\">\n                            ").concat(transaction.type === 'credit' ? '+' : '-').concat(_this4.formatCurrency(Math.abs(amount), currency), "\n                        </span>\n                    </td>\n                    <td class=\"balance-column\">\n                        <span class=\"transaction-balance ").concat(transaction.balanceAtTime >= 0 ? 'positive' : 'negative', "\">\n                            ").concat(_this4.formatCurrency(transaction.balanceAtTime, currency), "\n                        </span>\n                    </td>\n                    <td class=\"actions-column\">\n                        <div class=\"transaction-actions\">\n                            <button class=\"icon-rename edit-transaction-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Edit transaction\"></button>\n                            <button class=\"icon-delete delete-transaction-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Delete transaction\"></button>\n                        </div>\n                    </td>\n                </tr>\n            ");
+        var isScheduled = transaction.status === 'scheduled';
+        var scheduledBadge = isScheduled ? '<span class="scheduled-badge">Scheduled</span>' : '';
+        return "\n                <tr class=\"transaction-row".concat(isScheduled ? ' scheduled-transaction' : '', "\" data-transaction-id=\"").concat(transaction.id, "\">\n                    <td class=\"date-column\">\n                        <span class=\"transaction-date\">").concat(_this4.formatDate(transaction.date), "</span>").concat(scheduledBadge, "\n                    </td>\n                    <td class=\"description-column\">\n                        <div class=\"transaction-description\">\n                            <span class=\"description-main\">").concat(transaction.description || 'No description', "</span>\n                            ").concat(transaction.vendor ? "<span class=\"vendor-name\">".concat(transaction.vendor, "</span>") : '', "\n                        </div>\n                    </td>\n                    <td class=\"category-column\">\n                        <span class=\"category-name ").concat(category ? '' : 'uncategorized', "\">\n                            ").concat(category ? category.name : 'Uncategorized', "\n                        </span>\n                        <div class=\"transaction-tags-display\" data-transaction-id=\"").concat(transaction.id, "\" style=\"margin-top: 4px;\"></div>\n                    </td>\n                    <td class=\"amount-column\">\n                        <span class=\"transaction-amount ").concat(transaction.type, "\">\n                            ").concat(transaction.type === 'credit' ? '+' : '-').concat(_this4.formatCurrency(Math.abs(amount), currency), "\n                        </span>\n                    </td>\n                    <td class=\"balance-column\">\n                        <span class=\"transaction-balance ").concat(transaction.balanceAtTime >= 0 ? 'positive' : 'negative', "\">\n                            ").concat(_this4.formatCurrency(transaction.balanceAtTime, currency), "\n                        </span>\n                    </td>\n                    <td class=\"actions-column\">\n                        <div class=\"transaction-actions\">\n                            <button class=\"icon-rename edit-transaction-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Edit transaction\"></button>\n                            <button class=\"icon-delete delete-transaction-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Delete transaction\"></button>\n                        </div>\n                    </td>\n                </tr>\n            ");
       }).join('');
 
       // Add event listeners for transaction actions
@@ -37974,11 +37974,11 @@ var TransactionsModule = /*#__PURE__*/function () {
       var today = new Date().toISOString().split('T')[0];
       return transactions.map(function (t) {
         var isSplit = t.isSplit || t.is_split;
-        var isPending = t.date > today;
-        var rowClasses = [isSplit ? 'split-transaction' : '', isPending ? 'pending-transaction' : ''].filter(Boolean).join(' ');
+        var isScheduled = t.status === 'scheduled';
+        var rowClasses = [isSplit ? 'split-transaction' : '', isScheduled ? 'scheduled-transaction' : ''].filter(Boolean).join(' ');
         var categoryDisplay = isSplit ? '<span class="split-indicator" title="This transaction is split across multiple categories">Split</span>' : t.categoryName ? "<span class=\"category-name\">".concat(_this4.escapeHtml(t.categoryName), "</span>") : '-';
-        var pendingBadge = isPending ? '<span class="pending-badge">Pending</span>' : '';
-        return "\n            <tr class=\"".concat(rowClasses, "\">\n                <td class=\"select-column\">\n                    <input type=\"checkbox\" class=\"transaction-checkbox\" data-transaction-id=\"").concat(t.id, "\">\n                </td>\n                <td>").concat(_this4.formatDate(t.date)).concat(pendingBadge, "</td>\n                <td>").concat(_this4.escapeHtml(t.description), "</td>\n                <td>").concat(categoryDisplay, "</td>\n                <td class=\"amount ").concat(t.type, "\">").concat(_this4.formatCurrency(t.amount, t.accountCurrency), "</td>\n                <td>").concat(_this4.escapeHtml(t.accountName), "</td>\n                <td class=\"reconcile-column\"></td>\n                <td>\n                    <button class=\"tertiary transaction-split-btn\" data-transaction-id=\"").concat(t.id, "\" title=\"").concat(isSplit ? 'Edit splits' : 'Split transaction', "\">\n                        ").concat(isSplit ? 'Splits' : 'Split', "\n                    </button>\n                    <button class=\"tertiary transaction-edit-btn\" data-transaction-id=\"").concat(t.id, "\" aria-label=\"Edit transaction: ").concat(t.description, "\">Edit</button>\n                    <button class=\"error transaction-delete-btn\" data-transaction-id=\"").concat(t.id, "\" aria-label=\"Delete transaction: ").concat(t.description, "\">Delete</button>\n                </td>\n            </tr>\n            ");
+        var scheduledBadge = isScheduled ? '<span class="scheduled-badge">Scheduled</span>' : '';
+        return "\n            <tr class=\"".concat(rowClasses, "\">\n                <td class=\"select-column\">\n                    <input type=\"checkbox\" class=\"transaction-checkbox\" data-transaction-id=\"").concat(t.id, "\">\n                </td>\n                <td>").concat(_this4.formatDate(t.date)).concat(scheduledBadge, "</td>\n                <td>").concat(_this4.escapeHtml(t.description), "</td>\n                <td>").concat(categoryDisplay, "</td>\n                <td class=\"amount ").concat(t.type, "\">").concat(_this4.formatCurrency(t.amount, t.accountCurrency), "</td>\n                <td>").concat(_this4.escapeHtml(t.accountName), "</td>\n                <td class=\"reconcile-column\"></td>\n                <td>\n                    <button class=\"tertiary transaction-split-btn\" data-transaction-id=\"").concat(t.id, "\" title=\"").concat(isSplit ? 'Edit splits' : 'Split transaction', "\">\n                        ").concat(isSplit ? 'Splits' : 'Split', "\n                    </button>\n                    <button class=\"tertiary transaction-edit-btn\" data-transaction-id=\"").concat(t.id, "\" aria-label=\"Edit transaction: ").concat(t.description, "\">Edit</button>\n                    <button class=\"error transaction-delete-btn\" data-transaction-id=\"").concat(t.id, "\" aria-label=\"Delete transaction: ").concat(t.description, "\">Delete</button>\n                </td>\n            </tr>\n            ");
       }).join('');
     }
   }, {
@@ -44095,6 +44095,7 @@ var BudgetApp = /*#__PURE__*/function () {
           _this$transactionFilt6,
           _this$transactionFilt7,
           _this$transactionFilt8,
+          _this$transactionFilt9,
           url,
           params,
           response,
@@ -44145,6 +44146,9 @@ var BudgetApp = /*#__PURE__*/function () {
               }
               if ((_this$transactionFilt8 = this.transactionFilters) !== null && _this$transactionFilt8 !== void 0 && _this$transactionFilt8.amountMax) {
                 params.append('amountMax', this.transactionFilters.amountMax);
+              }
+              if ((_this$transactionFilt9 = this.transactionFilters) !== null && _this$transactionFilt9 !== void 0 && _this$transactionFilt9.status) {
+                params.append('status', this.transactionFilters.status);
               }
 
               // Add sorting parameters
@@ -44218,21 +44222,7 @@ var BudgetApp = /*#__PURE__*/function () {
       if (!this.transactions || !this.transactionFilters) return;
       var filtered = _toConsumableArray(this.transactions);
 
-      // Category, type, and amount filters are handled server-side.
-      // Only apply filters here that the backend doesn't support.
-
-      if (this.transactionFilters.status) {
-        var today = new Date().toISOString().split('T')[0];
-        if (this.transactionFilters.status === 'pending') {
-          filtered = filtered.filter(function (t) {
-            return t.date > today;
-          });
-        } else if (this.transactionFilters.status === 'cleared') {
-          filtered = filtered.filter(function (t) {
-            return t.date <= today;
-          });
-        }
-      }
+      // Category, type, amount, and status filters are handled server-side.
 
       // Apply sorting
       if ((_this$currentSort = this.currentSort) !== null && _this$currentSort !== void 0 && _this$currentSort.field) {

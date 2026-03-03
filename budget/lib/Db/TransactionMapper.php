@@ -234,6 +234,8 @@ class TransactionMapper extends QBMapper {
                 'updatedAt' => $row['updated_at'],
                 'linkedTransactionId' => $row['linked_transaction_id'] ? (int)$row['linked_transaction_id'] : null,
                 'isSplit' => (bool)($row['is_split'] ?? false),
+                'billId' => ($row['bill_id'] ?? null) ? (int)$row['bill_id'] : null,
+                'status' => $row['status'] ?? 'cleared',
                 'accountName' => $row['account_name'],
                 'accountCurrency' => $row['account_currency'] ?? 'USD',
                 'categoryName' => $row['category_name'],
@@ -271,6 +273,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')));
 
+        $this->excludeScheduledFuture($qb);
+
         if ($excludeTransfers) {
             $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));
         }
@@ -305,6 +309,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
+        $this->excludeScheduledFuture($qb);
+
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
@@ -336,6 +342,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
             ->andWhere($qb->expr()->isNotNull('t.vendor'))
             ->andWhere($qb->expr()->neq('t.vendor', $qb->createNamedParameter('')));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -372,6 +380,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
+        $this->excludeScheduledFuture($qb);
+
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
@@ -401,6 +411,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('credit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -451,6 +463,8 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -509,6 +523,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
+        $this->excludeScheduledFuture($qb);
+
         // Apply tag filtering if requested
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
@@ -562,6 +578,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
             ->andWhere($qb->expr()->isNotNull('t.linked_transaction_id'));
 
+        $this->excludeScheduledFuture($qb);
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
         $result = $qb->executeQuery();
@@ -607,6 +624,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
             ->andWhere($qb->expr()->isNotNull('t.linked_transaction_id'));
 
+        $this->excludeScheduledFuture($qb);
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
         $qb->groupBy('t.account_id');
@@ -644,8 +662,11 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->in('t.category_id', $qb->createNamedParameter($categoryIds, IQueryBuilder::PARAM_INT_ARRAY)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
-            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
-            ->groupBy('t.category_id');
+            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')));
+
+        $this->excludeScheduledFuture($qb);
+
+        $qb->groupBy('t.category_id');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -673,8 +694,11 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
-            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
-            ->groupBy('a.id', 'a.name')
+            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
+
+        $qb->groupBy('a.id', 'a.name')
             ->orderBy('total', 'DESC');
 
         $result = $qb->executeQuery();
@@ -764,8 +788,11 @@ class TransactionMapper extends QBMapper {
             ->from($this->getTableName(), 't')
             ->where($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
-            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
-            ->groupBy('t.date')
+            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
+
+        $qb->groupBy('t.date')
             ->orderBy('t.date', 'DESC');
 
         $result = $qb->executeQuery();
@@ -811,6 +838,8 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -871,6 +900,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
+        $this->excludeScheduledFuture($qb);
+
         if ($excludeTransfers) {
             $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));
         }
@@ -925,6 +956,8 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($excludeTransfers) {
             $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));
@@ -1167,6 +1200,8 @@ class TransactionMapper extends QBMapper {
                 $qb->expr()->isNull('t.is_split')
             ));
 
+        $this->excludeScheduledFuture($qb);
+
         $result = $qb->executeQuery();
         $row = $result->fetch();
         $result->closeCursor();
@@ -1192,6 +1227,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->eq('t.is_split', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)));
 
+        $this->excludeScheduledFuture($qb);
+
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
         $result->closeCursor();
@@ -1214,6 +1251,36 @@ class TransactionMapper extends QBMapper {
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
         return $qb->executeStatement();
+    }
+
+    /**
+     * Find scheduled transactions whose date has arrived (for background job transition).
+     *
+     * @return Transaction[]
+     */
+    public function findScheduledDueForTransition(): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('status', $qb->createNamedParameter('scheduled')))
+            ->andWhere($qb->expr()->lte('date', $qb->createNamedParameter(date('Y-m-d'))));
+
+        return $this->findEntities($qb);
+    }
+
+    /**
+     * Exclude scheduled future transactions from report queries.
+     * Allows: cleared transactions, NULL status (pre-migration), and scheduled transactions whose date has arrived.
+     */
+    private function excludeScheduledFuture(IQueryBuilder $qb, string $alias = 't'): void {
+        $today = date('Y-m-d');
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->neq("{$alias}.status", $qb->createNamedParameter('scheduled')),
+                $qb->expr()->isNull("{$alias}.status"),
+                $qb->expr()->lte("{$alias}.date", $qb->createNamedParameter($today))
+            )
+        );
     }
 
     // ==================== TAG-BASED REPORTING METHODS ====================
@@ -1281,6 +1348,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
+        $this->excludeScheduledFuture($qb);
+
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
@@ -1338,6 +1407,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('credit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1397,6 +1468,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1467,6 +1540,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1564,6 +1639,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1678,6 +1755,8 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter('debit')))
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+
+        $this->excludeScheduledFuture($qb);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
