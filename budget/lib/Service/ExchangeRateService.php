@@ -11,13 +11,16 @@ use OCP\Http\Client\IClientService;
 use Psr\Log\LoggerInterface;
 
 /**
- * Fetches and caches exchange rates from ECB (fiat) and CoinGecko (crypto).
+ * Fetches and caches exchange rates from FloatRates (fiat) and CoinGecko (crypto).
  *
- * All rates are stored as "units of currency per 1 EUR" (ECB native format).
+ * All rates are stored as "units of currency per 1 EUR".
  * EUR itself has an implicit rate of 1.0.
+ *
+ * FloatRates provides 168 fiat currencies (vs ECB's 31).
+ * ECB 90-day history is retained for historical fiat backfill only.
  */
 class ExchangeRateService {
-    private const ECB_DAILY_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+    private const FLOATRATES_URL = 'https://www.floatrates.com/daily/eur.json';
     private const ECB_HIST_90D_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml';
     private const COINGECKO_PRICE_URL = 'https://api.coingecko.com/api/v3/simple/price';
     private const COINGECKO_HISTORY_URL = 'https://api.coingecko.com/api/v3/coins';
@@ -72,10 +75,10 @@ class ExchangeRateService {
     }
 
     /**
-     * Fetch today's rates from both ECB and CoinGecko and store in DB.
+     * Fetch today's rates from FloatRates (fiat) and CoinGecko (crypto).
      */
     public function fetchLatestRates(): void {
-        $this->fetchEcbRates();
+        $this->fetchFloatRates();
         $this->fetchCoinGeckoRates();
     }
 
@@ -224,10 +227,62 @@ class ExchangeRateService {
     }
 
     /**
-     * Fetch daily rates from the European Central Bank.
+     * Fetch daily fiat rates from FloatRates (168 currencies, no API key).
+     * Only stores currencies present in the Currency enum.
+     */
+    public function fetchFloatRates(): void {
+        try {
+            $client = $this->clientService->newClient();
+            $response = $client->get(self::FLOATRATES_URL);
+
+            $data = json_decode($response->getBody(), true);
+            if (!is_array($data)) {
+                $this->logger->error('Invalid FloatRates response', ['app' => 'budget']);
+                return;
+            }
+
+            $today = date('Y-m-d');
+            $validCurrencies = Currency::values();
+            $count = 0;
+
+            foreach ($data as $entry) {
+                if (!isset($entry['code'], $entry['rate'])) {
+                    continue;
+                }
+
+                $code = strtoupper($entry['code']);
+                $rate = (string) $entry['rate'];
+
+                // Only store currencies we support and skip crypto (handled by CoinGecko)
+                if (!in_array($code, $validCurrencies, true)) {
+                    continue;
+                }
+                $currencyEnum = Currency::tryFrom($code);
+                if ($currencyEnum === null || $currencyEnum->isCrypto()) {
+                    continue;
+                }
+
+                $this->mapper->upsert($code, $rate, $today, ExchangeRate::SOURCE_FLOATRATES);
+                $count++;
+            }
+
+            $this->logger->info(
+                "FloatRates fiat rates updated: {$count} currencies",
+                ['app' => 'budget']
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                'Failed to fetch FloatRates exchange rates: ' . $e->getMessage(),
+                ['app' => 'budget', 'exception' => $e]
+            );
+        }
+    }
+
+    /**
+     * Fetch ECB rates from a given URL (used for historical backfill only).
      */
     public function fetchEcbRates(?string $url = null): void {
-        $url = $url ?? self::ECB_DAILY_URL;
+        $url = $url ?? self::ECB_HIST_90D_URL;
 
         try {
             $client = $this->clientService->newClient();

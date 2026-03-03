@@ -269,7 +269,10 @@ return [
         ['name' => 'migration#import', 'url' => '/api/migration/import', 'verb' => 'POST'],
 
         // Exchange rate routes
+        ['name' => 'exchangeRate#index', 'url' => '/api/exchange-rates', 'verb' => 'GET'],
         ['name' => 'exchangeRate#latest', 'url' => '/api/exchange-rates/latest', 'verb' => 'GET'],
         ['name' => 'exchangeRate#refresh', 'url' => '/api/exchange-rates/refresh', 'verb' => 'POST'],
+        ['name' => 'exchangeRate#setManualRate', 'url' => '/api/exchange-rates/manual', 'verb' => 'POST'],
+        ['name' => 'exchangeRate#removeManualRate', 'url' => '/api/exchange-rates/manual/{currency}', 'verb' => 'DELETE'],
     ],
 ];

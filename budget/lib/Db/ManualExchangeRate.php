@@ -10,28 +10,20 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @method int getId()
  * @method void setId(int $id)
+ * @method string getUserId()
+ * @method void setUserId(string $userId)
  * @method string getCurrency()
  * @method void setCurrency(string $currency)
  * @method string getRatePerEur()
  * @method void setRatePerEur(string $ratePerEur)
- * @method string getDate()
- * @method void setDate(string $date)
- * @method string getSource()
- * @method void setSource(string $source)
- * @method string getCreatedAt()
- * @method void setCreatedAt(string $createdAt)
+ * @method string getUpdatedAt()
+ * @method void setUpdatedAt(string $updatedAt)
  */
-class ExchangeRate extends Entity implements JsonSerializable {
-    public const SOURCE_ECB = 'ecb';
-    public const SOURCE_FLOATRATES = 'floatrates';
-    public const SOURCE_COINGECKO = 'coingecko';
-    public const SOURCE_MANUAL = 'manual';
-
+class ManualExchangeRate extends Entity implements JsonSerializable {
+    protected $userId;
     protected $currency;
     protected $ratePerEur;
-    protected $date;
-    protected $source;
-    protected $createdAt;
+    protected $updatedAt;
 
     public function __construct() {
         $this->addType('id', 'integer');
@@ -42,9 +34,7 @@ class ExchangeRate extends Entity implements JsonSerializable {
             'id' => $this->getId(),
             'currency' => $this->getCurrency(),
             'ratePerEur' => $this->getRatePerEur(),
-            'date' => $this->getDate(),
-            'source' => $this->getSource(),
-            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
         ];
     }
 }

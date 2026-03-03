@@ -272,6 +272,96 @@ XML;
 		$this->service->fetchCoinGeckoRates();
 	}
 
+	// ===== fetchFloatRates() =====
+
+	public function testFetchFloatRatesParsesJson(): void {
+		$floatRatesResponse = json_encode([
+			'usd' => ['code' => 'USD', 'rate' => 1.0800, 'date' => 'Mon, 3 Mar 2026 12:00:00 GMT'],
+			'gbp' => ['code' => 'GBP', 'rate' => 0.8500, 'date' => 'Mon, 3 Mar 2026 12:00:00 GMT'],
+			'ars' => ['code' => 'ARS', 'rate' => 1234.5, 'date' => 'Mon, 3 Mar 2026 12:00:00 GMT'],
+		]);
+
+		$response = $this->createMock(IResponse::class);
+		$response->method('getBody')->willReturn($floatRatesResponse);
+		$this->client->method('get')->willReturn($response);
+
+		$upsertedRates = [];
+		$this->mapper->method('upsert')
+			->willReturnCallback(function ($currency, $rate, $date, $source) use (&$upsertedRates) {
+				$upsertedRates[$currency] = [
+					'rate' => $rate,
+					'date' => $date,
+					'source' => $source,
+				];
+				return $this->makeRateEntity($currency, (string) $rate, $date);
+			});
+
+		$this->service->fetchFloatRates();
+
+		$this->assertArrayHasKey('USD', $upsertedRates);
+		$this->assertArrayHasKey('GBP', $upsertedRates);
+		$this->assertArrayHasKey('ARS', $upsertedRates);
+		$this->assertEquals(ExchangeRate::SOURCE_FLOATRATES, $upsertedRates['USD']['source']);
+		$this->assertEqualsWithDelta(1.08, (float) $upsertedRates['USD']['rate'], 0.001);
+		$this->assertEqualsWithDelta(1234.5, (float) $upsertedRates['ARS']['rate'], 0.1);
+	}
+
+	public function testFetchFloatRatesFiltersToEnumCurrencies(): void {
+		// Include a currency not in our enum
+		$floatRatesResponse = json_encode([
+			'usd' => ['code' => 'USD', 'rate' => 1.08],
+			'xof' => ['code' => 'XOF', 'rate' => 655.957], // Not in Currency enum
+		]);
+
+		$response = $this->createMock(IResponse::class);
+		$response->method('getBody')->willReturn($floatRatesResponse);
+		$this->client->method('get')->willReturn($response);
+
+		$upsertedRates = [];
+		$this->mapper->method('upsert')
+			->willReturnCallback(function ($currency, $rate, $date, $source) use (&$upsertedRates) {
+				$upsertedRates[$currency] = $rate;
+				return $this->makeRateEntity($currency, (string) $rate, $date);
+			});
+
+		$this->service->fetchFloatRates();
+
+		$this->assertArrayHasKey('USD', $upsertedRates);
+		$this->assertArrayNotHasKey('XOF', $upsertedRates);
+	}
+
+	public function testFetchFloatRatesSkipsCrypto(): void {
+		// BTC should be skipped (handled by CoinGecko)
+		$floatRatesResponse = json_encode([
+			'usd' => ['code' => 'USD', 'rate' => 1.08],
+			'btc' => ['code' => 'BTC', 'rate' => 0.00002],
+		]);
+
+		$response = $this->createMock(IResponse::class);
+		$response->method('getBody')->willReturn($floatRatesResponse);
+		$this->client->method('get')->willReturn($response);
+
+		$upsertedRates = [];
+		$this->mapper->method('upsert')
+			->willReturnCallback(function ($currency, $rate, $date, $source) use (&$upsertedRates) {
+				$upsertedRates[$currency] = $rate;
+				return $this->makeRateEntity($currency, (string) $rate, $date);
+			});
+
+		$this->service->fetchFloatRates();
+
+		$this->assertArrayHasKey('USD', $upsertedRates);
+		$this->assertArrayNotHasKey('BTC', $upsertedRates);
+	}
+
+	public function testFetchFloatRatesHandlesNetworkError(): void {
+		$this->client->method('get')
+			->willThrowException(new \Exception('Network error'));
+
+		$this->logger->expects($this->once())->method('error');
+		$this->service->fetchFloatRates();
+	}
+
 	// ===== getCoinGeckoId() =====
 
 	public function testGetCoinGeckoIdForKnownCurrencies(): void {

@@ -206,6 +206,16 @@ style('budget', 'budget-main');
                     Rules
                 </a>
             </li>
+            <li class="app-navigation-entry" data-id="exchange-rates">
+                <a href="#exchange-rates" class="nav-icon-exchange-rates svg">
+                    <span class="app-navigation-entry-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7.5,21.5L3.75,17.75L5.16,16.34L6.75,17.92V12.5H8.25V17.92L9.84,16.34L11.25,17.75L7.5,21.5M16.5,6.5L12.75,2.75L14.16,4.16L15.75,2.58V8H17.25V2.58L18.84,4.16L20.25,2.75L16.5,6.5M3,8V6H11V8H3M13,18V16H21V18H13M7,14V12H17V14H7Z"/>
+                        </svg>
+                    </span>
+                    Exchange Rates
+                </a>
+            </li>
             <li class="app-navigation-entry" data-id="settings">
                 <a href="#settings" class="nav-icon-settings svg">
                     <span class="app-navigation-entry-icon">
@@ -3807,6 +3817,105 @@ style('budget', 'budget-main');
                 <h3>Recent Shared Expenses</h3>
                 <div id="recent-shares-list" class="recent-shares-list">
                     <div class="empty-state-small">No shared expenses yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exchange Rates View -->
+        <div id="exchange-rates-view" class="view">
+            <div class="view-header">
+                <h2>Exchange Rates</h2>
+                <div class="view-controls">
+                    <button id="refresh-rates-btn" class="secondary" title="Refresh rates from online sources">
+                        <span class="icon-play" aria-hidden="true"></span>
+                        Refresh Rates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Info Notice -->
+            <div class="exchange-rates-notice" style="background-color: rgba(100, 116, 139, 0.08); border: 1px solid rgba(100, 116, 139, 0.15); border-radius: 4px; padding: 12px 16px; margin: 16px 0; display: flex; align-items: flex-start; gap: 12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(100, 116, 139, 0.6)" style="flex-shrink: 0; margin-top: 2px;">
+                    <path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+                </svg>
+                <div style="color: rgba(100, 116, 139, 0.85); font-size: 14px;">
+                    Rates shown as <strong>1 base currency = X target currency</strong>.
+                    Fiat rates from <a href="https://www.floatrates.com" target="_blank" rel="noopener" style="color: var(--color-primary);">FloatRates</a>,
+                    crypto from <a href="https://www.coingecko.com" target="_blank" rel="noopener" style="color: var(--color-primary);">CoinGecko</a>.
+                    Manual overrides take priority over automatic rates.
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="exchange-rates-summary">
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z"/>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-value" id="rates-total-count">0</div>
+                        <div class="summary-label">Total Currencies</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-value" id="rates-auto-count">0</div>
+                        <div class="summary-label">Auto Rates</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                        </svg>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-value" id="rates-manual-count">0</div>
+                        <div class="summary-label">Manual Overrides</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="exchange-rates-tabs">
+                <button class="tab-button active" data-filter="all">All</button>
+                <button class="tab-button" data-filter="fiat">Fiat</button>
+                <button class="tab-button" data-filter="crypto">Crypto</button>
+                <button class="tab-button" data-filter="manual">Manual Only</button>
+                <button class="tab-button" data-filter="no-rate">No Rate</button>
+            </div>
+
+            <!-- Rates List -->
+            <div class="exchange-rates-container">
+                <div id="exchange-rates-list" class="exchange-rates-list">
+                    <!-- Rate cards rendered by ExchangeRatesModule -->
+                </div>
+            </div>
+
+            <!-- Manual Rate Modal -->
+            <div id="manual-rate-modal" class="modal" style="display: none;" aria-hidden="true">
+                <div class="modal-content">
+                    <h3>Set Manual Exchange Rate</h3>
+                    <div class="modal-body">
+                        <p id="manual-rate-currency" class="manual-rate-currency-label"></p>
+                        <div class="form-group manual-rate-input-row">
+                            <label id="manual-rate-base-label" class="manual-rate-label"></label>
+                            <input type="number" id="manual-rate-value" step="any" min="0" class="manual-rate-input" />
+                            <span id="manual-rate-target-label" class="manual-rate-label"></span>
+                        </div>
+                        <input type="hidden" id="manual-rate-currency-input" />
+                    </div>
+                    <div class="modal-footer">
+                        <button id="manual-rate-cancel-btn" class="cancel-btn">Cancel</button>
+                        <button id="manual-rate-save-btn" class="primary">Save</button>
+                    </div>
                 </div>
             </div>
         </div>

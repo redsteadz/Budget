@@ -37,6 +37,7 @@ import ReportsModule from './modules/reports/ReportsModule.js';
 import ImportModule from './modules/import/ImportModule.js';
 import AccountsModule from './modules/accounts/AccountsModule.js';
 import CategoriesModule from './modules/categories/CategoriesModule.js';
+import ExchangeRatesModule from './modules/exchange-rates/ExchangeRatesModule.js';
 
 class BudgetApp {
     constructor() {
@@ -108,6 +109,7 @@ class BudgetApp {
         this.importModule = new ImportModule(this);
         this.accountsModule = new AccountsModule(this);
         this.categoriesModule = new CategoriesModule(this);
+        this.exchangeRatesModule = new ExchangeRatesModule(this);
 
         this.init();
     }
@@ -2100,6 +2102,10 @@ class BudgetApp {
         return this.rulesModule.loadRulesView();
     }
 
+    async loadExchangeRatesView() {
+        return this.exchangeRatesModule.loadExchangeRatesView();
+    }
+
     // ============================================
     // RECURRING INCOME METHODS
     // ============================================
@@ -2911,7 +2917,8 @@ class BudgetApp {
             'pension-balance-modal',
             'pension-contribution-modal',
             'asset-modal',
-            'asset-value-modal'
+            'asset-value-modal',
+            'manual-rate-modal'
         ];
 
         modalIds.forEach(modalId => {

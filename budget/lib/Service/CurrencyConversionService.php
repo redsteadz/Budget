@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OCA\Budget\Service;
 
 use OCA\Budget\Db\Account;
+use OCA\Budget\Db\ManualExchangeRateMapper;
 
 /**
  * Converts monetary amounts between currencies using cached exchange rates.
@@ -12,17 +13,23 @@ use OCA\Budget\Db\Account;
  * Conversion goes through EUR as an intermediate:
  *   amount_target = amount * (target_rate / source_rate)
  * where rate = units of currency per 1 EUR.
+ *
+ * For user-scoped conversions (convertToBase), manual rate overrides
+ * take priority over automatic rates from FloatRates/CoinGecko.
  */
 class CurrencyConversionService {
     private ExchangeRateService $exchangeRateService;
     private SettingService $settingService;
+    private ManualExchangeRateMapper $manualRateMapper;
 
     public function __construct(
         ExchangeRateService $exchangeRateService,
-        SettingService $settingService
+        SettingService $settingService,
+        ManualExchangeRateMapper $manualRateMapper
     ) {
         $this->exchangeRateService = $exchangeRateService;
         $this->settingService = $settingService;
+        $this->manualRateMapper = $manualRateMapper;
     }
 
     /**
@@ -89,16 +96,31 @@ class CurrencyConversionService {
 
     /**
      * Convert an amount to the user's base currency.
+     * Uses manual rate overrides when available (highest priority).
      *
      * @param string|float $amount The amount to convert
      * @param string $fromCurrency Source currency code
-     * @param string $userId User ID (to look up base currency)
+     * @param string $userId User ID (to look up base currency and manual rates)
      * @param string|null $date Date for historical rate lookup
      * @return string Converted amount
      */
     public function convertToBase($amount, string $fromCurrency, string $userId, ?string $date = null): string {
-        $baseCurrency = $this->getBaseCurrency($userId);
-        return $this->convertLocal($amount, $fromCurrency, $baseCurrency, $date);
+        $baseCurrency = strtoupper($this->getBaseCurrency($userId));
+        $fromCurrency = strtoupper($fromCurrency);
+
+        if ($fromCurrency === $baseCurrency) {
+            return (string) $amount;
+        }
+
+        $fromRate = $this->getEffectiveRate($fromCurrency, $userId, $date);
+        $toRate = $this->getEffectiveRate($baseCurrency, $userId, $date);
+
+        if ($fromRate === null || $toRate === null) {
+            return (string) $amount;
+        }
+
+        $ratio = bcdiv($toRate, $fromRate, 10);
+        return bcmul((string) $amount, $ratio, 10);
     }
 
     /**
@@ -158,5 +180,34 @@ class CurrencyConversionService {
      */
     public function accountNeedsConversion(string $accountCurrency, string $userId): bool {
         return strtoupper($accountCurrency) !== strtoupper($this->getBaseCurrency($userId));
+    }
+
+    /**
+     * Get the effective rate for a currency, checking manual overrides first.
+     * Manual rates (per-user standing rates) take priority over automatic rates.
+     *
+     * @param string $currency Currency code (uppercase)
+     * @param string $userId User ID for manual rate lookup
+     * @param string|null $date Date for automatic rate fallback
+     * @return string|null Rate per EUR, or null if unavailable
+     */
+    private function getEffectiveRate(string $currency, string $userId, ?string $date = null): ?string {
+        if ($currency === 'EUR') {
+            return '1.0000000000';
+        }
+
+        // Check for user's manual rate override (standing rate, ignores date)
+        $manual = $this->manualRateMapper->findByUserAndCurrency($userId, $currency);
+        if ($manual !== null) {
+            $rate = $manual->getRatePerEur();
+            // Normalize in case of scientific notation from SQLite
+            if (is_float($rate) || (is_string($rate) && stripos($rate, 'e') !== false)) {
+                return number_format((float) $rate, 10, '.', '');
+            }
+            return (string) $rate;
+        }
+
+        // Fall back to automatic rate (FloatRates/CoinGecko/ECB)
+        return $this->exchangeRateService->getRateLocal($currency, $date);
     }
 }

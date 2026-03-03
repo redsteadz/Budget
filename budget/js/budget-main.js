@@ -15708,6 +15708,9 @@ var Router = /*#__PURE__*/function () {
           case 'assets':
             this.app.loadAssetsView();
             break;
+          case 'exchange-rates':
+            this.app.loadExchangeRatesView();
+            break;
           case 'settings':
             this.app.loadSettingsView();
             break;
@@ -15766,6 +15769,9 @@ var Router = /*#__PURE__*/function () {
           break;
         case 'assets':
           this.app.loadAssetsView();
+          break;
+        case 'exchange-rates':
+          this.app.loadExchangeRatesView();
           break;
         case 'settings':
           // Don't reload settings view (we're already in it)
@@ -25730,6 +25736,505 @@ var DashboardModule = /*#__PURE__*/function () {
         return _reorderDashboardWidget.apply(this, arguments);
       }
       return reorderDashboardWidget;
+    }()
+  }]);
+}();
+
+
+/***/ }),
+
+/***/ "./src/modules/exchange-rates/ExchangeRatesModule.js":
+/*!***********************************************************!*\
+  !*** ./src/modules/exchange-rates/ExchangeRatesModule.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ExchangeRatesModule)
+/* harmony export */ });
+/* harmony import */ var _utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/notifications.js */ "./src/utils/notifications.js");
+/* harmony import */ var _utils_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/dom.js */ "./src/utils/dom.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+/**
+ * Exchange Rates Module - View and manage currency exchange rates
+ *
+ * Shows automatic rates from FloatRates/CoinGecko and allows
+ * per-user manual rate overrides for currencies without auto-rates
+ * or when the user wants a specific rate (e.g. Argentina's blue dollar).
+ */
+
+
+var ExchangeRatesModule = /*#__PURE__*/function () {
+  function ExchangeRatesModule(app) {
+    _classCallCheck(this, ExchangeRatesModule);
+    this.app = app;
+    this._eventsSetup = false;
+    this.data = null; // { baseCurrency, autoRates, manualRates, currencies }
+    this.currentFilter = 'all';
+  }
+  return _createClass(ExchangeRatesModule, [{
+    key: "settings",
+    get: function get() {
+      return this.app.settings;
+    }
+  }, {
+    key: "loadExchangeRatesView",
+    value: function () {
+      var _loadExchangeRatesView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              _context.p = 0;
+              _context.n = 1;
+              return fetch(OC.generateUrl('/apps/budget/api/exchange-rates'), {
+                headers: {
+                  'requesttoken': OC.requestToken
+                }
+              });
+            case 1:
+              response = _context.v;
+              if (response.ok) {
+                _context.n = 2;
+                break;
+              }
+              throw new Error("HTTP ".concat(response.status));
+            case 2:
+              _context.n = 3;
+              return response.json();
+            case 3:
+              this.data = _context.v;
+              this.renderRatesPage();
+              if (!this._eventsSetup) {
+                this.setupEventListeners();
+                this._eventsSetup = true;
+              }
+              _context.n = 5;
+              break;
+            case 4:
+              _context.p = 4;
+              _t = _context.v;
+              console.error('Failed to load exchange rates:', _t);
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Failed to load exchange rates');
+            case 5:
+              return _context.a(2);
+          }
+        }, _callee, this, [[0, 4]]);
+      }));
+      function loadExchangeRatesView() {
+        return _loadExchangeRatesView.apply(this, arguments);
+      }
+      return loadExchangeRatesView;
+    }()
+  }, {
+    key: "renderRatesPage",
+    value: function renderRatesPage() {
+      var _this = this;
+      var list = document.getElementById('exchange-rates-list');
+      if (!list || !this.data) return;
+      var _this$data = this.data,
+        baseCurrency = _this$data.baseCurrency,
+        autoRates = _this$data.autoRates,
+        manualRates = _this$data.manualRates,
+        currencies = _this$data.currencies;
+      var baseRate = this.getBaseRatePerEur(baseCurrency, autoRates);
+
+      // Build currency items with computed data
+      var items = [];
+      var autoCount = 0;
+      var manualCount = 0;
+      for (var _i = 0, _Object$entries = Object.entries(currencies); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+          code = _Object$entries$_i[0],
+          info = _Object$entries$_i[1];
+        if (code === baseCurrency) continue;
+        var auto = autoRates[code] || null;
+        var manual = manualRates[code] || null;
+        var hasManual = manual !== null;
+        var effectiveRatePerEur = null;
+        var source = 'none';
+        if (hasManual) {
+          effectiveRatePerEur = parseFloat(manual.ratePerEur);
+          source = 'manual';
+          manualCount++;
+        } else if (auto) {
+          effectiveRatePerEur = parseFloat(auto.ratePerEur);
+          source = auto.source || 'auto';
+          autoCount++;
+        }
+        items.push({
+          code: code,
+          name: info.name,
+          isCrypto: info.isCrypto,
+          decimals: info.decimals,
+          effectiveRatePerEur: effectiveRatePerEur,
+          source: source,
+          hasManual: hasManual
+        });
+      }
+
+      // Update summary cards
+      this.updateSummary(items.length, autoCount, manualCount);
+
+      // Render cards
+      list.innerHTML = items.map(function (curr) {
+        var displayRate = null;
+        if (curr.effectiveRatePerEur !== null && baseRate !== null) {
+          var ratePerBase = curr.effectiveRatePerEur / baseRate;
+          displayRate = _this.formatRate(ratePerBase, curr.decimals);
+        }
+        var currentDisplayRate = '';
+        if (curr.hasManual && curr.effectiveRatePerEur !== null && baseRate !== null) {
+          currentDisplayRate = (curr.effectiveRatePerEur / baseRate).toString();
+        }
+        var statusClass = curr.hasManual ? 'manual' : curr.source === 'none' ? 'no-rate' : 'auto';
+        var typeClass = curr.isCrypto ? 'crypto' : 'fiat';
+        return "\n                <div class=\"rate-card ".concat(statusClass, "\" data-currency=\"").concat(curr.code, "\" data-type=\"").concat(typeClass, "\" data-source=\"").concat(curr.source, "\" data-has-manual=\"").concat(curr.hasManual, "\">\n                    <div class=\"rate-card-header\">\n                        <div class=\"rate-info\">\n                            <h4 class=\"rate-currency-name\">").concat(_utils_dom_js__WEBPACK_IMPORTED_MODULE_1__.escapeHtml(curr.name), "</h4>\n                            <span class=\"rate-currency-code\">").concat(curr.code, "</span>\n                        </div>\n                        <div class=\"rate-value\">\n                            ").concat(displayRate !== null ? "1 ".concat(baseCurrency, " = ").concat(displayRate, " ").concat(curr.code) : '<span class="no-rate-text">No rate available</span>', "\n                        </div>\n                    </div>\n                    <div class=\"rate-details\">\n                        <div class=\"rate-source rate-source-").concat(curr.source, "\">\n                            <span class=\"status-badge\">").concat(_this.getSourceLabel(curr.source), "</span>\n                        </div>\n                    </div>\n                    <div class=\"rate-actions\">\n                        ").concat(curr.hasManual ? "\n                            <button class=\"edit-manual-rate-btn icon-button\" data-currency=\"".concat(curr.code, "\" data-rate=\"").concat(currentDisplayRate, "\" title=\"Edit manual rate\">\n                                <span class=\"icon-rename\" aria-hidden=\"true\"></span>\n                            </button>\n                            <button class=\"remove-manual-rate-btn icon-button\" data-currency=\"").concat(curr.code, "\" title=\"Remove manual rate\">\n                                <span class=\"icon-delete\" aria-hidden=\"true\"></span>\n                            </button>\n                        ") : "\n                            <button class=\"set-manual-rate-btn icon-button\" data-currency=\"".concat(curr.code, "\" title=\"Set manual rate\">\n                                <span class=\"icon-rename\" aria-hidden=\"true\"></span>\n                            </button>\n                        "), "\n                    </div>\n                </div>\n            ");
+      }).join('');
+
+      // Apply current filter
+      this.applyFilter(this.currentFilter);
+    }
+  }, {
+    key: "updateSummary",
+    value: function updateSummary(total, auto, manual) {
+      var totalEl = document.getElementById('rates-total-count');
+      var autoEl = document.getElementById('rates-auto-count');
+      var manualEl = document.getElementById('rates-manual-count');
+      if (totalEl) totalEl.textContent = total;
+      if (autoEl) autoEl.textContent = auto;
+      if (manualEl) manualEl.textContent = manual;
+    }
+  }, {
+    key: "getBaseRatePerEur",
+    value: function getBaseRatePerEur(baseCurrency, autoRates) {
+      if (baseCurrency === 'EUR') return 1.0;
+      var baseAuto = autoRates[baseCurrency];
+      return baseAuto ? parseFloat(baseAuto.ratePerEur) : null;
+    }
+  }, {
+    key: "formatRate",
+    value: function formatRate(rate, decimals) {
+      if (rate >= 1000) return rate.toFixed(2);
+      if (rate >= 1) return rate.toFixed(Math.min(decimals, 4));
+      return rate.toPrecision(6);
+    }
+  }, {
+    key: "getSourceLabel",
+    value: function getSourceLabel(source) {
+      var labels = {
+        'floatrates': 'FloatRates',
+        'ecb': 'ECB',
+        'coingecko': 'CoinGecko',
+        'manual': 'Manual',
+        'none': 'None'
+      };
+      return labels[source] || 'Unknown';
+    }
+  }, {
+    key: "applyFilter",
+    value: function applyFilter(filter) {
+      this.currentFilter = filter;
+      var cards = document.querySelectorAll('.rate-card');
+      cards.forEach(function (card) {
+        var type = card.dataset.type;
+        var source = card.dataset.source;
+        var hasManual = card.dataset.hasManual === 'true';
+        var show = false;
+        switch (filter) {
+          case 'all':
+            show = true;
+            break;
+          case 'fiat':
+            show = type === 'fiat';
+            break;
+          case 'crypto':
+            show = type === 'crypto';
+            break;
+          case 'manual':
+            show = hasManual;
+            break;
+          case 'no-rate':
+            show = source === 'none';
+            break;
+        }
+        card.style.display = show ? '' : 'none';
+      });
+
+      // Update active tab
+      document.querySelectorAll('.exchange-rates-tabs .tab-button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+    }
+  }, {
+    key: "setupEventListeners",
+    value: function setupEventListeners() {
+      var _this2 = this,
+        _document$getElementB,
+        _document$getElementB2,
+        _document$getElementB3;
+      // Delegate click events on the rates list
+      var list = document.getElementById('exchange-rates-list');
+      if (list) {
+        list.addEventListener('click', function (e) {
+          var setBtn = e.target.closest('.set-manual-rate-btn');
+          var editBtn = e.target.closest('.edit-manual-rate-btn');
+          var removeBtn = e.target.closest('.remove-manual-rate-btn');
+          if (setBtn) {
+            _this2.showManualRateModal(setBtn.dataset.currency);
+          } else if (editBtn) {
+            _this2.showManualRateModal(editBtn.dataset.currency, editBtn.dataset.rate);
+          } else if (removeBtn) {
+            _this2.confirmRemoveManualRate(removeBtn.dataset.currency);
+          }
+        });
+      }
+
+      // Filter tabs
+      document.querySelectorAll('.exchange-rates-tabs .tab-button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          _this2.applyFilter(btn.dataset.filter);
+        });
+      });
+
+      // Refresh button
+      (_document$getElementB = document.getElementById('refresh-rates-btn')) === null || _document$getElementB === void 0 || _document$getElementB.addEventListener('click', function () {
+        _this2.refreshRates();
+      });
+
+      // Manual rate modal buttons
+      (_document$getElementB2 = document.getElementById('manual-rate-save-btn')) === null || _document$getElementB2 === void 0 || _document$getElementB2.addEventListener('click', function () {
+        _this2.saveManualRate();
+      });
+      (_document$getElementB3 = document.getElementById('manual-rate-cancel-btn')) === null || _document$getElementB3 === void 0 || _document$getElementB3.addEventListener('click', function () {
+        _this2.hideManualRateModal();
+      });
+    }
+  }, {
+    key: "showManualRateModal",
+    value: function showManualRateModal(currency) {
+      var currentRate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var modal = document.getElementById('manual-rate-modal');
+      if (!modal || !this.data) return;
+      var baseCurrency = this.data.baseCurrency;
+      var currInfo = this.data.currencies[currency];
+      var currName = currInfo ? currInfo.name : currency;
+      document.getElementById('manual-rate-currency').textContent = "".concat(currency, " - ").concat(currName);
+      document.getElementById('manual-rate-base-label').textContent = "1 ".concat(baseCurrency, " =");
+      document.getElementById('manual-rate-target-label').textContent = currency;
+      document.getElementById('manual-rate-currency-input').value = currency;
+      var rateInput = document.getElementById('manual-rate-value');
+      rateInput.value = currentRate || '';
+      rateInput.placeholder = 'Enter rate';
+      modal.style.display = 'block';
+      modal.setAttribute('aria-hidden', 'false');
+      rateInput.focus();
+    }
+  }, {
+    key: "hideManualRateModal",
+    value: function hideManualRateModal() {
+      var modal = document.getElementById('manual-rate-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+      }
+    }
+  }, {
+    key: "saveManualRate",
+    value: function () {
+      var _saveManualRate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var _document$getElementB4, _document$getElementB5;
+        var currency, rate, response, err, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              currency = (_document$getElementB4 = document.getElementById('manual-rate-currency-input')) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value;
+              rate = (_document$getElementB5 = document.getElementById('manual-rate-value')) === null || _document$getElementB5 === void 0 || (_document$getElementB5 = _document$getElementB5.value) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.trim();
+              if (!(!currency || !rate)) {
+                _context2.n = 1;
+                break;
+              }
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Please enter a rate value');
+              return _context2.a(2);
+            case 1:
+              if (!(isNaN(parseFloat(rate)) || parseFloat(rate) <= 0)) {
+                _context2.n = 2;
+                break;
+              }
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Rate must be a positive number');
+              return _context2.a(2);
+            case 2:
+              _context2.p = 2;
+              _context2.n = 3;
+              return fetch(OC.generateUrl('/apps/budget/api/exchange-rates/manual'), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'requesttoken': OC.requestToken
+                },
+                body: JSON.stringify({
+                  currency: currency,
+                  rate: rate
+                })
+              });
+            case 3:
+              response = _context2.v;
+              if (response.ok) {
+                _context2.n = 5;
+                break;
+              }
+              _context2.n = 4;
+              return response.json();
+            case 4:
+              err = _context2.v;
+              throw new Error(err.error || 'Failed to save');
+            case 5:
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showSuccess)("Manual rate set for ".concat(currency));
+              this.hideManualRateModal();
+              _context2.n = 6;
+              return this.loadExchangeRatesView();
+            case 6:
+              _context2.n = 8;
+              break;
+            case 7:
+              _context2.p = 7;
+              _t2 = _context2.v;
+              console.error('Failed to save manual rate:', _t2);
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Failed to save manual rate');
+            case 8:
+              return _context2.a(2);
+          }
+        }, _callee2, this, [[2, 7]]);
+      }));
+      function saveManualRate() {
+        return _saveManualRate.apply(this, arguments);
+      }
+      return saveManualRate;
+    }()
+  }, {
+    key: "confirmRemoveManualRate",
+    value: function confirmRemoveManualRate(currency) {
+      if (confirm("Remove manual rate for ".concat(currency, "? It will revert to the automatic rate."))) {
+        this.removeManualRate(currency);
+      }
+    }
+  }, {
+    key: "removeManualRate",
+    value: function () {
+      var _removeManualRate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(currency) {
+        var response, _t3;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              _context3.p = 0;
+              _context3.n = 1;
+              return fetch(OC.generateUrl("/apps/budget/api/exchange-rates/manual/".concat(currency)), {
+                method: 'DELETE',
+                headers: {
+                  'requesttoken': OC.requestToken
+                }
+              });
+            case 1:
+              response = _context3.v;
+              if (response.ok) {
+                _context3.n = 2;
+                break;
+              }
+              throw new Error("HTTP ".concat(response.status));
+            case 2:
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showSuccess)("Manual rate removed for ".concat(currency));
+              _context3.n = 3;
+              return this.loadExchangeRatesView();
+            case 3:
+              _context3.n = 5;
+              break;
+            case 4:
+              _context3.p = 4;
+              _t3 = _context3.v;
+              console.error('Failed to remove manual rate:', _t3);
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Failed to remove manual rate');
+            case 5:
+              return _context3.a(2);
+          }
+        }, _callee3, this, [[0, 4]]);
+      }));
+      function removeManualRate(_x) {
+        return _removeManualRate.apply(this, arguments);
+      }
+      return removeManualRate;
+    }()
+  }, {
+    key: "refreshRates",
+    value: function () {
+      var _refreshRates = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var btn, response, _t4;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
+            case 0:
+              btn = document.getElementById('refresh-rates-btn');
+              if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Refreshing...';
+              }
+              _context4.p = 1;
+              _context4.n = 2;
+              return fetch(OC.generateUrl('/apps/budget/api/exchange-rates/refresh'), {
+                method: 'POST',
+                headers: {
+                  'requesttoken': OC.requestToken
+                }
+              });
+            case 2:
+              response = _context4.v;
+              if (response.ok) {
+                _context4.n = 3;
+                break;
+              }
+              throw new Error("HTTP ".concat(response.status));
+            case 3:
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showSuccess)('Exchange rates refreshed');
+              _context4.n = 4;
+              return this.loadExchangeRatesView();
+            case 4:
+              _context4.n = 6;
+              break;
+            case 5:
+              _context4.p = 5;
+              _t4 = _context4.v;
+              console.error('Failed to refresh rates:', _t4);
+              (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_0__.showError)('Failed to refresh exchange rates');
+            case 6:
+              _context4.p = 6;
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Refresh Rates';
+              }
+              return _context4.f(6);
+            case 7:
+              return _context4.a(2);
+          }
+        }, _callee4, this, [[1, 5, 6, 7]]);
+      }));
+      function refreshRates() {
+        return _refreshRates.apply(this, arguments);
+      }
+      return refreshRates;
     }()
   }]);
 }();
@@ -42486,6 +42991,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_import_ImportModule_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./modules/import/ImportModule.js */ "./src/modules/import/ImportModule.js");
 /* harmony import */ var _modules_accounts_AccountsModule_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./modules/accounts/AccountsModule.js */ "./src/modules/accounts/AccountsModule.js");
 /* harmony import */ var _modules_categories_CategoriesModule_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./modules/categories/CategoriesModule.js */ "./src/modules/categories/CategoriesModule.js");
+/* harmony import */ var _modules_exchange_rates_ExchangeRatesModule_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./modules/exchange-rates/ExchangeRatesModule.js */ "./src/modules/exchange-rates/ExchangeRatesModule.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -42530,6 +43036,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 // Modules
+
 
 
 
@@ -42625,6 +43132,7 @@ var BudgetApp = /*#__PURE__*/function () {
     this.importModule = new _modules_import_ImportModule_js__WEBPACK_IMPORTED_MODULE_24__["default"](this);
     this.accountsModule = new _modules_accounts_AccountsModule_js__WEBPACK_IMPORTED_MODULE_25__["default"](this);
     this.categoriesModule = new _modules_categories_CategoriesModule_js__WEBPACK_IMPORTED_MODULE_26__["default"](this);
+    this.exchangeRatesModule = new _modules_exchange_rates_ExchangeRatesModule_js__WEBPACK_IMPORTED_MODULE_27__["default"](this);
     this.init();
   }
   return _createClass(BudgetApp, [{
@@ -45335,19 +45843,35 @@ var BudgetApp = /*#__PURE__*/function () {
         return _loadRulesView.apply(this, arguments);
       }
       return loadRulesView;
+    }()
+  }, {
+    key: "loadExchangeRatesView",
+    value: function () {
+      var _loadExchangeRatesView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee47() {
+        return _regenerator().w(function (_context47) {
+          while (1) switch (_context47.n) {
+            case 0:
+              return _context47.a(2, this.exchangeRatesModule.loadExchangeRatesView());
+          }
+        }, _callee47, this);
+      }));
+      function loadExchangeRatesView() {
+        return _loadExchangeRatesView.apply(this, arguments);
+      }
+      return loadExchangeRatesView;
     }() // ============================================
     // RECURRING INCOME METHODS
     // ============================================
   }, {
     key: "loadIncomeView",
     value: function () {
-      var _loadIncomeView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee47() {
-        return _regenerator().w(function (_context47) {
-          while (1) switch (_context47.n) {
+      var _loadIncomeView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee48() {
+        return _regenerator().w(function (_context48) {
+          while (1) switch (_context48.n) {
             case 0:
-              return _context47.a(2, this.incomeModule.loadIncomeView());
+              return _context48.a(2, this.incomeModule.loadIncomeView());
           }
-        }, _callee47, this);
+        }, _callee48, this);
       }));
       function loadIncomeView() {
         return _loadIncomeView.apply(this, arguments);
@@ -45357,13 +45881,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadIncomeSummary",
     value: function () {
-      var _loadIncomeSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee48() {
-        return _regenerator().w(function (_context48) {
-          while (1) switch (_context48.n) {
+      var _loadIncomeSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee49() {
+        return _regenerator().w(function (_context49) {
+          while (1) switch (_context49.n) {
             case 0:
-              return _context48.a(2, this.incomeModule.loadIncomeSummary());
+              return _context49.a(2, this.incomeModule.loadIncomeSummary());
           }
-        }, _callee48, this);
+        }, _callee49, this);
       }));
       function loadIncomeSummary() {
         return _loadIncomeSummary.apply(this, arguments);
@@ -45419,13 +45943,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "addSelectedDetectedIncome",
     value: function () {
-      var _addSelectedDetectedIncome = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee49() {
-        return _regenerator().w(function (_context49) {
-          while (1) switch (_context49.n) {
+      var _addSelectedDetectedIncome = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee50() {
+        return _regenerator().w(function (_context50) {
+          while (1) switch (_context50.n) {
             case 0:
-              return _context49.a(2, this.incomeModule.addSelectedDetectedIncome());
+              return _context50.a(2, this.incomeModule.addSelectedDetectedIncome());
           }
-        }, _callee49, this);
+        }, _callee50, this);
       }));
       function addSelectedDetectedIncome() {
         return _addSelectedDetectedIncome.apply(this, arguments);
@@ -45437,13 +45961,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadSavingsGoalsView",
     value: function () {
-      var _loadSavingsGoalsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee50() {
-        return _regenerator().w(function (_context50) {
-          while (1) switch (_context50.n) {
+      var _loadSavingsGoalsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee51() {
+        return _regenerator().w(function (_context51) {
+          while (1) switch (_context51.n) {
             case 0:
-              return _context50.a(2, this.savingsModule.loadSavingsGoalsView());
+              return _context51.a(2, this.savingsModule.loadSavingsGoalsView());
           }
-        }, _callee50, this);
+        }, _callee51, this);
       }));
       function loadSavingsGoalsView() {
         return _loadSavingsGoalsView.apply(this, arguments);
@@ -45479,13 +46003,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveGoal",
     value: function () {
-      var _saveGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee51() {
-        return _regenerator().w(function (_context51) {
-          while (1) switch (_context51.n) {
+      var _saveGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee52() {
+        return _regenerator().w(function (_context52) {
+          while (1) switch (_context52.n) {
             case 0:
-              return _context51.a(2, this.savingsModule.saveGoal());
+              return _context52.a(2, this.savingsModule.saveGoal());
           }
-        }, _callee51, this);
+        }, _callee52, this);
       }));
       function saveGoal() {
         return _saveGoal.apply(this, arguments);
@@ -45500,13 +46024,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "deleteGoal",
     value: function () {
-      var _deleteGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee52(goalId) {
-        return _regenerator().w(function (_context52) {
-          while (1) switch (_context52.n) {
+      var _deleteGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee53(goalId) {
+        return _regenerator().w(function (_context53) {
+          while (1) switch (_context53.n) {
             case 0:
-              return _context52.a(2, this.savingsModule.deleteGoal(goalId));
+              return _context53.a(2, this.savingsModule.deleteGoal(goalId));
           }
-        }, _callee52, this);
+        }, _callee53, this);
       }));
       function deleteGoal(_x24) {
         return _deleteGoal.apply(this, arguments);
@@ -45521,13 +46045,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "addMoneyToGoal",
     value: function () {
-      var _addMoneyToGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee53() {
-        return _regenerator().w(function (_context53) {
-          while (1) switch (_context53.n) {
+      var _addMoneyToGoal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee54() {
+        return _regenerator().w(function (_context54) {
+          while (1) switch (_context54.n) {
             case 0:
-              return _context53.a(2, this.savingsModule.addMoneyToGoal());
+              return _context54.a(2, this.savingsModule.addMoneyToGoal());
           }
-        }, _callee53, this);
+        }, _callee54, this);
       }));
       function addMoneyToGoal() {
         return _addMoneyToGoal.apply(this, arguments);
@@ -45539,51 +46063,51 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadDebtPayoffView",
     value: function () {
-      var _loadDebtPayoffView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee54() {
+      var _loadDebtPayoffView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee55() {
         var summaryResponse, summary, debtsResponse, debts, currency, totalEl, rateEl, minEl, countEl, _t11, _t12, _t13;
-        return _regenerator().w(function (_context54) {
-          while (1) switch (_context54.p = _context54.n) {
+        return _regenerator().w(function (_context55) {
+          while (1) switch (_context55.p = _context55.n) {
             case 0:
-              _context54.p = 0;
-              _context54.n = 1;
+              _context55.p = 0;
+              _context55.n = 1;
               return fetch(OC.generateUrl('/apps/budget/api/debts/summary'), {
                 headers: {
                   'requesttoken': OC.requestToken
                 }
               });
             case 1:
-              summaryResponse = _context54.v;
+              summaryResponse = _context55.v;
               if (!summaryResponse.ok) {
-                _context54.n = 3;
+                _context55.n = 3;
                 break;
               }
-              _context54.n = 2;
+              _context55.n = 2;
               return summaryResponse.json();
             case 2:
-              _t11 = _context54.v;
-              _context54.n = 4;
+              _t11 = _context55.v;
+              _context55.n = 4;
               break;
             case 3:
               _t11 = null;
             case 4:
               summary = _t11;
-              _context54.n = 5;
+              _context55.n = 5;
               return fetch(OC.generateUrl('/apps/budget/api/debts'), {
                 headers: {
                   'requesttoken': OC.requestToken
                 }
               });
             case 5:
-              debtsResponse = _context54.v;
+              debtsResponse = _context55.v;
               if (!debtsResponse.ok) {
-                _context54.n = 7;
+                _context55.n = 7;
                 break;
               }
-              _context54.n = 6;
+              _context55.n = 6;
               return debtsResponse.json();
             case 6:
-              _t12 = _context54.v;
-              _context54.n = 8;
+              _t12 = _context55.v;
+              _context55.n = 8;
               break;
             case 7:
               _t12 = [];
@@ -45607,16 +46131,16 @@ var BudgetApp = /*#__PURE__*/function () {
 
               // Setup event listeners
               this.setupDebtPayoffControls();
-              _context54.n = 10;
+              _context55.n = 10;
               break;
             case 9:
-              _context54.p = 9;
-              _t13 = _context54.v;
+              _context55.p = 9;
+              _t13 = _context55.v;
               console.error('Failed to load debt payoff view:', _t13);
             case 10:
-              return _context54.a(2);
+              return _context55.a(2);
           }
-        }, _callee54, this, [[0, 9]]);
+        }, _callee55, this, [[0, 9]]);
       }));
       function loadDebtPayoffView() {
         return _loadDebtPayoffView.apply(this, arguments);
@@ -45661,49 +46185,49 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "calculatePayoffPlan",
     value: function () {
-      var _calculatePayoffPlan = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee55() {
+      var _calculatePayoffPlan = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee56() {
         var _document$getElementB4, _document$getElementB5;
         var strategy, extraPayment, response, plan, comparisonEl, _t14;
-        return _regenerator().w(function (_context55) {
-          while (1) switch (_context55.p = _context55.n) {
+        return _regenerator().w(function (_context56) {
+          while (1) switch (_context56.p = _context56.n) {
             case 0:
               strategy = ((_document$getElementB4 = document.getElementById('debt-strategy-select')) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value) || 'avalanche';
               extraPayment = parseFloat((_document$getElementB5 = document.getElementById('debt-extra-payment')) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value) || 0;
-              _context55.p = 1;
-              _context55.n = 2;
+              _context56.p = 1;
+              _context56.n = 2;
               return fetch(OC.generateUrl("/apps/budget/api/debts/payoff-plan?strategy=".concat(strategy, "&extraPayment=").concat(extraPayment)), {
                 headers: {
                   'requesttoken': OC.requestToken
                 }
               });
             case 2:
-              response = _context55.v;
+              response = _context56.v;
               if (response.ok) {
-                _context55.n = 3;
+                _context56.n = 3;
                 break;
               }
               throw new Error('Failed to calculate payoff plan');
             case 3:
-              _context55.n = 4;
+              _context56.n = 4;
               return response.json();
             case 4:
-              plan = _context55.v;
+              plan = _context56.v;
               this.displayPayoffPlan(plan);
 
               // Hide comparison results when showing plan
               comparisonEl = document.getElementById('debt-comparison-results');
               if (comparisonEl) comparisonEl.style.display = 'none';
-              _context55.n = 6;
+              _context56.n = 6;
               break;
             case 5:
-              _context55.p = 5;
-              _t14 = _context55.v;
+              _context56.p = 5;
+              _t14 = _context56.v;
               console.error('Failed to calculate payoff plan:', _t14);
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)('Failed to calculate payoff plan');
             case 6:
-              return _context55.a(2);
+              return _context56.a(2);
           }
-        }, _callee55, this, [[1, 5]]);
+        }, _callee56, this, [[1, 5]]);
       }));
       function calculatePayoffPlan() {
         return _calculatePayoffPlan.apply(this, arguments);
@@ -45754,48 +46278,48 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "compareStrategies",
     value: function () {
-      var _compareStrategies = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee56() {
+      var _compareStrategies = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee57() {
         var _document$getElementB6;
         var extraPayment, response, comparison, planEl, _t15;
-        return _regenerator().w(function (_context56) {
-          while (1) switch (_context56.p = _context56.n) {
+        return _regenerator().w(function (_context57) {
+          while (1) switch (_context57.p = _context57.n) {
             case 0:
               extraPayment = parseFloat((_document$getElementB6 = document.getElementById('debt-extra-payment')) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.value) || 0;
-              _context56.p = 1;
-              _context56.n = 2;
+              _context57.p = 1;
+              _context57.n = 2;
               return fetch(OC.generateUrl("/apps/budget/api/debts/compare?extraPayment=".concat(extraPayment)), {
                 headers: {
                   'requesttoken': OC.requestToken
                 }
               });
             case 2:
-              response = _context56.v;
+              response = _context57.v;
               if (response.ok) {
-                _context56.n = 3;
+                _context57.n = 3;
                 break;
               }
               throw new Error('Failed to compare strategies');
             case 3:
-              _context56.n = 4;
+              _context57.n = 4;
               return response.json();
             case 4:
-              comparison = _context56.v;
+              comparison = _context57.v;
               this.displayComparison(comparison);
 
               // Hide plan results when showing comparison
               planEl = document.getElementById('debt-payoff-results');
               if (planEl) planEl.style.display = 'none';
-              _context56.n = 6;
+              _context57.n = 6;
               break;
             case 5:
-              _context56.p = 5;
-              _t15 = _context56.v;
+              _context57.p = 5;
+              _t15 = _context57.v;
               console.error('Failed to compare strategies:', _t15);
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)('Failed to compare strategies');
             case 6:
-              return _context56.a(2);
+              return _context57.a(2);
           }
-        }, _callee56, this, [[1, 5]]);
+        }, _callee57, this, [[1, 5]]);
       }));
       function compareStrategies() {
         return _compareStrategies.apply(this, arguments);
@@ -45845,66 +46369,15 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "linkTransactions",
     value: (function () {
-      var _linkTransactions = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee57(transactionId, targetId) {
+      var _linkTransactions = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee58(transactionId, targetId) {
         var response, error, _t16;
-        return _regenerator().w(function (_context57) {
-          while (1) switch (_context57.p = _context57.n) {
-            case 0:
-              _context57.p = 0;
-              _context57.n = 1;
-              return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/link/").concat(targetId)), {
-                method: 'POST',
-                headers: {
-                  'requesttoken': OC.requestToken
-                }
-              });
-            case 1:
-              response = _context57.v;
-              if (response.ok) {
-                _context57.n = 3;
-                break;
-              }
-              _context57.n = 2;
-              return response.json();
-            case 2:
-              error = _context57.v;
-              throw new Error(error.error || "HTTP ".concat(response.status));
-            case 3:
-              _context57.n = 4;
-              return response.json();
-            case 4:
-              return _context57.a(2, _context57.v);
-            case 5:
-              _context57.p = 5;
-              _t16 = _context57.v;
-              console.error('Failed to link transactions:', _t16);
-              throw _t16;
-            case 6:
-              return _context57.a(2);
-          }
-        }, _callee57, null, [[0, 5]]);
-      }));
-      function linkTransactions(_x25, _x26) {
-        return _linkTransactions.apply(this, arguments);
-      }
-      return linkTransactions;
-    }()
-    /**
-     * Unlink a transaction from its transfer partner
-     */
-    )
-  }, {
-    key: "unlinkTransaction",
-    value: (function () {
-      var _unlinkTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee58(transactionId) {
-        var response, error, _t17;
         return _regenerator().w(function (_context58) {
           while (1) switch (_context58.p = _context58.n) {
             case 0:
               _context58.p = 0;
               _context58.n = 1;
-              return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/link")), {
-                method: 'DELETE',
+              return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/link/").concat(targetId)), {
+                method: 'POST',
                 headers: {
                   'requesttoken': OC.requestToken
                 }
@@ -45927,13 +46400,64 @@ var BudgetApp = /*#__PURE__*/function () {
               return _context58.a(2, _context58.v);
             case 5:
               _context58.p = 5;
-              _t17 = _context58.v;
-              console.error('Failed to unlink transaction:', _t17);
-              throw _t17;
+              _t16 = _context58.v;
+              console.error('Failed to link transactions:', _t16);
+              throw _t16;
             case 6:
               return _context58.a(2);
           }
         }, _callee58, null, [[0, 5]]);
+      }));
+      function linkTransactions(_x25, _x26) {
+        return _linkTransactions.apply(this, arguments);
+      }
+      return linkTransactions;
+    }()
+    /**
+     * Unlink a transaction from its transfer partner
+     */
+    )
+  }, {
+    key: "unlinkTransaction",
+    value: (function () {
+      var _unlinkTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee59(transactionId) {
+        var response, error, _t17;
+        return _regenerator().w(function (_context59) {
+          while (1) switch (_context59.p = _context59.n) {
+            case 0:
+              _context59.p = 0;
+              _context59.n = 1;
+              return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/link")), {
+                method: 'DELETE',
+                headers: {
+                  'requesttoken': OC.requestToken
+                }
+              });
+            case 1:
+              response = _context59.v;
+              if (response.ok) {
+                _context59.n = 3;
+                break;
+              }
+              _context59.n = 2;
+              return response.json();
+            case 2:
+              error = _context59.v;
+              throw new Error(error.error || "HTTP ".concat(response.status));
+            case 3:
+              _context59.n = 4;
+              return response.json();
+            case 4:
+              return _context59.a(2, _context59.v);
+            case 5:
+              _context59.p = 5;
+              _t17 = _context59.v;
+              console.error('Failed to unlink transaction:', _t17);
+              throw _t17;
+            case 6:
+              return _context59.a(2);
+          }
+        }, _callee59, null, [[0, 5]]);
       }));
       function unlinkTransaction(_x27) {
         return _unlinkTransaction.apply(this, arguments);
@@ -45947,23 +46471,23 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "showMatchingModal",
     value: (function () {
-      var _showMatchingModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee59(transactionId) {
+      var _showMatchingModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee60(transactionId) {
         var _this$transactions3,
           _this$accounts,
           _this17 = this;
         var transaction, modal, sourceDetails, loadingEl, emptyEl, listEl, account, currency, typeClass, result, _t18;
-        return _regenerator().w(function (_context59) {
-          while (1) switch (_context59.p = _context59.n) {
+        return _regenerator().w(function (_context60) {
+          while (1) switch (_context60.p = _context60.n) {
             case 0:
               transaction = (_this$transactions3 = this.transactions) === null || _this$transactions3 === void 0 ? void 0 : _this$transactions3.find(function (t) {
                 return t.id === transactionId;
               });
               if (transaction) {
-                _context59.n = 1;
+                _context60.n = 1;
                 break;
               }
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showWarning)('Transaction not found');
-              return _context59.a(2);
+              return _context60.a(2);
             case 1:
               modal = document.getElementById('matching-modal');
               sourceDetails = modal.querySelector('.source-details');
@@ -45986,18 +46510,18 @@ var BudgetApp = /*#__PURE__*/function () {
               loadingEl.style.display = 'flex';
               emptyEl.style.display = 'none';
               listEl.innerHTML = '';
-              _context59.p = 2;
-              _context59.n = 3;
+              _context60.p = 2;
+              _context60.n = 3;
               return this.findTransactionMatches(transactionId);
             case 3:
-              result = _context59.v;
+              result = _context60.v;
               loadingEl.style.display = 'none';
               if (!(!result.matches || result.matches.length === 0)) {
-                _context59.n = 4;
+                _context60.n = 4;
                 break;
               }
               emptyEl.style.display = 'flex';
-              return _context59.a(2);
+              return _context60.a(2);
             case 4:
               // Render matches
               listEl.innerHTML = result.matches.map(function (match) {
@@ -46009,18 +46533,18 @@ var BudgetApp = /*#__PURE__*/function () {
                 var matchTypeClass = match.type === 'credit' ? 'positive' : 'negative';
                 return "\n                    <div class=\"match-item\" data-match-id=\"".concat(match.id, "\">\n                        <span class=\"match-date\">").concat(_this17.formatDate(match.date), "</span>\n                        <span class=\"match-description\">").concat(_this17.escapeHtml(match.description), "</span>\n                        <span class=\"match-amount ").concat(matchTypeClass, "\">").concat(_this17.formatCurrency(match.amount, matchCurrency), "</span>\n                        <span class=\"match-account\">").concat((matchAccount === null || matchAccount === void 0 ? void 0 : matchAccount.name) || 'Unknown', "</span>\n                        <button class=\"link-match-btn\" data-source-id=\"").concat(transactionId, "\" data-target-id=\"").concat(match.id, "\">\n                            Link as Transfer\n                        </button>\n                    </div>\n                ");
               }).join('');
-              _context59.n = 6;
+              _context60.n = 6;
               break;
             case 5:
-              _context59.p = 5;
-              _t18 = _context59.v;
+              _context60.p = 5;
+              _t18 = _context60.v;
               loadingEl.style.display = 'none';
               emptyEl.style.display = 'flex';
               emptyEl.querySelector('p').textContent = 'Failed to search for matches. Please try again.';
             case 6:
-              return _context59.a(2);
+              return _context60.a(2);
           }
-        }, _callee59, this, [[2, 5]]);
+        }, _callee60, this, [[2, 5]]);
       }));
       function showMatchingModal(_x28) {
         return _showMatchingModal.apply(this, arguments);
@@ -46034,32 +46558,32 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "handleLinkMatch",
     value: (function () {
-      var _handleLinkMatch = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee60(sourceId, targetId) {
+      var _handleLinkMatch = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee61(sourceId, targetId) {
         var _t19;
-        return _regenerator().w(function (_context60) {
-          while (1) switch (_context60.p = _context60.n) {
+        return _regenerator().w(function (_context61) {
+          while (1) switch (_context61.p = _context61.n) {
             case 0:
-              _context60.p = 0;
-              _context60.n = 1;
+              _context61.p = 0;
+              _context61.n = 1;
               return this.linkTransactions(sourceId, targetId);
             case 1:
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showSuccess)('Transactions linked as transfer');
 
               // Close modal and refresh transactions
               document.getElementById('matching-modal').style.display = 'none';
-              _context60.n = 2;
+              _context61.n = 2;
               return this.loadTransactions();
             case 2:
-              _context60.n = 4;
+              _context61.n = 4;
               break;
             case 3:
-              _context60.p = 3;
-              _t19 = _context60.v;
+              _context61.p = 3;
+              _t19 = _context61.v;
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)(_t19.message || 'Failed to link transactions');
             case 4:
-              return _context60.a(2);
+              return _context61.a(2);
           }
-        }, _callee60, this, [[0, 3]]);
+        }, _callee61, this, [[0, 3]]);
       }));
       function handleLinkMatch(_x29, _x30) {
         return _handleLinkMatch.apply(this, arguments);
@@ -46073,35 +46597,35 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "handleUnlinkTransaction",
     value: (function () {
-      var _handleUnlinkTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee61(transactionId) {
+      var _handleUnlinkTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee62(transactionId) {
         var _t20;
-        return _regenerator().w(function (_context61) {
-          while (1) switch (_context61.p = _context61.n) {
+        return _regenerator().w(function (_context62) {
+          while (1) switch (_context62.p = _context62.n) {
             case 0:
               if (confirm('Are you sure you want to unlink this transaction from its transfer pair?')) {
-                _context61.n = 1;
+                _context62.n = 1;
                 break;
               }
-              return _context61.a(2);
+              return _context62.a(2);
             case 1:
-              _context61.p = 1;
-              _context61.n = 2;
+              _context62.p = 1;
+              _context62.n = 2;
               return this.unlinkTransaction(transactionId);
             case 2:
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showSuccess)('Transaction unlinked');
-              _context61.n = 3;
+              _context62.n = 3;
               return this.loadTransactions();
             case 3:
-              _context61.n = 5;
+              _context62.n = 5;
               break;
             case 4:
-              _context61.p = 4;
-              _t20 = _context61.v;
+              _context62.p = 4;
+              _t20 = _context62.v;
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)(_t20.message || 'Failed to unlink transaction');
             case 5:
-              return _context61.a(2);
+              return _context62.a(2);
           }
-        }, _callee61, this, [[1, 4]]);
+        }, _callee62, this, [[1, 4]]);
       }));
       function handleUnlinkTransaction(_x31) {
         return _handleUnlinkTransaction.apply(this, arguments);
@@ -46115,31 +46639,31 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "showSplitModal",
     value: function () {
-      var _showSplitModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee62(transactionId) {
+      var _showSplitModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee63(transactionId) {
         var _this$transactions4,
           _this$accounts2,
           _this18 = this;
         var transaction, modal, isSplit, titleEl, transactionInfoEl, splitsContainer, account, currency, splits, _t21;
-        return _regenerator().w(function (_context62) {
-          while (1) switch (_context62.p = _context62.n) {
+        return _regenerator().w(function (_context63) {
+          while (1) switch (_context63.p = _context63.n) {
             case 0:
               transaction = (_this$transactions4 = this.transactions) === null || _this$transactions4 === void 0 ? void 0 : _this$transactions4.find(function (t) {
                 return t.id === transactionId;
               });
               if (transaction) {
-                _context62.n = 1;
+                _context63.n = 1;
                 break;
               }
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showWarning)('Transaction not found');
-              return _context62.a(2);
+              return _context63.a(2);
             case 1:
               modal = document.getElementById('split-modal');
               if (modal) {
-                _context62.n = 2;
+                _context63.n = 2;
                 break;
               }
               console.error('Split modal not found');
-              return _context62.a(2);
+              return _context63.a(2);
             case 2:
               isSplit = transaction.isSplit || transaction.is_split;
               titleEl = document.getElementById('split-modal-title');
@@ -46162,28 +46686,28 @@ var BudgetApp = /*#__PURE__*/function () {
               // Clear and set up splits container
               splitsContainer.innerHTML = '';
               if (!isSplit) {
-                _context62.n = 7;
+                _context63.n = 7;
                 break;
               }
-              _context62.p = 3;
-              _context62.n = 4;
+              _context63.p = 3;
+              _context63.n = 4;
               return this.getTransactionSplits(transactionId);
             case 4:
-              splits = _context62.v;
+              splits = _context63.v;
               splits.forEach(function (split, index) {
                 _this18.addSplitRow(splitsContainer, split, index === 0);
               });
-              _context62.n = 6;
+              _context63.n = 6;
               break;
             case 5:
-              _context62.p = 5;
-              _t21 = _context62.v;
+              _context63.p = 5;
+              _t21 = _context63.v;
               console.error('Failed to load splits:', _t21);
               // Add two empty rows as fallback
               this.addSplitRow(splitsContainer, null, true);
               this.addSplitRow(splitsContainer, null, false);
             case 6:
-              _context62.n = 8;
+              _context63.n = 8;
               break;
             case 7:
               // Start with two empty split rows
@@ -46193,9 +46717,9 @@ var BudgetApp = /*#__PURE__*/function () {
               this.updateSplitRemaining();
               modal.style.display = 'flex';
             case 9:
-              return _context62.a(2);
+              return _context63.a(2);
           }
-        }, _callee62, this, [[3, 5]]);
+        }, _callee63, this, [[3, 5]]);
       }));
       function showSplitModal(_x32) {
         return _showSplitModal.apply(this, arguments);
@@ -46244,10 +46768,10 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveSplits",
     value: (function () {
-      var _saveSplits = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee63() {
+      var _saveSplits = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee64() {
         var modal, transactionId, totalAmount, splits, splitTotal, response, error, _t22;
-        return _regenerator().w(function (_context63) {
-          while (1) switch (_context63.p = _context63.n) {
+        return _regenerator().w(function (_context64) {
+          while (1) switch (_context64.p = _context64.n) {
             case 0:
               modal = document.getElementById('split-modal');
               transactionId = parseInt(modal === null || modal === void 0 ? void 0 : modal.dataset.transactionId);
@@ -46262,24 +46786,24 @@ var BudgetApp = /*#__PURE__*/function () {
                 return split.amount > 0;
               }); // Validate
               if (!(splits.length < 2)) {
-                _context63.n = 1;
+                _context64.n = 1;
                 break;
               }
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showWarning)('A split transaction must have at least 2 parts');
-              return _context63.a(2);
+              return _context64.a(2);
             case 1:
               splitTotal = splits.reduce(function (sum, s) {
                 return sum + s.amount;
               }, 0);
               if (!(Math.abs(splitTotal - totalAmount) > 0.01)) {
-                _context63.n = 2;
+                _context64.n = 2;
                 break;
               }
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showWarning)("Split amounts (".concat(splitTotal.toFixed(2), ") must equal transaction amount (").concat(totalAmount.toFixed(2), ")"));
-              return _context63.a(2);
+              return _context64.a(2);
             case 2:
-              _context63.p = 2;
-              _context63.n = 3;
+              _context64.p = 2;
+              _context64.n = 3;
               return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/splits")), {
                 method: 'POST',
                 headers: {
@@ -46291,33 +46815,33 @@ var BudgetApp = /*#__PURE__*/function () {
                 })
               });
             case 3:
-              response = _context63.v;
+              response = _context64.v;
               if (response.ok) {
-                _context63.n = 5;
+                _context64.n = 5;
                 break;
               }
-              _context63.n = 4;
+              _context64.n = 4;
               return response.json();
             case 4:
-              error = _context63.v;
+              error = _context64.v;
               throw new Error(error.error || "HTTP ".concat(response.status));
             case 5:
               this.hideSplitModal();
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showSuccess)('Transaction split successfully');
-              _context63.n = 6;
+              _context64.n = 6;
               return this.loadTransactions();
             case 6:
-              _context63.n = 8;
+              _context64.n = 8;
               break;
             case 7:
-              _context63.p = 7;
-              _t22 = _context63.v;
+              _context64.p = 7;
+              _t22 = _context64.v;
               console.error('Failed to save splits:', _t22);
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)(_t22.message || 'Failed to save splits');
             case 8:
-              return _context63.a(2);
+              return _context64.a(2);
           }
-        }, _callee63, this, [[2, 7]]);
+        }, _callee64, this, [[2, 7]]);
       }));
       function saveSplits() {
         return _saveSplits.apply(this, arguments);
@@ -46331,21 +46855,21 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "unsplitTransaction",
     value: (function () {
-      var _unsplitTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee64() {
+      var _unsplitTransaction = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee65() {
         var modal, transactionId, response, error, _t23;
-        return _regenerator().w(function (_context64) {
-          while (1) switch (_context64.p = _context64.n) {
+        return _regenerator().w(function (_context65) {
+          while (1) switch (_context65.p = _context65.n) {
             case 0:
               modal = document.getElementById('split-modal');
               transactionId = parseInt(modal === null || modal === void 0 ? void 0 : modal.dataset.transactionId);
               if (confirm('Are you sure you want to remove the split and revert to a single transaction?')) {
-                _context64.n = 1;
+                _context65.n = 1;
                 break;
               }
-              return _context64.a(2);
+              return _context65.a(2);
             case 1:
-              _context64.p = 1;
-              _context64.n = 2;
+              _context65.p = 1;
+              _context65.n = 2;
               return fetch(OC.generateUrl("/apps/budget/api/transactions/".concat(transactionId, "/splits")), {
                 method: 'DELETE',
                 headers: {
@@ -46353,33 +46877,33 @@ var BudgetApp = /*#__PURE__*/function () {
                 }
               });
             case 2:
-              response = _context64.v;
+              response = _context65.v;
               if (response.ok) {
-                _context64.n = 4;
+                _context65.n = 4;
                 break;
               }
-              _context64.n = 3;
+              _context65.n = 3;
               return response.json();
             case 3:
-              error = _context64.v;
+              error = _context65.v;
               throw new Error(error.error || "HTTP ".concat(response.status));
             case 4:
               this.hideSplitModal();
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showSuccess)('Transaction unsplit successfully');
-              _context64.n = 5;
+              _context65.n = 5;
               return this.loadTransactions();
             case 5:
-              _context64.n = 7;
+              _context65.n = 7;
               break;
             case 6:
-              _context64.p = 6;
-              _t23 = _context64.v;
+              _context65.p = 6;
+              _t23 = _context65.v;
               console.error('Failed to unsplit transaction:', _t23);
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)(_t23.message || 'Failed to unsplit transaction');
             case 7:
-              return _context64.a(2);
+              return _context65.a(2);
           }
-        }, _callee64, this, [[1, 6]]);
+        }, _callee65, this, [[1, 6]]);
       }));
       function unsplitTransaction() {
         return _unsplitTransaction.apply(this, arguments);
@@ -46405,7 +46929,7 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "hideModals",
     value: function hideModals() {
-      var modalIds = ['transaction-modal', 'account-modal', 'category-modal', 'split-modal', 'matching-modal', 'bulk-match-modal', 'add-tag-set-modal', 'add-tag-modal', 'edit-tag-set-modal', 'factory-reset-modal', 'rule-modal', 'apply-rules-modal', 'goal-modal', 'add-to-goal-modal', 'pension-modal', 'pension-balance-modal', 'pension-contribution-modal', 'asset-modal', 'asset-value-modal'];
+      var modalIds = ['transaction-modal', 'account-modal', 'category-modal', 'split-modal', 'matching-modal', 'bulk-match-modal', 'add-tag-set-modal', 'add-tag-modal', 'edit-tag-set-modal', 'factory-reset-modal', 'rule-modal', 'apply-rules-modal', 'goal-modal', 'add-to-goal-modal', 'pension-modal', 'pension-balance-modal', 'pension-contribution-modal', 'asset-modal', 'asset-value-modal', 'manual-rate-modal'];
       modalIds.forEach(function (modalId) {
         var modal = document.getElementById(modalId);
         if (modal) {
@@ -46417,11 +46941,11 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "showBulkMatchModal",
     value: (function () {
-      var _showBulkMatchModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee65() {
+      var _showBulkMatchModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee66() {
         var _this20 = this;
         var modal, loadingEl, resultsEl, emptyEl, autoMatchedSection, needsReviewSection, autoMatchedList, needsReviewList, result, _t24;
-        return _regenerator().w(function (_context65) {
-          while (1) switch (_context65.p = _context65.n) {
+        return _regenerator().w(function (_context66) {
+          while (1) switch (_context66.p = _context66.n) {
             case 0:
               modal = document.getElementById('bulk-match-modal');
               loadingEl = document.getElementById('bulk-match-loading');
@@ -46441,11 +46965,11 @@ var BudgetApp = /*#__PURE__*/function () {
 
               // Show modal
               modal.style.display = 'flex';
-              _context65.p = 1;
-              _context65.n = 2;
+              _context66.p = 1;
+              _context66.n = 2;
               return this.bulkMatchTransactions();
             case 2:
-              result = _context65.v;
+              result = _context66.v;
               loadingEl.style.display = 'none';
               resultsEl.style.display = 'block';
 
@@ -46455,11 +46979,11 @@ var BudgetApp = /*#__PURE__*/function () {
 
               // Check if no results
               if (!(result.stats.autoMatchedCount === 0 && result.stats.needsReviewCount === 0)) {
-                _context65.n = 3;
+                _context66.n = 3;
                 break;
               }
               emptyEl.style.display = 'flex';
-              return _context65.a(2);
+              return _context66.a(2);
             case 3:
               // Render auto-matched pairs
               if (result.autoMatched && result.autoMatched.length > 0) {
@@ -46476,19 +47000,19 @@ var BudgetApp = /*#__PURE__*/function () {
                   return _this20.renderNeedsReviewItem(item, index);
                 }).join('');
               }
-              _context65.n = 5;
+              _context66.n = 5;
               break;
             case 4:
-              _context65.p = 4;
-              _t24 = _context65.v;
+              _context66.p = 4;
+              _t24 = _context66.v;
               loadingEl.style.display = 'none';
               resultsEl.style.display = 'block';
               emptyEl.style.display = 'flex';
               emptyEl.querySelector('p').textContent = _t24.message || 'Failed to match transactions. Please try again.';
             case 5:
-              return _context65.a(2);
+              return _context66.a(2);
           }
-        }, _callee65, this, [[1, 4]]);
+        }, _callee66, this, [[1, 4]]);
       }));
       function showBulkMatchModal() {
         return _showBulkMatchModal.apply(this, arguments);
@@ -46531,13 +47055,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionsView",
     value: (function () {
-      var _loadPensionsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee66() {
-        return _regenerator().w(function (_context66) {
-          while (1) switch (_context66.n) {
+      var _loadPensionsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee67() {
+        return _regenerator().w(function (_context67) {
+          while (1) switch (_context67.n) {
             case 0:
-              return _context66.a(2, this.pensionsModule.loadPensionsView());
+              return _context67.a(2, this.pensionsModule.loadPensionsView());
           }
-        }, _callee66, this);
+        }, _callee67, this);
       }));
       function loadPensionsView() {
         return _loadPensionsView.apply(this, arguments);
@@ -46547,13 +47071,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensions",
     value: function () {
-      var _loadPensions = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee67() {
-        return _regenerator().w(function (_context67) {
-          while (1) switch (_context67.n) {
+      var _loadPensions = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee68() {
+        return _regenerator().w(function (_context68) {
+          while (1) switch (_context68.n) {
             case 0:
-              return _context67.a(2, this.pensionsModule.loadPensions());
+              return _context68.a(2, this.pensionsModule.loadPensions());
           }
-        }, _callee67, this);
+        }, _callee68, this);
       }));
       function loadPensions() {
         return _loadPensions.apply(this, arguments);
@@ -46563,13 +47087,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionSummary",
     value: function () {
-      var _loadPensionSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee68() {
-        return _regenerator().w(function (_context68) {
-          while (1) switch (_context68.n) {
+      var _loadPensionSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee69() {
+        return _regenerator().w(function (_context69) {
+          while (1) switch (_context69.n) {
             case 0:
-              return _context68.a(2, this.pensionsModule.loadPensionSummary());
+              return _context69.a(2, this.pensionsModule.loadPensionSummary());
           }
-        }, _callee68, this);
+        }, _callee69, this);
       }));
       function loadPensionSummary() {
         return _loadPensionSummary.apply(this, arguments);
@@ -46579,13 +47103,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionProjection",
     value: function () {
-      var _loadPensionProjection = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee69() {
-        return _regenerator().w(function (_context69) {
-          while (1) switch (_context69.n) {
+      var _loadPensionProjection = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee70() {
+        return _regenerator().w(function (_context70) {
+          while (1) switch (_context70.n) {
             case 0:
-              return _context69.a(2, this.pensionsModule.loadPensionProjection());
+              return _context70.a(2, this.pensionsModule.loadPensionProjection());
           }
-        }, _callee69, this);
+        }, _callee70, this);
       }));
       function loadPensionProjection() {
         return _loadPensionProjection.apply(this, arguments);
@@ -46636,13 +47160,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "savePension",
     value: function () {
-      var _savePension = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee70() {
-        return _regenerator().w(function (_context70) {
-          while (1) switch (_context70.n) {
+      var _savePension = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee71() {
+        return _regenerator().w(function (_context71) {
+          while (1) switch (_context71.n) {
             case 0:
-              return _context70.a(2, this.pensionsModule.savePension());
+              return _context71.a(2, this.pensionsModule.savePension());
           }
-        }, _callee70, this);
+        }, _callee71, this);
       }));
       function savePension() {
         return _savePension.apply(this, arguments);
@@ -46652,13 +47176,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "deletePension",
     value: function () {
-      var _deletePension = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee71(pensionId) {
-        return _regenerator().w(function (_context71) {
-          while (1) switch (_context71.n) {
+      var _deletePension = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee72(pensionId) {
+        return _regenerator().w(function (_context72) {
+          while (1) switch (_context72.n) {
             case 0:
-              return _context71.a(2, this.pensionsModule.deletePension(pensionId));
+              return _context72.a(2, this.pensionsModule.deletePension(pensionId));
           }
-        }, _callee71, this);
+        }, _callee72, this);
       }));
       function deletePension(_x33) {
         return _deletePension.apply(this, arguments);
@@ -46668,13 +47192,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "showPensionDetails",
     value: function () {
-      var _showPensionDetails = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee72(pensionId) {
-        return _regenerator().w(function (_context72) {
-          while (1) switch (_context72.n) {
+      var _showPensionDetails = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee73(pensionId) {
+        return _regenerator().w(function (_context73) {
+          while (1) switch (_context73.n) {
             case 0:
-              return _context72.a(2, this.pensionsModule.showPensionDetails(pensionId));
+              return _context73.a(2, this.pensionsModule.showPensionDetails(pensionId));
           }
-        }, _callee72, this);
+        }, _callee73, this);
       }));
       function showPensionDetails(_x34) {
         return _showPensionDetails.apply(this, arguments);
@@ -46689,13 +47213,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionBalanceChart",
     value: function () {
-      var _loadPensionBalanceChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee73(pensionId) {
-        return _regenerator().w(function (_context73) {
-          while (1) switch (_context73.n) {
+      var _loadPensionBalanceChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee74(pensionId) {
+        return _regenerator().w(function (_context74) {
+          while (1) switch (_context74.n) {
             case 0:
-              return _context73.a(2, this.pensionsModule.loadPensionBalanceChart(pensionId));
+              return _context74.a(2, this.pensionsModule.loadPensionBalanceChart(pensionId));
           }
-        }, _callee73, this);
+        }, _callee74, this);
       }));
       function loadPensionBalanceChart(_x35) {
         return _loadPensionBalanceChart.apply(this, arguments);
@@ -46705,13 +47229,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionProjectionChart",
     value: function () {
-      var _loadPensionProjectionChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee74(pensionId) {
-        return _regenerator().w(function (_context74) {
-          while (1) switch (_context74.n) {
+      var _loadPensionProjectionChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee75(pensionId) {
+        return _regenerator().w(function (_context75) {
+          while (1) switch (_context75.n) {
             case 0:
-              return _context74.a(2, this.pensionsModule.loadPensionProjectionChart(pensionId));
+              return _context75.a(2, this.pensionsModule.loadPensionProjectionChart(pensionId));
           }
-        }, _callee74, this);
+        }, _callee75, this);
       }));
       function loadPensionProjectionChart(_x36) {
         return _loadPensionProjectionChart.apply(this, arguments);
@@ -46721,13 +47245,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadPensionActivity",
     value: function () {
-      var _loadPensionActivity = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee75(pensionId) {
-        return _regenerator().w(function (_context75) {
-          while (1) switch (_context75.n) {
+      var _loadPensionActivity = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee76(pensionId) {
+        return _regenerator().w(function (_context76) {
+          while (1) switch (_context76.n) {
             case 0:
-              return _context75.a(2, this.pensionsModule.loadPensionActivity(pensionId));
+              return _context76.a(2, this.pensionsModule.loadPensionActivity(pensionId));
           }
-        }, _callee75, this);
+        }, _callee76, this);
       }));
       function loadPensionActivity(_x37) {
         return _loadPensionActivity.apply(this, arguments);
@@ -46747,13 +47271,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveSnapshot",
     value: function () {
-      var _saveSnapshot = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee76() {
-        return _regenerator().w(function (_context76) {
-          while (1) switch (_context76.n) {
+      var _saveSnapshot = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee77() {
+        return _regenerator().w(function (_context77) {
+          while (1) switch (_context77.n) {
             case 0:
-              return _context76.a(2, this.pensionsModule.saveSnapshot());
+              return _context77.a(2, this.pensionsModule.saveSnapshot());
           }
-        }, _callee76, this);
+        }, _callee77, this);
       }));
       function saveSnapshot() {
         return _saveSnapshot.apply(this, arguments);
@@ -46773,13 +47297,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveContribution",
     value: function () {
-      var _saveContribution = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee77() {
-        return _regenerator().w(function (_context77) {
-          while (1) switch (_context77.n) {
+      var _saveContribution = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee78() {
+        return _regenerator().w(function (_context78) {
+          while (1) switch (_context78.n) {
             case 0:
-              return _context77.a(2, this.pensionsModule.saveContribution());
+              return _context78.a(2, this.pensionsModule.saveContribution());
           }
-        }, _callee77, this);
+        }, _callee78, this);
       }));
       function saveContribution() {
         return _saveContribution.apply(this, arguments);
@@ -46789,13 +47313,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadDashboardPensionSummary",
     value: function () {
-      var _loadDashboardPensionSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee78() {
-        return _regenerator().w(function (_context78) {
-          while (1) switch (_context78.n) {
+      var _loadDashboardPensionSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee79() {
+        return _regenerator().w(function (_context79) {
+          while (1) switch (_context79.n) {
             case 0:
-              return _context78.a(2, this.pensionsModule.loadDashboardPensionSummary());
+              return _context79.a(2, this.pensionsModule.loadDashboardPensionSummary());
           }
-        }, _callee78, this);
+        }, _callee79, this);
       }));
       function loadDashboardPensionSummary() {
         return _loadDashboardPensionSummary.apply(this, arguments);
@@ -46807,13 +47331,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssetsView",
     value: function () {
-      var _loadAssetsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee79() {
-        return _regenerator().w(function (_context79) {
-          while (1) switch (_context79.n) {
+      var _loadAssetsView = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee80() {
+        return _regenerator().w(function (_context80) {
+          while (1) switch (_context80.n) {
             case 0:
-              return _context79.a(2, this.assetsModule.loadAssetsView());
+              return _context80.a(2, this.assetsModule.loadAssetsView());
           }
-        }, _callee79, this);
+        }, _callee80, this);
       }));
       function loadAssetsView() {
         return _loadAssetsView.apply(this, arguments);
@@ -46823,13 +47347,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssets",
     value: function () {
-      var _loadAssets = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee80() {
-        return _regenerator().w(function (_context80) {
-          while (1) switch (_context80.n) {
+      var _loadAssets = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee81() {
+        return _regenerator().w(function (_context81) {
+          while (1) switch (_context81.n) {
             case 0:
-              return _context80.a(2, this.assetsModule.loadAssets());
+              return _context81.a(2, this.assetsModule.loadAssets());
           }
-        }, _callee80, this);
+        }, _callee81, this);
       }));
       function loadAssets() {
         return _loadAssets.apply(this, arguments);
@@ -46839,13 +47363,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssetSummary",
     value: function () {
-      var _loadAssetSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee81() {
-        return _regenerator().w(function (_context81) {
-          while (1) switch (_context81.n) {
+      var _loadAssetSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee82() {
+        return _regenerator().w(function (_context82) {
+          while (1) switch (_context82.n) {
             case 0:
-              return _context81.a(2, this.assetsModule.loadAssetSummary());
+              return _context82.a(2, this.assetsModule.loadAssetSummary());
           }
-        }, _callee81, this);
+        }, _callee82, this);
       }));
       function loadAssetSummary() {
         return _loadAssetSummary.apply(this, arguments);
@@ -46855,13 +47379,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssetProjection",
     value: function () {
-      var _loadAssetProjection = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee82() {
-        return _regenerator().w(function (_context82) {
-          while (1) switch (_context82.n) {
+      var _loadAssetProjection = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee83() {
+        return _regenerator().w(function (_context83) {
+          while (1) switch (_context83.n) {
             case 0:
-              return _context82.a(2, this.assetsModule.loadAssetProjection());
+              return _context83.a(2, this.assetsModule.loadAssetProjection());
           }
-        }, _callee82, this);
+        }, _callee83, this);
       }));
       function loadAssetProjection() {
         return _loadAssetProjection.apply(this, arguments);
@@ -46907,13 +47431,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveAsset",
     value: function () {
-      var _saveAsset = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee83() {
-        return _regenerator().w(function (_context83) {
-          while (1) switch (_context83.n) {
+      var _saveAsset = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee84() {
+        return _regenerator().w(function (_context84) {
+          while (1) switch (_context84.n) {
             case 0:
-              return _context83.a(2, this.assetsModule.saveAsset());
+              return _context84.a(2, this.assetsModule.saveAsset());
           }
-        }, _callee83, this);
+        }, _callee84, this);
       }));
       function saveAsset() {
         return _saveAsset.apply(this, arguments);
@@ -46923,13 +47447,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "deleteAsset",
     value: function () {
-      var _deleteAsset = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee84(assetId) {
-        return _regenerator().w(function (_context84) {
-          while (1) switch (_context84.n) {
+      var _deleteAsset = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee85(assetId) {
+        return _regenerator().w(function (_context85) {
+          while (1) switch (_context85.n) {
             case 0:
-              return _context84.a(2, this.assetsModule.deleteAsset(assetId));
+              return _context85.a(2, this.assetsModule.deleteAsset(assetId));
           }
-        }, _callee84, this);
+        }, _callee85, this);
       }));
       function deleteAsset(_x38) {
         return _deleteAsset.apply(this, arguments);
@@ -46939,13 +47463,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "showAssetDetails",
     value: function () {
-      var _showAssetDetails = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee85(assetId) {
-        return _regenerator().w(function (_context85) {
-          while (1) switch (_context85.n) {
+      var _showAssetDetails = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee86(assetId) {
+        return _regenerator().w(function (_context86) {
+          while (1) switch (_context86.n) {
             case 0:
-              return _context85.a(2, this.assetsModule.showAssetDetails(assetId));
+              return _context86.a(2, this.assetsModule.showAssetDetails(assetId));
           }
-        }, _callee85, this);
+        }, _callee86, this);
       }));
       function showAssetDetails(_x39) {
         return _showAssetDetails.apply(this, arguments);
@@ -46960,13 +47484,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssetValueChart",
     value: function () {
-      var _loadAssetValueChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee86(assetId) {
-        return _regenerator().w(function (_context86) {
-          while (1) switch (_context86.n) {
+      var _loadAssetValueChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee87(assetId) {
+        return _regenerator().w(function (_context87) {
+          while (1) switch (_context87.n) {
             case 0:
-              return _context86.a(2, this.assetsModule.loadAssetValueChart(assetId));
+              return _context87.a(2, this.assetsModule.loadAssetValueChart(assetId));
           }
-        }, _callee86, this);
+        }, _callee87, this);
       }));
       function loadAssetValueChart(_x40) {
         return _loadAssetValueChart.apply(this, arguments);
@@ -46976,13 +47500,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAssetProjectionChart",
     value: function () {
-      var _loadAssetProjectionChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee87(assetId) {
-        return _regenerator().w(function (_context87) {
-          while (1) switch (_context87.n) {
+      var _loadAssetProjectionChart = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee88(assetId) {
+        return _regenerator().w(function (_context88) {
+          while (1) switch (_context88.n) {
             case 0:
-              return _context87.a(2, this.assetsModule.loadAssetProjectionChart(assetId));
+              return _context88.a(2, this.assetsModule.loadAssetProjectionChart(assetId));
           }
-        }, _callee87, this);
+        }, _callee88, this);
       }));
       function loadAssetProjectionChart(_x41) {
         return _loadAssetProjectionChart.apply(this, arguments);
@@ -47002,13 +47526,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveValueUpdate",
     value: function () {
-      var _saveValueUpdate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee88() {
-        return _regenerator().w(function (_context88) {
-          while (1) switch (_context88.n) {
+      var _saveValueUpdate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee89() {
+        return _regenerator().w(function (_context89) {
+          while (1) switch (_context89.n) {
             case 0:
-              return _context88.a(2, this.assetsModule.saveValueUpdate());
+              return _context89.a(2, this.assetsModule.saveValueUpdate());
           }
-        }, _callee88, this);
+        }, _callee89, this);
       }));
       function saveValueUpdate() {
         return _saveValueUpdate.apply(this, arguments);
@@ -47018,13 +47542,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadDashboardAssetSummary",
     value: function () {
-      var _loadDashboardAssetSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee89() {
-        return _regenerator().w(function (_context89) {
-          while (1) switch (_context89.n) {
+      var _loadDashboardAssetSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee90() {
+        return _regenerator().w(function (_context90) {
+          while (1) switch (_context90.n) {
             case 0:
-              return _context89.a(2, this.assetsModule.loadDashboardAssetSummary());
+              return _context90.a(2, this.assetsModule.loadDashboardAssetSummary());
           }
-        }, _callee89, this);
+        }, _callee90, this);
       }));
       function loadDashboardAssetSummary() {
         return _loadDashboardAssetSummary.apply(this, arguments);
@@ -47082,22 +47606,22 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "toggleColumnVisibility",
     value: function () {
-      var _toggleColumnVisibility = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee90(columnKey, visible) {
+      var _toggleColumnVisibility = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee91(columnKey, visible) {
         var visibleCount, settings, response, _t25;
-        return _regenerator().w(function (_context90) {
-          while (1) switch (_context90.p = _context90.n) {
+        return _regenerator().w(function (_context91) {
+          while (1) switch (_context91.p = _context91.n) {
             case 0:
               // Prevent hiding all columns (enforce minimum 1 visible)
               visibleCount = Object.values(this.columnVisibility).filter(function (v) {
                 return v;
               }).length;
               if (!(!visible && visibleCount <= 1)) {
-                _context90.n = 1;
+                _context91.n = 1;
                 break;
               }
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showWarning)('At least one column must remain visible');
               document.getElementById("col-toggle-".concat(columnKey)).checked = true;
-              return _context90.a(2);
+              return _context91.a(2);
             case 1:
               // Update local state
               this.columnVisibility[columnKey] = visible;
@@ -47106,11 +47630,11 @@ var BudgetApp = /*#__PURE__*/function () {
               this.applyColumnVisibility();
 
               // Persist to backend
-              _context90.p = 2;
+              _context91.p = 2;
               settings = {
                 transaction_columns_visible: JSON.stringify(this.columnVisibility)
               };
-              _context90.n = 3;
+              _context91.n = 3;
               return fetch(OC.generateUrl('/apps/budget/api/settings'), {
                 method: 'PUT',
                 headers: {
@@ -47120,19 +47644,19 @@ var BudgetApp = /*#__PURE__*/function () {
                 body: JSON.stringify(settings)
               });
             case 3:
-              response = _context90.v;
+              response = _context91.v;
               if (response.ok) {
-                _context90.n = 4;
+                _context91.n = 4;
                 break;
               }
               throw new Error('Failed to save column visibility');
             case 4:
               this.settings.transaction_columns_visible = JSON.stringify(this.columnVisibility);
-              _context90.n = 6;
+              _context91.n = 6;
               break;
             case 5:
-              _context90.p = 5;
-              _t25 = _context90.v;
+              _context91.p = 5;
+              _t25 = _context91.v;
               console.error('Failed to save column visibility:', _t25);
               (0,_utils_notifications_js__WEBPACK_IMPORTED_MODULE_6__.showError)('Failed to save column preferences');
 
@@ -47141,9 +47665,9 @@ var BudgetApp = /*#__PURE__*/function () {
               this.applyColumnVisibility();
               document.getElementById("col-toggle-".concat(columnKey)).checked = !visible;
             case 6:
-              return _context90.a(2);
+              return _context91.a(2);
           }
-        }, _callee90, this, [[2, 5]]);
+        }, _callee91, this, [[2, 5]]);
       }));
       function toggleColumnVisibility(_x42, _x43) {
         return _toggleColumnVisibility.apply(this, arguments);
@@ -47172,13 +47696,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadTagSetsForCategory",
     value: function () {
-      var _loadTagSetsForCategory = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee91(categoryId) {
-        return _regenerator().w(function (_context91) {
-          while (1) switch (_context91.n) {
+      var _loadTagSetsForCategory = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee92(categoryId) {
+        return _regenerator().w(function (_context92) {
+          while (1) switch (_context92.n) {
             case 0:
-              return _context91.a(2, this.tagSetsModule.loadTagSetsForCategory(categoryId));
+              return _context92.a(2, this.tagSetsModule.loadTagSetsForCategory(categoryId));
           }
-        }, _callee91, this);
+        }, _callee92, this);
       }));
       function loadTagSetsForCategory(_x44) {
         return _loadTagSetsForCategory.apply(this, arguments);
@@ -47188,13 +47712,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadTransactionTags",
     value: function () {
-      var _loadTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee92(transactionId) {
-        return _regenerator().w(function (_context92) {
-          while (1) switch (_context92.n) {
+      var _loadTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee93(transactionId) {
+        return _regenerator().w(function (_context93) {
+          while (1) switch (_context93.n) {
             case 0:
-              return _context92.a(2, this.tagSetsModule.loadTransactionTags(transactionId));
+              return _context93.a(2, this.tagSetsModule.loadTransactionTags(transactionId));
           }
-        }, _callee92, this);
+        }, _callee93, this);
       }));
       function loadTransactionTags(_x45) {
         return _loadTransactionTags.apply(this, arguments);
@@ -47204,13 +47728,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "saveTransactionTags",
     value: function () {
-      var _saveTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee93(transactionId, tagIds) {
-        return _regenerator().w(function (_context93) {
-          while (1) switch (_context93.n) {
+      var _saveTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee94(transactionId, tagIds) {
+        return _regenerator().w(function (_context94) {
+          while (1) switch (_context94.n) {
             case 0:
-              return _context93.a(2, this.tagSetsModule.saveTransactionTags(transactionId, tagIds));
+              return _context94.a(2, this.tagSetsModule.saveTransactionTags(transactionId, tagIds));
           }
-        }, _callee93, this);
+        }, _callee94, this);
       }));
       function saveTransactionTags(_x46, _x47) {
         return _saveTransactionTags.apply(this, arguments);
@@ -47225,13 +47749,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "renderCategoryTagSetsUI",
     value: function () {
-      var _renderCategoryTagSetsUI = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee94(categoryId) {
-        return _regenerator().w(function (_context94) {
-          while (1) switch (_context94.n) {
+      var _renderCategoryTagSetsUI = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee95(categoryId) {
+        return _regenerator().w(function (_context95) {
+          while (1) switch (_context95.n) {
             case 0:
-              return _context94.a(2, this.tagSetsModule.renderCategoryTagSetsUI(categoryId));
+              return _context95.a(2, this.tagSetsModule.renderCategoryTagSetsUI(categoryId));
           }
-        }, _callee94, this);
+        }, _callee95, this);
       }));
       function renderCategoryTagSetsUI(_x48) {
         return _renderCategoryTagSetsUI.apply(this, arguments);
@@ -47241,13 +47765,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "renderTransactionTagSelectors",
     value: function () {
-      var _renderTransactionTagSelectors = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee95(categoryId, transactionId) {
-        return _regenerator().w(function (_context95) {
-          while (1) switch (_context95.n) {
+      var _renderTransactionTagSelectors = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee96(categoryId, transactionId) {
+        return _regenerator().w(function (_context96) {
+          while (1) switch (_context96.n) {
             case 0:
-              return _context95.a(2, this.tagSetsModule.renderTransactionTagSelectors(categoryId, transactionId));
+              return _context96.a(2, this.tagSetsModule.renderTransactionTagSelectors(categoryId, transactionId));
           }
-        }, _callee95, this);
+        }, _callee96, this);
       }));
       function renderTransactionTagSelectors(_x49, _x50) {
         return _renderTransactionTagSelectors.apply(this, arguments);
@@ -47257,13 +47781,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAndDisplayTransactionTags",
     value: function () {
-      var _loadAndDisplayTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee96() {
-        return _regenerator().w(function (_context96) {
-          while (1) switch (_context96.n) {
+      var _loadAndDisplayTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee97() {
+        return _regenerator().w(function (_context97) {
+          while (1) switch (_context97.n) {
             case 0:
-              return _context96.a(2, this.tagSetsModule.loadAndDisplayTransactionTags());
+              return _context97.a(2, this.tagSetsModule.loadAndDisplayTransactionTags());
           }
-        }, _callee96, this);
+        }, _callee97, this);
       }));
       function loadAndDisplayTransactionTags() {
         return _loadAndDisplayTransactionTags.apply(this, arguments);
@@ -47273,13 +47797,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "renderCategoryTagSetsList",
     value: function () {
-      var _renderCategoryTagSetsList = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee97(categoryId) {
-        return _regenerator().w(function (_context97) {
-          while (1) switch (_context97.n) {
+      var _renderCategoryTagSetsList = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee98(categoryId) {
+        return _regenerator().w(function (_context98) {
+          while (1) switch (_context98.n) {
             case 0:
-              return _context97.a(2, this.tagSetsModule.renderCategoryTagSetsList(categoryId));
+              return _context98.a(2, this.tagSetsModule.renderCategoryTagSetsList(categoryId));
           }
-        }, _callee97, this);
+        }, _callee98, this);
       }));
       function renderCategoryTagSetsList(_x51) {
         return _renderCategoryTagSetsList.apply(this, arguments);
@@ -47289,13 +47813,13 @@ var BudgetApp = /*#__PURE__*/function () {
   }, {
     key: "loadAllTransactionTags",
     value: function () {
-      var _loadAllTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee98() {
-        return _regenerator().w(function (_context98) {
-          while (1) switch (_context98.n) {
+      var _loadAllTransactionTags = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee99() {
+        return _regenerator().w(function (_context99) {
+          while (1) switch (_context99.n) {
             case 0:
-              return _context98.a(2, this.tagSetsModule.loadAllTransactionTags());
+              return _context99.a(2, this.tagSetsModule.loadAllTransactionTags());
           }
-        }, _callee98, this);
+        }, _callee99, this);
       }));
       function loadAllTransactionTags() {
         return _loadAllTransactionTags.apply(this, arguments);

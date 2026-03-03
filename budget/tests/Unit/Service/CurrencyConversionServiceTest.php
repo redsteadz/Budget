@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace OCA\Budget\Tests\Unit\Service;
 
 use OCA\Budget\Db\Account;
+use OCA\Budget\Db\ManualExchangeRate;
+use OCA\Budget\Db\ManualExchangeRateMapper;
 use OCA\Budget\Service\CurrencyConversionService;
 use OCA\Budget\Service\ExchangeRateService;
 use OCA\Budget\Service\SettingService;
@@ -14,13 +16,16 @@ class CurrencyConversionServiceTest extends TestCase {
 	private CurrencyConversionService $service;
 	private ExchangeRateService $exchangeRateService;
 	private SettingService $settingService;
+	private ManualExchangeRateMapper $manualRateMapper;
 
 	protected function setUp(): void {
 		$this->exchangeRateService = $this->createMock(ExchangeRateService::class);
 		$this->settingService = $this->createMock(SettingService::class);
+		$this->manualRateMapper = $this->createMock(ManualExchangeRateMapper::class);
 		$this->service = new CurrencyConversionService(
 			$this->exchangeRateService,
-			$this->settingService
+			$this->settingService,
+			$this->manualRateMapper
 		);
 	}
 
@@ -111,12 +116,112 @@ class CurrencyConversionServiceTest extends TestCase {
 		$this->assertGreaterThan(0, $resultFloat);
 	}
 
-	// ===== convertToBase() =====
+	// ===== convertLocal() does NOT use manual rates =====
+
+	public function testConvertLocalDoesNotCheckManualRates(): void {
+		$this->manualRateMapper->expects($this->never())->method('findByUserAndCurrency');
+
+		$this->exchangeRateService->method('getRateLocal')
+			->willReturnMap([
+				['USD', null, '1.0800000000'],
+				['GBP', null, '0.8500000000'],
+			]);
+
+		$result = $this->service->convertLocal('100', 'USD', 'GBP');
+		$this->assertGreaterThan(0, (float) $result);
+	}
+
+	// ===== convertToBase() with manual rates =====
+
+	public function testConvertToBaseUsesManualRateWhenAvailable(): void {
+		$this->settingService->method('get')
+			->with('user1', 'default_currency')
+			->willReturn('GBP');
+
+		// Manual rate set for ARS
+		$manualRate = new ManualExchangeRate();
+		$manualRate->setRatePerEur('1048.9000000000');
+
+		$this->manualRateMapper->method('findByUserAndCurrency')
+			->willReturnCallback(function ($userId, $currency) use ($manualRate) {
+				if ($userId === 'user1' && $currency === 'ARS') {
+					return $manualRate;
+				}
+				return null;
+			});
+
+		// Auto rate for GBP (base currency)
+		$this->exchangeRateService->method('getRateLocal')
+			->willReturnMap([
+				['GBP', null, '0.8500000000'],
+			]);
+
+		$result = $this->service->convertToBase('1000', 'ARS', 'user1');
+		$resultFloat = round((float) $result, 2);
+		// ARS→GBP: 1000 * (0.85 / 1048.9) ≈ 0.81
+		$this->assertEqualsWithDelta(0.81, $resultFloat, 0.01);
+	}
+
+	public function testConvertToBaseFallsBackToAutoWhenNoManualRate(): void {
+		$this->settingService->method('get')
+			->with('user1', 'default_currency')
+			->willReturn('GBP');
+
+		// No manual rates
+		$this->manualRateMapper->method('findByUserAndCurrency')->willReturn(null);
+
+		$this->exchangeRateService->method('getRateLocal')
+			->willReturnMap([
+				['USD', null, '1.0800000000'],
+				['GBP', null, '0.8500000000'],
+			]);
+
+		$result = $this->service->convertToBase('100', 'USD', 'user1');
+		$resultFloat = round((float) $result, 2);
+		$this->assertEqualsWithDelta(78.70, $resultFloat, 0.01);
+	}
+
+	public function testConvertToBaseManualRateForBaseCurrency(): void {
+		$this->settingService->method('get')
+			->with('user1', 'default_currency')
+			->willReturn('GBP');
+
+		// Manual rate for GBP (base currency) and auto for USD
+		$manualGbp = new ManualExchangeRate();
+		$manualGbp->setRatePerEur('0.9000000000');
+
+		$this->manualRateMapper->method('findByUserAndCurrency')
+			->willReturnCallback(function ($userId, $currency) use ($manualGbp) {
+				if ($currency === 'GBP') return $manualGbp;
+				return null;
+			});
+
+		$this->exchangeRateService->method('getRateLocal')
+			->willReturnMap([
+				['USD', null, '1.0800000000'],
+			]);
+
+		$result = $this->service->convertToBase('100', 'USD', 'user1');
+		$resultFloat = round((float) $result, 2);
+		// USD→GBP: 100 * (0.90 / 1.08) ≈ 83.33
+		$this->assertEqualsWithDelta(83.33, $resultFloat, 0.01);
+	}
+
+	public function testConvertToBaseGracefulDegradationNoRates(): void {
+		$this->settingService->method('get')->willReturn('GBP');
+		$this->manualRateMapper->method('findByUserAndCurrency')->willReturn(null);
+		$this->exchangeRateService->method('getRateLocal')->willReturn(null);
+
+		$result = $this->service->convertToBase('100', 'XYZ', 'user1');
+		$this->assertEquals('100', $result);
+	}
 
 	public function testConvertToBaseUsesUserDefaultCurrency(): void {
 		$this->settingService->method('get')
 			->with('user1', 'default_currency')
 			->willReturn('GBP');
+
+		$this->manualRateMapper->method('findByUserAndCurrency')->willReturn(null);
 
 		$this->exchangeRateService->method('getRateLocal')
 			->willReturnMap([
@@ -133,6 +238,8 @@ class CurrencyConversionServiceTest extends TestCase {
 		$this->settingService->method('get')
 			->with('user1', 'default_currency')
 			->willReturn(null);
+
+		$this->manualRateMapper->method('findByUserAndCurrency')->willReturn(null);
 
 		$this->exchangeRateService->method('getRateLocal')
 			->willReturnMap([
@@ -151,6 +258,8 @@ class CurrencyConversionServiceTest extends TestCase {
 	public function testConvertToBaseFloatReturnsFloat(): void {
 		$this->settingService->method('get')
 			->willReturn('GBP');
+
+		$this->manualRateMapper->method('findByUserAndCurrency')->willReturn(null);
 
 		$this->exchangeRateService->method('getRateLocal')
 			->willReturnMap([

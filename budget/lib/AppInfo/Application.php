@@ -617,6 +617,11 @@ class Application extends App implements IBootstrap {
         });
         $context->registerServiceAlias('ExchangeRateMapper', \OCA\Budget\Db\ExchangeRateMapper::class);
 
+        $context->registerService(\OCA\Budget\Db\ManualExchangeRateMapper::class, function($c) {
+            return new \OCA\Budget\Db\ManualExchangeRateMapper($c->get(\OCP\IDBConnection::class));
+        });
+        $context->registerServiceAlias('ManualExchangeRateMapper', \OCA\Budget\Db\ManualExchangeRateMapper::class);
+
         $context->registerService(\OCA\Budget\Service\ExchangeRateService::class, function($c) {
             return new \OCA\Budget\Service\ExchangeRateService(
                 $c->get(\OCA\Budget\Db\ExchangeRateMapper::class),
@@ -626,10 +631,20 @@ class Application extends App implements IBootstrap {
         });
         $context->registerServiceAlias('ExchangeRateService', \OCA\Budget\Service\ExchangeRateService::class);
 
+        $context->registerService(\OCA\Budget\Service\ManualExchangeRateService::class, function($c) {
+            return new \OCA\Budget\Service\ManualExchangeRateService(
+                $c->get(\OCA\Budget\Db\ManualExchangeRateMapper::class),
+                $c->get(\OCA\Budget\Service\ExchangeRateService::class),
+                $c->get(\OCA\Budget\Service\SettingService::class)
+            );
+        });
+        $context->registerServiceAlias('ManualExchangeRateService', \OCA\Budget\Service\ManualExchangeRateService::class);
+
         $context->registerService(\OCA\Budget\Service\CurrencyConversionService::class, function($c) {
             return new \OCA\Budget\Service\CurrencyConversionService(
                 $c->get(\OCA\Budget\Service\ExchangeRateService::class),
-                $c->get(\OCA\Budget\Service\SettingService::class)
+                $c->get(\OCA\Budget\Service\SettingService::class),
+                $c->get(\OCA\Budget\Db\ManualExchangeRateMapper::class)
             );
         });
         $context->registerServiceAlias('CurrencyConversionService', \OCA\Budget\Service\CurrencyConversionService::class);

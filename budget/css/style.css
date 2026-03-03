@@ -6912,6 +6912,292 @@ button.danger:hover {
 }
 
 /* ==========================================
+   Exchange Rates View Styles
+   ========================================== */
+
+/* Exchange Rates Summary */
+.exchange-rates-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.exchange-rates-summary .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--color-main-background);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.exchange-rates-summary .summary-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background-hover);
+    border-radius: 50%;
+    color: var(--color-primary, #0082c9);
+}
+
+.exchange-rates-summary .summary-content {
+    flex: 1;
+}
+
+.exchange-rates-summary .summary-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-main-text);
+}
+
+.exchange-rates-summary .summary-label {
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+    margin-top: 2px;
+}
+
+/* Exchange Rates Tabs */
+.exchange-rates-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0;
+}
+
+.exchange-rates-tabs .tab-button {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: var(--color-text-maxcontrast);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    border-radius: 0;
+    min-height: 36px;
+    transition: all 0.2s ease;
+}
+
+.exchange-rates-tabs .tab-button:hover {
+    color: var(--color-main-text);
+    background: var(--color-background-hover);
+}
+
+.exchange-rates-tabs .tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Rate Cards List */
+.exchange-rates-container {
+    position: relative;
+}
+
+.exchange-rates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rate-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--color-main-background);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease;
+}
+
+.rate-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rate-card.auto {
+    border-left: 4px solid var(--color-primary-element, #0082c9);
+}
+
+.rate-card.manual {
+    border-left: 4px solid #f59d00;
+}
+
+.rate-card.no-rate {
+    border-left: 4px solid var(--color-error);
+    background: rgba(var(--color-error-rgb, 198, 40, 40), 0.03);
+}
+
+/* Rate Card Header */
+.rate-card-header {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.rate-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rate-currency-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    margin: 0;
+}
+
+.rate-currency-code {
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+    font-weight: 500;
+}
+
+.rate-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.no-rate-text {
+    color: var(--color-text-maxcontrast);
+    font-style: italic;
+    font-weight: 400;
+}
+
+/* Rate Card Details */
+.rate-details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+/* Source Badges */
+.rate-source .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.rate-source-floatrates .status-badge {
+    background: rgba(0, 130, 201, 0.12);
+    color: #0082c9;
+}
+
+.rate-source-coingecko .status-badge {
+    background: rgba(237, 108, 2, 0.12);
+    color: #ed6c02;
+}
+
+.rate-source-manual .status-badge {
+    background: rgba(245, 157, 0, 0.12);
+    color: #c67d00;
+}
+
+.rate-source-ecb .status-badge {
+    background: rgba(108, 117, 125, 0.12);
+    color: #6c757d;
+}
+
+.rate-source-none .status-badge {
+    background: rgba(var(--color-error-rgb, 198, 40, 40), 0.12);
+    color: var(--color-error, #c62828);
+}
+
+/* Rate Card Actions */
+.rate-actions {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-left: auto;
+    padding-left: 16px;
+}
+
+/* Manual Rate Modal Enhancements */
+.manual-rate-currency-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    margin-bottom: 16px;
+}
+
+.manual-rate-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.manual-rate-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-main-text);
+    white-space: nowrap;
+}
+
+.manual-rate-input {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
+    .exchange-rates-summary {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .exchange-rates-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .exchange-rates-tabs {
+        flex-wrap: wrap;
+    }
+
+    .rate-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rate-card-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .rate-value {
+        text-align: left;
+    }
+
+    .rate-details {
+        padding: 8px 0;
+    }
+
+    .rate-actions {
+        margin-left: 0;
+        padding-left: 0;
+        padding-top: 8px;
+    }
+}
+
+/* ==========================================
    Recurring Income View Styles
    ========================================== */
 
