@@ -321,6 +321,45 @@ class BudgetApp {
             });
         }
 
+        // More-actions menu (fixed position to avoid overflow clipping)
+        document.addEventListener('click', (e) => {
+            const moreBtn = e.target.closest('.more-actions-btn');
+            if (moreBtn) {
+                e.stopPropagation();
+                const existing = document.querySelector('.action-menu-fixed');
+                if (existing) existing.remove();
+
+                const transactionId = moreBtn.getAttribute('data-transaction-id');
+                const transaction = this.transactions?.find(t => t.id === parseInt(transactionId));
+                const isLinked = transaction?.linkedTransactionId != null;
+                const rect = moreBtn.getBoundingClientRect();
+
+                const menu = document.createElement('div');
+                menu.className = 'action-menu-fixed';
+                menu.style.top = `${rect.bottom + 2}px`;
+                menu.style.left = `${rect.left}px`;
+                menu.innerHTML = `
+                    <button class="action-menu-item transaction-split-btn" data-transaction-id="${transactionId}">Split</button>
+                    <button class="action-menu-item transaction-share-btn" data-transaction-id="${transactionId}">Share</button>
+                    ${isLinked
+                        ? `<button class="action-menu-item transaction-unlink-btn" data-transaction-id="${transactionId}">Unlink Transfer</button>`
+                        : `<button class="action-menu-item transaction-match-btn" data-transaction-id="${transactionId}">Match Transfer</button>`
+                    }
+                `;
+                document.body.appendChild(menu);
+
+                // Close menu on any click (after this event)
+                setTimeout(() => {
+                    const closeMenu = () => {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    };
+                    document.addEventListener('click', closeMenu);
+                }, 0);
+                return;
+            }
+        });
+
         // Account action buttons, transaction action buttons, and autocomplete (using event delegation)
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('edit-account-btn') || e.target.closest('.edit-account-btn')) {
@@ -863,17 +902,9 @@ class BudgetApp {
             const linkedBadge = isLinked
                 ? `<span class="linked-indicator" data-transaction-id="${transaction.id}" data-linked-id="${transaction.linkedTransactionId}" title="Linked transfer - click to unlink">&#x1F517; Transfer</span>`
                 : '';
-            const matchButton = !isLinked
-                ? `<button class="action-btn match-btn transaction-match-btn"
-                          data-transaction-id="${transaction.id}"
-                          title="Find transfer matches">
-                      <span class="icon-external" aria-hidden="true"></span>
-                  </button>`
-                : `<button class="action-btn unlink-btn transaction-unlink-btn"
-                          data-transaction-id="${transaction.id}"
-                          title="Unlink transfer">
-                      &#x2716;
-                  </button>`;
+            const matchOption = !isLinked
+                ? `<option value="match">Match Transfer</option>`
+                : `<option value="unlink">Unlink Transfer</option>`;
 
             return `
                 <tr class="transaction-row ${isLinked ? 'is-linked' : ''}" data-transaction-id="${transaction.id}">
@@ -936,20 +967,14 @@ class BudgetApp {
                     </td>
                     <td class="actions-column">
                         <div class="transaction-actions">
-                            <button class="action-btn split-btn transaction-split-btn"
+                            <button class="action-btn more-actions-btn"
                                     data-transaction-id="${transaction.id}"
-                                    title="Split into categories">
-                                <span aria-hidden="true">⋯</span>
+                                    title="More actions">
+                                <span aria-hidden="true">&#x22EE;</span>
                             </button>
-                            <button class="action-btn share-btn transaction-share-btn"
-                                    data-transaction-id="${transaction.id}"
-                                    title="Share with contact">
-                                <span aria-hidden="true">👥</span>
-                            </button>
-                            ${matchButton}
                             <button class="action-btn edit-btn transaction-edit-btn"
                                     data-transaction-id="${transaction.id}"
-                                    title="Edit transaction (modal)">
+                                    title="Edit transaction">
                                 <span class="icon-rename" aria-hidden="true"></span>
                             </button>
                             <button class="action-btn delete-btn transaction-delete-btn"

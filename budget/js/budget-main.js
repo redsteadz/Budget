@@ -43599,6 +43599,39 @@ var BudgetApp = /*#__PURE__*/function () {
         });
       }
 
+      // More-actions menu (fixed position to avoid overflow clipping)
+      document.addEventListener('click', function (e) {
+        var moreBtn = e.target.closest('.more-actions-btn');
+        if (moreBtn) {
+          var _this$transactions;
+          e.stopPropagation();
+          var existing = document.querySelector('.action-menu-fixed');
+          if (existing) existing.remove();
+          var transactionId = moreBtn.getAttribute('data-transaction-id');
+          var transaction = (_this$transactions = _this.transactions) === null || _this$transactions === void 0 ? void 0 : _this$transactions.find(function (t) {
+            return t.id === parseInt(transactionId);
+          });
+          var isLinked = (transaction === null || transaction === void 0 ? void 0 : transaction.linkedTransactionId) != null;
+          var rect = moreBtn.getBoundingClientRect();
+          var menu = document.createElement('div');
+          menu.className = 'action-menu-fixed';
+          menu.style.top = "".concat(rect.bottom + 2, "px");
+          menu.style.left = "".concat(rect.left, "px");
+          menu.innerHTML = "\n                    <button class=\"action-menu-item transaction-split-btn\" data-transaction-id=\"".concat(transactionId, "\">Split</button>\n                    <button class=\"action-menu-item transaction-share-btn\" data-transaction-id=\"").concat(transactionId, "\">Share</button>\n                    ").concat(isLinked ? "<button class=\"action-menu-item transaction-unlink-btn\" data-transaction-id=\"".concat(transactionId, "\">Unlink Transfer</button>") : "<button class=\"action-menu-item transaction-match-btn\" data-transaction-id=\"".concat(transactionId, "\">Match Transfer</button>"), "\n                ");
+          document.body.appendChild(menu);
+
+          // Close menu on any click (after this event)
+          setTimeout(function () {
+            var _closeMenu = function closeMenu() {
+              menu.remove();
+              document.removeEventListener('click', _closeMenu);
+            };
+            document.addEventListener('click', _closeMenu);
+          }, 0);
+          return;
+        }
+      });
+
       // Account action buttons, transaction action buttons, and autocomplete (using event delegation)
       document.addEventListener('click', function (e) {
         if (e.target.classList.contains('edit-account-btn') || e.target.closest('.edit-account-btn')) {
@@ -43626,10 +43659,10 @@ var BudgetApp = /*#__PURE__*/function () {
           var _transactionId2 = parseInt(_button5.getAttribute('data-transaction-id'));
           _this.showSplitModal(_transactionId2);
         } else if (e.target.classList.contains('transaction-share-btn') || e.target.closest('.transaction-share-btn')) {
-          var _this$transactions;
+          var _this$transactions2;
           var _button6 = e.target.classList.contains('transaction-share-btn') ? e.target : e.target.closest('.transaction-share-btn');
           var _transactionId3 = parseInt(_button6.getAttribute('data-transaction-id'));
-          var transaction = (_this$transactions = _this.transactions) === null || _this$transactions === void 0 ? void 0 : _this$transactions.find(function (t) {
+          var transaction = (_this$transactions2 = _this.transactions) === null || _this$transactions2 === void 0 ? void 0 : _this$transactions2.find(function (t) {
             return t.id === _transactionId3;
           });
           if (transaction) {
@@ -44421,8 +44454,8 @@ var BudgetApp = /*#__PURE__*/function () {
         var formattedAmount = _this4.formatCurrency(transaction.amount, currency);
         var isLinked = transaction.linkedTransactionId != null;
         var linkedBadge = isLinked ? "<span class=\"linked-indicator\" data-transaction-id=\"".concat(transaction.id, "\" data-linked-id=\"").concat(transaction.linkedTransactionId, "\" title=\"Linked transfer - click to unlink\">&#x1F517; Transfer</span>") : '';
-        var matchButton = !isLinked ? "<button class=\"action-btn match-btn transaction-match-btn\"\n                          data-transaction-id=\"".concat(transaction.id, "\"\n                          title=\"Find transfer matches\">\n                      <span class=\"icon-external\" aria-hidden=\"true\"></span>\n                  </button>") : "<button class=\"action-btn unlink-btn transaction-unlink-btn\"\n                          data-transaction-id=\"".concat(transaction.id, "\"\n                          title=\"Unlink transfer\">\n                      &#x2716;\n                  </button>");
-        return "\n                <tr class=\"transaction-row ".concat(isLinked ? 'is-linked' : '', "\" data-transaction-id=\"").concat(transaction.id, "\">\n                    <td class=\"select-column\">\n                        <input type=\"checkbox\" class=\"transaction-checkbox\"\n                               data-transaction-id=\"").concat(transaction.id, "\"\n                               ").concat((_this4$transactionsMo = _this4.transactionsModule.selectedTransactions) !== null && _this4$transactionsMo !== void 0 && _this4$transactionsMo.has(transaction.id) ? 'checked' : '', ">\n                    </td>\n                    <td class=\"date-column editable-cell\"\n                        data-field=\"date\"\n                        data-value=\"").concat(transaction.date, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">").concat(_this4.formatDate(transaction.date), "</span>\n                    </td>\n                    <td class=\"description-column editable-cell\"\n                        data-field=\"description\"\n                        data-value=\"").concat(_this4.escapeHtml(transaction.description), "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <div class=\"transaction-description\">\n                            <span class=\"primary-text cell-display\">").concat(_this4.escapeHtml(transaction.description) || 'No description', "</span>\n                            ").concat(transaction.reference ? "<span class=\"secondary-text\">".concat(_this4.escapeHtml(transaction.reference), "</span>") : '', "\n                            ").concat(linkedBadge, "\n                        </div>\n                    </td>\n                    <td class=\"vendor-column editable-cell\"\n                        data-field=\"vendor\"\n                        data-value=\"").concat(_this4.escapeHtml(transaction.vendor || ''), "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">").concat(_this4.escapeHtml(transaction.vendor) || '-', "</span>\n                    </td>\n                    <td class=\"category-column editable-cell\"\n                        data-field=\"categoryId\"\n                        data-value=\"").concat(transaction.categoryId || '', "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"category-badge cell-display ").concat(category ? 'categorized' : 'uncategorized', "\">\n                            ").concat(category ? _this4.escapeHtml(category.name) : 'Uncategorized', "\n                        </span>\n                    </td>\n                    <td class=\"tags-column editable-cell\"\n                        data-field=\"tags\"\n                        data-value=\"").concat(_this4.getTransactionTagIds(transaction.id).join(','), "\"\n                        data-category-id=\"").concat(transaction.categoryId || '', "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">\n                            ").concat(_this4.renderTransactionTags(transaction.id), "\n                        </span>\n                    </td>\n                    <td class=\"amount-column editable-cell\"\n                        data-field=\"amount\"\n                        data-value=\"").concat(transaction.amount, "\"\n                        data-type=\"").concat(transaction.type, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"amount cell-display ").concat(typeClass, "\">").concat(formattedAmount, "</span>\n                    </td>\n                    <td class=\"account-column editable-cell\"\n                        data-field=\"accountId\"\n                        data-value=\"").concat(transaction.accountId, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"account-name cell-display\">").concat(account ? _this4.escapeHtml(account.name) : 'Unknown Account', "</span>\n                    </td>\n                    <td class=\"actions-column\">\n                        <div class=\"transaction-actions\">\n                            <button class=\"action-btn split-btn transaction-split-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Split into categories\">\n                                <span aria-hidden=\"true\">\u22EF</span>\n                            </button>\n                            <button class=\"action-btn share-btn transaction-share-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Share with contact\">\n                                <span aria-hidden=\"true\">\uD83D\uDC65</span>\n                            </button>\n                            ").concat(matchButton, "\n                            <button class=\"action-btn edit-btn transaction-edit-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Edit transaction (modal)\">\n                                <span class=\"icon-rename\" aria-hidden=\"true\"></span>\n                            </button>\n                            <button class=\"action-btn delete-btn transaction-delete-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Delete transaction\">\n                                <span class=\"icon-delete\" aria-hidden=\"true\"></span>\n                            </button>\n                        </div>\n                    </td>\n                </tr>\n            ");
+        var matchOption = !isLinked ? "<option value=\"match\">Match Transfer</option>" : "<option value=\"unlink\">Unlink Transfer</option>";
+        return "\n                <tr class=\"transaction-row ".concat(isLinked ? 'is-linked' : '', "\" data-transaction-id=\"").concat(transaction.id, "\">\n                    <td class=\"select-column\">\n                        <input type=\"checkbox\" class=\"transaction-checkbox\"\n                               data-transaction-id=\"").concat(transaction.id, "\"\n                               ").concat((_this4$transactionsMo = _this4.transactionsModule.selectedTransactions) !== null && _this4$transactionsMo !== void 0 && _this4$transactionsMo.has(transaction.id) ? 'checked' : '', ">\n                    </td>\n                    <td class=\"date-column editable-cell\"\n                        data-field=\"date\"\n                        data-value=\"").concat(transaction.date, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">").concat(_this4.formatDate(transaction.date), "</span>\n                    </td>\n                    <td class=\"description-column editable-cell\"\n                        data-field=\"description\"\n                        data-value=\"").concat(_this4.escapeHtml(transaction.description), "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <div class=\"transaction-description\">\n                            <span class=\"primary-text cell-display\">").concat(_this4.escapeHtml(transaction.description) || 'No description', "</span>\n                            ").concat(transaction.reference ? "<span class=\"secondary-text\">".concat(_this4.escapeHtml(transaction.reference), "</span>") : '', "\n                            ").concat(linkedBadge, "\n                        </div>\n                    </td>\n                    <td class=\"vendor-column editable-cell\"\n                        data-field=\"vendor\"\n                        data-value=\"").concat(_this4.escapeHtml(transaction.vendor || ''), "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">").concat(_this4.escapeHtml(transaction.vendor) || '-', "</span>\n                    </td>\n                    <td class=\"category-column editable-cell\"\n                        data-field=\"categoryId\"\n                        data-value=\"").concat(transaction.categoryId || '', "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"category-badge cell-display ").concat(category ? 'categorized' : 'uncategorized', "\">\n                            ").concat(category ? _this4.escapeHtml(category.name) : 'Uncategorized', "\n                        </span>\n                    </td>\n                    <td class=\"tags-column editable-cell\"\n                        data-field=\"tags\"\n                        data-value=\"").concat(_this4.getTransactionTagIds(transaction.id).join(','), "\"\n                        data-category-id=\"").concat(transaction.categoryId || '', "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"cell-display\">\n                            ").concat(_this4.renderTransactionTags(transaction.id), "\n                        </span>\n                    </td>\n                    <td class=\"amount-column editable-cell\"\n                        data-field=\"amount\"\n                        data-value=\"").concat(transaction.amount, "\"\n                        data-type=\"").concat(transaction.type, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"amount cell-display ").concat(typeClass, "\">").concat(formattedAmount, "</span>\n                    </td>\n                    <td class=\"account-column editable-cell\"\n                        data-field=\"accountId\"\n                        data-value=\"").concat(transaction.accountId, "\"\n                        data-transaction-id=\"").concat(transaction.id, "\">\n                        <span class=\"account-name cell-display\">").concat(account ? _this4.escapeHtml(account.name) : 'Unknown Account', "</span>\n                    </td>\n                    <td class=\"actions-column\">\n                        <div class=\"transaction-actions\">\n                            <button class=\"action-btn more-actions-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"More actions\">\n                                <span aria-hidden=\"true\">&#x22EE;</span>\n                            </button>\n                            <button class=\"action-btn edit-btn transaction-edit-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Edit transaction\">\n                                <span class=\"icon-rename\" aria-hidden=\"true\"></span>\n                            </button>\n                            <button class=\"action-btn delete-btn transaction-delete-btn\"\n                                    data-transaction-id=\"").concat(transaction.id, "\"\n                                    title=\"Delete transaction\">\n                                <span class=\"icon-delete\" aria-hidden=\"true\"></span>\n                            </button>\n                        </div>\n                    </td>\n                </tr>\n            ");
       }).join('');
     }
 
@@ -44604,7 +44637,7 @@ var BudgetApp = /*#__PURE__*/function () {
      * Add a split row to the splits container
      */
     function addSplitRow(container) {
-      var _this$transactions2,
+      var _this$transactions3,
         _this6 = this;
       var split = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var isFirst = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -44614,7 +44647,7 @@ var BudgetApp = /*#__PURE__*/function () {
 
       // Get the transaction to determine its type
       var transactionId = parseInt(modal === null || modal === void 0 ? void 0 : modal.dataset.transactionId);
-      var transaction = (_this$transactions2 = this.transactions) === null || _this$transactions2 === void 0 ? void 0 : _this$transactions2.find(function (t) {
+      var transaction = (_this$transactions3 = this.transactions) === null || _this$transactions3 === void 0 ? void 0 : _this$transactions3.find(function (t) {
         return t.id === transactionId;
       });
       var transactionType = (transaction === null || transaction === void 0 ? void 0 : transaction.type) || 'debit';
@@ -46764,14 +46797,14 @@ var BudgetApp = /*#__PURE__*/function () {
     key: "showMatchingModal",
     value: (function () {
       var _showMatchingModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee61(transactionId) {
-        var _this$transactions3,
+        var _this$transactions4,
           _this$accounts,
           _this18 = this;
         var transaction, modal, sourceDetails, loadingEl, emptyEl, listEl, account, currency, typeClass, result, _t19;
         return _regenerator().w(function (_context61) {
           while (1) switch (_context61.p = _context61.n) {
             case 0:
-              transaction = (_this$transactions3 = this.transactions) === null || _this$transactions3 === void 0 ? void 0 : _this$transactions3.find(function (t) {
+              transaction = (_this$transactions4 = this.transactions) === null || _this$transactions4 === void 0 ? void 0 : _this$transactions4.find(function (t) {
                 return t.id === transactionId;
               });
               if (transaction) {
@@ -46932,14 +46965,14 @@ var BudgetApp = /*#__PURE__*/function () {
     key: "showSplitModal",
     value: function () {
       var _showSplitModal = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee64(transactionId) {
-        var _this$transactions4,
+        var _this$transactions5,
           _this$accounts2,
           _this19 = this;
         var transaction, modal, isSplit, titleEl, transactionInfoEl, splitsContainer, account, currency, splits, _t22;
         return _regenerator().w(function (_context64) {
           while (1) switch (_context64.p = _context64.n) {
             case 0:
-              transaction = (_this$transactions4 = this.transactions) === null || _this$transactions4 === void 0 ? void 0 : _this$transactions4.find(function (t) {
+              transaction = (_this$transactions5 = this.transactions) === null || _this$transactions5 === void 0 ? void 0 : _this$transactions5.find(function (t) {
                 return t.id === transactionId;
               });
               if (transaction) {
