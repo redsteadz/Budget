@@ -247,6 +247,9 @@ export default class ExchangeRatesModule {
         document.getElementById('manual-rate-cancel-btn')?.addEventListener('click', () => {
             this.hideManualRateModal();
         });
+        document.getElementById('manual-rate-close-btn')?.addEventListener('click', () => {
+            this.hideManualRateModal();
+        });
     }
 
     showManualRateModal(currency, currentRate = null) {
@@ -256,17 +259,21 @@ export default class ExchangeRatesModule {
         const baseCurrency = this.data.baseCurrency;
         const currInfo = this.data.currencies[currency];
         const currName = currInfo ? currInfo.name : currency;
+        const isEdit = currentRate !== null;
 
-        document.getElementById('manual-rate-currency').textContent = `${currency} - ${currName}`;
+        const titleEl = document.getElementById('manual-rate-modal-title');
+        if (titleEl) titleEl.textContent = isEdit ? 'Edit Manual Rate' : 'Set Manual Rate';
+
+        document.getElementById('manual-rate-currency').textContent = `${currency} \u2014 ${currName}`;
         document.getElementById('manual-rate-base-label').textContent = `1 ${baseCurrency} =`;
         document.getElementById('manual-rate-target-label').textContent = currency;
         document.getElementById('manual-rate-currency-input').value = currency;
 
         const rateInput = document.getElementById('manual-rate-value');
         rateInput.value = currentRate || '';
-        rateInput.placeholder = 'Enter rate';
+        rateInput.placeholder = '0.00';
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
         rateInput.focus();
     }

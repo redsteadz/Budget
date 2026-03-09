@@ -26099,7 +26099,8 @@ var ExchangeRatesModule = /*#__PURE__*/function () {
       var _this2 = this,
         _document$getElementB,
         _document$getElementB2,
-        _document$getElementB3;
+        _document$getElementB3,
+        _document$getElementB4;
       // Delegate click events on the rates list
       var list = document.getElementById('exchange-rates-list');
       if (list) {
@@ -26136,6 +26137,9 @@ var ExchangeRatesModule = /*#__PURE__*/function () {
       (_document$getElementB3 = document.getElementById('manual-rate-cancel-btn')) === null || _document$getElementB3 === void 0 || _document$getElementB3.addEventListener('click', function () {
         _this2.hideManualRateModal();
       });
+      (_document$getElementB4 = document.getElementById('manual-rate-close-btn')) === null || _document$getElementB4 === void 0 || _document$getElementB4.addEventListener('click', function () {
+        _this2.hideManualRateModal();
+      });
     }
   }, {
     key: "showManualRateModal",
@@ -26146,14 +26150,17 @@ var ExchangeRatesModule = /*#__PURE__*/function () {
       var baseCurrency = this.data.baseCurrency;
       var currInfo = this.data.currencies[currency];
       var currName = currInfo ? currInfo.name : currency;
-      document.getElementById('manual-rate-currency').textContent = "".concat(currency, " - ").concat(currName);
+      var isEdit = currentRate !== null;
+      var titleEl = document.getElementById('manual-rate-modal-title');
+      if (titleEl) titleEl.textContent = isEdit ? 'Edit Manual Rate' : 'Set Manual Rate';
+      document.getElementById('manual-rate-currency').textContent = "".concat(currency, " \u2014 ").concat(currName);
       document.getElementById('manual-rate-base-label').textContent = "1 ".concat(baseCurrency, " =");
       document.getElementById('manual-rate-target-label').textContent = currency;
       document.getElementById('manual-rate-currency-input').value = currency;
       var rateInput = document.getElementById('manual-rate-value');
       rateInput.value = currentRate || '';
-      rateInput.placeholder = 'Enter rate';
-      modal.style.display = 'block';
+      rateInput.placeholder = '0.00';
+      modal.style.display = 'flex';
       modal.setAttribute('aria-hidden', 'false');
       rateInput.focus();
     }
@@ -26170,13 +26177,13 @@ var ExchangeRatesModule = /*#__PURE__*/function () {
     key: "saveManualRate",
     value: function () {
       var _saveManualRate = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var _document$getElementB4, _document$getElementB5;
+        var _document$getElementB5, _document$getElementB6;
         var currency, rate, response, err, _t2;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
-              currency = (_document$getElementB4 = document.getElementById('manual-rate-currency-input')) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.value;
-              rate = (_document$getElementB5 = document.getElementById('manual-rate-value')) === null || _document$getElementB5 === void 0 || (_document$getElementB5 = _document$getElementB5.value) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.trim();
+              currency = (_document$getElementB5 = document.getElementById('manual-rate-currency-input')) === null || _document$getElementB5 === void 0 ? void 0 : _document$getElementB5.value;
+              rate = (_document$getElementB6 = document.getElementById('manual-rate-value')) === null || _document$getElementB6 === void 0 || (_document$getElementB6 = _document$getElementB6.value) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.trim();
               if (!(!currency || !rate)) {
                 _context2.n = 1;
                 break;

@@ -7187,30 +7187,105 @@ button.danger:hover {
     padding-left: 16px;
 }
 
-/* Manual Rate Modal Enhancements */
-.manual-rate-currency-label {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-main-text);
-    margin-bottom: 16px;
+/* Manual Rate Modal */
+.manual-rate-modal-content {
+    max-width: 420px;
+    padding: 0;
 }
 
-.manual-rate-input-row {
+.manual-rate-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.manual-rate-title-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.manual-rate-label {
-    font-size: 15px;
+.manual-rate-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(46, 125, 50, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2e7d32;
+    flex-shrink: 0;
+}
+
+.manual-rate-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
     font-weight: 600;
+}
+
+.manual-rate-body {
+    padding: 24px;
+}
+
+.manual-rate-currency-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-maxcontrast);
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.manual-rate-equation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--color-background-dark);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.manual-rate-eq-label {
+    font-size: 15px;
+    font-weight: 700;
     color: var(--color-main-text);
     white-space: nowrap;
 }
 
-.manual-rate-input {
+.manual-rate-eq-input {
     flex: 1;
-    min-width: 120px;
+    min-width: 100px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 2px solid var(--color-border-dark);
+    padding: 8px 12px;
+    background: var(--color-main-background);
+    transition: border-color 0.15s ease;
+}
+
+.manual-rate-eq-input:focus {
+    border-color: var(--color-primary-element);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 130, 201, 0.15);
+}
+
+.manual-rate-hint {
+    margin: 16px 0 0 0;
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+    line-height: 1.4;
+}
+
+.manual-rate-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--color-border);
 }
 
 /* Responsive */

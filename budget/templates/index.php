@@ -3905,21 +3905,32 @@ style('budget', 'budget-main');
             </div>
 
             <!-- Manual Rate Modal -->
-            <div id="manual-rate-modal" class="modal" style="display: none;" aria-hidden="true">
-                <div class="modal-content">
-                    <h3>Set Manual Exchange Rate</h3>
-                    <div class="modal-body">
-                        <p id="manual-rate-currency" class="manual-rate-currency-label"></p>
-                        <div class="form-group manual-rate-input-row">
-                            <label id="manual-rate-base-label" class="manual-rate-label"></label>
-                            <input type="number" id="manual-rate-value" step="any" min="0" class="manual-rate-input" />
-                            <span id="manual-rate-target-label" class="manual-rate-label"></span>
+            <div id="manual-rate-modal" class="modal" style="display: none;" role="dialog" aria-labelledby="manual-rate-modal-title" aria-hidden="true">
+                <div class="modal-content manual-rate-modal-content">
+                    <div class="manual-rate-modal-header">
+                        <div class="manual-rate-title-row">
+                            <div class="manual-rate-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7.5,21.5C4.25,19.94 2,16.76 2,13.5C2,9.08 5.58,5.5 10,5.5C13.27,5.5 16.44,7.75 18,11H22L18.5,14.5L15,11H17.03C15.6,8.87 13,7.5 10,7.5C6.69,7.5 4,10.19 4,13.5C4,16 5.56,18.13 7.76,19.15L7.5,21.5M16.5,2.5C19.75,4.06 22,7.24 22,10.5C22,14.92 18.42,18.5 14,18.5C10.73,18.5 7.56,16.25 6,13H2L5.5,9.5L9,13H6.97C8.4,15.13 11,16.5 14,16.5C17.31,16.5 20,13.81 20,10.5C20,8 18.44,5.87 16.24,4.85L16.5,2.5Z"/>
+                                </svg>
+                            </div>
+                            <h3 id="manual-rate-modal-title">Set Manual Rate</h3>
+                        </div>
+                        <button class="modal-close cancel-btn" id="manual-rate-close-btn" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="manual-rate-body">
+                        <p id="manual-rate-currency" class="manual-rate-currency-name"></p>
+                        <div class="manual-rate-equation">
+                            <span id="manual-rate-base-label" class="manual-rate-eq-label"></span>
+                            <input type="number" id="manual-rate-value" step="any" min="0" class="manual-rate-eq-input" placeholder="0.00" />
+                            <span id="manual-rate-target-label" class="manual-rate-eq-label"></span>
                         </div>
                         <input type="hidden" id="manual-rate-currency-input" />
+                        <p class="manual-rate-hint">This overrides the automatic rate for your account only.</p>
                     </div>
-                    <div class="modal-footer">
+                    <div class="manual-rate-footer">
                         <button id="manual-rate-cancel-btn" class="cancel-btn">Cancel</button>
-                        <button id="manual-rate-save-btn" class="primary">Save</button>
+                        <button id="manual-rate-save-btn" class="primary">Save Rate</button>
                     </div>
                 </div>
             </div>
