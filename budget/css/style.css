@@ -15,9 +15,9 @@
     width: 100%;
 }
 
-.app-navigation-search-input {
+#app-navigation .app-navigation-search-input {
     width: 100%;
-    padding: 8px 36px 8px 36px;
+    padding: 8px 36px 8px 44px !important;
     border: 1px solid var(--color-border);
     border-radius: 22px;
     background: var(--color-background-dark);
@@ -29,13 +29,13 @@
     outline: none;
 }
 
-.app-navigation-search-input:focus {
+#app-navigation .app-navigation-search-input:focus {
     border-color: var(--color-primary);
     background: var(--color-main-background);
     box-shadow: 0 0 0 2px var(--color-primary-light);
 }
 
-.app-navigation-search-input::placeholder {
+#app-navigation .app-navigation-search-input::placeholder {
     color: var(--color-text-maxcontrast);
     opacity: 1;
 }
