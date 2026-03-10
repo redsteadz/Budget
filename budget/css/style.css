@@ -2874,8 +2874,8 @@ button.danger:hover {
 
 /* Reconciliation Panel */
 .reconcile-panel {
-    background: #fff3cd;
-    border: 1px solid #ffc107;
+    background: var(--color-background-dark);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 16px;
@@ -2883,8 +2883,31 @@ button.danger:hover {
 
 .reconcile-panel h3 {
     margin: 0 0 16px 0;
-    color: #856404;
+    color: var(--color-main-text);
     font-size: 16px;
+}
+
+.reconcile-panel label {
+    color: var(--color-main-text);
+}
+
+.reconcile-panel select,
+.reconcile-panel input[type="number"],
+.reconcile-panel input[type="date"] {
+    background-color: var(--color-main-background);
+    color: var(--color-main-text);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--border-radius, 4px);
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reconcile-panel select:focus,
+.reconcile-panel input[type="number"]:focus,
+.reconcile-panel input[type="date"]:focus {
+    border-color: var(--color-primary-element);
+    outline: none;
 }
 
 .reconcile-form {
@@ -2932,11 +2955,11 @@ button.danger:hover {
 }
 
 .reconcile-stats .stat.balanced .amount {
-    color: #28a745;
+    color: var(--color-success, #28a745);
 }
 
 .reconcile-stats .stat.unbalanced .amount {
-    color: #dc3545;
+    color: var(--color-error, #dc3545);
 }
 
 /* Enhanced Transaction Table */
