@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-05-02 00:25+0000\n"
+"PO-Revision-Date: 2026-05-03 06:09+0000\n"
 "Last-Translator: SGiersch <Stephan@sgiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -404,7 +404,7 @@ msgstr "Der Erinnerungszeitraum muss zwischen 0 und 30 liegen"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/BillController.php:242
 msgid "Transaction date"
-msgstr "Transaktionsdatum"
+msgstr "Buchungsdatum"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/BillController.php:250
 #: /tmp/budget-v2.11.0/budget/lib/Controller/BillController.php:436
@@ -766,41 +766,41 @@ msgstr "Fehler beim Laden des Zielverlaufs"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/GoalsController.php:281
 msgid "Failed to retrieve goal forecast"
-msgstr ""
+msgstr "Fehler beim Laden der Zielprognose"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:55
 #: /tmp/budget-v2.11.0/budget/lib/Controller/MigrationController.php:83
 #: /tmp/budget-v2.11.0/budget/lib/Controller/MigrationController.php:121
 msgid "No file uploaded"
-msgstr ""
+msgstr "Keine Datei hochgeladen"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:59
 #: /tmp/budget-v2.11.0/budget/lib/Controller/MigrationController.php:90
 #: /tmp/budget-v2.11.0/budget/lib/Controller/MigrationController.php:128
 msgid "File upload failed"
-msgstr ""
+msgstr "Datei-Upload fehlgeschlagen"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:78
 #: /tmp/budget-v2.11.0/budget/src/modules/import/ImportModule.js:93
 msgid "Failed to upload file"
-msgstr ""
+msgstr "Fehler beim Hochladen der Datei"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:105
 #: /tmp/budget-v2.11.0/budget/lib/Controller/MigrationController.php:105
 msgid "Failed to preview import"
-msgstr ""
+msgstr "Vorschau des Imports fehlgeschlagen"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:151
 msgid "Failed to process import"
-msgstr ""
+msgstr "Fehler beim Verarbeiten des Imports"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:163
 msgid "Failed to retrieve import templates"
-msgstr ""
+msgstr "Fehler beim Laden der Importvorlagen"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:175
 msgid "Failed to retrieve import history"
-msgstr ""
+msgstr "Fehler beim Laden der Import-Historie"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportController.php:187
 msgid "Failed to validate file"
