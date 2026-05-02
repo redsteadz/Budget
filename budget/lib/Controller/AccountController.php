@@ -602,10 +602,10 @@ class AccountController extends Controller {
     /**
      * @NoAdminRequired
      */
-    public function reconcile(int $id, float $statementBalance): DataResponse {
+    public function reconcile(int $id, float $statementBalance, ?string $statementDate = null): DataResponse {
         try {
             $this->requireWriteAccess('account', $id);
-            $result = $this->service->reconcile($id, $this->getEffectiveUserId(), $statementBalance);
+            $result = $this->service->reconcile($id, $this->getEffectiveUserId(), $statementBalance, $statementDate);
             return new DataResponse($result);
         } catch (\Exception $e) {
             return $this->handleError($e, $this->l->t('Failed to reconcile account'), Http::STATUS_BAD_REQUEST, ['accountId' => $id]);

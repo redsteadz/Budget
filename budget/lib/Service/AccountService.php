@@ -298,13 +298,13 @@ class AccountService extends AbstractCrudService {
         return array_reverse($history);
     }
 
-    public function reconcile(int $accountId, string $userId, float $statementBalance): array {
+    public function reconcile(int $accountId, string $userId, float $statementBalance, ?string $statementDate = null): array {
         $account = $this->find($accountId, $userId);
 
-        // Use current balance (excluding future scheduled transactions)
-        // to match what the account card displays and what bank statements reflect
-        $today = date('Y-m-d');
-        $futureChange = $this->transactionMapper->getNetChangeAfterDate($accountId, $today);
+        // Calculate balance as of the statement date (excluding transactions after that date).
+        // If no date provided, use today.
+        $asOfDate = $statementDate ?: date('Y-m-d');
+        $futureChange = $this->transactionMapper->getNetChangeAfterDate($accountId, $asOfDate);
         $storedBalance = (string) $account->getBalance();
         $currentBalance = MoneyCalculator::subtract($storedBalance, (string) $futureChange);
 

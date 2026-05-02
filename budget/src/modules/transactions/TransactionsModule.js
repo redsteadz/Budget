@@ -970,7 +970,8 @@ export default class TransactionsModule {
                         'requesttoken': OC.requestToken
                     },
                     body: JSON.stringify({
-                        statementBalance: parseFloat(statementBalance)
+                        statementBalance: parseFloat(statementBalance),
+                        statementDate: statementDate
                     })
                 });
 
