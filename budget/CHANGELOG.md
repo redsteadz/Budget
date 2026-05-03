@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.17.3] - 2026-05-03
+
+### Fixed
+- **Reconciliation marks 0 transactions** ([#175](https://github.com/otherworld-dev/budget/issues/175)): The finish reconciliation flow was querying for non-existent checkbox elements. Now correctly uses the selected transactions set.
+- **Reconciled transaction indicator** ([#175](https://github.com/otherworld-dev/budget/issues/175)): Reconciled transactions now show a green left border in both transaction views.
+- **Paid one-time bills showing as "Upcoming"** ([#163](https://github.com/otherworld-dev/budget/issues/163)): One-time bills that were paid but remained active are now detected and deactivated by the Data Repair tool. The stuck bills repair also no longer touches one-time bills.
+
 ## [2.17.2] - 2026-05-02
 
 ### Fixed
