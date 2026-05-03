@@ -946,7 +946,7 @@ export default class AccountsModule {
                 : '';
 
             return `
-                <tr class="transaction-row${isScheduled ? ' scheduled-transaction' : ''}${isLinked ? ' is-linked' : ''}" data-transaction-id="${transaction.id}">
+                <tr class="transaction-row${isScheduled ? ' scheduled-transaction' : ''}${isLinked ? ' is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}" data-transaction-id="${transaction.id}">
                     <td class="date-column">
                         <span class="transaction-date">${this.formatDate(transaction.date)}</span>${scheduledBadge}
                     </td>

@@ -1119,9 +1119,8 @@ export default class TransactionsModule {
             return;
         }
 
-        // Collect all checked reconcile checkboxes
-        const checkedBoxes = document.querySelectorAll('.reconcile-checkbox:checked');
-        const transactionIds = Array.from(checkedBoxes).map(cb => parseInt(cb.getAttribute('data-transaction-id')));
+        // Collect selected transaction IDs
+        const transactionIds = Array.from(this.selectedTransactions);
 
         try {
             const response = await fetch(OC.generateUrl(`/apps/budget/api/accounts/${accountId}/reconcile/complete`), {

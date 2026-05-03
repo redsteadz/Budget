@@ -1077,7 +1077,7 @@ class BudgetApp {
                 : `<option value="unlink">${t('budget', 'Unlink Transfer')}</option>`;
 
             return `
-                <tr class="transaction-row ${isLinked ? 'is-linked' : ''}" data-transaction-id="${transaction.id}">
+                <tr class="transaction-row ${isLinked ? 'is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}" data-transaction-id="${transaction.id}">
                     <td class="select-column">
                         <input type="checkbox" class="transaction-checkbox"
                                data-transaction-id="${transaction.id}"
