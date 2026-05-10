@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-05-09 15:11+0000\n"
+"PO-Revision-Date: 2026-05-11 05:11+0000\n"
 "Last-Translator: SGiersch <Stephan@sgiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -850,23 +850,23 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:172
 msgid "Failed to create import rule"
-msgstr ""
+msgstr "Fehler beim Erstellen der Importregel"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:294
 msgid "Failed to update import rule"
-msgstr ""
+msgstr "Fehler beim Aktualisieren der Importregel"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:319
 msgid "Failed to test import rules"
-msgstr ""
+msgstr "Fehler beim Testen der Importregeln"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:345
 msgid "Failed to preview rule application"
-msgstr ""
+msgstr "Vorschau der Regelanwendung konnte nicht erstellt werden"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:373
 msgid "Failed to test rule against transactions"
-msgstr ""
+msgstr "Regel konnte nicht mit Transaktionen getestet werden"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/ImportRuleController.php:400
 msgid "Failed to apply rules to transactions"
