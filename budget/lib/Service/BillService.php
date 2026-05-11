@@ -286,7 +286,22 @@ class BillService {
             $dbUpdates[$columnName] = $value;
         }
 
-        // Recalculate next due date only if schedule-related fields actually changed
+        // Recalculate next due date if schedule fields changed, OR if
+        // nextDueDate is inconsistent with the current schedule (catches
+        // stale dates from edits on older versions)
+        if (!$needsRecalculation && $bill->getIsActive() && $bill->getNextDueDate()) {
+            $expectedDue = $this->frequencyCalculator->calculateNextDueDate(
+                $updates['frequency'] ?? $bill->getFrequency(),
+                $updates['dueDay'] ?? $bill->getDueDay(),
+                $updates['dueMonth'] ?? $bill->getDueMonth(),
+                null,
+                $updates['customRecurrencePattern'] ?? $bill->getCustomRecurrencePattern()
+            );
+            if ($expectedDue !== $bill->getNextDueDate()) {
+                $needsRecalculation = true;
+            }
+        }
+
         if ($needsRecalculation) {
             // Apply updates to get current state for calculation
             foreach ($updates as $key => $value) {
