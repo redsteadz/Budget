@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.18.0] - 2026-05-11
+
+### Added
+- **Description field for bills, income, and transfers** ([#181](https://github.com/otherworld-dev/budget/issues/181)): Optional description that is used when transactions are auto-generated.
+- **Semi-annually frequency support**: Bills can now use semi-annual frequency (every 6 months), previously missing from the frequency calculator.
+
+### Fixed
+- **FrequencyCalculator rewrite**: Fixed 6 bugs affecting bill date calculations:
+  - Daily bills double-advancing (skipping 2 days instead of 1) with forceAdvance
+  - Biweekly bills only advancing 1 week instead of 2
+  - Quarterly bills getting stuck when dueMonth was >3 months behind
+  - Days 29-31 truncated to 28 for quarterly/yearly/one-time bills
+  - One-time bills incorrectly advancing +1 year on create
+  - forceAdvance using a 2099 date hack that broke custom frequency bills
+- **Bills list shows only active bills** ([#163](https://github.com/otherworld-dev/budget/issues/163)): Inactive paid one-time bills no longer appear as "Upcoming".
+- **Calendar paid status** ([#163](https://github.com/otherworld-dev/budget/issues/163)): Now uses lastPaidDate instead of nextDueDate to determine paid months.
+- **Bill date editing** ([#163](https://github.com/otherworld-dev/budget/issues/163)): Changing dueDay/dueMonth now recalculates nextDueDate from today.
+- **Running balance pagination** ([#182](https://github.com/otherworld-dev/budget/issues/182)): Balance calculations now correct when same-date transactions span multiple pages.
+- **Timezone issue in bill paid status**: `isBillPaidThisMonth` now parses dates as strings to avoid timezone drift.
+- Removed debug `error_log` calls from BillService.
+- Repair tool no longer flags daily/weekly/biweekly bills as stuck.
+
 ## [2.17.3] - 2026-05-03
 
 ### Fixed
