@@ -21,6 +21,15 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * Return a SQL expression that extracts YYYY-MM from a date column.
+     * The date column stores dates as YYYY-MM-DD strings, so a simple SUBSTR suffices
+     * and avoids the MySQL-specific CAST(... AS CHAR(10)) which fails on SQLite.
+     */
+    private function monthExpr(string $alias = 't'): string {
+        return "SUBSTR({$alias}.date, 1, 7)";
+    }
+
+    /**
      * Apply user scope to a query — either by userId or by visible account IDs.
      * Used for granular sharing where the user can see specific shared accounts.
      *
@@ -284,7 +293,7 @@ class TransactionMapper extends QBMapper {
         $ids = $categoryIds ?? [$categoryId];
 
         $qb = $this->db->getQueryBuilder();
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias($qb->createFunction(
                 "SUM(CASE WHEN t.type = 'debit' THEN t.amount ELSE -t.amount END)"
             ), 'total')
@@ -298,8 +307,8 @@ class TransactionMapper extends QBMapper {
 
         $this->excludeScheduledFuture($qb);
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy($qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -374,7 +383,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->isNotNull('t.import_id'))
             ->andWhere($qb->expr()->neq('t.import_id', $qb->createNamedParameter('')))
             ->groupBy('a.id', 'a.name',
-                $qb->createFunction('SUBSTR(CAST(t.created_at AS CHAR(10)), 1, 10)'))
+                $qb->createFunction('SUBSTR(t.created_at, 1, 10)'))
             ->orderBy($qb->createFunction('MAX(t.created_at)'), 'DESC')
             ->setMaxResults($limit);
 
@@ -577,7 +586,7 @@ class TransactionMapper extends QBMapper {
         $qb = $this->db->getQueryBuilder();
 
         // Use SUBSTR with CAST for month extraction (compatible with SQLite, MySQL, PostgreSQL)
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias($qb->func()->sum('t.amount'), 'total')
             ->selectAlias($qb->func()->count('t.id'), 'count')
             ->from($this->getTableName(), 't')
@@ -593,8 +602,8 @@ class TransactionMapper extends QBMapper {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy($qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -648,7 +657,7 @@ class TransactionMapper extends QBMapper {
     public function getIncomeByMonth(string $userId, ?int $accountId, string $startDate, string $endDate): array {
         $qb = $this->db->getQueryBuilder();
 
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias($qb->func()->sum('t.amount'), 'total')
             ->selectAlias($qb->func()->count('t.id'), 'count')
             ->from($this->getTableName(), 't')
@@ -664,8 +673,8 @@ class TransactionMapper extends QBMapper {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy($qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -727,7 +736,7 @@ class TransactionMapper extends QBMapper {
     ): array {
         $qb = $this->db->getQueryBuilder();
 
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias(
                 $qb->createFunction('SUM(CASE WHEN t.type = \'credit\' THEN t.amount ELSE 0 END)'),
                 'income'
@@ -755,8 +764,8 @@ class TransactionMapper extends QBMapper {
         // Apply tag filtering if requested
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy($qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -1322,7 +1331,7 @@ class TransactionMapper extends QBMapper {
         $qb = $this->db->getQueryBuilder();
 
         // SQLite-compatible: dates stored as TEXT in YYYY-MM-DD format, no need for CAST
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias(
                 $qb->createFunction('SUM(CASE WHEN t.type = \'credit\' THEN t.amount ELSE 0 END)'),
                 'income'
@@ -1350,8 +1359,8 @@ class TransactionMapper extends QBMapper {
         // Apply tag filtering if requested
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy($qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -1383,7 +1392,7 @@ class TransactionMapper extends QBMapper {
         $qb = $this->db->getQueryBuilder();
 
         $qb->select('t.account_id')
-            ->addSelect($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+            ->addSelect($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias(
                 $qb->createFunction('SUM(CASE WHEN t.type = \'credit\' THEN t.amount ELSE 0 END)'),
                 'income'
@@ -1406,8 +1415,8 @@ class TransactionMapper extends QBMapper {
 
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
-        $qb->groupBy('t.account_id', $qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy('t.account_id', $qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -1440,7 +1449,7 @@ class TransactionMapper extends QBMapper {
         $qb = $this->db->getQueryBuilder();
 
         $qb->select('t.account_id')
-            ->addSelect($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+            ->addSelect($qb->createFunction($this->monthExpr() . ' as month'))
             ->selectAlias(
                 $qb->createFunction('SUM(CASE WHEN t.type = \'credit\' THEN t.amount ELSE 0 END)'),
                 'income'
@@ -1463,8 +1472,8 @@ class TransactionMapper extends QBMapper {
 
         $this->applyTagFilter($qb, $tagIds, $includeUntagged);
 
-        $qb->groupBy('t.account_id', $qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'))
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC');
+        $qb->groupBy('t.account_id', $qb->createFunction($this->monthExpr()))
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC');
 
         $result = $qb->executeQuery();
         $data = $result->fetchAll();
@@ -2271,7 +2280,7 @@ class TransactionMapper extends QBMapper {
 
         $qb = $this->db->getQueryBuilder();
 
-        $qb->select($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7) as month'))
+        $qb->select($qb->createFunction($this->monthExpr() . ' as month'))
             ->addSelect('tag.id as tag_id', 'tag.name as tag_name', 'tag.color')
             ->selectAlias($qb->func()->sum('t.amount'), 'total')
             ->from($this->getTableName(), 't')
@@ -2290,8 +2299,8 @@ class TransactionMapper extends QBMapper {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
         }
 
-        $qb->groupBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'tag.id', 'tag.name', 'tag.color')
-            ->orderBy($qb->createFunction('SUBSTR(CAST(t.date AS CHAR(10)), 1, 7)'), 'ASC')
+        $qb->groupBy($qb->createFunction($this->monthExpr()), 'tag.id', 'tag.name', 'tag.color')
+            ->orderBy($qb->createFunction($this->monthExpr()), 'ASC')
             ->addOrderBy('tag.id', 'ASC');
 
         $result = $qb->executeQuery();
