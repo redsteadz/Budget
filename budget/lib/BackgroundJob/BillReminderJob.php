@@ -265,7 +265,7 @@ class BillReminderJob extends TimedJob {
             }
         } catch (\Exception $e) {
             // Log but don't fail entire job
-            error_log("Auto-pay processing failed for user {$userId}: " . $e->getMessage());
+            $logger->warning("Auto-pay processing failed for user {$userId}: " . $e->getMessage());
         }
 
         return ['success' => $successCount, 'failed' => $failedCount];

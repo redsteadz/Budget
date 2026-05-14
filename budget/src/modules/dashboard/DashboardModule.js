@@ -2513,7 +2513,6 @@ export default class DashboardModule {
     setupDashboardDragAndDrop() {
         // Implementation for dashboard drag and drop would go here
         // This is a complex feature that allows reordering dashboard tiles
-        console.log('Dashboard drag and drop setup');
     }
 
     applyDashboardOrder() {

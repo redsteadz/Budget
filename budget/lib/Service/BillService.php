@@ -14,6 +14,7 @@ use OCA\Budget\Service\TransactionService;
 use OCA\Budget\Service\TransactionSplitService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
+use Psr\Log\LoggerInterface;
 
 /**
  * Manages bill CRUD operations and summary calculations.
@@ -27,6 +28,7 @@ class BillService {
     private AccountMapper $accountMapper;
     private CurrencyConversionService $currencyConversion;
     private TransactionSplitService $splitService;
+    private LoggerInterface $logger;
 
     public function __construct(
         BillMapper $mapper,
@@ -36,7 +38,8 @@ class BillService {
         IL10N $l,
         AccountMapper $accountMapper,
         CurrencyConversionService $currencyConversion,
-        TransactionSplitService $splitService
+        TransactionSplitService $splitService,
+        LoggerInterface $logger
     ) {
         $this->mapper = $mapper;
         $this->frequencyCalculator = $frequencyCalculator;
@@ -46,6 +49,7 @@ class BillService {
         $this->accountMapper = $accountMapper;
         $this->currencyConversion = $currencyConversion;
         $this->splitService = $splitService;
+        $this->logger = $logger;
     }
 
     /**
@@ -246,7 +250,7 @@ class BillService {
                 $this->applySplitTemplate($bill, $transaction, $userId);
             } catch (\Exception $e) {
                 // Log error but don't fail bill creation
-                error_log("Failed to create transaction for bill {$bill->getId()}: {$e->getMessage()}");
+                $this->logger->warning("Failed to create transaction for bill {$bill->getId()}: {$e->getMessage()}");
             }
         }
 
@@ -387,7 +391,7 @@ class BillService {
                 ]);
                 $linkedExistingTransaction = true;
             } catch (\Exception $e) {
-                error_log("Failed to link existing transaction {$existingTransactionId} to bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to link existing transaction {$existingTransactionId} to bill {$id}: {$e->getMessage()}");
             }
         } elseif ($createNextTransaction && $bill->getAccountId() !== null) {
             try {
@@ -407,7 +411,7 @@ class BillService {
                 // Apply split template if defined
                 $this->applySplitTemplate($bill, $transaction, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to create transaction for bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to create transaction for bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -459,7 +463,7 @@ class BillService {
                 }
                 $this->applySplitTemplate($bill, $nextTransaction, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to create next transaction for bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to create next transaction for bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -491,7 +495,7 @@ class BillService {
             try {
                 $this->transactionService->delete((int) $transactionId, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to delete transaction {$transactionId} during undo-paid for bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to delete transaction {$transactionId} during undo-paid for bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -514,7 +518,7 @@ class BillService {
                 $nextTransaction = $this->transactionService->createFromBill($userId, $bill, null);
                 $this->applySplitTemplate($bill, $nextTransaction, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to recreate scheduled transaction after undo-paid for bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to recreate scheduled transaction after undo-paid for bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -569,7 +573,7 @@ class BillService {
                 $nextTransaction = $this->transactionService->createFromBill($userId, $bill, null);
                 $this->applySplitTemplate($bill, $nextTransaction, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to create next transaction after skipping bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to create next transaction after skipping bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -607,7 +611,7 @@ class BillService {
                 $nextTransaction = $this->transactionService->createFromBill($userId, $bill, null);
                 $this->applySplitTemplate($bill, $nextTransaction, $userId);
             } catch (\Exception $e) {
-                error_log("Failed to recreate transaction after undoing skip for bill {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to recreate transaction after undoing skip for bill {$id}: {$e->getMessage()}");
             }
         }
 
@@ -718,7 +722,7 @@ class BillService {
 
             $this->splitService->splitTransaction($transaction->getId(), $userId, $splitData);
         } catch (\Exception $e) {
-            error_log("Failed to apply split template to transaction {$transaction->getId()}: {$e->getMessage()}");
+            $this->logger->warning("Failed to apply split template to transaction {$transaction->getId()}: {$e->getMessage()}");
         }
     }
 

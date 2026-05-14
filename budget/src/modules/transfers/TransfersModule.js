@@ -366,15 +366,6 @@ export default class TransfersModule {
         const isEdit = transfer !== null;
         const title = isEdit ? t('budget', 'Edit Transfer') : t('budget', 'Add Transfer');
 
-        // Debug logging
-        console.log('Accounts available for transfer modal:', this.accounts);
-        console.log('Number of accounts:', this.accounts ? this.accounts.length : 0);
-        if (this.accounts && this.accounts.length > 0) {
-            console.log('First account:', this.accounts[0]);
-            console.log('Account IDs:', this.accounts.map(a => a.id));
-            console.log('Account names:', this.accounts.map(a => a.name));
-        }
-
         const modalHtml = `
             <div class="budget-modal-overlay">
                 <div class="budget-modal">
@@ -517,20 +508,6 @@ export default class TransfersModule {
             initSingleDatePicker(transferDateInput, this.app.settings);
         }
 
-        // Debug: Check if dropdowns are populated
-        setTimeout(() => {
-            const fromSelect = document.getElementById('recurring-transfer-from-account');
-            const toSelect = document.getElementById('recurring-transfer-to-account');
-            console.log('From Account dropdown options:', fromSelect ? fromSelect.options.length : 'not found');
-            console.log('To Account dropdown options:', toSelect ? toSelect.options.length : 'not found');
-            if (toSelect && toSelect.options.length > 0) {
-                console.log('First option in To Account:', toSelect.options[0].value, toSelect.options[0].text);
-                if (toSelect.options.length > 1) {
-                    console.log('Second option in To Account:', toSelect.options[1].value, toSelect.options[1].text);
-                }
-            }
-        }, 100);
-
         // Category change listener - load tag sets for selected category
         const categorySelect = document.getElementById('transfer-category');
         if (categorySelect) {
@@ -594,17 +571,6 @@ export default class TransfersModule {
         const createTransaction = document.getElementById('transfer-create-transaction')?.checked || false;
         const transactionDate = document.getElementById('transfer-transaction-date')?.value || null;
         const autoPayEnabled = document.getElementById('transfer-auto-pay').checked;
-
-        // Debug logging
-        console.log('Transfer form values:', {
-            name,
-            amount,
-            frequency,
-            fromAccountId,
-            toAccountId,
-            fromAccountValue: document.getElementById('recurring-transfer-from-account').value,
-            toAccountValue: document.getElementById('recurring-transfer-to-account').value
-        });
 
         // Validation
         if (!fromAccountId || isNaN(fromAccountId)) {

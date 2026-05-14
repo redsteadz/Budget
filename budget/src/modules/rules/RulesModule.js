@@ -251,14 +251,10 @@ export default class RulesModule {
     }
 
     setupRulesEventListeners() {
-        console.log('setupRulesEventListeners called');
-
         // Add Rule button in view header
         const addRuleBtn = document.getElementById('rules-add-btn');
-        console.log('rules-add-btn found:', addRuleBtn);
         if (addRuleBtn && !addRuleBtn.dataset.listenerAttached) {
             addRuleBtn.addEventListener('click', () => {
-                console.log('Add Rule button clicked');
                 this.showRuleModal();
             });
             addRuleBtn.dataset.listenerAttached = 'true';
@@ -359,14 +355,11 @@ export default class RulesModule {
     }
 
     async showRuleModal(rule = null) {
-        console.log('showRuleModal called', rule);
         const modal = document.getElementById('rule-modal');
         const title = document.getElementById('rule-modal-title');
         const form = document.getElementById('rule-form');
 
-        console.log('modal:', modal, 'form:', form);
         if (!modal || !form) {
-            console.error('Modal or form not found!');
             return;
         }
 
@@ -390,8 +383,6 @@ export default class RulesModule {
                 const reason = hasBrokenStructure ? 'broken criteria structure' :
                     (!rule.criteria || Object.keys(rule.criteria).length === 0) ? 'null/empty criteria' :
                     'v1 rule';
-                console.log('Migrating rule:', rule.id, 'reason:', reason, 'schemaVersion:', rule.schemaVersion, 'criteria:', rule.criteria);
-
                 const response = await fetch(OC.generateUrl(`/apps/budget/api/import-rules/${rule.id}/migrate`), {
                     method: 'POST',
                     headers: { 'requesttoken': OC.requestToken }
@@ -400,7 +391,6 @@ export default class RulesModule {
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 rule = await response.json();
-                console.log('Migration complete. Rule:', rule.id, 'schemaVersion:', rule.schemaVersion, 'criteria:', rule.criteria);
                 showSuccess(t('budget', 'This rule has been upgraded to the new format with advanced features'));
             } catch (error) {
                 console.error('Failed to migrate rule:', error);
@@ -428,17 +418,8 @@ export default class RulesModule {
             document.getElementById('rule-apply-on-import').checked = rule.applyOnImport !== false;
 
             // Show appropriate criteria UI based on schema version
-            console.log('Rule UI decision:', {
-                ruleId: rule.id,
-                schemaVersion: rule.schemaVersion,
-                hasCriteria: !!rule.criteria,
-                criteriaType: typeof rule.criteria,
-                criteria: rule.criteria
-            });
-
             if (rule.schemaVersion === 2 && rule.criteria) {
                 // v2 format - show CriteriaBuilder
-                console.log('Showing v2 CriteriaBuilder UI');
                 if (v1Section) v1Section.style.display = 'none';
                 if (v2Section) v2Section.style.display = 'block';
                 this.initializeCriteriaBuilder(rule.criteria);

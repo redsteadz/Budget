@@ -9,6 +9,7 @@ use OCA\Budget\Db\RecurringIncomeMapper;
 use OCA\Budget\Service\Bill\FrequencyCalculator;
 use OCA\Budget\Service\Income\RecurringIncomeDetector;
 use OCP\AppFramework\Db\DoesNotExistException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Manages recurring income CRUD operations and summary calculations.
@@ -18,17 +19,20 @@ class RecurringIncomeService {
     private FrequencyCalculator $frequencyCalculator;
     private RecurringIncomeDetector $recurringDetector;
     private TransactionService $transactionService;
+    private LoggerInterface $logger;
 
     public function __construct(
         RecurringIncomeMapper $mapper,
         FrequencyCalculator $frequencyCalculator,
         RecurringIncomeDetector $recurringDetector,
-        TransactionService $transactionService
+        TransactionService $transactionService,
+        LoggerInterface $logger
     ) {
         $this->mapper = $mapper;
         $this->frequencyCalculator = $frequencyCalculator;
         $this->recurringDetector = $recurringDetector;
         $this->transactionService = $transactionService;
+        $this->logger = $logger;
     }
 
     /**
@@ -177,7 +181,7 @@ class RecurringIncomeService {
             try {
                 $this->transactionService->createFromIncome($userId, $income, $transactionDate, 'cleared');
             } catch (\Exception $e) {
-                error_log("Failed to create transaction for income {$id}: {$e->getMessage()}");
+                $this->logger->warning("Failed to create transaction for income {$id}: {$e->getMessage()}");
             }
         }
 
