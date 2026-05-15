@@ -4279,10 +4279,16 @@ style('budget', 'budget-main');
                 <div class="settings-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                         <h3><?php p($l->t('Bank Connections')); ?></h3>
-                        <button class="btn btn-primary" id="add-bank-connection-btn">
-                            <span class="icon-add" aria-hidden="true"></span>
-                            <?php p($l->t('Add Connection')); ?>
-                        </button>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" id="sync-all-connections-btn" style="display: none;" title="<?php p($l->t('Sync all active connections')); ?>">
+                                <span class="icon-play" aria-hidden="true"></span>
+                                <?php p($l->t('Sync All')); ?>
+                            </button>
+                            <button class="btn btn-primary" id="add-bank-connection-btn">
+                                <span class="icon-add" aria-hidden="true"></span>
+                                <?php p($l->t('Add Connection')); ?>
+                            </button>
+                        </div>
                     </div>
                     <div id="bank-connections-list">
                         <div class="empty-state-small"><?php p($l->t('No bank connections yet. Click "Add Connection" to get started.')); ?></div>
@@ -4291,7 +4297,12 @@ style('budget', 'budget-main');
 
                 <!-- Account Mappings (shown when a connection is selected) -->
                 <div class="settings-section" id="bank-mappings-section" style="display: none;">
-                    <h3 id="bank-mappings-title"><?php p($l->t('Account Mappings')); ?></h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 id="bank-mappings-title"><?php p($l->t('Account Mappings')); ?></h3>
+                        <button class="btn btn-sm" id="refresh-accounts-btn" title="<?php p($l->t('Refresh account list from bank')); ?>">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"/></svg>
+                        </button>
+                    </div>
                     <p class="section-description"><?php p($l->t('Map your bank accounts to Budget accounts to enable automatic transaction import.')); ?></p>
                     <div id="bank-mappings-list"></div>
                 </div>
@@ -6058,48 +6069,102 @@ style('budget', 'budget-main');
 
 <!-- Bank Sync Connection Modal -->
 <div id="bank-sync-modal" class="modal" style="display: none;" role="dialog" aria-label="<?php p($l->t('Add Bank Connection')); ?>">
-    <div class="modal-content" style="max-width: 500px;">
-        <h3><?php p($l->t('Add Bank Connection')); ?></h3>
+    <div class="modal-content" style="max-width: 600px;">
+        <!-- Step 1: Provider & Credentials -->
+        <div id="bank-sync-step-1" class="bank-sync-step">
+            <h3><?php p($l->t('Add Bank Connection')); ?></h3>
 
-        <div class="form-group">
-            <label for="bank-sync-provider"><?php p($l->t('Provider')); ?></label>
-            <select id="bank-sync-provider">
-                <option value=""><?php p($l->t('Select a provider...')); ?></option>
-                <option value="gocardless"><?php p($l->t('GoCardless (UK/Europe)')); ?></option>
-                <option value="simplefin"><?php p($l->t('SimpleFIN Bridge (US)')); ?></option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="bank-sync-name"><?php p($l->t('Connection Name')); ?></label>
-            <input type="text" id="bank-sync-name" placeholder="<?php p($l->t('e.g. My Bank')); ?>" maxlength="255">
-        </div>
-
-        <!-- SimpleFIN fields -->
-        <div id="simplefin-fields" style="display: none;">
             <div class="form-group">
-                <label for="bank-sync-setup-token"><?php p($l->t('Setup Token')); ?></label>
-                <input type="text" id="bank-sync-setup-token" placeholder="<?php p($l->t('Paste your SimpleFIN setup token')); ?>">
-                <small class="form-text"><?php p($l->t('Get a token from beta-bridge.simplefin.org')); ?></small>
+                <label for="bank-sync-provider"><?php p($l->t('Provider')); ?></label>
+                <select id="bank-sync-provider">
+                    <option value=""><?php p($l->t('Select a provider...')); ?></option>
+                    <option value="gocardless"><?php p($l->t('GoCardless (UK/Europe)')); ?></option>
+                    <option value="simplefin"><?php p($l->t('SimpleFIN Bridge (US)')); ?></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bank-sync-name"><?php p($l->t('Connection Name')); ?></label>
+                <input type="text" id="bank-sync-name" placeholder="<?php p($l->t('e.g. My Bank')); ?>" maxlength="255">
+            </div>
+
+            <!-- SimpleFIN fields -->
+            <div id="simplefin-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="bank-sync-setup-token"><?php p($l->t('Setup Token')); ?></label>
+                    <input type="text" id="bank-sync-setup-token" placeholder="<?php p($l->t('Paste your SimpleFIN setup token')); ?>">
+                    <small class="form-text"><?php p($l->t('Get a token from beta-bridge.simplefin.org')); ?></small>
+                </div>
+            </div>
+
+            <!-- GoCardless fields -->
+            <div id="gocardless-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="bank-sync-secret-id"><?php p($l->t('Secret ID')); ?></label>
+                    <input type="text" id="bank-sync-secret-id" placeholder="<?php p($l->t('Your GoCardless Secret ID')); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="bank-sync-secret-key"><?php p($l->t('Secret Key')); ?></label>
+                    <input type="password" id="bank-sync-secret-key" placeholder="<?php p($l->t('Your GoCardless Secret Key')); ?>">
+                </div>
+                <small class="form-text"><?php p($l->t('Get API keys from bankaccountdata.gocardless.com')); ?></small>
+            </div>
+
+            <div id="bank-sync-step1-error" class="bank-sync-error" style="display: none;"></div>
+
+            <div class="modal-buttons">
+                <button type="button" class="primary" id="bank-sync-step1-next"><?php p($l->t('Next')); ?></button>
+                <button type="button" class="secondary cancel-btn"><?php p($l->t('Cancel')); ?></button>
             </div>
         </div>
 
-        <!-- GoCardless fields -->
-        <div id="gocardless-fields" style="display: none;">
+        <!-- Step 2: Select Institution (GoCardless only) -->
+        <div id="bank-sync-step-2" class="bank-sync-step" style="display: none;">
+            <h3><?php p($l->t('Select Your Bank')); ?></h3>
+
             <div class="form-group">
-                <label for="bank-sync-secret-id"><?php p($l->t('Secret ID')); ?></label>
-                <input type="text" id="bank-sync-secret-id" placeholder="<?php p($l->t('Your GoCardless Secret ID')); ?>">
+                <label for="bank-sync-country"><?php p($l->t('Country')); ?></label>
+                <select id="bank-sync-country"></select>
             </div>
+
             <div class="form-group">
-                <label for="bank-sync-secret-key"><?php p($l->t('Secret Key')); ?></label>
-                <input type="password" id="bank-sync-secret-key" placeholder="<?php p($l->t('Your GoCardless Secret Key')); ?>">
+                <input type="text" id="bank-sync-institution-search" placeholder="<?php p($l->t('Search banks...')); ?>">
             </div>
-            <small class="form-text"><?php p($l->t('Get API keys from bankaccountdata.gocardless.com')); ?></small>
+
+            <div id="bank-sync-institutions-loading" class="bank-sync-loading" style="display: none;">
+                <span class="icon-loading-small"></span> <?php p($l->t('Loading banks...')); ?>
+            </div>
+
+            <div id="bank-sync-institutions-grid" class="bank-sync-institutions-grid"></div>
+
+            <div id="bank-sync-step2-error" class="bank-sync-error" style="display: none;"></div>
+
+            <div class="modal-buttons">
+                <button type="button" class="primary" id="bank-sync-step2-connect" disabled><?php p($l->t('Connect')); ?></button>
+                <button type="button" class="secondary" id="bank-sync-step2-back"><?php p($l->t('Back')); ?></button>
+            </div>
         </div>
 
-        <div class="modal-buttons">
-            <button type="button" class="primary" id="bank-sync-connect-btn"><?php p($l->t('Connect')); ?></button>
-            <button type="button" class="secondary cancel-btn"><?php p($l->t('Cancel')); ?></button>
+        <!-- Step 3: Bank Authorization -->
+        <div id="bank-sync-step-3" class="bank-sync-step" style="display: none;">
+            <h3><?php p($l->t('Authorize with Your Bank')); ?></h3>
+
+            <div class="bank-sync-auth-status">
+                <p><?php p($l->t('A new window has been opened for you to authorize access at your bank.')); ?></p>
+                <p><?php p($l->t('Once you have completed the authorization, click the button below.')); ?></p>
+                <p id="bank-sync-auth-link-fallback" style="display: none;">
+                    <?php p($l->t('If the window did not open, ')); ?>
+                    <a id="bank-sync-auth-link" href="#" target="_blank" rel="noopener"><?php p($l->t('click here to authorize')); ?></a>.
+                </p>
+            </div>
+
+            <div id="bank-sync-step3-error" class="bank-sync-error" style="display: none;"></div>
+            <div id="bank-sync-step3-success" class="bank-sync-success" style="display: none;"></div>
+
+            <div class="modal-buttons">
+                <button type="button" class="primary" id="bank-sync-check-auth"><?php p($l->t('I\'ve Completed Authorization')); ?></button>
+                <button type="button" class="secondary cancel-btn"><?php p($l->t('Close')); ?></button>
+            </div>
         </div>
     </div>
 </div>
