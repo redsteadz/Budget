@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.19.0] - 2026-05-15
+
+### Added
+- **GoCardless Bank Sync Wizard** ([#184](https://github.com/otherworld-dev/budget/issues/184)): Complete multi-step connection flow — enter API credentials, select your country and bank from a searchable grid with logos, then authorize at your bank. Previously the institution selection step was missing, making GoCardless connections non-functional.
+- **Re-authorization Flow**: Expired GoCardless connections (90-day PSD2 limit) now show a "Re-authorize" button instead of requiring disconnect/reconnect.
+- **Sync All Connections**: New button to sync all active bank connections sequentially with progress feedback and aggregated results.
+- **Refresh Accounts**: Button in account mappings to re-fetch the account list from the bank provider.
+
+### Fixed
+- **GoCardless sync always failing** ([#184](https://github.com/otherworld-dev/budget/issues/184)): Fixed "Bank authorization has expired" error that occurred on every sync because the connect flow never sent the institution ID, so no bank requisition was created.
+- **Exception messages leaking to clients**: Controllers now return generic error messages instead of exposing internal exception details.
+- **SQLite compatibility**: Replaced MySQL-specific `CAST(AS CHAR)` with `SUBSTR` for cross-database compatibility.
+- **Budget summary double-counting**: Children's spending no longer counted twice in parent category totals.
+
+### Changed
+- Controllers now use `request->getParams()` instead of reading `php://input` directly, following Nextcloud framework conventions.
+- Replaced debug `error_log()` calls with proper PSR logger usage.
+
 ## [2.18.1] - 2026-05-11
 
 ### Fixed

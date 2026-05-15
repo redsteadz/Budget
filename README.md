@@ -8,17 +8,14 @@ A comprehensive financial management app for Nextcloud. Track spending habits, m
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
-## What's New in v2.18
+## What's New in v2.19
 
-- **Bill Description Field** - Bills, income, and transfers now have an optional description used when auto-generating transactions
-- **Semi-Annual Frequency** - Bills can now use semi-annual (every 6 months) frequency
-- **FrequencyCalculator Rewrite** - Fixed 6 bugs affecting bill date calculations across all frequency types
-- **Exclude from Reports** - Flag categories to hide from budgets, spending reports, and dashboard totals
-- **Auto-Match Transfers After Import** - Automatically links transfer pairs across accounts after importing
-- **Pension Projections from Profile** - Reads date of birth from your Nextcloud profile for retirement calculations
-- **Reconciliation** - Full reconciliation flow with statement date support, transaction marking, and visual indicators
-- **Category Net Spending** - Refunds/credits reduce category totals; debt payments count as real expenses
-- **Pagination Fix** - Running balance correct when same-date transactions span multiple pages
+- **GoCardless Bank Sync Now Works** ([#184](https://github.com/otherworld-dev/budget/issues/184)) - Complete multi-step wizard: enter API credentials, pick your country, select your bank from a searchable grid with logos, authorize at your bank
+- **Re-authorization for Expired Connections** - When GoCardless PSD2 consent expires (90 days), re-authorize with one click instead of disconnecting
+- **Sync All Connections** - New button to sync all active bank connections at once with progress feedback
+- **Refresh Accounts** - Re-fetch account list from your bank provider without a full sync
+- **Security Hardening** - Exception messages no longer leaked to API clients
+- **SQLite Compatibility Fix** - Replaced MySQL-specific queries for cross-database support
 
 See the [full changelog](budget/CHANGELOG.md) for details.
 
@@ -57,9 +54,11 @@ Popular topics:
 
 ### Import & Automation
 - **Bank Sync (Beta)** - Connect external bank accounts for automatic transaction imports
-  - GoCardless provider for UK/Europe banks
+  - GoCardless provider for UK/Europe banks with guided setup wizard and bank selection
   - SimpleFIN provider for US banks
   - Daily background sync with duplicate detection
+  - Re-authorization flow when bank consent expires (PSD2 90-day limit)
+  - Sync all connections at once with aggregated results
   - Encrypted credential storage
   - Admin-enabled with experimental feature warnings
 - **Smart Import** - Import bank statements from CSV, OFX, and QIF formats
