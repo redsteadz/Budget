@@ -248,6 +248,30 @@ class BankSyncController extends Controller {
         }
     }
 
+    /**
+     * Re-authorize an expired GoCardless connection.
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 5, period: 60)]
+    public function reauthorize(int $id): DataResponse {
+        if ($r = $this->requireBankSync()) return $r;
+
+        try {
+            $params = $this->request->getParams();
+            $institutionId = $params['institutionId'] ?? null;
+            $redirectUrl = $params['redirectUrl'] ?? null;
+
+            if (!$institutionId) {
+                return new DataResponse(['error' => $this->l->t('Institution ID is required')], Http::STATUS_BAD_REQUEST);
+            }
+
+            $result = $this->syncService->reauthorize($this->userId, $id, $institutionId, $redirectUrl ?? '');
+            return new DataResponse($result);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to re-authorize'), Http::STATUS_BAD_REQUEST, ['connectionId' => $id]);
+        }
+    }
+
     private function getGoCardlessToken(GoCardlessProvider $provider, string $secretId, string $secretKey): string {
         return $provider->getToken($secretId, $secretKey);
     }

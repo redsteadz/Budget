@@ -358,6 +358,51 @@ class BankSyncService {
         return $this->mappingMapper->findByConnection($connectionId);
     }
 
+    /**
+     * Re-authorize an expired GoCardless connection with a new requisition.
+     *
+     * @return array{authorizationUrl: string}
+     */
+    public function reauthorize(string $userId, int $connectionId, string $institutionId, string $redirectUrl): array {
+        $this->requireEnabled();
+
+        $connection = $this->connectionMapper->find($connectionId, $userId);
+
+        if ($connection->getProvider() !== 'gocardless') {
+            throw new \Exception('Re-authorization is only supported for GoCardless connections');
+        }
+
+        $provider = $this->providerFactory->getProvider('gocardless');
+        $creds = json_decode($connection->getCredentials(), true);
+
+        if (!$creds || !isset($creds['secretId'], $creds['secretKey'])) {
+            throw new \Exception('Stored credentials are incomplete');
+        }
+
+        // Re-initialize with institution to create a new requisition
+        $result = $provider->initializeConnection([
+            'secretId' => $creds['secretId'],
+            'secretKey' => $creds['secretKey'],
+            'institutionId' => $institutionId,
+            'redirectUrl' => $redirectUrl,
+        ]);
+
+        // Update connection with new credentials (new requisitionId, fresh token)
+        $connection->setCredentials($result['credentials']);
+        $connection->setStatus('active');
+        $connection->setLastError(null);
+        $connection->setUpdatedAt(date('Y-m-d H:i:s'));
+        $this->connectionMapper->update($connection);
+
+        $this->auditService->log($userId, 'bank_reauthorized', 'bank_connection', $connectionId, [
+            'provider' => 'gocardless',
+        ]);
+
+        return [
+            'authorizationUrl' => $result['authorizationUrl'] ?? null,
+        ];
+    }
+
     private function requireEnabled(): void {
         if (!$this->adminSettings->isBankSyncEnabled()) {
             throw new \Exception('Bank sync is disabled by the administrator');

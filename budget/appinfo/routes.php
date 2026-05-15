@@ -341,6 +341,7 @@ return [
         ['name' => 'bankSync#mappings', 'url' => '/api/bank-sync/connections/{id}/mappings', 'verb' => 'GET'],
         ['name' => 'bankSync#updateMapping', 'url' => '/api/bank-sync/connections/{id}/mappings/{mappingId}', 'verb' => 'PUT'],
         ['name' => 'bankSync#refreshAccounts', 'url' => '/api/bank-sync/connections/{id}/refresh', 'verb' => 'POST'],
+        ['name' => 'bankSync#reauthorize', 'url' => '/api/bank-sync/connections/{id}/reauthorize', 'verb' => 'POST'],
 
         // Admin settings routes
         ['name' => 'adminSetting#index', 'url' => '/api/admin/settings', 'verb' => 'GET'],
