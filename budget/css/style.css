@@ -7655,6 +7655,106 @@ button.danger:hover {
     text-decoration: underline;
 }
 
+/* Bank Sync Wizard Steps */
+.bank-sync-step { }
+.bank-sync-error {
+    color: var(--color-error, #e9322d);
+    background: var(--color-error-hover, #fdd);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+.bank-sync-success {
+    color: var(--color-success, #46ba61);
+    background: var(--color-success-hover, #dfd);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 13px;
+}
+.bank-sync-loading {
+    padding: 16px;
+    text-align: center;
+    color: var(--color-text-maxcontrast);
+}
+.bank-sync-auth-status {
+    padding: 16px 0;
+}
+.bank-sync-auth-status p {
+    margin-bottom: 8px;
+}
+
+/* Institution Grid */
+.bank-sync-institutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 4px;
+    margin-bottom: 12px;
+}
+.bank-institution-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 8px;
+    border: 2px solid var(--color-border, #ededed);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    text-align: center;
+    min-height: 80px;
+    justify-content: center;
+}
+.bank-institution-tile:hover {
+    border-color: var(--color-primary-element, #0082c9);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.bank-institution-tile.selected {
+    border-color: var(--color-primary-element, #0082c9);
+    background: var(--color-primary-element-light, #e6f3fb);
+    box-shadow: 0 0 0 1px var(--color-primary-element, #0082c9);
+}
+.bank-institution-tile:focus-visible {
+    outline: 2px solid var(--color-primary-element, #0082c9);
+    outline-offset: 2px;
+}
+.bank-institution-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 6px;
+    border-radius: 4px;
+}
+.bank-institution-logo-placeholder {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+    background: var(--color-background-darker, #f0f0f0);
+    border-radius: 4px;
+}
+.bank-institution-name {
+    font-size: 12px;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+/* Re-authorize button */
+.btn-warning {
+    background: var(--color-warning, #e9a200) !important;
+    color: #fff !important;
+    border-color: var(--color-warning, #e9a200) !important;
+}
+.btn-warning:hover {
+    opacity: 0.9;
+}
+
+#bank-sync-institution-search {
+    width: 100%;
+}
+
 /* Help FAB & Panel */
 .help-fab {
     position: fixed;
