@@ -124,11 +124,12 @@ class NetWorthService {
             // Graceful fallback if pensions table doesn't exist yet
         }
 
-        $netWorth = MoneyCalculator::subtract($totalAssets, $totalLiabilities);
+        // totalLiabilities is negative (sum of negative balances), so adding gives correct net worth
+        $netWorth = MoneyCalculator::add($totalAssets, $totalLiabilities);
 
         return [
             'totalAssets' => MoneyCalculator::toFloat($totalAssets),
-            'totalLiabilities' => MoneyCalculator::toFloat($totalLiabilities),
+            'totalLiabilities' => abs(MoneyCalculator::toFloat($totalLiabilities)),
             'netWorth' => MoneyCalculator::toFloat($netWorth),
             'baseCurrency' => $baseCurrency,
             'unconvertedCurrencies' => array_values(array_unique($unconvertedCurrencies)),

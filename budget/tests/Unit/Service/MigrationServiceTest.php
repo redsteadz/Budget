@@ -373,7 +373,7 @@ class MigrationServiceTest extends TestCase {
 
 		$manifest = json_decode($zip->getFromName('manifest.json'), true);
 		$this->assertEquals('budget', $manifest['appId']);
-		$this->assertEquals('1.0.0', $manifest['version']);
+		$this->assertEquals('1.1.0', $manifest['version']);
 		$this->assertEquals(1, $manifest['counts']['categories']);
 		$this->assertEquals(1, $manifest['counts']['accounts']);
 

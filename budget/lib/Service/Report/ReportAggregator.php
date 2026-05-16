@@ -214,7 +214,7 @@ class ReportAggregator {
         $summary['totals']['totalExpenses'] = $totalExpenses;
         $summary['totals']['netIncome'] = $totalIncome - $totalExpenses;
         $summary['totals']['totalAssets'] = round($totalAssets, 2);
-        $summary['totals']['totalLiabilities'] = round($totalLiabilities, 2);
+        $summary['totals']['totalLiabilities'] = round(abs($totalLiabilities), 2);
         $summary['unconvertedCurrencies'] = array_values(array_unique($unconvertedCurrencies));
 
         $days = $summary['period']['days'];

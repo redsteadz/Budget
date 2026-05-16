@@ -427,8 +427,8 @@ class AccountController extends Controller {
 
                 // Liability accounts store opening balance as negative
                 $accountData = $this->service->findWithCurrentBalance($id, $this->getEffectiveUserId());
-                $accountType = $accountData['type'] ?? '';
-                if ($updates['openingBalance'] > 0 && AccountType::from($accountType)->isLiability()) {
+                $accountType = AccountType::tryFrom($accountData['type'] ?? '');
+                if ($updates['openingBalance'] > 0 && $accountType?->isLiability()) {
                     $updates['openingBalance'] = -$updates['openingBalance'];
                 }
             }
