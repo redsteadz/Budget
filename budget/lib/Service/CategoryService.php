@@ -167,7 +167,7 @@ class CategoryService extends AbstractCrudService {
         // Check for transactions
         $transactions = $this->transactionMapper->findByCategory($entity->getId(), $userId, 1);
         if (!empty($transactions)) {
-            throw new \Exception($this->l->t('Cannot delete category with existing transactions'));
+            throw new \Exception($this->l->t('Cannot delete this category because it has transactions assigned to it. Please reassign or delete them first.'));
         }
 
         // Cascade delete: Delete budget snapshots for this category

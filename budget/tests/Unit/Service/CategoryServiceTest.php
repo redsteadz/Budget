@@ -238,7 +238,7 @@ class CategoryServiceTest extends TestCase {
             ->willReturn([['id' => 1]]);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('existing transactions');
+        $this->expectExceptionMessage('has transactions assigned');
 
         $this->service->delete(1, 'user1');
     }
