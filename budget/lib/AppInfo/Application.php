@@ -451,6 +451,7 @@ class Application extends App implements IBootstrap {
                 $c->get(\OCA\Budget\Service\TransactionService::class),
                 $c->get(\OCA\Budget\Db\TransactionMapper::class),
                 $c->get(\OCA\Budget\Db\AccountMapper::class),
+                $c->get(\OCA\Budget\Service\AccountService::class),
                 $c->get(\OCA\Budget\Service\Import\FileValidator::class),
                 $c->get(\OCA\Budget\Service\Import\ParserFactory::class),
                 $c->get(\OCA\Budget\Service\Import\TransactionNormalizer::class),

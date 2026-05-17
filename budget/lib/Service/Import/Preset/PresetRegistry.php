@@ -32,6 +32,7 @@ class PresetRegistry {
             'description' => $p->getDescription(),
             'format' => 'csv',
             'mapping' => $p->getMapping(),
+            'options' => $p->getOptions(),
             'isPreset' => true,
         ], $this->presets);
     }

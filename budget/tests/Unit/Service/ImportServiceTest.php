@@ -7,6 +7,7 @@ namespace OCA\Budget\Tests\Unit\Service;
 use OCA\Budget\Db\Account;
 use OCA\Budget\Db\AccountMapper;
 use OCA\Budget\Db\TransactionMapper;
+use OCA\Budget\Service\AccountService;
 use OCA\Budget\Service\CategoryService;
 use OCA\Budget\Service\Import\DuplicateDetector;
 use OCA\Budget\Service\Import\FileValidator;
@@ -58,12 +59,14 @@ class ImportServiceTest extends TestCase {
         $categoryService = $this->createMock(CategoryService::class);
         $tagSetService = $this->createMock(TagSetService::class);
         $transactionTagService = $this->createMock(TransactionTagService::class);
+        $accountService = $this->createMock(AccountService::class);
 
         $this->service = new ImportService(
             $this->appData,
             $this->transactionService,
             $transactionMapper,
             $this->accountMapper,
+            $accountService,
             $this->fileValidator,
             $this->parserFactory,
             $this->normalizer,

@@ -5,6 +5,19 @@ declare(strict_types=1);
 namespace OCA\Budget\Service\Import\Preset;
 
 class ToshlPreset implements ImportPresetInterface {
+    private const ACCOUNT_TYPE_MAP = [
+        'cash' => 'cash',
+        'checking' => 'checking',
+        'savings' => 'savings',
+        'investment' => 'investment',
+        'credit card' => 'credit_card',
+        'credit' => 'credit_card',
+        'loan' => 'loan',
+        'mortgage' => 'mortgage',
+        'crypto' => 'cryptocurrency',
+        'bitcoin' => 'cryptocurrency',
+        'line of credit' => 'line_of_credit',
+    ];
     public function getId(): string {
         return 'toshl';
     }
@@ -69,6 +82,27 @@ class ToshlPreset implements ImportPresetInterface {
             $normalizedRow['_accountName'] = $account;
         }
 
+        // Attach currency for account creation
+        $currency = trim($rawCsvRow['Currency'] ?? '');
+        if ($currency !== '') {
+            $normalizedRow['_currency'] = strtoupper($currency);
+        }
+
         return $normalizedRow;
+    }
+
+    public function inferAccountType(string $accountName): string {
+        $lower = strtolower(trim($accountName));
+        // Exact match first
+        if (isset(self::ACCOUNT_TYPE_MAP[$lower])) {
+            return self::ACCOUNT_TYPE_MAP[$lower];
+        }
+        // Partial match
+        foreach (self::ACCOUNT_TYPE_MAP as $keyword => $type) {
+            if (str_contains($lower, $keyword)) {
+                return $type;
+            }
+        }
+        return 'checking'; // Default fallback
     }
 }

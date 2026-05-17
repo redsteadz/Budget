@@ -23,4 +23,9 @@ interface ImportPresetInterface {
      * @return array|null Processed row or null to skip
      */
     public function postProcessRow(array $normalizedRow, array $rawCsvRow): ?array;
+
+    /**
+     * Infer account type from account name. Returns a valid AccountType value.
+     */
+    public function inferAccountType(string $accountName): string;
 }

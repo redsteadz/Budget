@@ -582,6 +582,9 @@ export default class ImportModule {
             requestBody.presetId = this.selectedPreset;
         }
 
+        // Check if preset has accountColumn (multi-account auto-creation)
+        const presetHasAccountColumn = this.selectedPreset && this.presets.find(p => p.id === this.selectedPreset)?.options?.accountColumn;
+
         if (isMultiAccount) {
             const accountMapping = this.getAccountMapping();
             if (Object.keys(accountMapping).length === 0) {
@@ -589,7 +592,7 @@ export default class ImportModule {
                 return;
             }
             requestBody.accountMapping = accountMapping;
-        } else {
+        } else if (!presetHasAccountColumn) {
             const accountId = document.getElementById('import-account')?.value;
             if (!accountId) {
                 showWarning(t('budget', 'Please select an account first'));
@@ -631,6 +634,37 @@ export default class ImportModule {
         // Count transactions with categoryId set
         const categorized = (result.transactions || []).filter(tx => tx.categoryId || tx._categoryName).length;
         document.getElementById('categorized-transactions').textContent = categorized;
+
+        // Show accounts to create for multi-account preset imports
+        const accountsContainer = document.getElementById('accounts-to-create');
+        if (result.accountsToCreate && result.accountsToCreate.length > 0) {
+            if (!accountsContainer) {
+                const summarySection = document.querySelector('.import-summary');
+                if (summarySection) {
+                    const div = document.createElement('div');
+                    div.id = 'accounts-to-create';
+                    div.className = 'preset-accounts-info';
+                    summarySection.appendChild(div);
+                }
+            }
+            const container = document.getElementById('accounts-to-create');
+            if (container) {
+                const newAccounts = result.accountsToCreate.filter(a => !a.exists);
+                const existingAccounts = result.accountsToCreate.filter(a => a.exists);
+                let html = '';
+                if (newAccounts.length > 0) {
+                    const accountNames = newAccounts.map(a => `${a.name} (${a.type}, ${a.currency})`);
+                    html += `<p><strong>${t('budget', 'Accounts to create:')}</strong> ${dom.escapeHtml(accountNames.join(', '))}</p>`;
+                }
+                if (existingAccounts.length > 0) {
+                    const existingNames = existingAccounts.map(a => a.name);
+                    html += `<p><strong>${t('budget', 'Existing accounts matched:')}</strong> ${dom.escapeHtml(existingNames.join(', '))}</p>`;
+                }
+                container.innerHTML = html;
+            }
+        } else if (accountsContainer) {
+            accountsContainer.innerHTML = '';
+        }
 
         // Show categories to create for preset imports
         const categoriesContainer = document.getElementById('categories-to-create');
@@ -754,8 +788,16 @@ export default class ImportModule {
             const singleAccountSection = document.getElementById('single-account-selection');
             const multiAccountSection = document.getElementById('multi-account-mapping');
 
-            // Check if we have multi-account OFX/QIF file
-            if (this.sourceAccounts && this.sourceAccounts.length > 0) {
+            // Check if preset has accountColumn (multi-account auto-creation from CSV)
+            const presetHasAccountColumn = this.selectedPreset && this.presets.find(p => p.id === this.selectedPreset)?.options?.accountColumn;
+
+            if (presetHasAccountColumn) {
+                // Hide account selection — accounts come from CSV
+                if (singleAccountSection) singleAccountSection.style.display = 'none';
+                if (multiAccountSection) multiAccountSection.style.display = 'none';
+                // Auto-trigger preview since no account selection needed
+                this.processImportData();
+            } else if (this.sourceAccounts && this.sourceAccounts.length > 0) {
                 // Show multi-account mapping UI
                 if (singleAccountSection) singleAccountSection.style.display = 'none';
                 if (multiAccountSection) multiAccountSection.style.display = 'block';
@@ -879,6 +921,9 @@ export default class ImportModule {
             requestBody.presetId = this.selectedPreset;
         }
 
+        // Check if preset has accountColumn (multi-account auto-creation)
+        const presetHasAccountColumn = this.selectedPreset && this.presets.find(p => p.id === this.selectedPreset)?.options?.accountColumn;
+
         if (isMultiAccount) {
             const accountMapping = this.getAccountMapping();
             if (Object.keys(accountMapping).length === 0) {
@@ -886,7 +931,7 @@ export default class ImportModule {
                 return;
             }
             requestBody.accountMapping = accountMapping;
-        } else {
+        } else if (!presetHasAccountColumn) {
             const accountId = document.getElementById('import-account').value;
             if (!accountId) {
                 showWarning(t('budget', 'Please select an account'));

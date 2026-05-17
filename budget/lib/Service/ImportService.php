@@ -10,6 +10,7 @@ use OCA\Budget\Service\Import\DuplicateDetector;
 use OCA\Budget\Service\Import\FileValidator;
 use OCA\Budget\Service\Import\ImportRuleApplicator;
 use OCA\Budget\Service\Import\ParserFactory;
+use OCA\Budget\Service\Import\Preset\ImportPresetInterface;
 use OCA\Budget\Service\Import\Preset\PresetRegistry;
 use OCA\Budget\Service\Import\TransactionNormalizer;
 use OCP\Files\IAppData;
@@ -24,6 +25,7 @@ class ImportService {
     private TransactionService $transactionService;
     private TransactionMapper $transactionMapper;
     private AccountMapper $accountMapper;
+    private AccountService $accountService;
     private FileValidator $fileValidator;
     private ParserFactory $parserFactory;
     private TransactionNormalizer $normalizer;
@@ -40,6 +42,7 @@ class ImportService {
         TransactionService $transactionService,
         TransactionMapper $transactionMapper,
         AccountMapper $accountMapper,
+        AccountService $accountService,
         FileValidator $fileValidator,
         ParserFactory $parserFactory,
         TransactionNormalizer $normalizer,
@@ -55,6 +58,7 @@ class ImportService {
         $this->transactionService = $transactionService;
         $this->transactionMapper = $transactionMapper;
         $this->accountMapper = $accountMapper;
+        $this->accountService = $accountService;
         $this->fileValidator = $fileValidator;
         $this->parserFactory = $parserFactory;
         $this->normalizer = $normalizer;
@@ -450,12 +454,14 @@ class ImportService {
     }
 
     private function previewSingleAccountImport(string $userId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, string $delimiter = ',', ?string $presetId = null): array {
-        if (!$accountId) {
+        // Load preset if specified
+        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
+        $hasAccountColumn = $preset && !empty($preset->getOptions()['accountColumn']);
+
+        if (!$accountId && !$hasAccountColumn) {
             throw new \Exception($this->l->t('Account ID is required for single-account imports'));
         }
 
-        // Load preset if specified
-        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
         if ($preset) {
             $mapping = $preset->getMapping();
             $delimiter = $preset->getDelimiter();
@@ -464,8 +470,16 @@ class ImportService {
             }
         }
 
-        $account = $this->accountMapper->find($accountId, $userId);
         $data = $this->parserFactory->parse($content, $format, null, $delimiter);
+
+        // Resolve accounts for multi-account preset imports
+        $accountsToCreate = [];
+        if ($hasAccountColumn) {
+            $accountResolution = $this->resolvePresetAccounts($userId, $data, $preset, true);
+            $accountsToCreate = $accountResolution['created'];
+        }
+
+        $account = $accountId ? $this->accountMapper->find($accountId, $userId) : null;
         $transactions = [];
         $duplicates = 0;
         $errors = [];
@@ -508,22 +522,44 @@ class ImportService {
                     }
                 }
 
-                $importId = $this->normalizer->generateImportId('preview', $index, $transaction);
-                $isDuplicate = $this->duplicateDetector->isDuplicate($accountId, $transaction, $importId);
-
-                if ($skipDuplicates && $isDuplicate) {
-                    $duplicates++;
-                    continue;
+                // For multi-account preset: resolve accountId from row, skip if unresolvable
+                $txAccountId = $accountId;
+                if ($hasAccountColumn) {
+                    $txAccountName = $transaction['_accountName'] ?? '';
+                    if ($txAccountName === '') {
+                        $errors[] = ['row' => $index, 'error' => $this->l->t('Missing account name'), 'data' => $row];
+                        continue;
+                    }
+                    // Find existing account ID for duplicate detection in preview
+                    $existingAccount = $this->accountMapper->findByName($userId, $txAccountName);
+                    $txAccountId = $existingAccount ? $existingAccount->getId() : null;
                 }
 
-                $transaction = $this->ruleApplicator->applyRules($userId, $transaction);
-                $transactions[] = array_merge($transaction, [
-                    'rowIndex' => $index,
-                    'isDuplicate' => $isDuplicate,
-                ]);
+                if ($txAccountId) {
+                    $importId = $this->normalizer->generateImportId('preview', $index, $transaction);
+                    $isDuplicate = $this->duplicateDetector->isDuplicate($txAccountId, $transaction, $importId);
 
-                if ($isDuplicate) {
-                    $duplicates++;
+                    if ($skipDuplicates && $isDuplicate) {
+                        $duplicates++;
+                        continue;
+                    }
+
+                    $transaction = $this->ruleApplicator->applyRules($userId, $transaction);
+                    $transactions[] = array_merge($transaction, [
+                        'rowIndex' => $index,
+                        'isDuplicate' => $isDuplicate,
+                    ]);
+
+                    if ($isDuplicate) {
+                        $duplicates++;
+                    }
+                } else {
+                    // Account doesn't exist yet — treat as new (not duplicate)
+                    $transaction = $this->ruleApplicator->applyRules($userId, $transaction);
+                    $transactions[] = array_merge($transaction, [
+                        'rowIndex' => $index,
+                        'isDuplicate' => false,
+                    ]);
                 }
             } catch (\Exception $e) {
                 $errors[] = ['row' => $index, 'error' => $e->getMessage(), 'data' => $row];
@@ -541,20 +577,32 @@ class ImportService {
             }
         }
 
-        $result = [
-            'transactions' => array_slice($transactions, 0, 50),
-            'totalRows' => count($data),
-            'validTransactions' => count($transactions),
-            'duplicates' => $duplicates,
-            'skippedByPreset' => $skippedByPreset,
-            'errors' => $errors,
-            'accountSummaries' => [[
-                'destinationAccountId' => $accountId,
-                'destinationAccountName' => $account->getName(),
-                'transactionCount' => count($transactions),
+        if ($hasAccountColumn) {
+            $result = [
+                'transactions' => array_slice($transactions, 0, 50),
+                'totalRows' => count($data),
+                'validTransactions' => count($transactions),
                 'duplicates' => $duplicates,
-            ]],
-        ];
+                'skippedByPreset' => $skippedByPreset,
+                'errors' => $errors,
+                'accountsToCreate' => $accountsToCreate,
+            ];
+        } else {
+            $result = [
+                'transactions' => array_slice($transactions, 0, 50),
+                'totalRows' => count($data),
+                'validTransactions' => count($transactions),
+                'duplicates' => $duplicates,
+                'skippedByPreset' => $skippedByPreset,
+                'errors' => $errors,
+                'accountSummaries' => [[
+                    'destinationAccountId' => $accountId,
+                    'destinationAccountName' => $account->getName(),
+                    'transactionCount' => count($transactions),
+                    'duplicates' => $duplicates,
+                ]],
+            ];
+        }
 
         if (!empty($categoriesPreview)) {
             $result['categoriesToCreate'] = $categoriesPreview;
@@ -634,12 +682,14 @@ class ImportService {
     }
 
     private function executeSingleAccountImport(string $userId, string $fileId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, bool $applyRules, string $delimiter = ',', ?string $presetId = null): array {
-        if (!$accountId) {
+        // Load preset if specified
+        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
+        $hasAccountColumn = $preset && !empty($preset->getOptions()['accountColumn']);
+
+        if (!$accountId && !$hasAccountColumn) {
             throw new \Exception($this->l->t('Account ID is required for single-account imports'));
         }
 
-        // Load preset if specified
-        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
         if ($preset) {
             $mapping = $preset->getMapping();
             $delimiter = $preset->getDelimiter();
@@ -648,8 +698,18 @@ class ImportService {
             }
         }
 
-        $account = $this->accountMapper->find($accountId, $userId);
         $data = $this->parserFactory->parse($content, $format, null, $delimiter);
+
+        // Resolve accounts for multi-account preset imports
+        $resolvedAccounts = [];
+        $accountsCreated = 0;
+        if ($hasAccountColumn) {
+            $accountResolution = $this->resolvePresetAccounts($userId, $data, $preset, false);
+            $resolvedAccounts = $accountResolution['resolved'];
+            $accountsCreated = count(array_filter($accountResolution['created'], fn($a) => !$a['exists']));
+        }
+
+        $account = $accountId ? $this->accountMapper->find($accountId, $userId) : null;
         $imported = 0;
         $skipped = 0;
         $errors = [];
@@ -671,6 +731,8 @@ class ImportService {
         $categoryCache = [];
         $tagCache = [];
         $tagsCreated = 0;
+        // Track per-account results for multi-account imports
+        $perAccountResults = [];
 
         foreach ($data as $index => $row) {
             try {
@@ -685,9 +747,20 @@ class ImportService {
                     }
                 }
 
+                // Determine which account this transaction goes to
+                $txAccountId = $accountId;
+                if ($hasAccountColumn) {
+                    $txAccountName = $transaction['_accountName'] ?? '';
+                    if ($txAccountName === '' || !isset($resolvedAccounts[$txAccountName])) {
+                        $errors[] = ['row' => $index + 1, 'error' => $this->l->t('Could not resolve account: %1$s', [$txAccountName])];
+                        continue;
+                    }
+                    $txAccountId = $resolvedAccounts[$txAccountName];
+                }
+
                 $importId = $this->normalizer->generateImportId($fileId, $index, $transaction);
 
-                if ($skipDuplicates && $this->duplicateDetector->isDuplicateByImportId($accountId, $importId)) {
+                if ($skipDuplicates && $this->duplicateDetector->isDuplicateByImportId($txAccountId, $importId)) {
                     $skipped++;
                     continue;
                 }
@@ -711,7 +784,7 @@ class ImportService {
 
                 $createdTx = $this->transactionService->create(
                     $userId,
-                    $accountId,
+                    $txAccountId,
                     $transaction['date'],
                     $transaction['description'],
                     $transaction['amount'],
@@ -738,6 +811,20 @@ class ImportService {
                 }
 
                 $imported++;
+
+                // Track per-account stats
+                if ($hasAccountColumn) {
+                    $txAccountName = $transaction['_accountName'] ?? 'Unknown';
+                    if (!isset($perAccountResults[$txAccountName])) {
+                        $perAccountResults[$txAccountName] = [
+                            'destinationAccountId' => $txAccountId,
+                            'destinationAccountName' => $txAccountName,
+                            'imported' => 0,
+                            'skipped' => 0,
+                        ];
+                    }
+                    $perAccountResults[$txAccountName]['imported']++;
+                }
             } catch (\Exception $e) {
                 $errors[] = ['row' => $index + 1, 'error' => $e->getMessage()];
             }
@@ -745,18 +832,29 @@ class ImportService {
 
         $this->normalizer->resetDateFormat();
 
-        $result = [
-            'imported' => $imported,
-            'skipped' => $skipped,
-            'errors' => $errors,
-            'totalProcessed' => count($data),
-            'accountResults' => [[
-                'destinationAccountId' => $accountId,
-                'destinationAccountName' => $account->getName(),
+        if ($hasAccountColumn) {
+            $result = [
                 'imported' => $imported,
                 'skipped' => $skipped,
-            ]],
-        ];
+                'errors' => $errors,
+                'totalProcessed' => count($data),
+                'accountResults' => array_values($perAccountResults),
+                'accountsCreated' => $accountsCreated,
+            ];
+        } else {
+            $result = [
+                'imported' => $imported,
+                'skipped' => $skipped,
+                'errors' => $errors,
+                'totalProcessed' => count($data),
+                'accountResults' => [[
+                    'destinationAccountId' => $accountId,
+                    'destinationAccountName' => $account->getName(),
+                    'imported' => $imported,
+                    'skipped' => $skipped,
+                ]],
+            ];
+        }
 
         if ($categoriesCreated > 0) {
             $result['categoriesCreated'] = $categoriesCreated;
@@ -766,6 +864,79 @@ class ImportService {
         }
 
         return $result;
+    }
+
+    /**
+     * Resolve accounts from preset metadata. Creates missing accounts on execute (dryRun=false).
+     *
+     * @param string $userId
+     * @param array $data Parsed CSV data rows
+     * @param ImportPresetInterface $preset The active preset
+     * @param bool $dryRun If true, don't create accounts (preview mode)
+     * @return array{resolved: array<string, int>, created: array}
+     */
+    private function resolvePresetAccounts(
+        string $userId,
+        array $data,
+        ImportPresetInterface $preset,
+        bool $dryRun = false
+    ): array {
+        $accountColumn = $preset->getOptions()['accountColumn'] ?? null;
+        if (!$accountColumn) {
+            return ['resolved' => [], 'created' => []];
+        }
+
+        // Collect unique accounts with their currencies
+        $accountInfo = [];
+        foreach ($data as $row) {
+            $name = trim($row[$accountColumn] ?? '');
+            if ($name === '') {
+                continue;
+            }
+
+            // Skip transfer rows
+            $processed = $preset->postProcessRow([], $row);
+            if ($processed === null) {
+                continue;
+            }
+
+            if (!isset($accountInfo[$name])) {
+                $currency = strtoupper(trim($row['Currency'] ?? 'USD'));
+                $accountInfo[$name] = [
+                    'name' => $name,
+                    'currency' => $currency,
+                    'type' => $preset->inferAccountType($name),
+                ];
+            }
+        }
+
+        $resolved = [];
+        $created = [];
+
+        foreach ($accountInfo as $name => $info) {
+            $existing = $this->accountMapper->findByName($userId, $name);
+            if ($existing) {
+                $resolved[$name] = $existing->getId();
+                $info['exists'] = true;
+                $info['existingId'] = $existing->getId();
+            } else {
+                $info['exists'] = false;
+                if (!$dryRun) {
+                    $account = $this->accountService->create(
+                        $userId,
+                        $info['name'],
+                        $info['type'],
+                        0.0,
+                        $info['currency']
+                    );
+                    $resolved[$name] = $account->getId();
+                    $info['createdId'] = $account->getId();
+                }
+            }
+            $created[] = $info;
+        }
+
+        return ['resolved' => $resolved, 'created' => $created];
     }
 
     /**
