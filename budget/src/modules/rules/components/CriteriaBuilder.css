@@ -43,15 +43,16 @@
 	gap: 8px;
 	margin-bottom: 8px;
 	padding-bottom: 6px;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid var(--color-border, #e0e0e0);
 }
 
 .group-operator {
 	flex: 0 0 auto;
 	padding: 6px 10px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--color-border-dark, #ccc);
 	border-radius: 3px;
-	background: white;
+	background: var(--color-main-background, #fff);
+	color: var(--color-main-text, #333);
 	font-size: 13px;
 	font-weight: 500;
 	cursor: pointer;
@@ -59,13 +60,13 @@
 }
 
 .group-operator:focus {
-	outline: 2px solid #0082c9;
+	outline: 2px solid var(--color-primary-element, #0082c9);
 	outline-offset: 2px;
 }
 
 .btn-remove-group {
-	background: #dc3545;
-	color: white;
+	background: var(--color-error, #dc3545);
+	color: #fff;
 	border: none;
 	border-radius: 3px;
 	padding: 6px 10px;
@@ -76,7 +77,7 @@
 }
 
 .btn-remove-group:hover {
-	background: #c82333;
+	opacity: 0.9;
 }
 
 .group-conditions {
@@ -88,15 +89,15 @@
 	gap: 6px;
 	margin-top: 8px;
 	padding-top: 8px;
-	border-top: 1px solid #e0e0e0;
+	border-top: 1px solid var(--color-border, #e0e0e0);
 }
 
 .btn-add-condition,
 .btn-add-group {
 	padding: 6px 12px;
-	border: 1px solid #0082c9;
-	background: white;
-	color: #0082c9;
+	border: 1px solid var(--color-primary-element, #0082c9);
+	background: var(--color-main-background, #fff);
+	color: var(--color-primary-element, #0082c9);
 	border-radius: 3px;
 	cursor: pointer;
 	font-size: 13px;
@@ -106,21 +107,21 @@
 
 .btn-add-condition:hover,
 .btn-add-group:hover {
-	background: #0082c9;
-	color: white;
+	background: var(--color-primary-element, #0082c9);
+	color: #fff;
 }
 
 .criteria-condition {
 	margin: 4px 0;
 	padding: 8px 10px;
-	background: white;
-	border: 1px solid #ddd;
+	background: var(--color-main-background, #fff);
+	border: 1px solid var(--color-border, #ddd);
 	border-radius: 4px;
 	transition: border-color 0.2s;
 }
 
 .criteria-condition:hover {
-	border-color: #0082c9;
+	border-color: var(--color-primary-element, #0082c9);
 }
 
 .condition-row {
@@ -135,7 +136,7 @@
 	align-items: center;
 	gap: 4px;
 	padding: 4px 8px;
-	background: #f0f0f0;
+	background: var(--color-background-dark, #f0f0f0);
 	border-radius: 3px;
 	cursor: pointer;
 	user-select: none;
@@ -143,7 +144,7 @@
 }
 
 .negate-checkbox:hover {
-	background: #e0e0e0;
+	background: var(--color-background-hover, #e0e0e0);
 }
 
 .negate-checkbox input[type="checkbox"] {
@@ -153,20 +154,21 @@
 .negate-label {
 	font-size: 12px;
 	font-weight: 600;
-	color: #666;
+	color: var(--color-text-maxcontrast, #666);
 	white-space: nowrap;
 }
 
 .negate-checkbox input[type="checkbox"]:checked + .negate-label {
-	color: #d32f2f;
+	color: var(--color-error, #d32f2f);
 }
 
 .condition-field,
 .condition-match-type {
 	padding: 6px 8px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--color-border-dark, #ccc);
 	border-radius: 3px;
-	background: white;
+	background: var(--color-main-background, #fff);
+	color: var(--color-main-text, #333);
 	font-size: 13px;
 	cursor: pointer;
 }
@@ -186,27 +188,29 @@
 	min-width: 150px;
 	max-width: 300px;
 	padding: 6px 8px;
-	border: 1px solid #ccc;
+	border: 1px solid var(--color-border-dark, #ccc);
 	border-radius: 3px;
+	background: var(--color-main-background, #fff);
+	color: var(--color-main-text, #333);
 	font-size: 13px;
 }
 
 .condition-pattern::placeholder {
-	color: #999;
+	color: var(--color-text-maxcontrast, #999);
 	font-style: italic;
 }
 
 .condition-pattern:focus,
 .condition-field:focus,
 .condition-match-type:focus {
-	outline: 2px solid #0082c9;
+	outline: 2px solid var(--color-primary-element, #0082c9);
 	outline-offset: 2px;
-	border-color: #0082c9;
+	border-color: var(--color-primary-element, #0082c9);
 }
 
 .btn-remove-condition {
-	background: #dc3545;
-	color: white;
+	background: var(--color-error, #dc3545);
+	color: #fff;
 	border: none;
 	border-radius: 3px;
 	padding: 6px 10px;
@@ -217,7 +221,7 @@
 }
 
 .btn-remove-condition:hover {
-	background: #c82333;
+	opacity: 0.9;
 }
 
 /* Responsive adjustments - Keep horizontal layout */
