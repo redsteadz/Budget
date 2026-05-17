@@ -8,14 +8,12 @@ A comprehensive financial management app for Nextcloud. Track spending habits, m
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
-## What's New in v2.19
+## What's New in v2.20
 
-- **GoCardless Bank Sync Now Works** ([#184](https://github.com/otherworld-dev/budget/issues/184)) - Complete multi-step wizard: enter API credentials, pick your country, select your bank from a searchable grid with logos, authorize at your bank
-- **Re-authorization for Expired Connections** - When GoCardless PSD2 consent expires (90 days), re-authorize with one click instead of disconnecting
-- **Sync All Connections** - New button to sync all active bank connections at once with progress feedback
-- **Refresh Accounts** - Re-fetch account list from your bank provider without a full sync
-- **Security Hardening** - Exception messages no longer leaked to API clients
-- **SQLite Compatibility Fix** - Replaced MySQL-specific queries for cross-database support
+- **Liability Accounts Fixed** ([#187](https://github.com/otherworld-dev/budget/issues/187)) - Loan and credit card balances now work correctly. Payments decrease the balance, charges increase it. Added Mortgage and Line of Credit account types.
+- **Import from App: Toshl Finance** ([#191](https://github.com/otherworld-dev/budget/issues/191)) - One-click import from Toshl CSV exports with auto-creation of accounts, categories, and tags. Full preview before executing.
+- **PostgreSQL Support Fixed** ([#185](https://github.com/otherworld-dev/budget/issues/185)) - All report queries now work on PostgreSQL
+- **CSV Encoding Auto-Detection** ([#189](https://github.com/otherworld-dev/budget/issues/189)) - Import handles ISO-8859-1 and Windows-1252 files automatically
 
 See the [full changelog](budget/CHANGELOG.md) for details.
 

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.20.0] - 2026-05-17
+
+### Added
+- **Liability Account Model** ([#187](https://github.com/otherworld-dev/budget/issues/187)): Loan, credit card, mortgage, and line of credit accounts now store balances as negative numbers internally. Payments (credits) correctly decrease the balance; charges (debits) increase it. The display layer shows absolute values with "owed" context.
+- **Mortgage and Line of Credit** account types added to the account type dropdown.
+- **Import from App** — App-specific import presets with Toshl Finance as the first supported app. Select "Toshl Finance" from the import format dropdown and the app handles column mapping, date/amount formats, and auto-creation automatically.
+- **Toshl Import: Category Auto-Creation** — Categories from Toshl's Category column are created automatically if they don't exist.
+- **Toshl Import: Tag Set Integration** — Toshl tags map to Budget's tag set system (not subcategories). A "Tags" tag set is created per category.
+- **Toshl Import: Multi-Account Auto-Creation** — Accounts from Toshl's Account column are created automatically with inferred types (e.g., "Cash" → cash, "Investment" → investment) and currencies from the CSV.
+- **Toshl Import: Full Preview** — Preview shows accounts to create, categories to create, tags to create, and transfer rows to skip before executing.
+
+### Fixed
+- **PostgreSQL compatibility** ([#185](https://github.com/otherworld-dev/budget/issues/185), [#192](https://github.com/otherworld-dev/budget/issues/192)): Fixed `SUBSTR()` on date columns by casting to VARCHAR. Affects all report/trend queries.
+- **CSV encoding detection** ([#189](https://github.com/otherworld-dev/budget/issues/189)): Import now auto-detects ISO-8859-1, Windows-1252, and ISO-8859-15 encodings and converts to UTF-8.
+- **Horizontal scrolling** ([#188](https://github.com/otherworld-dev/budget/issues/188)): Transaction table no longer overflows viewport with long descriptions.
+- **Scheduled transaction auto-clear**: Editing a scheduled transaction's date to today or past automatically changes status to cleared and updates the account balance.
+- **Liability balance display**: Account detail view now shows absolute value for liability accounts instead of raw negative number.
+- **Net worth formula**: Corrected for negative liability balance model.
+- **Category delete error message**: Now explains why deletion failed and what to do.
+- **Database migration**: Existing liability account balances automatically negated on upgrade.
+- **Backward-compatible import**: Legacy data exports with positive liability balances are converted during import.
+
 ## [2.19.1] - 2026-05-15
 
 ### Fixed
