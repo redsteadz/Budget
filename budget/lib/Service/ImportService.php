@@ -10,6 +10,7 @@ use OCA\Budget\Service\Import\DuplicateDetector;
 use OCA\Budget\Service\Import\FileValidator;
 use OCA\Budget\Service\Import\ImportRuleApplicator;
 use OCA\Budget\Service\Import\ParserFactory;
+use OCA\Budget\Service\Import\Preset\PresetRegistry;
 use OCA\Budget\Service\Import\TransactionNormalizer;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
@@ -28,6 +29,8 @@ class ImportService {
     private TransactionNormalizer $normalizer;
     private DuplicateDetector $duplicateDetector;
     private ImportRuleApplicator $ruleApplicator;
+    private PresetRegistry $presetRegistry;
+    private CategoryService $categoryService;
     private IL10N $l;
 
     public function __construct(
@@ -40,6 +43,8 @@ class ImportService {
         TransactionNormalizer $normalizer,
         DuplicateDetector $duplicateDetector,
         ImportRuleApplicator $ruleApplicator,
+        PresetRegistry $presetRegistry,
+        CategoryService $categoryService,
         IL10N $l
     ) {
         $this->appData = $appData;
@@ -51,6 +56,8 @@ class ImportService {
         $this->normalizer = $normalizer;
         $this->duplicateDetector = $duplicateDetector;
         $this->ruleApplicator = $ruleApplicator;
+        $this->presetRegistry = $presetRegistry;
+        $this->categoryService = $categoryService;
         $this->l = $l;
     }
 
@@ -107,7 +114,8 @@ class ImportService {
         ?int $accountId = null,
         ?array $accountMapping = null,
         bool $skipDuplicates = true,
-        string $delimiter = ','
+        string $delimiter = ',',
+        ?string $presetId = null
     ): array {
         $file = $this->getImportFile($fileId);
         $format = $this->parserFactory->detectFormat($fileId);
@@ -117,7 +125,7 @@ class ImportService {
             return $this->previewMultiAccountImport($userId, $content, $format, $accountMapping, $skipDuplicates);
         }
 
-        return $this->previewSingleAccountImport($userId, $content, $format, $mapping, $accountId, $skipDuplicates, $delimiter);
+        return $this->previewSingleAccountImport($userId, $content, $format, $mapping, $accountId, $skipDuplicates, $delimiter, $presetId);
     }
 
     /**
@@ -131,7 +139,8 @@ class ImportService {
         ?array $accountMapping = null,
         bool $skipDuplicates = true,
         bool $applyRules = true,
-        string $delimiter = ','
+        string $delimiter = ',',
+        ?string $presetId = null
     ): array {
         $file = $this->getImportFile($fileId);
         $format = $this->parserFactory->detectFormat($fileId);
@@ -140,7 +149,7 @@ class ImportService {
         if (($format === 'ofx' || $format === 'qif') && !empty($accountMapping)) {
             $result = $this->executeMultiAccountImport($userId, $fileId, $content, $format, $accountMapping, $skipDuplicates, $applyRules);
         } else {
-            $result = $this->executeSingleAccountImport($userId, $fileId, $content, $format, $mapping, $accountId, $skipDuplicates, $applyRules, $delimiter);
+            $result = $this->executeSingleAccountImport($userId, $fileId, $content, $format, $mapping, $accountId, $skipDuplicates, $applyRules, $delimiter, $presetId);
         }
 
         // Clean up import file
@@ -157,7 +166,7 @@ class ImportService {
      * Get import templates for common bank formats.
      */
     public function getImportTemplates(): array {
-        return [
+        $templates = [
             'chase_checking' => [
                 'name' => 'Chase Checking',
                 'format' => 'csv',
@@ -188,6 +197,13 @@ class ImportService {
                 ]
             ]
         ];
+
+        // Merge app-specific presets
+        foreach ($this->presetRegistry->toArray() as $preset) {
+            $templates[$preset['id']] = $preset;
+        }
+
+        return $templates;
     }
 
     public function getImportHistory(string $userId, int $limit = 10): array {
@@ -427,9 +443,19 @@ class ImportService {
         ];
     }
 
-    private function previewSingleAccountImport(string $userId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, string $delimiter = ','): array {
+    private function previewSingleAccountImport(string $userId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, string $delimiter = ',', ?string $presetId = null): array {
         if (!$accountId) {
             throw new \Exception($this->l->t('Account ID is required for single-account imports'));
+        }
+
+        // Load preset if specified
+        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
+        if ($preset) {
+            $mapping = $preset->getMapping();
+            $delimiter = $preset->getDelimiter();
+            if ($preset->getDateFormatHint()) {
+                $this->normalizer->setDateFormatHint($preset->getDateFormatHint());
+            }
         }
 
         $account = $this->accountMapper->find($accountId, $userId);
@@ -437,20 +463,45 @@ class ImportService {
         $transactions = [];
         $duplicates = 0;
         $errors = [];
+        $categoriesToCreate = [];
+        $skippedByPreset = 0;
 
-        // Detect date format from all rows before processing individually
-        $dateColumn = $mapping['date'] ?? null;
-        if ($dateColumn !== null) {
-            $dateStrings = array_filter(array_map(
-                fn($row) => $row[$dateColumn] ?? '',
-                $data
-            ));
-            $this->normalizer->detectDateFormat($dateStrings);
+        // Detect date format from all rows before processing individually (unless preset set it)
+        if (!$preset) {
+            $dateColumn = $mapping['date'] ?? null;
+            if ($dateColumn !== null) {
+                $dateStrings = array_filter(array_map(
+                    fn($row) => $row[$dateColumn] ?? '',
+                    $data
+                ));
+                $this->normalizer->detectDateFormat($dateStrings);
+            }
         }
 
         foreach ($data as $index => $row) {
             try {
                 $transaction = $this->normalizer->mapRowToTransaction($row, $mapping);
+
+                // Apply preset post-processing
+                if ($preset) {
+                    $transaction = $preset->postProcessRow($transaction, $row);
+                    if ($transaction === null) {
+                        $skippedByPreset++;
+                        continue;
+                    }
+
+                    // Collect categories that will be created
+                    if (!empty($transaction['_categoryName'])) {
+                        $catKey = $transaction['_categoryName'];
+                        if (!isset($categoriesToCreate[$catKey])) {
+                            $categoriesToCreate[$catKey] = ['name' => $catKey, 'subcategories' => []];
+                        }
+                        if (!empty($transaction['_tagName'])) {
+                            $categoriesToCreate[$catKey]['subcategories'][$transaction['_tagName']] = true;
+                        }
+                    }
+                }
+
                 $importId = $this->normalizer->generateImportId('preview', $index, $transaction);
                 $isDuplicate = $this->duplicateDetector->isDuplicate($accountId, $transaction, $importId);
 
@@ -475,11 +526,21 @@ class ImportService {
 
         $this->normalizer->resetDateFormat();
 
-        return [
+        // Build categories preview for preset imports
+        $categoriesPreview = [];
+        if ($preset && !empty($categoriesToCreate)) {
+            foreach ($categoriesToCreate as $catData) {
+                $entry = ['name' => $catData['name'], 'subcategories' => array_keys($catData['subcategories'])];
+                $categoriesPreview[] = $entry;
+            }
+        }
+
+        $result = [
             'transactions' => array_slice($transactions, 0, 50),
             'totalRows' => count($data),
             'validTransactions' => count($transactions),
             'duplicates' => $duplicates,
+            'skippedByPreset' => $skippedByPreset,
             'errors' => $errors,
             'accountSummaries' => [[
                 'destinationAccountId' => $accountId,
@@ -488,6 +549,12 @@ class ImportService {
                 'duplicates' => $duplicates,
             ]],
         ];
+
+        if (!empty($categoriesPreview)) {
+            $result['categoriesToCreate'] = $categoriesPreview;
+        }
+
+        return $result;
     }
 
     private function executeMultiAccountImport(string $userId, string $fileId, string $content, string $format, array $accountMapping, bool $skipDuplicates, bool $applyRules): array {
@@ -560,9 +627,19 @@ class ImportService {
         ];
     }
 
-    private function executeSingleAccountImport(string $userId, string $fileId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, bool $applyRules, string $delimiter = ','): array {
+    private function executeSingleAccountImport(string $userId, string $fileId, string $content, string $format, array $mapping, ?int $accountId, bool $skipDuplicates, bool $applyRules, string $delimiter = ',', ?string $presetId = null): array {
         if (!$accountId) {
             throw new \Exception($this->l->t('Account ID is required for single-account imports'));
+        }
+
+        // Load preset if specified
+        $preset = $presetId ? $this->presetRegistry->get($presetId) : null;
+        if ($preset) {
+            $mapping = $preset->getMapping();
+            $delimiter = $preset->getDelimiter();
+            if ($preset->getDateFormatHint()) {
+                $this->normalizer->setDateFormatHint($preset->getDateFormatHint());
+            }
         }
 
         $account = $this->accountMapper->find($accountId, $userId);
@@ -570,20 +647,36 @@ class ImportService {
         $imported = 0;
         $skipped = 0;
         $errors = [];
+        $categoriesCreated = 0;
 
-        // Detect date format from all rows before processing individually
-        $dateColumn = $mapping['date'] ?? null;
-        if ($dateColumn !== null) {
-            $dateStrings = array_filter(array_map(
-                fn($row) => $row[$dateColumn] ?? '',
-                $data
-            ));
-            $this->normalizer->detectDateFormat($dateStrings);
+        // Detect date format from all rows before processing individually (unless preset set it)
+        if (!$preset) {
+            $dateColumn = $mapping['date'] ?? null;
+            if ($dateColumn !== null) {
+                $dateStrings = array_filter(array_map(
+                    fn($row) => $row[$dateColumn] ?? '',
+                    $data
+                ));
+                $this->normalizer->detectDateFormat($dateStrings);
+            }
         }
+
+        // Cache for resolved categories during this import
+        $categoryCache = [];
 
         foreach ($data as $index => $row) {
             try {
                 $transaction = $this->normalizer->mapRowToTransaction($row, $mapping);
+
+                // Apply preset post-processing
+                if ($preset) {
+                    $transaction = $preset->postProcessRow($transaction, $row);
+                    if ($transaction === null) {
+                        $skipped++;
+                        continue;
+                    }
+                }
+
                 $importId = $this->normalizer->generateImportId($fileId, $index, $transaction);
 
                 if ($skipDuplicates && $this->duplicateDetector->isDuplicateByImportId($accountId, $importId)) {
@@ -593,6 +686,19 @@ class ImportService {
 
                 if ($applyRules) {
                     $transaction = $this->ruleApplicator->applyRules($userId, $transaction);
+                }
+
+                // Resolve category from preset metadata if no category already assigned
+                if ($preset && empty($transaction['categoryId']) && !empty($transaction['_categoryName'])) {
+                    $categoryId = $this->resolvePresetCategory(
+                        $userId,
+                        $transaction,
+                        $categoryCache,
+                        $categoriesCreated
+                    );
+                    if ($categoryId !== null) {
+                        $transaction['categoryId'] = $categoryId;
+                    }
                 }
 
                 $this->transactionService->create(
@@ -617,7 +723,7 @@ class ImportService {
 
         $this->normalizer->resetDateFormat();
 
-        return [
+        $result = [
             'imported' => $imported,
             'skipped' => $skipped,
             'errors' => $errors,
@@ -629,6 +735,59 @@ class ImportService {
                 'skipped' => $skipped,
             ]],
         ];
+
+        if ($categoriesCreated > 0) {
+            $result['categoriesCreated'] = $categoriesCreated;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Resolve category from preset metadata (_categoryName / _tagName).
+     * Uses cache to avoid repeated DB lookups within the same import.
+     *
+     * @param string $userId
+     * @param array $transaction Transaction with _categoryName and optional _tagName
+     * @param array &$categoryCache Cache of resolved category IDs
+     * @param int &$categoriesCreated Counter for newly created categories
+     * @return int|null The resolved category ID
+     */
+    private function resolvePresetCategory(string $userId, array $transaction, array &$categoryCache, int &$categoriesCreated): ?int {
+        $categoryName = $transaction['_categoryName'];
+        $tagName = $transaction['_tagName'] ?? null;
+        $type = ($transaction['type'] === 'credit') ? 'income' : 'expense';
+
+        // Build cache key
+        $cacheKey = $type . '::' . $categoryName . '::' . ($tagName ?? '');
+        if (isset($categoryCache[$cacheKey])) {
+            return $categoryCache[$cacheKey];
+        }
+
+        // Find or create parent category
+        $parentCacheKey = $type . '::' . $categoryName . '::';
+        if (isset($categoryCache[$parentCacheKey])) {
+            $parentId = $categoryCache[$parentCacheKey];
+        } else {
+            $parent = $this->categoryService->findOrCreate($userId, $categoryName, $type);
+            $parentId = $parent->getId();
+            $categoryCache[$parentCacheKey] = $parentId;
+            // Count as created if it was just inserted (no updated_at yet or very recent)
+            $categoriesCreated++;
+        }
+
+        // If no tag/subcategory, use parent directly
+        if ($tagName === null || $tagName === '') {
+            $categoryCache[$cacheKey] = $parentId;
+            return $parentId;
+        }
+
+        // Find or create subcategory
+        $subcategory = $this->categoryService->findOrCreateSubcategory($userId, $tagName, $type, $parentId);
+        $categoryCache[$cacheKey] = $subcategory->getId();
+        $categoriesCreated++;
+
+        return $subcategory->getId();
     }
 
     /**

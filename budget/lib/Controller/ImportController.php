@@ -88,7 +88,8 @@ class ImportController extends Controller {
         ?int $accountId = null,
         ?array $accountMapping = null,
         bool $skipDuplicates = true,
-        string $delimiter = ','
+        string $delimiter = ',',
+        ?string $presetId = null
     ): DataResponse {
         try {
             $preview = $this->service->previewImport(
@@ -98,7 +99,8 @@ class ImportController extends Controller {
                 $accountId,
                 $accountMapping,
                 $skipDuplicates,
-                $delimiter
+                $delimiter,
+                $presetId
             );
             return new DataResponse($preview);
         } catch (\Exception $e) {
@@ -117,7 +119,8 @@ class ImportController extends Controller {
         ?array $accountMapping = null,
         bool $skipDuplicates = true,
         bool $applyRules = true,
-        string $delimiter = ','
+        string $delimiter = ',',
+        ?string $presetId = null
     ): DataResponse {
         try {
             $result = $this->service->processImport(
@@ -128,7 +131,8 @@ class ImportController extends Controller {
                 $accountMapping,
                 $skipDuplicates,
                 $applyRules,
-                $delimiter
+                $delimiter,
+                $presetId
             );
 
             // Log completed imports for each account

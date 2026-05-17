@@ -192,6 +192,13 @@ class TransactionNormalizer {
     }
 
     /**
+     * Manually set the date format hint (e.g., from a preset).
+     */
+    public function setDateFormatHint(?string $format): void {
+        $this->detectedDateFormat = $format;
+    }
+
+    /**
      * Reset the cached date format between import batches.
      */
     public function resetDateFormat(): void {

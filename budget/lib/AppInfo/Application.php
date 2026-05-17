@@ -441,6 +441,10 @@ class Application extends App implements IBootstrap {
         });
         $context->registerServiceAlias('ForecastService', \OCA\Budget\Service\ForecastService::class);
 
+        $context->registerService(\OCA\Budget\Service\Import\Preset\PresetRegistry::class, function($c) {
+            return new \OCA\Budget\Service\Import\Preset\PresetRegistry();
+        });
+
         $context->registerService(\OCA\Budget\Service\ImportService::class, function($c) {
             return new \OCA\Budget\Service\ImportService(
                 $c->get(\OCP\Files\IAppData::class),
@@ -452,6 +456,8 @@ class Application extends App implements IBootstrap {
                 $c->get(\OCA\Budget\Service\Import\TransactionNormalizer::class),
                 $c->get(\OCA\Budget\Service\Import\DuplicateDetector::class),
                 $c->get(\OCA\Budget\Service\Import\ImportRuleApplicator::class),
+                $c->get(\OCA\Budget\Service\Import\Preset\PresetRegistry::class),
+                $c->get(\OCA\Budget\Service\CategoryService::class),
                 $c->get(\OCP\IL10N::class)
             );
         });
