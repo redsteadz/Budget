@@ -77,6 +77,7 @@ class ImportService {
             $importsFolder = $this->getOrCreateImportsFolder();
             $file = $importsFolder->newFile($fileId);
             $content = file_get_contents($tmpPath);
+            $content = $this->ensureUtf8($content);
             $file->putContent($content);
 
             // Detect CSV delimiter if applicable
@@ -687,5 +688,26 @@ class ImportService {
         }
 
         return $matches;
+    }
+
+    /**
+     * Detect file encoding and convert to UTF-8 if needed.
+     * Handles common bank export encodings (ISO-8859-1, Windows-1252, etc.).
+     */
+    private function ensureUtf8(string $content): string {
+        if (mb_check_encoding($content, 'UTF-8')) {
+            return $content;
+        }
+
+        // Try common bank export encodings
+        $encodings = ['ISO-8859-1', 'Windows-1252', 'ISO-8859-15'];
+        foreach ($encodings as $encoding) {
+            if (mb_check_encoding($content, $encoding)) {
+                return mb_convert_encoding($content, 'UTF-8', $encoding);
+            }
+        }
+
+        // Last resort: force UTF-8 with substitution
+        return mb_convert_encoding($content, 'UTF-8', 'UTF-8');
     }
 }
