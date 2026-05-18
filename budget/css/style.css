@@ -15,6 +15,19 @@
     --color-warning: #e65100;
 }
 
+#app-navigation {
+    position: relative;
+    z-index: 1000;
+    background: var(--color-main-background);
+    isolation: isolate;
+}
+
+#app-content {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+}
+
 /* App Navigation Search Bar - Match Files app style */
 .app-navigation-search {
     position: relative;
