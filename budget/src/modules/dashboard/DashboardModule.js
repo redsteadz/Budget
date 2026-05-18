@@ -792,6 +792,9 @@ export default class DashboardModule {
             });
         });
 
+        // Allow drop on the list container
+        listEl.addEventListener('dragover', (e) => e.preventDefault());
+
         listEl.addEventListener('drop', async (e) => {
             e.preventDefault();
             // Save new order from DOM
@@ -800,6 +803,20 @@ export default class DashboardModule {
                 .map(el => parseInt(el.dataset.accountId));
             await this.saveAccountsTileConfig(config);
             this.updateAccountsWidget(this._allDashboardAccounts);
+        });
+
+        // Also save on dragend as a fallback (some browsers don't fire drop reliably)
+        listEl.addEventListener('dragend', async () => {
+            const config = this.getAccountsTileConfig();
+            const newOrder = Array.from(listEl.querySelectorAll('.tile-config-item'))
+                .map(el => parseInt(el.dataset.accountId));
+            const currentOrder = config.order || [];
+            // Only save if order actually changed
+            if (JSON.stringify(newOrder) !== JSON.stringify(currentOrder)) {
+                config.order = newOrder;
+                await this.saveAccountsTileConfig(config);
+                this.updateAccountsWidget(this._allDashboardAccounts);
+            }
         });
     }
 
