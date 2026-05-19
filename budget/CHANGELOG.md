@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.23.0] - 2026-05-20
+
+### Added
+- **Auto-Create Transactions for Recurring Income** — Same as bills' auto-pay. When enabled, the background job creates scheduled transactions automatically when the expected date arrives. Includes Nextcloud notifications on success/failure.
+- **Category Column in CSV Import** ([#193](https://github.com/otherworld-dev/budget/issues/193)) — Map a CSV column to "Category" for auto-creation during import, same as the Toshl preset.
+- **Budget Month Navigation Arrows** — Left/right arrows flanking the month selector for quick month switching.
+- **Account List View Click Navigation** — Clicking an account row in list view now opens the account details page.
+- **Balance Colour in Account List View** — Account balances in list view now show green for positive, red for negative.
+
+### Fixed
+- **Bill Description Not Saved** ([#196](https://github.com/otherworld-dev/budget/issues/196)) — Bill descriptions now properly saved on create and update, and carried to auto-generated transactions.
+- **Budget Month Off-By-One** ([#199](https://github.com/otherworld-dev/budget/issues/199)) — Fixed UTC timezone conversion causing wrong month selection in certain timezones.
+- **Liability Opening Balance Edit** ([#195](https://github.com/otherworld-dev/budget/issues/195)) — Editing a liability account no longer auto-negates positive balances, allowing credit/overpayment values.
+- **Running Balance with Scheduled Transactions** — Scheduled transactions are now excluded from running balance calculation in both account detail and main transaction views.
+- **Scheduled Transaction Styling** — Future/scheduled transactions now show with reduced opacity in the main transactions table, matching the account detail view.
+- **Transaction Table Column Alignment** — Added column classes to account transaction table headers for proper alignment with data rows.
+- **Categories Search Padding** — Fixed search icon overlapping text in the categories search bar.
+- **Bill Amount Spacing** — Added proper top padding to bill amount display.
+
 ## [2.22.0] - 2026-05-18
 
 ### Added
