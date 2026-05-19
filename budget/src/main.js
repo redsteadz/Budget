@@ -1059,6 +1059,7 @@ class BudgetApp {
             });
             let running = parseFloat(this.balanceBeforePage);
             for (const tx of chronological) {
+                if (tx.status === 'scheduled') continue;
                 const amount = parseFloat(tx.amount) || 0;
                 running += (tx.type === 'credit' ? amount : -amount);
                 balanceMap[tx.id] = running;
@@ -1096,7 +1097,7 @@ class BudgetApp {
                 : `<option value="unlink">${t('budget', 'Unlink Transfer')}</option>`;
 
             return `
-                <tr class="transaction-row ${isLinked ? 'is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}" data-transaction-id="${transaction.id}">
+                <tr class="transaction-row ${isLinked ? 'is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}${transaction.status === 'scheduled' ? ' scheduled-transaction' : ''}" data-transaction-id="${transaction.id}">
                     <td class="select-column">
                         <input type="checkbox" class="transaction-checkbox"
                                data-transaction-id="${transaction.id}"
