@@ -5213,6 +5213,10 @@ button.danger:hover {
     font-size: 14px;
 }
 
+#categories-search {
+    padding-left: 40px;
+}
+
 .search-input:focus {
     outline: none;
     border-color: var(--color-primary);
