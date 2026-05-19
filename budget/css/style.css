@@ -2650,6 +2650,12 @@ button.danger:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.account-row-balance.positive {
+    color: var(--budget-color-positive, #2e7d32);
+}
+.account-row-balance.negative {
+    color: var(--budget-color-negative, #c62828);
+}
 .account-row-actions {
     display: flex;
     gap: 4px;
