@@ -327,6 +327,17 @@ export default class SavingsModule {
                 tagDropdown.value = goal.tagId;
                 this.updateCurrentAmountFieldState(true);
             }
+
+            // Set account dropdown
+            const accountDropdown = document.getElementById('goal-account');
+            if (accountDropdown && goal.accountId) {
+                accountDropdown.value = goal.accountId;
+            }
+
+            // Set color
+            if (goal.color) {
+                document.getElementById('goal-color').value = goal.color;
+            }
         }
 
         modal.style.display = 'flex';
@@ -339,13 +350,18 @@ export default class SavingsModule {
         const targetDateValue = document.getElementById('goal-target-date').value;
         const descriptionValue = document.getElementById('goal-notes').value;
 
+        const accountValue = document.getElementById('goal-account')?.value;
+        const colorValue = document.getElementById('goal-color')?.value;
+
         const data = {
             name: document.getElementById('goal-name').value,
             targetAmount: parseFloat(document.getElementById('goal-target').value) || 0,
             currentAmount: parseFloat(document.getElementById('goal-current').value) || 0,
             targetDate: targetDateValue || null,
             description: descriptionValue || null,
-            tagId: tagValue ? parseInt(tagValue) : null
+            tagId: tagValue ? parseInt(tagValue) : null,
+            accountId: accountValue ? parseInt(accountValue) : null,
+            color: colorValue || null
         };
 
         try {

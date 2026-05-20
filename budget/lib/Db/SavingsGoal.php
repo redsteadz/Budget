@@ -26,6 +26,10 @@ use OCP\AppFramework\Db\Entity;
  * @method void setTargetDate(?string $targetDate)
  * @method int|null getTagId()
  * @method void setTagId(?int $tagId)
+ * @method int|null getAccountId()
+ * @method void setAccountId(?int $accountId)
+ * @method string|null getColor()
+ * @method void setColor(?string $color)
  * @method string getCreatedAt()
  * @method void setCreatedAt(string $createdAt)
  */
@@ -38,6 +42,8 @@ class SavingsGoal extends Entity implements JsonSerializable {
     protected $description;
     protected $targetDate;
     protected $tagId;
+    protected $accountId;
+    protected $color;
     protected $createdAt;
 
     public function __construct() {
@@ -46,6 +52,7 @@ class SavingsGoal extends Entity implements JsonSerializable {
         $this->addType('currentAmount', 'float');
         $this->addType('targetMonths', 'integer');
         $this->addType('tagId', 'integer');
+        $this->addType('accountId', 'integer');
     }
 
     public function jsonSerialize(): array {
@@ -63,6 +70,8 @@ class SavingsGoal extends Entity implements JsonSerializable {
             'description' => $this->getDescription(),
             'targetDate' => $this->getTargetDate(),
             'tagId' => $this->getTagId(),
+            'accountId' => $this->getAccountId(),
+            'color' => $this->getColor(),
             'createdAt' => $this->getCreatedAt(),
             'completed' => $completed,
         ];

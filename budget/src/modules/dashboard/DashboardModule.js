@@ -1052,6 +1052,8 @@ export default class DashboardModule {
             const current = goal.currentAmount || goal.current_amount || 0;
             const percentage = target > 0 ? Math.min((current / target) * 100, 100) : 0;
             const remaining = Math.max(target - current, 0);
+            const safeColor = goal.color && /^#[0-9a-fA-F]{3,6}$/.test(goal.color) ? goal.color : '';
+            const fillStyle = safeColor ? `background: ${safeColor};` : '';
 
             return `
                 <div class="savings-goal-item">
@@ -1060,7 +1062,7 @@ export default class DashboardModule {
                         <div class="savings-goal-target">${t('budget', 'Target: {amount}', { amount: this.formatCurrency(target) })}</div>
                     </div>
                     <div class="savings-goal-progress">
-                        <div class="savings-goal-fill" style="width: ${percentage}%"></div>
+                        <div class="savings-goal-fill" style="width: ${percentage}%; ${fillStyle}"></div>
                     </div>
                     <div class="savings-goal-footer">
                         <span class="savings-goal-current">${t('budget', '{amount} saved', { amount: this.formatCurrency(current) })}</span>
@@ -1287,6 +1289,8 @@ export default class DashboardModule {
             const target = goal.targetAmount || goal.target_amount || 0;
             const current = goal.currentAmount || goal.current_amount || 0;
             const percentage = target > 0 ? Math.min((current / target) * 100, 100) : 0;
+            const safeColor = goal.color && /^#[0-9a-fA-F]{3,6}$/.test(goal.color) ? goal.color : '';
+            const fillStyle = safeColor ? `background: ${safeColor};` : '';
 
             return `
                 <div class="goal-summary-item">
@@ -1295,7 +1299,7 @@ export default class DashboardModule {
                         <span class="goal-percentage">${percentage.toFixed(0)}%</span>
                     </div>
                     <div class="goal-summary-progress">
-                        <div class="goal-summary-fill" style="width: ${percentage}%"></div>
+                        <div class="goal-summary-fill" style="width: ${percentage}%; ${fillStyle}"></div>
                     </div>
                     <div class="goal-summary-footer">
                         <span>${this.formatCurrency(current)}</span>
