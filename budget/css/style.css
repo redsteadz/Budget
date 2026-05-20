@@ -14618,12 +14618,6 @@ tr.scheduled-transaction:hover {
     border-color: var(--color-primary-element);
 }
 
-.rules-col-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 /* Action Badges */
 .action-badge {
     display: inline-block;
