@@ -45,7 +45,7 @@ export default class AccountsModule {
     }
 
     formatDate(date) {
-        return formatters.formatDate(date);
+        return formatters.formatDate(date, this.settings);
     }
 
     getPrimaryCurrency() {
@@ -1013,10 +1013,10 @@ export default class AccountsModule {
                     <td class="description-column">
                         <div class="transaction-description">
                             <span class="description-main">${dom.escapeHtml(transaction.description) || t('budget', 'No description')}</span>
-                            ${transaction.vendor ? `<span class="vendor-name">${dom.escapeHtml(transaction.vendor)}</span>` : ''}
                             ${(linkedBadge || splitBadge) ? `<div class="transaction-badges">${linkedBadge}${splitBadge}</div>` : ''}
                         </div>
                     </td>
+                    <td class="vendor-column">${dom.escapeHtml(transaction.vendor || '')}</td>
                     <td class="category-column">
                         <span class="category-name ${category ? '' : 'uncategorized'}">
                             ${category ? dom.escapeHtml(category.name) : t('budget', 'Uncategorized')}

@@ -1335,6 +1335,7 @@ style('budget', 'budget-main');
                                     <th class="description-column sortable" data-sort="description">
                                         <?php p($l->t('Description')); ?> <span class="sort-indicator"></span>
                                     </th>
+                                    <th class="vendor-column"><?php p($l->t('Vendor')); ?></th>
                                     <th class="category-column"><?php p($l->t('Category')); ?></th>
                                     <th class="amount-column sortable" data-sort="amount">
                                         <?php p($l->t('Amount')); ?> <span class="sort-indicator"></span>
