@@ -4995,7 +4995,7 @@ button.danger:hover {
 #account-transactions-table {
     margin-top: 0;
 }
-#account-transactions-table .date-column { width: 90px; }
+#account-transactions-table .date-column { width: 110px; }
 #account-transactions-table .description-column { width: auto; }
 #account-transactions-table .vendor-column { width: 120px; }
 #account-transactions-table .category-column { width: 110px; }
