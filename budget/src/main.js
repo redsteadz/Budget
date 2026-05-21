@@ -1048,21 +1048,12 @@ class BudgetApp {
         const tbody = document.querySelector('#transactions-table tbody');
         if (!tbody || !this.transactions) return;
 
-        // Compute running balances if backend provided balanceBeforePage
+        // Use backend-computed running balances directly
         let balanceMap = null;
-        if (this.balanceBeforePage !== null && this.balanceBeforePage !== undefined) {
+        if (this.runningBalances) {
             balanceMap = {};
-            const chronological = [...this.transactions].sort((a, b) => {
-                if (a.date < b.date) return -1;
-                if (a.date > b.date) return 1;
-                return a.id - b.id;
-            });
-            let running = parseFloat(this.balanceBeforePage);
-            for (const tx of chronological) {
-                if (tx.status === 'scheduled') continue;
-                const amount = parseFloat(tx.amount) || 0;
-                running += (tx.type === 'credit' ? amount : -amount);
-                balanceMap[tx.id] = running;
+            for (const [id, balance] of Object.entries(this.runningBalances)) {
+                balanceMap[parseInt(id)] = parseFloat(balance);
             }
         }
 
@@ -1357,7 +1348,7 @@ class BudgetApp {
 
             const result = await response.json();
             this.transactions = Array.isArray(result) ? result : (result.transactions || result);
-            this.balanceBeforePage = result.balanceBeforePage ?? null;
+            this.runningBalances = result.runningBalances ?? null;
 
             // Load tags and shared status for all displayed transactions
             await Promise.all([
@@ -3890,7 +3881,7 @@ class BudgetApp {
 
             // Balance column auto-hides when data isn't available
             let isVisible = visible;
-            if (key === 'balance' && (this.balanceBeforePage === null || this.balanceBeforePage === undefined)) {
+            if (key === 'balance' && !this.runningBalances) {
                 isVisible = false;
             }
 

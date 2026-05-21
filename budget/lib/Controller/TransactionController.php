@@ -107,8 +107,8 @@ class TransactionController extends Controller {
                 'totalPages' => ceil($result['total'] / $limit)
             ];
 
-            if (isset($result['balanceBeforePage'])) {
-                $responseData['balanceBeforePage'] = $result['balanceBeforePage'];
+            if (isset($result['runningBalances'])) {
+                $responseData['runningBalances'] = $result['runningBalances'];
             }
 
             return new DataResponse($responseData);

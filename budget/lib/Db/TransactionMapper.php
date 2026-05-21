@@ -1120,8 +1120,9 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * @deprecated No longer used — running balances are now computed via getAllTransactionsForBalance().
+     *
      * Get net change for the first N transactions in display order.
-     * Used to compute balanceBeforePage: total_net - topN_net = net of older pages.
      *
      * @param int $accountId Account to query
      * @param int $n Number of transactions from the top (display order)
@@ -1173,6 +1174,35 @@ class TransactionMapper extends QBMapper {
         return $netChange;
     }
 
+    /**
+     * Fetch all non-scheduled transactions for an account with minimal columns,
+     * ordered chronologically for running balance computation.
+     *
+     * @param int $accountId
+     * @return array Array of rows with 'id', 'amount', 'type' keys
+     */
+    public function getAllTransactionsForBalance(int $accountId): array {
+        $qb = $this->db->getQueryBuilder();
+
+        $qb->select('t.id', 't.amount', 't.type')
+            ->from($this->getTableName(), 't')
+            ->where($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('t.status', $qb->createNamedParameter('scheduled')),
+                    $qb->expr()->isNull('t.status')
+                )
+            )
+            ->orderBy('t.date', 'ASC')
+            ->addOrderBy('t.id', 'ASC');
+
+        $result = $qb->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+
+        return $rows;
+    }
+
     public function getNetChangeAfterDate(int $accountId, string $afterDate): float {
         $qb = $this->db->getQueryBuilder();
 
@@ -1201,7 +1231,7 @@ class TransactionMapper extends QBMapper {
      * Calculate the net change of all transactions chronologically before a given (date, id) boundary.
      * Used for computing running balance: balanceBeforePage = openingBalance + getNetChangeBeforePage().
      *
-     * @deprecated Use getNetChangeBeforePage instead — handles same-date pagination splits correctly.
+     * @deprecated No longer used — running balances are now computed via getAllTransactionsForBalance().
      *
      * @param int $accountId Account to compute balance for
      * @param string $boundaryDate The date of the boundary transaction

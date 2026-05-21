@@ -923,7 +923,7 @@ export default class AccountsModule {
                 this.accountTransactions = result.transactions || result; // Handle both formats
                 this.accountTotalPages = result.totalPages || 1;
                 this.accountTotal = result.total || this.accountTransactions.length;
-                this.accountBalanceBeforePage = result.balanceBeforePage ?? null;
+                this.accountRunningBalances = result.runningBalances ?? null;
             } else {
                 // Fallback: filter from all transactions
                 await this.loadTransactions();
@@ -963,21 +963,12 @@ export default class AccountsModule {
             return;
         }
 
-        // Compute running balances from server-provided balanceBeforePage
+        // Use backend-computed running balances directly
         let balanceMap = null;
-        if (this.accountBalanceBeforePage !== null && this.accountBalanceBeforePage !== undefined) {
+        if (this.accountRunningBalances) {
             balanceMap = {};
-            const chronological = [...this.accountTransactions].sort((a, b) => {
-                if (a.date < b.date) return -1;
-                if (a.date > b.date) return 1;
-                return a.id - b.id;
-            });
-            let running = parseFloat(this.accountBalanceBeforePage);
-            for (const tx of chronological) {
-                if (tx.status === 'scheduled') continue; // Scheduled transactions don't affect running balance
-                const amount = parseFloat(tx.amount) || 0;
-                running += (tx.type === 'credit' ? amount : -amount);
-                balanceMap[tx.id] = running;
+            for (const [id, balance] of Object.entries(this.accountRunningBalances)) {
+                balanceMap[parseInt(id)] = parseFloat(balance);
             }
         }
 

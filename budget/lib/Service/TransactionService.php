@@ -549,24 +549,31 @@ class TransactionService {
             $account = $this->accountMapper->find($accountId, $userId);
             $openingBalance = (string)($account->getOpeningBalance() ?? 0);
 
-            // Compute balance before this page by summing ALL transactions for
-            // the account, then subtracting the net of the current page and all
-            // pages before it (which contain more recent transactions).
-            //
-            // This avoids the boundary issue where same-date transactions split
-            // across pages cause incorrect running balances (the old approach
-            // used date+id boundaries which broke when pagination split same-date
-            // transactions).
-            $totalNet = $this->mapper->getNetChangeAll($accountId);
-            $netCurrentAndBefore = $this->mapper->getNetChangeTopN(
-                $accountId,
-                $offset + count($result['transactions']),
-                $filters['direction'] ?? 'DESC'
-            );
+            // Compute running balance for each transaction on the current page
+            // by iterating over ALL account transactions chronologically.
+            // This avoids page-boundary issues entirely.
+            $allTx = $this->mapper->getAllTransactionsForBalance($accountId);
 
-            // balanceBeforePage = openingBalance + (totalNet - netCurrentAndBefore)
-            $netAfter = MoneyCalculator::subtract((string)$totalNet, (string)$netCurrentAndBefore);
-            $result['balanceBeforePage'] = MoneyCalculator::add($openingBalance, $netAfter);
+            $pageIds = [];
+            foreach ($result['transactions'] as $tx) {
+                $pageIds[$tx['id']] = true;
+            }
+
+            $running = $openingBalance;
+            $runningBalances = [];
+            foreach ($allTx as $row) {
+                $amount = (string)$row['amount'];
+                if ($row['type'] === 'credit') {
+                    $running = MoneyCalculator::add($running, $amount);
+                } else {
+                    $running = MoneyCalculator::subtract($running, $amount);
+                }
+                if (isset($pageIds[(int)$row['id']])) {
+                    $runningBalances[(int)$row['id']] = $running;
+                }
+            }
+
+            $result['runningBalances'] = $runningBalances;
         }
 
         return $result;
