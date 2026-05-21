@@ -8,12 +8,14 @@ A comprehensive financial management app for Nextcloud. Track spending habits, m
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
-## What's New in v2.20
+## What's New in v2.25
 
-- **Liability Accounts Fixed** ([#187](https://github.com/otherworld-dev/budget/issues/187)) - Loan and credit card balances now work correctly. Payments decrease the balance, charges increase it. Added Mortgage and Line of Credit account types.
-- **Import from App: Toshl Finance** ([#191](https://github.com/otherworld-dev/budget/issues/191)) - One-click import from Toshl CSV exports with auto-creation of accounts, categories, and tags. Full preview before executing.
-- **PostgreSQL Support Fixed** ([#185](https://github.com/otherworld-dev/budget/issues/185)) - All report queries now work on PostgreSQL
-- **CSV Encoding Auto-Detection** ([#189](https://github.com/otherworld-dev/budget/issues/189)) - Import handles ISO-8859-1 and Windows-1252 files automatically
+- **Debt Payoff Charts** - Stacked area chart showing each debt declining over time, with toggle to individual line view
+- **Debt Scenarios** - Create, save, and compare named payoff scenarios with different strategies, extra payments, lump sums, debt selection, and rate overrides
+- **Strategy Comparison** - Side-by-side avalanche vs snowball comparison with recommendation
+- **Debt Dashboard Widgets** - Mini sparkline chart, progress/countdown with percentage paid off, and days-until-debt-free hero tile
+- **Running Balance Fix** ([#194](https://github.com/otherworld-dev/Budget/issues/194)) - Rewrote to compute server-side, eliminating page boundary errors
+- **Rules Tag Fix** ([#204](https://github.com/otherworld-dev/Budget/issues/204)) - Import rules now correctly apply tag actions
 
 See the [full changelog](budget/CHANGELOG.md) for details.
 
@@ -101,6 +103,11 @@ Popular topics:
   - Appreciation/depreciation projections with interactive charts
   - Integrated into net worth calculations
 - **Debt Payoff Planner** - Plan debt repayment using avalanche or snowball strategies
+  - Repayment charts with stacked area / individual line toggle
+  - Named scenarios with extra payments, lump sums, debt selection, and rate overrides
+  - Strategy comparison with side-by-side metrics and recommendation
+  - Progress tracking against active scenario (ahead/behind/on track)
+  - Dashboard widgets: chart sparkline, progress countdown, days until debt free
 - **Savings Goals** - Set financial targets with progress tracking and achievement forecasting
   - Link goals to tags for automatic amount calculation from tagged transactions
 - **Pension Tracker** - Track retirement accounts with growth projections and combined forecasts
@@ -316,6 +323,8 @@ The app provides a REST API for all functionality:
 | `/api/goals` | Savings goal management |
 | `/api/assets` | Non-liquid asset tracking |
 | `/api/pensions` | Pension account tracking |
+| `/api/debts` | Debt payoff planning |
+| `/api/debt-scenarios` | Debt scenario management |
 | `/api/reports` | Financial reports |
 | `/api/migration` | Data export/import |
 | `/api/auth` | Password protection |
