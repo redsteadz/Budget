@@ -14,7 +14,7 @@ use OCP\IDBConnection;
  */
 class DebtScenarioMapper extends QBMapper {
     public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'budget_debt_scenarios', DebtScenario::class);
+        parent::__construct($db, 'budget_dscn', DebtScenario::class);
     }
 
     /**

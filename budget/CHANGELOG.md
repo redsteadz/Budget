@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.25.0] - 2026-05-21
+
+### Added
+- **Debt Payoff Charts** — Stacked area chart showing each debt declining over time, with toggle to individual line view. Hover tooltips show per-debt balances.
+- **Debt Scenarios** — Create, save, and compare named payoff scenarios with different strategies (avalanche/snowball), extra monthly payments, one-time lump sums, debt selection, and interest rate overrides.
+- **Scenario Comparison** — Side-by-side comparison of avalanche vs snowball strategies showing months to payoff, total interest, and a recommendation.
+- **Debt Progress Dashboard Widget** — Countdown to debt-free date, progress bar showing percentage paid off, next payoff milestone, and ahead/behind schedule status.
+- **Debt Chart Dashboard Widget** — Mini sparkline chart showing debt decline trajectory on the dashboard.
+- **Days Until Debt Free Hero Widget** — Hero tile showing countdown to projected debt-free date.
+
+### Fixed
+- **Running Balance Across Pages** ([#194](https://github.com/otherworld-dev/Budget/issues/194)) — Rewrote running balance to compute server-side across all account transactions, eliminating page boundary calculation errors.
+- **Rules Not Applying Tags** ([#204](https://github.com/otherworld-dev/Budget/issues/204)) — Fixed deferred tag actions being silently dropped during rule execution.
+- **Dashboard Lock/Unlock Icons** — Replaced non-rendering CSS icon classes with inline SVGs for lock/unlock and settings gear buttons.
+- **Category Dropdown Clipped** — Fixed category autocomplete dropdown being cut off at the bottom of the transactions table.
+- **Accounts Tile Settings Icon** — Settings gear icon now visible on dark themes (uses currentColor).
+
+### Removed
+- **Dead Category Settings Button** — Removed non-functional gear button from the categories page header.
+
 ## [2.24.0] - 2026-05-20
 
 ### Added

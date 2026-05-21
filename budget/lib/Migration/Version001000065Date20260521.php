@@ -15,8 +15,8 @@ class Version001000065Date20260521 extends SimpleMigrationStep {
         /** @var ISchemaWrapper $schema */
         $schema = $schemaClosure();
 
-        if (!$schema->hasTable('budget_debt_scenarios')) {
-            $table = $schema->createTable('budget_debt_scenarios');
+        if (!$schema->hasTable('budget_dscn')) {
+            $table = $schema->createTable('budget_dscn');
 
             $table->addColumn('id', Types::BIGINT, [
                 'autoincrement' => true,
@@ -90,8 +90,8 @@ class Version001000065Date20260521 extends SimpleMigrationStep {
             ]);
 
             $table->setPrimaryKey(['id']);
-            $table->addIndex(['user_id'], 'budget_dscen_user');
-            $table->addIndex(['user_id', 'is_active'], 'budget_dscen_active');
+            $table->addIndex(['user_id'], 'budget_dscn_user');
+            $table->addIndex(['user_id', 'is_active'], 'budget_dscn_active');
         }
 
         return $schema;
