@@ -558,26 +558,19 @@
     margin-bottom: 12px;
 }
 
-/* Main Dashboard Grid - Two Column Layout */
+/* Main Dashboard Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(var(--dashboard-cols, 3), 1fr);
     gap: 20px;
+    grid-auto-flow: dense;
 }
 
-.dashboard-column {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.dashboard-column-main {
-    min-width: 0;
-}
-
-.dashboard-column-side {
-    min-width: 280px;
-}
+/* Tile Sizes */
+.dashboard-tile-xs { grid-column: span 1; max-height: 120px; overflow: hidden; }
+.dashboard-tile-s  { grid-column: span 1; }
+.dashboard-tile-m  { grid-column: span 2; }
+.dashboard-tile-l  { grid-column: 1 / -1; }
 
 /* Dashboard Cards */
 .dashboard-card {
@@ -1549,12 +1542,10 @@
     }
 
     .dashboard-grid {
-        grid-template-columns: 1fr;
+        --dashboard-cols: 2 !important;
     }
-
-    .dashboard-column-side {
-        min-width: 0;
-    }
+    .dashboard-tile-m { grid-column: span 2; }
+    .dashboard-tile-l { grid-column: 1 / -1; }
 
     /* Accounts Page */
     .accounts-grid {
@@ -2088,10 +2079,6 @@ button.danger:hover {
 
 /* Responsive Design - Nextcloud Breakpoints */
 @media (max-width: 1024px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-
     .categories-container {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -2099,6 +2086,17 @@ button.danger:hover {
 }
 
 @media (max-width: 768px) {
+    .dashboard-grid {
+        --dashboard-cols: 1 !important;
+    }
+    .dashboard-tile-xs,
+    .dashboard-tile-s,
+    .dashboard-tile-m,
+    .dashboard-tile-l {
+        grid-column: span 1;
+        max-height: none;
+    }
+
     .view-controls {
         gap: 5px;
     }

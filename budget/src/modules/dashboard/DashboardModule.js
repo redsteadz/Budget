@@ -2599,11 +2599,23 @@ export default class DashboardModule {
                 }
             });
 
-            return {
+            const config = {
                 order: mergedOrder,
                 visibility: { ...defaults.visibility, ...saved.visibility },
                 settings: saved.settings || {}
             };
+
+            // Backward compat: add sizes if missing
+            if (!config.sizes) {
+                config.sizes = saved.sizes || {};
+            }
+
+            // Backward compat: add tileSettings if missing
+            if (!config.tileSettings) {
+                config.tileSettings = saved.tileSettings || {};
+            }
+
+            return config;
         } catch (e) {
             console.error('Failed to parse dashboard config', e);
             return defaults;
@@ -2725,60 +2737,78 @@ export default class DashboardModule {
         // This is a complex feature that allows reordering dashboard tiles
     }
 
+    getDefaultSize(widgetKey) {
+        for (const category of ['hero', 'widgets']) {
+            const widget = DASHBOARD_WIDGETS[category]?.[widgetKey];
+            if (widget) return widget.defaultSize || 's';
+        }
+        return 's';
+    }
+
+    getWidgetSize(widgetId, category) {
+        const config = this.dashboardConfig[category];
+        if (config?.sizes?.[widgetId]) return config.sizes[widgetId];
+        // Find widget key from id
+        const widgets = DASHBOARD_WIDGETS[category] || {};
+        for (const [key, def] of Object.entries(widgets)) {
+            if (def.id === widgetId || key === widgetId) return def.defaultSize || 's';
+        }
+        return 's';
+    }
+
+    applyTileSizes() {
+        const grid = document.querySelector('.dashboard-grid');
+        if (!grid) return;
+
+        const sizes = this.dashboardConfig.widgets?.sizes || {};
+        grid.querySelectorAll('[data-widget-category="widget"]').forEach(card => {
+            const widgetId = card.dataset.widgetId;
+            const size = sizes[widgetId] || this.getWidgetSize(widgetId, 'widgets');
+            card.classList.remove('dashboard-tile-xs', 'dashboard-tile-s', 'dashboard-tile-m', 'dashboard-tile-l');
+            card.classList.add(`dashboard-tile-${size}`);
+        });
+    }
+
     applyDashboardOrder() {
-        // Reorder hero cards
+        // Hero cards (unchanged logic)
         const heroContainer = document.querySelector('.dashboard-hero');
         if (heroContainer) {
-            const fragment = document.createDocumentFragment();
-            this.dashboardConfig.hero.order.forEach(widgetId => {
-                const card = heroContainer.querySelector(`[data-widget-id="${widgetId}"]`);
-                if (card) {
-                    fragment.appendChild(card);
-                }
+            const heroOrder = this.dashboardConfig.hero?.order || [];
+            const heroCards = Array.from(heroContainer.querySelectorAll('[data-widget-category="hero"]'));
+            heroCards.sort((a, b) => {
+                const aIdx = heroOrder.indexOf(a.dataset.widgetId);
+                const bIdx = heroOrder.indexOf(b.dataset.widgetId);
+                return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
             });
-            heroContainer.appendChild(fragment);
+            heroCards.forEach(card => heroContainer.appendChild(card));
         }
 
-        // For widgets, we need to handle two columns
-        // Simpler approach: collect all widgets, sort by order, then redistribute
-        const mainColumn = document.querySelector('.dashboard-column-main');
-        const sideColumn = document.querySelector('.dashboard-column-side');
+        // Widget cards — flat grid, no column split
+        const grid = document.querySelector('.dashboard-grid');
+        if (!grid) return;
 
-        if (!mainColumn || !sideColumn) return;
+        const widgetOrder = this.dashboardConfig.widgets?.order || [];
+        const allCards = Array.from(grid.querySelectorAll('[data-widget-category="widget"]'));
 
-        // Collect all widget cards
-        const allCards = [];
-        document.querySelectorAll('[data-widget-category="widget"]').forEach(card => {
-            allCards.push(card);
-        });
-
-        // Sort by configured order
         allCards.sort((a, b) => {
-            const aIndex = this.dashboardConfig.widgets.order.indexOf(a.dataset.widgetId);
-            const bIndex = this.dashboardConfig.widgets.order.indexOf(b.dataset.widgetId);
-            return aIndex - bIndex;
+            const aIdx = widgetOrder.indexOf(a.dataset.widgetId);
+            const bIdx = widgetOrder.indexOf(b.dataset.widgetId);
+            return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
         });
 
-        // Remove all widget cards from both columns first
-        allCards.forEach(card => card.remove());
+        allCards.forEach(card => grid.appendChild(card));
 
-        // Redistribute: first 4 to main, rest to side (matching original layout)
-        const fragment1 = document.createDocumentFragment();
-        const fragment2 = document.createDocumentFragment();
-
-        allCards.forEach((card, index) => {
-            if (index < 4) {
-                fragment1.appendChild(card);
-            } else {
-                fragment2.appendChild(card);
-            }
-        });
-
-        mainColumn.appendChild(fragment1);
-        sideColumn.appendChild(fragment2);
+        // Apply size classes
+        this.applyTileSizes();
     }
 
     applyDashboardLayout() {
+        // Set grid columns from user preference
+        const grid = document.querySelector('.dashboard-grid');
+        if (grid) {
+            grid.style.setProperty('--dashboard-cols', this.gridColumns || 3);
+        }
+
         const isMobile = window.innerWidth < 1200;
 
         if (isMobile) {
@@ -3045,6 +3075,7 @@ export default class DashboardModule {
         // Load saved lock state
         const savedLockState = this.settings.dashboard_locked !== 'false'; // Default to locked
         this.app.dashboardLocked = savedLockState;
+        this.gridColumns = parseInt(this.app.settings?.dashboard_grid_columns) || 3;
         this.updateDashboardLockUI();
 
         toggleBtn.addEventListener('click', () => this.toggleDashboardLock());
@@ -3200,7 +3231,7 @@ export default class DashboardModule {
                     key,
                     name: widget.name,
                     type: 'widget',
-                    size: widget.size
+                    size: widget.defaultSize
                 });
             }
         });
@@ -3326,10 +3357,9 @@ export default class DashboardModule {
 
         // Setup drop zones
         const heroContainer = document.querySelector('.dashboard-hero');
-        const mainColumn = document.querySelector('.dashboard-column-main');
-        const sideColumn = document.querySelector('.dashboard-column-side');
+        const widgetGrid = document.querySelector('.dashboard-grid');
 
-        [heroContainer, mainColumn, sideColumn].forEach(container => {
+        [heroContainer, widgetGrid].forEach(container => {
             if (!container) return;
 
             container.addEventListener('dragover', (e) => {

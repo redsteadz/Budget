@@ -20208,331 +20208,537 @@ var DASHBOARD_WIDGETS = {
     netWorth: {
       id: 'hero-net-worth',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Net Worth'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     income: {
       id: 'hero-income',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Income This Month'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     expenses: {
       id: 'hero-expenses',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Expenses This Month'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     savings: {
       id: 'hero-savings',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Net Savings'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     pension: {
       id: 'hero-pension',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Pension Worth'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     assets: {
       id: 'hero-assets',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Assets Worth'),
-      size: 'hero',
-      defaultVisible: true
+      defaultSize: 'hero',
+      defaultVisible: true,
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     // Phase 1 - Quick Wins (use existing data)
     savingsRate: {
       id: 'hero-savings-rate',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Savings Rate'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     cashFlow: {
       id: 'hero-cash-flow',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Cash Flow'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     budgetRemaining: {
       id: 'hero-budget-remaining',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Budget Remaining'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'budgeting'
+      category: 'budgeting',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     budgetHealth: {
       id: 'hero-budget-health',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Budget Health'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'budgeting'
+      category: 'budgeting',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     // Per-Account Views
     accountIncome: {
       id: 'hero-account-income',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Account Income'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'accounts'
+      category: 'accounts',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     accountExpenses: {
       id: 'hero-account-expenses',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Account Expenses'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'accounts'
+      category: 'accounts',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     // Phase 2 - Moderate Complexity (lazy loaded)
     uncategorizedCount: {
       id: 'hero-uncategorized',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Uncategorized'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'alerts'
+      category: 'alerts',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     lowBalanceAlert: {
       id: 'hero-low-balance',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Low Balance Alert'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'alerts'
+      category: 'alerts',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     // Phase 3 - Advanced Features (lazy loaded with charts)
     burnRate: {
       id: 'hero-burn-rate',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Burn Rate'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'forecasting'
+      category: 'forecasting',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     },
     daysUntilDebtFree: {
       id: 'hero-debt-free',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Days Until Debt Free'),
-      size: 'hero',
+      defaultSize: 'hero',
       defaultVisible: false,
-      category: 'debts'
+      category: 'debts',
+      settingsSchema: {
+        displayFormat: ['compact', 'full'],
+        showChangeIndicator: true
+      }
     }
   },
   widgets: {
     trendChart: {
       id: 'trend-chart-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Income vs Expenses'),
-      size: 'large',
-      defaultVisible: true
+      defaultSize: 'l',
+      allowedSizes: ['m', 'l'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true,
+        chartType: ['bar', 'line']
+      }
     },
     spendingChart: {
       id: 'spending-chart-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Spending by Category'),
-      size: 'medium',
-      defaultVisible: true
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true,
+        chartType: ['doughnut', 'bar']
+      }
     },
     netWorthHistory: {
       id: 'net-worth-history-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Net Worth History'),
-      size: 'medium',
-      defaultVisible: true
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     assetValueHistory: {
       id: 'asset-value-history-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Asset Value History'),
-      size: 'medium',
-      defaultVisible: true
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     recentTransactions: {
       id: 'recent-transactions-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Recent Transactions'),
-      size: 'medium',
-      defaultVisible: true
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        rowCount: {
+          min: 3,
+          max: 20,
+          "default": 5
+        }
+      }
     },
     accounts: {
       id: 'accounts-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Accounts'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {}
     },
     budgetAlerts: {
       id: 'budget-alerts-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Budget Alerts'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {}
     },
     upcomingBills: {
       id: 'upcoming-bills-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Upcoming Bills'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        rowCount: {
+          min: 3,
+          max: 20,
+          "default": 5
+        }
+      }
     },
     budgetProgress: {
       id: 'budget-progress-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Budget Progress'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {}
     },
     savingsGoals: {
       id: 'savings-goals-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Savings Goals'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {}
     },
     debtPayoff: {
       id: 'debt-payoff-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Debt Payoff'),
-      size: 'small',
-      defaultVisible: true
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
+      defaultVisible: true,
+      settingsSchema: {}
     },
     debtChart: {
       id: 'debt-chart-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Debt Payoff Chart'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'debts'
+      category: 'debts',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     debtProgress: {
       id: 'debt-progress-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Debt Progress'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'debts'
+      category: 'debts',
+      settingsSchema: {}
     },
     // Phase 1 - Quick Wins (use existing data)
     topCategories: {
       id: 'top-categories-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Top Spending Categories'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {}
     },
     accountPerformance: {
       id: 'account-performance-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Account Performance'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {}
     },
     budgetBreakdown: {
       id: 'budget-breakdown-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Budget Breakdown'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'budgeting'
+      category: 'budgeting',
+      settingsSchema: {}
     },
     goalsSummary: {
       id: 'goals-summary-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Savings Goals Summary'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'goals'
+      category: 'goals',
+      settingsSchema: {}
     },
     paymentBreakdown: {
       id: 'payment-breakdown-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Payment Methods'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {}
     },
     reconciliationStatus: {
       id: 'reconciliation-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Reconciliation Status'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'transactions'
+      category: 'transactions',
+      settingsSchema: {}
     },
     // Phase 2 - Moderate Complexity (lazy loaded)
     monthlyComparison: {
       id: 'monthly-comparison-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Monthly Comparison'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     largeTransactions: {
       id: 'large-transactions-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Large Transactions'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'transactions'
+      category: 'transactions',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        rowCount: {
+          min: 3,
+          max: 20,
+          "default": 5
+        }
+      }
     },
     weeklyTrend: {
       id: 'weekly-trend-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Weekly Spending'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     unmatchedTransfers: {
       id: 'unmatched-transfers-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Unmatched Transfers'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'transactions'
+      category: 'transactions',
+      settingsSchema: {}
     },
     categoryTrends: {
       id: 'category-trends-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Category Trends'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     billsDueSoon: {
       id: 'bills-due-soon-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Bills Due Soon'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'bills'
+      category: 'bills',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        rowCount: {
+          min: 3,
+          max: 20,
+          "default": 5
+        }
+      }
     },
     // Phase 3 - Advanced Features (lazy loaded with charts)
     cashFlowForecast: {
       id: 'cash-flow-forecast-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Cash Flow Forecast'),
-      size: 'large',
+      defaultSize: 'l',
+      allowedSizes: ['m', 'l'],
       defaultVisible: false,
-      category: 'forecasting'
+      category: 'forecasting',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     yoyComparison: {
       id: 'yoy-comparison-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Year-over-Year'),
-      size: 'large',
+      defaultSize: 'l',
+      allowedSizes: ['m', 'l'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     incomeTracking: {
       id: 'income-tracking-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Income Tracking'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'income'
+      category: 'income',
+      settingsSchema: {
+        dateRange: true,
+        accountSelector: true,
+        showLegend: true
+      }
     },
     recentImports: {
       id: 'recent-imports-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Recent Imports'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'transactions'
+      category: 'transactions',
+      settingsSchema: {}
     },
     ruleEffectiveness: {
       id: 'rule-effectiveness-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Rule Effectiveness'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {}
     },
     spendingVelocity: {
       id: 'spending-velocity-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Spending Velocity'),
-      size: 'small',
+      defaultSize: 's',
+      allowedSizes: ['xs', 's', 'm'],
       defaultVisible: false,
-      category: 'insights'
+      category: 'insights',
+      settingsSchema: {}
     },
     // Phase 4 - Interactive Widgets
     quickAdd: {
       id: 'quick-add-card',
       name: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.translate)('budget', 'Quick Add Transaction'),
-      size: 'medium',
+      defaultSize: 'm',
+      allowedSizes: ['s', 'm', 'l'],
       defaultVisible: false,
-      category: 'interactive'
+      category: 'interactive',
+      settingsSchema: {}
     }
   }
 };
@@ -34754,11 +34960,22 @@ var DashboardModule = /*#__PURE__*/function () {
             mergedOrder.push(id);
           }
         });
-        return {
+        var config = {
           order: mergedOrder,
           visibility: _objectSpread(_objectSpread({}, defaults.visibility), saved.visibility),
           settings: saved.settings || {}
         };
+
+        // Backward compat: add sizes if missing
+        if (!config.sizes) {
+          config.sizes = saved.sizes || {};
+        }
+
+        // Backward compat: add tileSettings if missing
+        if (!config.tileSettings) {
+          config.tileSettings = saved.tileSettings || {};
+        }
+        return config;
       } catch (e) {
         console.error('Failed to parse dashboard config', e);
         return defaults;
@@ -35030,9 +35247,8 @@ var DashboardModule = /*#__PURE__*/function () {
 
       // Setup drop zones
       var heroContainer = document.querySelector('.dashboard-hero');
-      var mainColumn = document.querySelector('.dashboard-column-main');
-      var sideColumn = document.querySelector('.dashboard-column-side');
-      [heroContainer, mainColumn, sideColumn].forEach(function (container) {
+      var widgetGrid = document.querySelector('.dashboard-grid');
+      [heroContainer, widgetGrid].forEach(function (container) {
         if (!container) return;
         container.addEventListener('dragover', function (e) {
           e.preventDefault();
@@ -35079,63 +35295,93 @@ var DashboardModule = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "getDefaultSize",
+    value: function getDefaultSize(widgetKey) {
+      for (var _i3 = 0, _arr = ['hero', 'widgets']; _i3 < _arr.length; _i3++) {
+        var _DASHBOARD_WIDGETS$ca;
+        var category = _arr[_i3];
+        var widget = (_DASHBOARD_WIDGETS$ca = _config_dashboardWidgets_js__WEBPACK_IMPORTED_MODULE_3__.DASHBOARD_WIDGETS[category]) === null || _DASHBOARD_WIDGETS$ca === void 0 ? void 0 : _DASHBOARD_WIDGETS$ca[widgetKey];
+        if (widget) return widget.defaultSize || 's';
+      }
+      return 's';
+    }
+  }, {
+    key: "getWidgetSize",
+    value: function getWidgetSize(widgetId, category) {
+      var _config$sizes;
+      var config = this.dashboardConfig[category];
+      if (config !== null && config !== void 0 && (_config$sizes = config.sizes) !== null && _config$sizes !== void 0 && _config$sizes[widgetId]) return config.sizes[widgetId];
+      // Find widget key from id
+      var widgets = _config_dashboardWidgets_js__WEBPACK_IMPORTED_MODULE_3__.DASHBOARD_WIDGETS[category] || {};
+      for (var _i4 = 0, _Object$entries3 = Object.entries(widgets); _i4 < _Object$entries3.length; _i4++) {
+        var _Object$entries3$_i = _slicedToArray(_Object$entries3[_i4], 2),
+          key = _Object$entries3$_i[0],
+          def = _Object$entries3$_i[1];
+        if (def.id === widgetId || key === widgetId) return def.defaultSize || 's';
+      }
+      return 's';
+    }
+  }, {
+    key: "applyTileSizes",
+    value: function applyTileSizes() {
+      var _this$dashboardConfig5,
+        _this27 = this;
+      var grid = document.querySelector('.dashboard-grid');
+      if (!grid) return;
+      var sizes = ((_this$dashboardConfig5 = this.dashboardConfig.widgets) === null || _this$dashboardConfig5 === void 0 ? void 0 : _this$dashboardConfig5.sizes) || {};
+      grid.querySelectorAll('[data-widget-category="widget"]').forEach(function (card) {
+        var widgetId = card.dataset.widgetId;
+        var size = sizes[widgetId] || _this27.getWidgetSize(widgetId, 'widgets');
+        card.classList.remove('dashboard-tile-xs', 'dashboard-tile-s', 'dashboard-tile-m', 'dashboard-tile-l');
+        card.classList.add("dashboard-tile-".concat(size));
+      });
+    }
+  }, {
     key: "applyDashboardOrder",
     value: function applyDashboardOrder() {
-      var _this27 = this;
-      // Reorder hero cards
+      var _this$dashboardConfig7;
+      // Hero cards (unchanged logic)
       var heroContainer = document.querySelector('.dashboard-hero');
       if (heroContainer) {
-        var fragment = document.createDocumentFragment();
-        this.dashboardConfig.hero.order.forEach(function (widgetId) {
-          var card = heroContainer.querySelector("[data-widget-id=\"".concat(widgetId, "\"]"));
-          if (card) {
-            fragment.appendChild(card);
-          }
+        var _this$dashboardConfig6;
+        var heroOrder = ((_this$dashboardConfig6 = this.dashboardConfig.hero) === null || _this$dashboardConfig6 === void 0 ? void 0 : _this$dashboardConfig6.order) || [];
+        var heroCards = Array.from(heroContainer.querySelectorAll('[data-widget-category="hero"]'));
+        heroCards.sort(function (a, b) {
+          var aIdx = heroOrder.indexOf(a.dataset.widgetId);
+          var bIdx = heroOrder.indexOf(b.dataset.widgetId);
+          return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
         });
-        heroContainer.appendChild(fragment);
+        heroCards.forEach(function (card) {
+          return heroContainer.appendChild(card);
+        });
       }
 
-      // For widgets, we need to handle two columns
-      // Simpler approach: collect all widgets, sort by order, then redistribute
-      var mainColumn = document.querySelector('.dashboard-column-main');
-      var sideColumn = document.querySelector('.dashboard-column-side');
-      if (!mainColumn || !sideColumn) return;
-
-      // Collect all widget cards
-      var allCards = [];
-      document.querySelectorAll('[data-widget-category="widget"]').forEach(function (card) {
-        allCards.push(card);
-      });
-
-      // Sort by configured order
+      // Widget cards — flat grid, no column split
+      var grid = document.querySelector('.dashboard-grid');
+      if (!grid) return;
+      var widgetOrder = ((_this$dashboardConfig7 = this.dashboardConfig.widgets) === null || _this$dashboardConfig7 === void 0 ? void 0 : _this$dashboardConfig7.order) || [];
+      var allCards = Array.from(grid.querySelectorAll('[data-widget-category="widget"]'));
       allCards.sort(function (a, b) {
-        var aIndex = _this27.dashboardConfig.widgets.order.indexOf(a.dataset.widgetId);
-        var bIndex = _this27.dashboardConfig.widgets.order.indexOf(b.dataset.widgetId);
-        return aIndex - bIndex;
+        var aIdx = widgetOrder.indexOf(a.dataset.widgetId);
+        var bIdx = widgetOrder.indexOf(b.dataset.widgetId);
+        return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
       });
-
-      // Remove all widget cards from both columns first
       allCards.forEach(function (card) {
-        return card.remove();
+        return grid.appendChild(card);
       });
 
-      // Redistribute: first 4 to main, rest to side (matching original layout)
-      var fragment1 = document.createDocumentFragment();
-      var fragment2 = document.createDocumentFragment();
-      allCards.forEach(function (card, index) {
-        if (index < 4) {
-          fragment1.appendChild(card);
-        } else {
-          fragment2.appendChild(card);
-        }
-      });
-      mainColumn.appendChild(fragment1);
-      sideColumn.appendChild(fragment2);
+      // Apply size classes
+      this.applyTileSizes();
     }
   }, {
     key: "applyDashboardLayout",
     value: function applyDashboardLayout() {
       var _this28 = this;
+      // Set grid columns from user preference
+      var grid = document.querySelector('.dashboard-grid');
+      if (grid) {
+        grid.style.setProperty('--dashboard-cols', this.gridColumns || 3);
+      }
       var isMobile = window.innerWidth < 1200;
       if (isMobile) {
         // On mobile, apply CSS order property for single-column layout
@@ -35519,13 +35765,15 @@ var DashboardModule = /*#__PURE__*/function () {
   }, {
     key: "setupDashboardCustomization",
     value: function setupDashboardCustomization() {
-      var _this29 = this;
+      var _this$app$settings,
+        _this29 = this;
       var toggleBtn = document.getElementById('toggle-dashboard-lock-btn');
       if (!toggleBtn) return;
 
       // Load saved lock state
       var savedLockState = this.settings.dashboard_locked !== 'false'; // Default to locked
       this.app.dashboardLocked = savedLockState;
+      this.gridColumns = parseInt((_this$app$settings = this.app.settings) === null || _this$app$settings === void 0 ? void 0 : _this$app$settings.dashboard_grid_columns) || 3;
       this.updateDashboardLockUI();
       toggleBtn.addEventListener('click', function () {
         return _this29.toggleDashboardLock();
@@ -35714,7 +35962,7 @@ var DashboardModule = /*#__PURE__*/function () {
             key: key,
             name: widget.name,
             type: 'widget',
-            size: widget.size
+            size: widget.defaultSize
           });
         }
       });

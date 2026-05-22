@@ -543,10 +543,8 @@ style('budget', 'budget-main');
 
             <!-- Main Dashboard Grid -->
             <div class="dashboard-grid">
-                <!-- Left Column -->
-                <div class="dashboard-column dashboard-column-main">
                     <!-- Income vs Expenses Chart -->
-                    <div id="trend-chart-card" class="dashboard-card dashboard-card-large" data-widget-id="trendChart" data-widget-category="widget">
+                    <div id="trend-chart-card" class="dashboard-card dashboard-card-large dashboard-tile-l" data-widget-id="trendChart" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Income vs Expenses')); ?></h3>
                             <div class="card-header-controls">
@@ -568,7 +566,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Spending by Category Chart -->
-                    <div id="spending-chart-card" class="dashboard-card" data-widget-id="spendingChart" data-widget-category="widget">
+                    <div id="spending-chart-card" class="dashboard-card dashboard-tile-m" data-widget-id="spendingChart" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Spending by Category')); ?></h3>
                             <div class="card-header-controls">
@@ -591,7 +589,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Net Worth History Chart -->
-                    <div id="net-worth-history-card" class="dashboard-card" data-widget-id="netWorthHistory" data-widget-category="widget">
+                    <div id="net-worth-history-card" class="dashboard-card dashboard-tile-m" data-widget-id="netWorthHistory" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Net Worth History')); ?></h3>
                             <div class="card-header-controls">
@@ -619,7 +617,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Asset Value History Chart -->
-                    <div id="asset-value-history-card" class="dashboard-card" data-widget-id="assetValueHistory" data-widget-category="widget">
+                    <div id="asset-value-history-card" class="dashboard-card dashboard-tile-m" data-widget-id="assetValueHistory" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Asset Value History')); ?></h3>
                             <div class="card-header-controls">
@@ -642,7 +640,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Recent Transactions -->
-                    <div id="recent-transactions-card" class="dashboard-card" data-widget-id="recentTransactions" data-widget-category="widget">
+                    <div id="recent-transactions-card" class="dashboard-card dashboard-tile-m" data-widget-id="recentTransactions" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Recent Transactions')); ?></h3>
                             <div class="card-header-controls">
@@ -654,12 +652,9 @@ style('budget', 'budget-main');
                         </div>
                         <div id="recent-transactions" class="recent-transactions-list"></div>
                     </div>
-                </div>
 
-                <!-- Right Column -->
-                <div class="dashboard-column dashboard-column-side">
                     <!-- Account Balances -->
-                    <div id="accounts-card" class="dashboard-card" data-widget-id="accounts" data-widget-category="widget">
+                    <div id="accounts-card" class="dashboard-card dashboard-tile-s" data-widget-id="accounts" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Accounts')); ?></h3>
                             <div class="card-header-actions">
@@ -674,7 +669,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Budget Alerts -->
-                    <div id="budget-alerts-card" class="dashboard-card budget-alerts-card" data-widget-id="budgetAlerts" data-widget-category="widget" style="display: none;">
+                    <div id="budget-alerts-card" class="dashboard-card budget-alerts-card dashboard-tile-s" data-widget-id="budgetAlerts" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Budget Alerts')); ?></h3>
                             <a href="#budget" class="card-link"><?php p($l->t('Details')); ?></a>
@@ -685,7 +680,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Upcoming Bills -->
-                    <div id="upcoming-bills-card" class="dashboard-card" data-widget-id="upcomingBills" data-widget-category="widget">
+                    <div id="upcoming-bills-card" class="dashboard-card dashboard-tile-s" data-widget-id="upcomingBills" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Upcoming Bills')); ?></h3>
                             <a href="#bills" class="card-link"><?php p($l->t('View All')); ?></a>
@@ -696,7 +691,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Budget Progress -->
-                    <div id="budget-progress-card" class="dashboard-card" data-widget-id="budgetProgress" data-widget-category="widget">
+                    <div id="budget-progress-card" class="dashboard-card dashboard-tile-s" data-widget-id="budgetProgress" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Budget Progress')); ?></h3>
                             <a href="#budget" class="card-link"><?php p($l->t('Details')); ?></a>
@@ -707,7 +702,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Savings Goals -->
-                    <div id="savings-goals-card" class="dashboard-card" data-widget-id="savingsGoals" data-widget-category="widget">
+                    <div id="savings-goals-card" class="dashboard-card dashboard-tile-s" data-widget-id="savingsGoals" data-widget-category="widget">
                         <div class="card-header">
                             <h3><?php p($l->t('Savings Goals')); ?></h3>
                             <a href="#savings-goals" class="card-link"><?php p($l->t('Manage')); ?></a>
@@ -718,7 +713,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Debt Payoff Summary -->
-                    <div id="debt-payoff-card" class="dashboard-card debt-payoff-card" data-widget-id="debtPayoff" data-widget-category="widget" style="display: none;">
+                    <div id="debt-payoff-card" class="dashboard-card debt-payoff-card dashboard-tile-s" data-widget-id="debtPayoff" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Debt Payoff')); ?></h3>
                             <a href="#debt-payoff" class="card-link"><?php p($l->t('Plan')); ?></a>
@@ -743,7 +738,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Debt Chart Widget -->
-                    <div id="debt-chart-card" class="dashboard-card" data-widget-id="debtChart" data-widget-category="widget" style="display: none;">
+                    <div id="debt-chart-card" class="dashboard-card dashboard-tile-m" data-widget-id="debtChart" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Debt Payoff Chart')); ?></h3>
                             <div class="card-header-actions">
@@ -763,7 +758,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Debt Progress Widget -->
-                    <div id="debt-progress-card" class="dashboard-card" data-widget-id="debtProgress" data-widget-category="widget" style="display: none;">
+                    <div id="debt-progress-card" class="dashboard-card dashboard-tile-s" data-widget-id="debtProgress" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Debt Progress')); ?></h3>
                             <div class="card-header-actions">
@@ -799,7 +794,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Phase 1: New Widget Tiles (Hidden by Default) -->
-                    <div id="top-categories-card" class="dashboard-card" data-widget-id="topCategories" data-widget-category="widget" style="display: none;">
+                    <div id="top-categories-card" class="dashboard-card dashboard-tile-s" data-widget-id="topCategories" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Top Spending Categories')); ?></h3>
                         </div>
@@ -808,7 +803,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="account-performance-card" class="dashboard-card" data-widget-id="accountPerformance" data-widget-category="widget" style="display: none;">
+                    <div id="account-performance-card" class="dashboard-card dashboard-tile-s" data-widget-id="accountPerformance" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Account Performance')); ?></h3>
                         </div>
@@ -817,7 +812,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="budget-breakdown-card" class="dashboard-card" data-widget-id="budgetBreakdown" data-widget-category="widget" style="display: none;">
+                    <div id="budget-breakdown-card" class="dashboard-card dashboard-tile-m" data-widget-id="budgetBreakdown" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Budget Breakdown')); ?></h3>
                         </div>
@@ -826,7 +821,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="goals-summary-card" class="dashboard-card" data-widget-id="goalsSummary" data-widget-category="widget" style="display: none;">
+                    <div id="goals-summary-card" class="dashboard-card dashboard-tile-s" data-widget-id="goalsSummary" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('All Goals Progress')); ?></h3>
                         </div>
@@ -835,7 +830,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="payment-breakdown-card" class="dashboard-card" data-widget-id="paymentBreakdown" data-widget-category="widget" style="display: none;">
+                    <div id="payment-breakdown-card" class="dashboard-card dashboard-tile-s" data-widget-id="paymentBreakdown" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Payment Methods')); ?></h3>
                         </div>
@@ -844,7 +839,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="reconciliation-card" class="dashboard-card" data-widget-id="reconciliationStatus" data-widget-category="widget" style="display: none;">
+                    <div id="reconciliation-card" class="dashboard-card dashboard-tile-s" data-widget-id="reconciliationStatus" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Reconciliation Status')); ?></h3>
                         </div>
@@ -854,7 +849,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Phase 2: Lazy-Loaded Widget Tiles -->
-                    <div id="monthly-comparison-card" class="dashboard-card" data-widget-id="monthlyComparison" data-widget-category="widget" style="display: none;">
+                    <div id="monthly-comparison-card" class="dashboard-card dashboard-tile-m" data-widget-id="monthlyComparison" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Monthly Comparison')); ?></h3>
                         </div>
@@ -863,7 +858,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="large-transactions-card" class="dashboard-card" data-widget-id="largeTransactions" data-widget-category="widget" style="display: none;">
+                    <div id="large-transactions-card" class="dashboard-card dashboard-tile-m" data-widget-id="largeTransactions" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Large Transactions')); ?></h3>
                         </div>
@@ -872,7 +867,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="weekly-trend-card" class="dashboard-card" data-widget-id="weeklyTrend" data-widget-category="widget" style="display: none;">
+                    <div id="weekly-trend-card" class="dashboard-card dashboard-tile-s" data-widget-id="weeklyTrend" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Weekly Spending')); ?></h3>
                         </div>
@@ -881,7 +876,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="unmatched-transfers-card" class="dashboard-card" data-widget-id="unmatchedTransfers" data-widget-category="widget" style="display: none;">
+                    <div id="unmatched-transfers-card" class="dashboard-card dashboard-tile-s" data-widget-id="unmatchedTransfers" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Unmatched Transfers')); ?></h3>
                         </div>
@@ -890,7 +885,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="category-trends-card" class="dashboard-card" data-widget-id="categoryTrends" data-widget-category="widget" style="display: none;">
+                    <div id="category-trends-card" class="dashboard-card dashboard-tile-m" data-widget-id="categoryTrends" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Category Trends')); ?></h3>
                         </div>
@@ -899,7 +894,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="bills-due-soon-card" class="dashboard-card" data-widget-id="billsDueSoon" data-widget-category="widget" style="display: none;">
+                    <div id="bills-due-soon-card" class="dashboard-card dashboard-tile-s" data-widget-id="billsDueSoon" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Bills Due Soon')); ?></h3>
                         </div>
@@ -909,7 +904,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Phase 3: Advanced Widget Tiles -->
-                    <div id="cash-flow-forecast-card" class="dashboard-card dashboard-card-large" data-widget-id="cashFlowForecast" data-widget-category="widget" style="display: none;">
+                    <div id="cash-flow-forecast-card" class="dashboard-card dashboard-card-large dashboard-tile-l" data-widget-id="cashFlowForecast" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Cash Flow Forecast')); ?></h3>
                         </div>
@@ -918,7 +913,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="yoy-comparison-card" class="dashboard-card dashboard-card-large" data-widget-id="yoyComparison" data-widget-category="widget" style="display: none;">
+                    <div id="yoy-comparison-card" class="dashboard-card dashboard-card-large dashboard-tile-l" data-widget-id="yoyComparison" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Year-over-Year Comparison')); ?></h3>
                         </div>
@@ -927,7 +922,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="income-tracking-card" class="dashboard-card" data-widget-id="incomeTracking" data-widget-category="widget" style="display: none;">
+                    <div id="income-tracking-card" class="dashboard-card dashboard-tile-m" data-widget-id="incomeTracking" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Income Tracking')); ?></h3>
                         </div>
@@ -936,7 +931,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="recent-imports-card" class="dashboard-card" data-widget-id="recentImports" data-widget-category="widget" style="display: none;">
+                    <div id="recent-imports-card" class="dashboard-card dashboard-tile-s" data-widget-id="recentImports" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Recent Imports')); ?></h3>
                         </div>
@@ -945,7 +940,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="rule-effectiveness-card" class="dashboard-card" data-widget-id="ruleEffectiveness" data-widget-category="widget" style="display: none;">
+                    <div id="rule-effectiveness-card" class="dashboard-card dashboard-tile-s" data-widget-id="ruleEffectiveness" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Rule Effectiveness')); ?></h3>
                         </div>
@@ -954,7 +949,7 @@ style('budget', 'budget-main');
                         </div>
                     </div>
 
-                    <div id="spending-velocity-card" class="dashboard-card" data-widget-id="spendingVelocity" data-widget-category="widget" style="display: none;">
+                    <div id="spending-velocity-card" class="dashboard-card dashboard-tile-s" data-widget-id="spendingVelocity" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Spending Velocity')); ?></h3>
                         </div>
@@ -964,7 +959,7 @@ style('budget', 'budget-main');
                     </div>
 
                     <!-- Phase 4: Interactive Widget Tiles -->
-                    <div id="quick-add-card" class="dashboard-card" data-widget-id="quickAdd" data-widget-category="widget" style="display: none;">
+                    <div id="quick-add-card" class="dashboard-card dashboard-tile-m" data-widget-id="quickAdd" data-widget-category="widget" style="display: none;">
                         <div class="card-header">
                             <h3><?php p($l->t('Quick Add Transaction')); ?></h3>
                         </div>
@@ -1010,7 +1005,6 @@ style('budget', 'budget-main');
                             </form>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
 
