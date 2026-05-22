@@ -546,7 +546,9 @@ class TransactionService {
         if ($accountId && $sort === 'date' && !$hasContiguityBreakingFilters
             && !empty($result['transactions'])) {
 
-            $account = $this->accountMapper->find($accountId, $userId);
+            // Use findById (not find) because the account may belong to a different
+            // user who shared it. Access is already verified via visibleAccountIds.
+            $account = $this->accountMapper->findById((int)$accountId);
             $openingBalance = (string)($account->getOpeningBalance() ?? 0);
 
             // Compute running balance for each transaction on the current page
