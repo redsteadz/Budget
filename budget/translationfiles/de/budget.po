@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-05-25 09:11+0000\n"
+"PO-Revision-Date: 2026-05-26 20:15+0000\n"
 "Last-Translator: SGiersch <Stephan@sgiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -4215,13 +4215,13 @@ msgstr "Zum aktuellen Kurs in {currency} umgerechnet"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:607
 msgid "No accounts yet"
-msgstr ""
+msgstr "Noch keine Konten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:621
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1162
 #: /tmp/budget-v2.11.0/budget/src/utils/formatters.js:191
 msgid "Checking"
-msgstr ""
+msgstr "Girokonto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:622
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1163
@@ -4330,16 +4330,16 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1073
 #: /tmp/budget-v2.11.0/budget/templates/index.php:737
 msgid "No budget data"
-msgstr ""
+msgstr "Keine Budgetdaten verfügbar"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1114
 #: /tmp/budget-v2.11.0/budget/templates/index.php:746
 msgid "No savings goals"
-msgstr ""
+msgstr "Keine Sparziele"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1164
 msgid "Credit Cards"
-msgstr ""
+msgstr "Kreditkarten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1165
 msgid "Investments"
@@ -4408,13 +4408,13 @@ msgstr "Portfolio"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1616
 msgid "just now"
-msgstr ""
+msgstr "gerade eben"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1618
 msgid "%n hour ago"
 msgid_plural "%n hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vor %n Stunde"
+msgstr[1] "vor %n Stunden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1621
 msgid "yesterday"
@@ -4445,11 +4445,11 @@ msgstr "Vermögensstand-Momentaufnahme aufgezeichnet"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:1910
 msgid "Failed to record snapshot"
-msgstr ""
+msgstr "Momentaufnahme konnte nicht gespeichert werden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:2062
 msgid "Failed to save dashboard layout"
-msgstr ""
+msgstr "Fehler beim Speichern des Dashboard-Layouts"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/dashboard/DashboardModule.js:2320
 msgid "Failed to save dashboard lock state"
