@@ -213,7 +213,6 @@ export function formatCurrencyCompact(value, currency, settings) {
     const config = CURRENCY_CONFIG[currencyCode] || { symbol: currencyCode, position: 'prefix' };
     const { symbol, position } = config;
 
-    const decimals = parseInt(settings.number_format_decimals) || 2;
     const decimalSep = settings.number_format_decimal_sep || '.';
     const thousandsSep = settings.number_format_thousands_sep ?? ',';
 

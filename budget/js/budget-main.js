@@ -64865,7 +64865,6 @@ function formatCurrencyCompact(value, currency, settings) {
   };
   var symbol = config.symbol,
     position = config.position;
-  var decimals = parseInt(settings.number_format_decimals) || 2;
   var decimalSep = settings.number_format_decimal_sep || '.';
   var thousandsSep = (_settings$number_form2 = settings.number_format_thousands_sep) !== null && _settings$number_form2 !== void 0 ? _settings$number_form2 : ',';
   var scaledValue, suffix;
