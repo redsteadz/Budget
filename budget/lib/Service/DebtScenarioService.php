@@ -7,10 +7,13 @@ namespace OCA\Budget\Service;
 use OCA\Budget\Db\DebtScenario;
 use OCA\Budget\Db\DebtScenarioMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
 use Psr\Log\LoggerInterface;
 
-class DebtScenarioService {
-    private DebtScenarioMapper $mapper;
+/**
+ * @extends AbstractCrudService<DebtScenario>
+ */
+class DebtScenarioService extends AbstractCrudService {
     private DebtPayoffService $payoffService;
     private LoggerInterface $logger;
 
@@ -22,20 +25,6 @@ class DebtScenarioService {
         $this->mapper = $mapper;
         $this->payoffService = $payoffService;
         $this->logger = $logger;
-    }
-
-    /**
-     * @return DebtScenario[]
-     */
-    public function findAll(string $userId): array {
-        return $this->mapper->findAll($userId);
-    }
-
-    /**
-     * @throws DoesNotExistException
-     */
-    public function find(int $id, string $userId): DebtScenario {
-        return $this->mapper->find($id, $userId);
     }
 
     public function create(string $userId, array $params): DebtScenario {
@@ -73,60 +62,32 @@ class DebtScenarioService {
             $scenario->setOriginalTotalDebt(abs($summary['totalBalance']));
         }
 
-        $now = date('Y-m-d H:i:s');
-        $scenario->setCreatedAt($now);
-        $scenario->setUpdatedAt($now);
+        $this->setTimestamps($scenario, true);
 
         return $this->mapper->insert($scenario);
     }
 
-    /**
-     * @throws DoesNotExistException
-     */
-    public function update(int $id, string $userId, array $params): DebtScenario {
-        $scenario = $this->mapper->find($id, $userId);
-
-        if (array_key_exists('name', $params) && $params['name'] !== null) {
-            $scenario->setName($params['name']);
-        }
-        if (array_key_exists('strategy', $params) && $params['strategy'] !== null) {
-            $scenario->setStrategy($params['strategy']);
-        }
-        if (array_key_exists('extraPayment', $params)) {
-            $scenario->setExtraPayment((float) ($params['extraPayment'] ?? 0));
-        }
-        if (array_key_exists('lumpSum', $params)) {
-            $scenario->setLumpSum((float) ($params['lumpSum'] ?? 0));
-        }
-        if (array_key_exists('lumpSumMonth', $params)) {
-            $scenario->setLumpSumMonth((int) ($params['lumpSumMonth'] ?? 1));
-        }
-        if (array_key_exists('selectedDebtIds', $params)) {
-            $scenario->setSelectedDebtIds(
-                $params['selectedDebtIds'] !== null
-                    ? json_encode($params['selectedDebtIds'])
-                    : null
-            );
-        }
-        if (array_key_exists('rateOverrides', $params)) {
-            $scenario->setRateOverrides(
-                $params['rateOverrides'] !== null
-                    ? json_encode($params['rateOverrides'])
-                    : null
-            );
-        }
-
-        $scenario->setUpdatedAt(date('Y-m-d H:i:s'));
-
-        return $this->mapper->update($scenario);
+    protected function beforeUpdate(Entity $entity, array $updates, string $userId): void {
+        // JSON-encode array fields before applyUpdates sets them
     }
 
     /**
-     * @throws DoesNotExistException
+     * Override update to handle JSON encoding of array fields.
      */
-    public function delete(int $id, string $userId): void {
-        $scenario = $this->mapper->find($id, $userId);
-        $this->mapper->delete($scenario);
+    public function update(int $id, string $userId, array $updates): Entity {
+        // Pre-process JSON fields
+        if (array_key_exists('selectedDebtIds', $updates)) {
+            $updates['selectedDebtIds'] = $updates['selectedDebtIds'] !== null
+                ? json_encode($updates['selectedDebtIds'])
+                : null;
+        }
+        if (array_key_exists('rateOverrides', $updates)) {
+            $updates['rateOverrides'] = $updates['rateOverrides'] !== null
+                ? json_encode($updates['rateOverrides'])
+                : null;
+        }
+
+        return parent::update($id, $userId, $updates);
     }
 
     /**

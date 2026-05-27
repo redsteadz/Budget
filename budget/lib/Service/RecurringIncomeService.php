@@ -14,8 +14,10 @@ use Psr\Log\LoggerInterface;
 /**
  * Manages recurring income CRUD operations and summary calculations.
  */
-class RecurringIncomeService {
-    private RecurringIncomeMapper $mapper;
+/**
+ * @extends AbstractCrudService<RecurringIncome>
+ */
+class RecurringIncomeService extends AbstractCrudService {
     private FrequencyCalculator $frequencyCalculator;
     private RecurringIncomeDetector $recurringDetector;
     private TransactionService $transactionService;
@@ -33,17 +35,6 @@ class RecurringIncomeService {
         $this->recurringDetector = $recurringDetector;
         $this->transactionService = $transactionService;
         $this->logger = $logger;
-    }
-
-    /**
-     * @throws DoesNotExistException
-     */
-    public function find(int $id, string $userId): RecurringIncome {
-        return $this->mapper->find($id, $userId);
-    }
-
-    public function findAll(string $userId): array {
-        return $this->mapper->findAll($userId);
     }
 
     public function findActive(string $userId): array {
@@ -149,11 +140,6 @@ class RecurringIncomeService {
 
         // Reload from database to ensure we return the actual saved state
         return $this->find($id, $userId);
-    }
-
-    public function delete(int $id, string $userId): void {
-        $income = $this->find($id, $userId);
-        $this->mapper->delete($income);
     }
 
     /**

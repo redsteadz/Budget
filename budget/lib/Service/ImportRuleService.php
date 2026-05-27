@@ -15,8 +15,10 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\IQueryBuilder;
 use OCP\IDBConnection;
 
-class ImportRuleService {
-    private ImportRuleMapper $mapper;
+/**
+ * @extends AbstractCrudService<ImportRule>
+ */
+class ImportRuleService extends AbstractCrudService {
     private CategoryMapper $categoryMapper;
     private TransactionMapper $transactionMapper;
     private IDBConnection $db;
@@ -37,17 +39,6 @@ class ImportRuleService {
         $this->db = $db;
         $this->criteriaEvaluator = $criteriaEvaluator;
         $this->actionApplicator = $actionApplicator;
-    }
-
-    /**
-     * @throws DoesNotExistException
-     */
-    public function find(int $id, string $userId): ImportRule {
-        return $this->mapper->find($id, $userId);
-    }
-
-    public function findAll(string $userId): array {
-        return $this->mapper->findAll($userId);
     }
 
     /**
@@ -232,10 +223,6 @@ class ImportRuleService {
         return $this->mapper->update($rule);
     }
 
-    public function delete(int $id, string $userId): void {
-        $rule = $this->find($id, $userId);
-        $this->mapper->delete($rule);
-    }
 
     public function testRules(string $userId, array $transactionData): array {
         $rules = $this->mapper->findActive($userId);
