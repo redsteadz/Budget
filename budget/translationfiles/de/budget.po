@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-06-01 22:01+0000\n"
+"PO-Revision-Date: 2026-06-02 23:01+0000\n"
 "Last-Translator: St0rml <n.f@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -2502,9 +2502,8 @@ msgid "Settled"
 msgstr "Erledigt"
 
 #: /tmp/budget-v2.11.0/budget/src/main.js:993
-#, fuzzy
 msgid "Match Transfer"
-msgstr "Transfer zuordnen"
+msgstr "Umbuchung zuordnen"
 
 #: /tmp/budget-v2.11.0/budget/src/main.js:994
 msgid "Unlink Transfer"
@@ -3234,28 +3233,28 @@ msgstr "Alle Kategorien"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1521
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1749
 msgid "Tags"
-msgstr "Stichworte"
+msgstr "Schlagwörter"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/accounts/AccountsModule.js:968
 #: /tmp/budget-v2.11.0/budget/src/modules/reports/ReportsModule.js:201
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:645
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:399
 msgid "No tags available"
-msgstr "Keine Stichworte verfügbar"
+msgstr "Keine Schlagwörter verfügbar"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/accounts/AccountsModule.js:979
 #: /tmp/budget-v2.11.0/budget/src/modules/reports/ReportsModule.js:213
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:410
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2901
 msgid "Type to filter tags..."
-msgstr "Tippe um nach Stichworten zu filtern..."
+msgstr "Tippe um nach Schlagwörtern zu filtern..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/accounts/AccountsModule.js:1062
 #: /tmp/budget-v2.11.0/budget/src/modules/reports/ReportsModule.js:279
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:494
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2976
 msgid "No tags found"
-msgstr "Keine Stichworte gefunden"
+msgstr "Keine Schlagwörter gefunden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/accounts/AccountsModule.js:1169
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:353
@@ -5614,7 +5613,7 @@ msgstr "Notizen festlegen"
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/components/ActionBuilder.js:92
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/components/ActionBuilder.js:122
 msgid "Add Tags"
-msgstr "Stichworte hinzufügen"
+msgstr "Schlagwörter hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/components/ActionBuilder.js:93
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/components/ActionBuilder.js:123
@@ -5953,46 +5952,46 @@ msgstr "Zieldatum: Heute"
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:96
 msgid "%n day left"
 msgid_plural "%n days left"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein Tag verbleibend"
+msgstr[1] "%n Tage verbleibend"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:98
 msgid "Target: {date}"
-msgstr ""
+msgstr "Stichtag: {date}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:104
 msgid "Goal reached!"
-msgstr ""
+msgstr "Ziel erreicht!"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:106
 msgid "Auto-tracked"
-msgstr ""
+msgstr "Automatisch verfolgt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:108
 msgid "+ Add money"
-msgstr ""
+msgstr "+ Geld hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:135
 msgid "of {amount}"
-msgstr ""
+msgstr "von {amount}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:231
 msgid "Auto-calculated from tag"
-msgstr ""
+msgstr "Automatisch berechnet aus Schlagwort"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:245
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2572
 msgid "No linked account"
-msgstr ""
+msgstr "Kein verknüpftes Konto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:264
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2585
 msgid "No linked tag"
-msgstr ""
+msgstr "Kein verknüpftes Schlagwort"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:301
 msgid "Edit Savings Goal"
-msgstr ""
+msgstr "Sparziel bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:301
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2549
@@ -6002,28 +6001,28 @@ msgstr "Sparziel hinzufügen"
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:368
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:377
 msgid "Failed to save goal"
-msgstr ""
+msgstr "Fehler beim Speichern des Sparziels"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:373
 msgid "Goal updated"
-msgstr ""
+msgstr "Sparziel aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:373
 msgid "Goal created"
-msgstr ""
+msgstr "Sparziel erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:389
 msgid "Are you sure you want to delete this savings goal?"
-msgstr ""
+msgstr "Möchtest du dieses Sparziel wirklich löschen?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:401
 msgid "Goal deleted"
-msgstr ""
+msgstr "Sparziel gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:415
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:441
 msgid "This goal is auto-tracked via a tag"
-msgstr ""
+msgstr "Dieses Ziel wird automatisch über ein Schlagwort verfolgt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/savings/SavingsModule.js:461
 msgid "Added {amount} to goal"
@@ -6036,26 +6035,28 @@ msgstr "Geld konnte nicht zum Ziel hinzugefügt werden"
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:28
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:36
 msgid "Failed to load settings"
-msgstr ""
+msgstr "Fehler beim Laden der Einstellungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:113
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:134
 msgid "Failed to save settings"
-msgstr ""
+msgstr "Fehler beim Speichern der Einstellungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:117
 msgid "Settings saved successfully"
-msgstr ""
+msgstr "Einstellungen gespeichert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:156
 msgid ""
 "Are you sure you want to reset all settings to defaults? This action cannot "
 "be undone."
 msgstr ""
+"Möchtest du wirklich alle Einstellungen zurücksetzen? Diese Aktion kann "
+"nicht rückgängig gemacht werden."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/settings/SettingsModule.js:175
 msgid "Settings reset to defaults"
-msgstr ""
+msgstr "Einstellungen wurden zurückgesetzt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:97
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4040
@@ -6066,17 +6067,17 @@ msgstr "Fügen Sie Kontakte hinzu, um Ausgaben aufteilen zu können"
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:295
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:384
 msgid "Owes you {amount}"
-msgstr ""
+msgstr "Schuldet dir {amount}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:107
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:295
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:384
 msgid "You owe {amount}"
-msgstr ""
+msgstr "Du schuldest {amount}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:202
 msgid "Edit Contact"
-msgstr ""
+msgstr "Kontakt bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:202
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4009
@@ -6086,7 +6087,7 @@ msgstr "Kontakt hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:239
 msgid "Contact updated"
-msgstr ""
+msgstr "Kontakt aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:239
 msgid "Contact added"
@@ -6094,21 +6095,23 @@ msgstr "Kontakt hinzugefügt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:244
 msgid "Failed to save contact"
-msgstr ""
+msgstr "Fehler beim Speichern des Kontaktes"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:256
 msgid ""
 "Are you sure you want to delete this contact? This will also remove all "
 "shared expense records with them."
 msgstr ""
+"Möchtest du diesen Kontakt wirklich entfernen? Dies wird alle zugehörigen "
+"geteilten Buchungen löschen."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:268
 msgid "Contact deleted"
-msgstr ""
+msgstr "Kontakt entfernt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:330
 msgid "Failed to load contact details"
-msgstr ""
+msgstr "Fehler beim Laden der Kontaktdetails"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:337
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5775
@@ -6122,23 +6125,23 @@ msgstr "Offen"
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:362
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5781
 msgid "No settlements yet"
-msgstr ""
+msgstr "Noch keine Abrechnungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:404
 msgid "No unsettled expenses"
-msgstr ""
+msgstr "Keine unbeglichenen Ausgaben"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:444
 msgid "Failed to load expenses"
-msgstr ""
+msgstr "Fehler beim Laden der Ausgaben"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:476
 msgid "Date is required"
-msgstr ""
+msgstr "Datum wird benötigt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:493
 msgid "Expenses settled"
-msgstr ""
+msgstr "Ausgaben beglichen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:504
 msgid ""
@@ -6149,7 +6152,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:522
 msgid "All expenses settled"
-msgstr ""
+msgstr "Alle Ausgaben sind beglichen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:544
 msgid "Please add contacts first in Shared Expenses"
@@ -6162,19 +6165,19 @@ msgstr "Kontakt auswählen..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:573
 msgid "Please select a contact"
-msgstr ""
+msgstr "Bitte wähle einen Kontakt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:586
 msgid "Amount is required for custom splits"
-msgstr ""
+msgstr "Für benutzerdefinierte Aufteilungen ist ein Betrag erforderlich"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/shared-expenses/SharedExpensesModule.js:610
 msgid "Expense shared"
-msgstr ""
+msgstr "Ausgabe aufgeteilt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:48
 msgid "Failed to load sharing data"
-msgstr ""
+msgstr "Fehler beim Laden der geteilten Ausgaben"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:72
 msgid ""
@@ -6201,7 +6204,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:78
 msgid "Pending Invitations"
-msgstr ""
+msgstr "Ausstehende Einladungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:84
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:110
@@ -6218,17 +6221,19 @@ msgstr "Ablehnen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:97
 msgid "Share Your Budget"
-msgstr ""
+msgstr "Teile dein Budget"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:98
 msgid ""
 "Invite a Nextcloud user and then configure which parts of your budget they "
 "can access."
 msgstr ""
+"Lade einen Nextcloud-Benutzer ein und entscheide auf welche Teile deines "
+"Budgets dieser zugreifen darf."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:100
 msgid "Enter Nextcloud username..."
-msgstr ""
+msgstr "Nextcloud-Benutzer eingeben..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:101
 msgid "Invite"
@@ -6270,19 +6275,19 @@ msgstr "Konfigurieren"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:138
 msgid "Loading configuration..."
-msgstr ""
+msgstr "Lade Konfiguration..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:145
 msgid "You have not shared your budget with anyone yet."
-msgstr ""
+msgstr "Du hast dein Budget mit niemandem geteilt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:150
 msgid "Shared With Me"
-msgstr ""
+msgstr "Geteilt mit mir"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:151
 msgid "Budgets shared with you by other users."
-msgstr ""
+msgstr "Budgets, die andere Benutzer mit dir geteilt haben."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:160
 msgid "Leave"
@@ -6290,7 +6295,7 @@ msgstr "Verlassen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:233
 msgid "Failed to load configuration"
-msgstr ""
+msgstr "Fehler beim Laden der Konfiguration"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:240
 #: /tmp/budget-v2.11.0/budget/templates/index.php:63
@@ -6312,83 +6317,85 @@ msgstr "Alle auswählen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:261
 msgid "Read only"
-msgstr ""
+msgstr "Lesezugriff"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:262
 msgid "Read & Write"
-msgstr ""
+msgstr "Lese- und Schreibzugriff"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:287
 msgid "Save Configuration"
-msgstr ""
+msgstr "Konfiguration speichern"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:303
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3315
 msgid "Deselect All"
-msgstr ""
+msgstr "Alle abwählen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:337
 msgid "Failed to save some sections: {types}"
-msgstr ""
+msgstr "Fehler beim Speichern mancher Abschnitte: {types}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:339
 msgid "Share configuration saved"
-msgstr ""
+msgstr "Geteilte Budget-Konfiguration gespeichert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:346
 msgid "Please enter a username"
-msgstr ""
+msgstr "Bitte gib einen Nutzernamen ein"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:353
 msgid "Invitation sent to {user}"
-msgstr ""
+msgstr "Einladung an {user} gesendet"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:355
 msgid "Failed to share budget"
-msgstr ""
+msgstr "Fehler beim Teilen des Budgets"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:361
 msgid "Share accepted — reloading budget data"
-msgstr ""
+msgstr "Einladung angenommen - Budget wird neu geladen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:370
 msgid "Share declined"
-msgstr ""
+msgstr "Einladung abgelehnt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:376
 msgid "Are you sure? The user will lose access to your budget."
-msgstr ""
+msgstr "Bist du sicher? Der Benutzer verliert Zugriff auf dein Budget."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:379
 msgid "Share revoked"
-msgstr ""
+msgstr "Einladung zurückgenommen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:386
 msgid "Are you sure you want to leave this shared budget?"
-msgstr ""
+msgstr "Möchtest du wirklich dieses geteilte Budget verlassen?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/sharing/SharingModule.js:389
 msgid "Left shared budget — reloading your data"
-msgstr ""
+msgstr "Geteiltes Budget verlassen - deine Daten werden neu geladen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:63
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:420
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:774
 msgid "No tags yet"
-msgstr ""
+msgstr "Noch keine Stichwörter"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:64
 msgid "Create tags to classify your transactions across all categories."
 msgstr ""
+"Erstelle Stichwörter, um deine Buchungen in allen Kategorien zu "
+"klassifizieren."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:67
 msgid "Create Your First Tag"
-msgstr ""
+msgstr "Erstelle dein erstes Schlagwort"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:181
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5399
 msgid "Edit Tag"
-msgstr ""
+msgstr "Schlagwort bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:187
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:779
@@ -6397,35 +6404,35 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5374
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5388
 msgid "Add Tag"
-msgstr ""
+msgstr "Schlagwort hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:226
 msgid "Tag name is required"
-msgstr ""
+msgstr "Schlagwortname ist erforderlich"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:243
 msgid "Failed to save tag"
-msgstr ""
+msgstr "Fehler beim Speichern des Schlagworts"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:251
 msgid "Tag updated"
-msgstr ""
+msgstr "Schlagwort aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:251
 msgid "Tag created"
-msgstr ""
+msgstr "Schlagwort erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:258
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:529
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:880
 msgid "Delete this tag? It will be removed from all transactions."
-msgstr ""
+msgstr "Dieses Schlagwort löschen? Es wird von allen Buchungen entfernt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:273
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:534
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:884
 msgid "Tag deleted"
-msgstr ""
+msgstr "Schlagwort gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:376
 msgid "Save category first to manage tag sets"
@@ -6440,30 +6447,32 @@ msgstr "Schlagwort-Sammlungen"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5350
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5363
 msgid "Add Tag Set"
-msgstr ""
+msgstr "Schlagwort Gruppe erstellen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:393
 msgid ""
 "No tag sets yet. Add your first tag set to enable multi-dimensional "
 "categorization."
 msgstr ""
+"Noch keine Schlagwortgruppen. Füge eine Schlagwortgruppe hinzu für eine "
+"mehrschichtige Kategorisierung."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:404
 msgid "Add tag"
-msgstr ""
+msgstr "Schlagwort hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:407
 msgid "Delete tag set"
-msgstr ""
+msgstr "Schlagwortgruppe löschen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:417
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:771
 msgid "Edit tag"
-msgstr ""
+msgstr "Schlagwort bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:440
 msgid "Enter tag set name (e.g., \"Priority\", \"Status\"):"
-msgstr ""
+msgstr "Schlagwortgruppennamen eingeben (z.B. \"Status\", \"Priorität\"):"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:448
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:909
@@ -6480,40 +6489,43 @@ msgstr "Geben Sie die Beschreibung ein (optional):"
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:457
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:917
 msgid "Tag set created successfully"
-msgstr ""
+msgstr "Schlagwortgruppe erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:469
 msgid ""
 "Delete this tag set? All associated tags will be removed from transactions."
 msgstr ""
+"Diese Schlagwortgruppe löschen? Alle beinhalteten Stichwörter werden von "
+"Buchungen entfernt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:474
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:851
 msgid "Tag set deleted"
-msgstr ""
+msgstr "Schlagwortgruppe gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:486
 msgid "Enter tag name:"
-msgstr ""
+msgstr "Schlagwortnamen eingeben:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:496
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:1129
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:1211
 msgid "A tag named \"{name}\" already exists in this tag set"
 msgstr ""
+"Ein Schlagwort namens \"{name}\" existiert bereits in dieser Schlagwortgruppe"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:501
 msgid "Enter color (e.g., #FF5733):"
-msgstr ""
+msgstr "Farbe eingeben (z.B. #FF5733):"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:506
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:1138
 msgid "Tag created successfully"
-msgstr ""
+msgstr "Schlagwort erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:730
 msgid "Select a category to manage tag sets"
-msgstr ""
+msgstr "Wähle eine Kategorie, um Schlagwortgruppen zu verwalten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:740
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1728
@@ -6522,24 +6534,26 @@ msgstr "Keine Schlagwort-Gruppen vorhanden."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:772
 msgid "Delete tag"
-msgstr ""
+msgstr "Schlagwort löschen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:782
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5425
 msgid "Edit Tag Set"
-msgstr ""
+msgstr "Schlagwortgruppe bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:785
 msgid "Delete Tag Set"
-msgstr ""
+msgstr "Schlagwortgruppe löschen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:803
 msgid "Failed to load tag sets"
-msgstr ""
+msgstr "Fehler beim Laden der Schlagwortgruppen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:847
 msgid "Delete this tag set? All tags in this set will be removed."
 msgstr ""
+"Diese Schlagwortgruppe löschen? Alle enthaltenen Schlagwörter werden "
+"gelöscht."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:994
 msgid "Tag set updated successfully"
