@@ -1,7 +1,7 @@
 <?php
 script('budget', 'budget-app');
 style('budget', 'style');
-style('budget', 'budget-main');
+style('budget', 'budget-app');
 ?>
 
 <div id="budget-nav-toggle-wrapper">
