@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
 "PO-Revision-Date: 2026-06-02 23:01+0000\n"
-"Last-Translator: St0rml <n.f@mailbox.org>\n"
+"Last-Translator: SGiersch <Forum@SGiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -5416,7 +5416,7 @@ msgstr "Fehler beim Aktualisieren auf das neue Regelformat"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/RulesModule.js:423
 msgid "Edit Rule"
-msgstr "Regel bearbeiten"
+msgstr "Bearbeiten der Regel"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/rules/RulesModule.js:459
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2315
@@ -6395,7 +6395,7 @@ msgstr "Erstelle dein erstes Schlagwort"
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:181
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5399
 msgid "Edit Tag"
-msgstr "Schlagwort bearbeiten"
+msgstr "Bearbeiten des Schlagworts"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:187
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:779
@@ -6404,7 +6404,7 @@ msgstr "Schlagwort bearbeiten"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5374
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5388
 msgid "Add Tag"
-msgstr "Schlagwort hinzufügen"
+msgstr "Hinzufügen eines Schlagworts"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:226
 msgid "Tag name is required"
@@ -6521,7 +6521,7 @@ msgstr "Farbe eingeben (z.B. #FF5733):"
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:506
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:1138
 msgid "Tag created successfully"
-msgstr "Schlagwort erstellt"
+msgstr "Schlagwort erfolgreich erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:730
 msgid "Select a category to manage tag sets"
@@ -6632,68 +6632,68 @@ msgstr[1] ""
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:838
 msgid "Failed to unreconcile %n transaction"
 msgid_plural "Failed to unreconcile %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Abgleich von %n Transaktion konnte nicht aufgehoben werden"
+msgstr[1] "Abgleich von %n Transaktionen konnte nicht aufgehoben werden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:842
 msgid "Failed to unreconcile transactions"
-msgstr ""
+msgstr "Der Abgleich der Transaktionen konnte nicht aufgehoben werden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:862
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5599
 msgid "Don't change"
-msgstr ""
+msgstr "Nicht ändern"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:888
 msgid "Please fill in at least one field to update"
-msgstr ""
+msgstr "Bitte fülle mindestens ein Feld aus, um Änderungen vorzunehmen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:892
 msgid "Are you sure you want to update %n transaction?"
 msgid_plural "Are you sure you want to update %n transactions?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Möchtest du diese Transaktion wirklich aktualisieren?"
+msgstr[1] "Möchtest du wirklich %n Transaktionen aktualisieren?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:912
 msgid "Successfully updated %n transaction"
 msgid_plural "Successfully updated %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Transaktion erfolgreich aktualisiert"
+msgstr[1] "%n Transaktionen erfolgreich aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:922
 msgid "Failed to update %n transaction"
 msgid_plural "Failed to update %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Transaktion konnte nicht aktualisiert werden"
+msgstr[1] "%n Transaktionen konnten nicht aktualisiert werden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:926
 msgid "Failed to update transactions"
-msgstr ""
+msgstr "Fehler beim Aktualisieren der Transaktionen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:953
 msgid "Please fill in all reconciliation fields"
-msgstr ""
+msgstr "Bitte fülle alle Felder für den Abgleich aus"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1016
 msgid "Reconciliation mode started"
-msgstr ""
+msgstr "Abstimmungsmodus gestartet"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1019
 msgid "Failed to start reconciliation: {message}"
-msgstr ""
+msgstr "Abgleich konnte nicht gestartet werden: {message}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1036
 msgid "deposit"
-msgstr ""
+msgstr "Einzahlung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1036
 msgid "withdrawal"
-msgstr ""
+msgstr "Auszahlung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1040
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1416
 msgid "Account Reconciliation"
-msgstr ""
+msgstr "Kontenabgleich"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1043
 msgid "Current Balance:"
@@ -6701,7 +6701,7 @@ msgstr "Aktueller Kontostand:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1047
 msgid "Statement Balance:"
-msgstr ""
+msgstr "Saldo laut Kontoauszug:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1051
 msgid "Difference:"
@@ -6709,25 +6709,27 @@ msgstr "Differenz:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1056
 msgid "Balances match. You can finish reconciliation."
-msgstr ""
+msgstr "Die Salden stimmen überein. Du kannst den Abgleich abschließen."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1057
 msgid ""
 "The difference of {amount} must be resolved before finishing. You can create "
 "an adjustment transaction to match the statement balance."
 msgstr ""
+"Die Differenz von {amount} muss vor dem Abschluss ausgeglichen werden. "
+"Erstelle eine Korrekturbuchung, damit der Saldo dem Kontoauszug entspricht."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1061
 msgid "Finish Reconciliation"
-msgstr ""
+msgstr "Abstimmung abschließen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1065
 msgid "Create {amount} Adjustment ({type})"
-msgstr ""
+msgstr "Korrekturbuchung über {amount} erstellen ({type})"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1125
 msgid "No account selected for adjustment"
-msgstr ""
+msgstr "Kein Konto für die Korrekturbuchung ausgewählt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1143
 msgid "Reconciliation Adjustment"
@@ -6735,7 +6737,7 @@ msgstr "Abstimmungsanpassung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1144
 msgid "Adjustment to match statement balance of {amount}"
-msgstr ""
+msgstr "Korrekturbuchung zum Abgleich des Kontoauszugssaldos von {amount}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1153
 msgid "Adjustment transaction created"
@@ -9947,7 +9949,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4993
 msgid "Add/Edit Rule"
-msgstr ""
+msgstr "Regel hinzufügen/bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5001
 msgid "Rule Name"
