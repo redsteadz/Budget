@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
 "PO-Revision-Date: 2026-06-02 23:01+0000\n"
-"Last-Translator: SGiersch <Forum@SGiersch.de>\n"
+"Last-Translator: St0rml <n.f@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -6557,11 +6557,11 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:994
 msgid "Tag set updated successfully"
-msgstr ""
+msgstr "Schlagwortgruppe aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/tagsets/TagSetsModule.js:1220
 msgid "Tag updated successfully"
-msgstr ""
+msgstr "Schlagwort aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:726
 msgid ""
@@ -6570,7 +6570,11 @@ msgid_plural ""
 "Are you sure you want to delete %n transactions? This action cannot be "
 "undone."
 msgstr[0] ""
+"Möchtest du eine Buchung wirklich löschen? Diese Aktion lässt sich nicht "
+"rückgängig machen."
 msgstr[1] ""
+"Möchtest du wirklich %n Buchungen löschen? Diese Aktion lässt sich nicht "
+"rückgängig machen."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:729
 msgid ""
@@ -6580,54 +6584,60 @@ msgid_plural ""
 "%n of these were auto-generated from bill payments. Deleting real payments "
 "will cause your balance to diverge from your bank statement."
 msgstr[0] ""
+"Eine dieser Buchungen wurde durch den Rechnung-Mechanismus erstellt. Das "
+"Löschen echter Buchungen führt zu einer Abweichung deines Saldos von deinem "
+"Bankauszug."
 msgstr[1] ""
+"%n dieser Buchungen wurde durch den Rechnung-Mechanismus erstellt. Das "
+"Löschen echter Buchungen führt zu einer Abweichung deines Saldos von deinem "
+"Bankauszug."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:751
 msgid "Successfully deleted %n transaction"
 msgid_plural "Successfully deleted %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eine Buchung wurde gelöscht"
+msgstr[1] "%n Buchungen wurden gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:758
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3458
 msgid "Failed to delete %n transaction"
 msgid_plural "Failed to delete %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Fehler beim Löschen einer Buchung"
+msgstr[1] "Fehler beim Löschen von %n Buchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:771
 msgid "Are you sure you want to mark %n transaction as reconciled?"
 msgid_plural "Are you sure you want to mark %n transactions as reconciled?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Möchtest du wirklich eine Buchung als abgeglichen markieren?"
+msgstr[1] "Möchtest du wirklich %n Buchungen als abgeglichen markieren?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:791
 msgid "Successfully reconciled %n transaction"
 msgid_plural "Successfully reconciled %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eine Buchung wurde abgeglichen"
+msgstr[1] "%n Buchungen wurden abgeglichen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:798
 msgid "Failed to reconcile %n transaction"
 msgid_plural "Failed to reconcile %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Fehler beim Abgleichen einer Buchung"
+msgstr[1] "Fehler beim Abgleichen von %n Buchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:802
 msgid "Failed to reconcile transactions"
-msgstr ""
+msgstr "Fehler beim Abgleichen der Buchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:811
 msgid "Are you sure you want to mark %n transaction as unreconciled?"
 msgid_plural "Are you sure you want to mark %n transactions as unreconciled?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Möchtest du wirklich eine Buchung als nicht abgeglichen markieren?"
+msgstr[1] "Möchtest du wirklich %n Buchungen als nicht abgeglichen markieren?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:831
 msgid "Successfully unreconciled %n transaction"
 msgid_plural "Successfully unreconciled %n transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eine Buchung wurde als nicht abgeglichen markiert"
+msgstr[1] "%n Buchungen wurden als nicht abgeglichen markiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:838
 msgid "Failed to unreconcile %n transaction"
@@ -6741,16 +6751,16 @@ msgstr "Korrekturbuchung zum Abgleich des Kontoauszugssaldos von {amount}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1153
 msgid "Adjustment transaction created"
-msgstr ""
+msgstr "Ausgleichsbuchung wurde erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1168
 msgid "Failed to create adjustment: {message}"
-msgstr ""
+msgstr "Fehler beim Erstellen der Ausgleichsbuchung: {message}"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1197
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4586
 msgid "Choose an account"
-msgstr ""
+msgstr "Wähle ein Konto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1218
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:415
@@ -6762,64 +6772,66 @@ msgstr "Konto auswählen..."
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1346
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1369
 msgid "Failed to load transaction"
-msgstr ""
+msgstr "Fehler beim Laden der Buchung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1399
 msgid "Please select destination account"
-msgstr ""
+msgstr "Bitte wähle ein Zielkonto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1403
 msgid "Cannot transfer to same account"
-msgstr ""
+msgstr "Eine Umbuchung auf dasselbe Konto ist nicht möglich"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1478
 msgid "Transfer created successfully"
-msgstr ""
+msgstr "Umbuchung erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1493
 msgid "Failed to create transfer"
-msgstr ""
+msgstr "Fehler beim Erstellen der Umbuchung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1548
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3188
 msgid "Transaction updated"
-msgstr ""
+msgstr "Buchung aktualisiert"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1548
 msgid "Transaction created"
-msgstr ""
+msgstr "Buchung erstellt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1572
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1587
 msgid "Are you sure you want to delete this transaction?"
-msgstr ""
+msgstr "Möchtest du diese Buchung wirklich löschen?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1581
 msgid "This will decrease the account balance by {amount}."
-msgstr ""
+msgstr "Der Kontosaldo wird dadurch um {amount} reduziert."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1582
 msgid "This will increase the account balance by {amount}."
-msgstr ""
+msgstr "Der Kontosaldo wird dadurch um {amount} erhöht."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1585
 msgid "This transaction was auto-generated from a bill payment."
-msgstr ""
+msgstr "Diese Buchung wurde durch den Rechnung-Mechanismus erstellt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1585
 msgid ""
 "If this is a real payment, deleting it will cause your balance to diverge "
 "from your bank statement. Are you sure?"
 msgstr ""
+"Wenn dies eine echte Buchung ist, führt das Löschen dieser zu einer "
+"Abweichung deines Saldos von deinem Bankauszug. Bist du dir sicher?"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1604
 msgid "Transaction deleted"
-msgstr ""
+msgstr "Buchung gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1617
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1621
 msgid "Failed to delete transaction"
-msgstr ""
+msgstr "Fehler beim Löschen der Buchung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1802
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5549
@@ -6833,81 +6845,90 @@ msgstr "Beschreibung:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:1810
 msgid "Total Amount:"
-msgstr ""
+msgstr "Summe:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2085
 msgid "Date window (days):"
-msgstr ""
+msgstr "Zeitraum (Tage):"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2090
 msgid ""
 "Matches must be within this many days of each other. Use 0 for exact date "
 "match."
 msgstr ""
+"Übereinstimmungen müssen innerhalb dieser Anzahl von Tagen voneinander "
+"liegen. 0 steht für eine exakte Datumsübereinstimmung."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2093
 msgid "Matching mode:"
-msgstr ""
+msgstr "Übereinstimmungsmodus:"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2098
 msgid "Auto-link exact matches"
-msgstr ""
+msgstr "Automatisch exakte Übereinstimmungen verknüpfen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2099
 msgid "Single-match pairs linked automatically. Multi-match shown for review."
 msgstr ""
+"Einzelne Übereinstimmungen werden automatisch verknüpft. Mehrfache "
+"Übereinstimmungen werden zur Überprüfung angezeigt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2105
 msgid "Review all matches"
-msgstr ""
+msgstr "Alle Übereinstimmungen überprüfen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2106
 msgid "All candidates shown for your confirmation before linking."
 msgstr ""
+"Alle Übereinstimmungen werden vor der Verknüpfung zur Bestätigung angezeigt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2138
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5487
 msgid "Scanning for matching transactions..."
-msgstr ""
+msgstr "Suche nach übereinstimmenden Buchungen..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2149
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5520
 msgid "No matching transactions found."
-msgstr ""
+msgstr "Keine übereinstimmenden Buchungen gefunden."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2164
 msgid "Failed to scan for matches. Please try again."
 msgstr ""
+"Fehler beim Suchen nach übereinstimmenden Buchungen. Bitte versuche es "
+"erneut."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2184
 msgid "Linking %n exact match pair..."
 msgid_plural "Linking %n exact match pairs..."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Verknüpfe eine Übereinstimmung…"
+msgstr[1] "Verknüpfe %n Übereinstimmungen..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2252
 msgid "Exact Matches"
-msgstr ""
+msgstr "Genaue Übereinstimmungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2253
 msgid ""
 "These transactions have exactly one match. Uncheck any you don't want to "
 "link."
 msgstr ""
+"Diese Buchungen haben exakt eine Übereinstimmung. Wähle diejenigen ab, die "
+"du nicht verknüpfen möchtest."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2379
 msgid "Select a match (%n option):"
 msgid_plural "Select a match (%n options):"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Wähle eine Übereinstimmung (eine Option):"
+msgstr[1] "Wähle eine Übereinstimmung (%n Optionen):"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2383
 msgid "Link Selected"
-msgstr ""
+msgstr "Verknüpfung ausgewählt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2411
 msgid "No matches selected"
-msgstr ""
+msgstr "Keine Übereinstimmungen ausgewählt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2418
 msgid "Linking..."
@@ -6916,43 +6937,45 @@ msgstr "Verbinde..."
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2425
 msgid "Linked %n pair"
 msgid_plural "Linked %n pairs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein Buchungspaar wurde verknüpft"
+msgstr[1] "%n Buchungspaare wurden verknüpft"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2427
 msgid "%n failed"
 msgid_plural "%n failed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eine fehlgeschlagen"
+msgstr[1] "%n fehlgeschlagen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2440
 msgid "Linked Pairs"
-msgstr ""
+msgstr "Verknüpfte Buchungspaare"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2441
 msgid "These transactions have been linked. Click Undo to unlink a pair."
 msgstr ""
+"Diese Buchungen wurden verknüpft. Klicke auf Rückgängig, um die Verknüpfung "
+"aufzulösen."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2478
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5527
 msgid "Confirm Selected"
-msgstr ""
+msgstr "Ausgewählte bestätigen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2505
 msgid "Match undone"
-msgstr ""
+msgstr "Verknüpfung aufgelöst"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2507
 msgid "Failed to undo match"
-msgstr ""
+msgstr "Fehler beim Auflösen der Verknüpfung"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2516
 msgid "Please select a match first"
-msgstr ""
+msgstr "Bitte wähle erst eine Übereinstimmung aus"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2544
 msgid "Transactions linked"
-msgstr ""
+msgstr "Buchungen wurden verknüpft"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2669
 msgid "Enter description..."
@@ -6960,35 +6983,35 @@ msgstr "Geben Sie die Beschreibung ein..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2701
 msgid "Type to search..."
-msgstr ""
+msgstr "Tippe zum Suchen..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2734
 msgid "No categories found"
-msgstr ""
+msgstr "Keine Kategorien gefunden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:2887
 msgid "No tags"
-msgstr ""
+msgstr "Keine Schlagwörter"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3043
 msgid "Error loading tags"
-msgstr ""
+msgstr "Fehler beim Laden der Schlagwörter"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3244
 msgid "Find Duplicate Transactions"
-msgstr ""
+msgstr "Doppelte Buchungen finden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3250
 msgid "Scanning for duplicates..."
-msgstr ""
+msgstr "Suche nach Duplikaten..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3291
 msgid "No duplicate transactions found."
-msgstr ""
+msgstr "Keine doppelten Buchungen gefunden."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3301
 msgid "Failed to scan for duplicates. Please try again."
-msgstr ""
+msgstr "Fehler beim Suchen nach Duplikaten. Bitte versuche es erneut."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3310
 msgid ""
@@ -6996,12 +7019,16 @@ msgid ""
 "The oldest transaction in each group is kept by default. Review and adjust "
 "the selection, then delete the checked items."
 msgstr ""
+"Es wurden {groupCount} Gruppen mit {duplicateCount} verdächtigen doppelten "
+"Buchungen gefunden. Standardmäßig wird die älteste Transaktion in jeder "
+"Gruppe beibehalten. Bitte überprüfe die Auswahl. Die ausgewählten Einträge "
+"werden gelöscht."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3313
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3466
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1603
 msgid "Delete Selected"
-msgstr ""
+msgstr "Ausgewählte löschen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3328
 msgid "(no description)"
@@ -7024,7 +7051,11 @@ msgid "Delete %n suspected duplicate transaction? This cannot be undone."
 msgid_plural ""
 "Delete %n suspected duplicate transactions? This cannot be undone."
 msgstr[0] ""
+"Eine verdächtige doppelte Buchung löschen? Diese Aktion lässt sich nicht "
+"rückgängig machen."
 msgstr[1] ""
+"%n verdächtige doppelte Buchungen löschen? Diese Aktion lässt sich nicht "
+"rückgängig machen."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3404
 msgid ""
@@ -7034,25 +7065,29 @@ msgid_plural ""
 "%n of these were generated from bill payments. Make sure they are truly "
 "duplicates before deleting."
 msgstr[0] ""
+"Eine Buchung wurde durch den Rechnung-Mechanismus erstellt. Bitte stelle "
+"sicher, dass es sich wirklich um Duplikate handelt."
 msgstr[1] ""
+"%n dieser Buchungen wurden durch den Rechnung-Mechanismus erstellt. Bitte "
+"stelle sicher, dass es sich wirklich um Duplikate handelt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3430
 msgid "Deleted %n duplicate transaction"
 msgid_plural "Deleted %n duplicate transactions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ein Duplikat wurde gelöscht"
+msgstr[1] "%n Duplikate wurden gelöscht"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3453
 msgid "All duplicates have been resolved."
-msgstr ""
+msgstr "Alle Buchungsduplikate wurden aufgelöst."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transactions/TransactionsModule.js:3462
 msgid "Failed to delete duplicates"
-msgstr ""
+msgstr "Fehler beim Löschen der Duplikate"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:45
 msgid "Failed to load transfers"
-msgstr ""
+msgstr "Fehler beim Laden der Umbuchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:58
 msgid "Recurring Transfers"
@@ -7060,22 +7095,22 @@ msgstr "Wiederkehrende Umbuchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:60
 msgid "Add new transfer"
-msgstr ""
+msgstr "Neue Umbuchung hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:62
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:366
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:495
 msgid "Add Transfer"
-msgstr ""
+msgstr "Umbuchung hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:75
 msgid "Active Transfers"
-msgstr ""
+msgstr "Aktive wiederkehrende Umbuchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:84
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2221
 msgid "Due This Month"
-msgstr "Dieser Monat fällig"
+msgstr "Diesen Monat fällig"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:93
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2239
@@ -7085,11 +7120,11 @@ msgstr "Monatssumme"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:102
 msgid "Completed This Month"
-msgstr ""
+msgstr "Diesen Monat ausgeführt"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:109
 msgid "All Transfers"
-msgstr ""
+msgstr "Alle Umbuchungen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:124
 msgid "No recurring transfers yet"
@@ -7109,15 +7144,15 @@ msgstr "Fügen Sie Ihre erste Überweisung hinzu"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:289
 msgid "Edit transfer"
-msgstr ""
+msgstr "Umbuchung bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:292
 msgid "Delete transfer"
-msgstr ""
+msgstr "Umbuchung löschen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:366
 msgid "Edit Transfer"
-msgstr ""
+msgstr "Umbuchung bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:386
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2348
@@ -7128,7 +7163,7 @@ msgstr "Name"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:388
 msgid "e.g., Monthly Savings"
-msgstr ""
+msgstr "z.B. Monatliche Ersparnisse"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:400
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4821
@@ -7138,52 +7173,53 @@ msgstr "Häufigkeit"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:413
 msgid "From Account"
-msgstr ""
+msgstr "Ursprungskonto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:424
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4601
 msgid "To Account"
-msgstr ""
+msgstr "Zielkonto"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:437
 msgid "Day of Month (1-31)"
-msgstr ""
+msgstr "Tag des Monats (1-31)"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:439
 msgid "e.g., 15"
-msgstr ""
+msgstr "z.B. 15"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:441
 msgid "Leave empty for weekly transfers"
-msgstr ""
+msgstr "Für wöchentliche Umbuchungen leer lassen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:445
 msgid "Transaction Description Pattern (Optional)"
-msgstr ""
+msgstr "Muster des Buchungstextes (Optional)"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:447
 msgid "e.g., Savings Transfer"
-msgstr ""
+msgstr "z.B. Sparen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:449
 msgid "Used to match imported transactions"
-msgstr ""
+msgstr "Wir benutzt, um Übereinstimmungen bei importierten Buchungen zu finden"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:458
 msgid "Category for created transactions (optional)"
-msgstr ""
+msgstr "Kategorie für erstellte Buchungen (optional)"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:466
 msgid "Optional notes..."
-msgstr ""
+msgstr "Optionale Notizen..."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:473
 msgid "Also create transactions now"
-msgstr ""
+msgstr "Buchungen jetzt erstellen"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:475
 msgid "Creates paired debit/credit transactions immediately"
 msgstr ""
+"Neue Buchungspaare werden sofort nach Abschließen des Formulars erstellt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:479
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4963
