@@ -7860,6 +7860,26 @@ button.danger:hover {
     font-size: 16px;
     padding: 8px 10px;
     -webkit-appearance: none;
+    appearance: none;
+}
+/* Native <input type="date"> renders inconsistently on iOS Safari: the value is
+   shown in ::-webkit-date-and-time-value, which defaults to centered with its
+   own intrinsic height, making the field look taller and misaligned vs the other
+   inputs. Normalize it to match the rest of the form. */
+.qa-form-group input[type="date"] {
+    min-height: 38px;
+    line-height: 1.2;
+    text-align: left;
+    background: var(--color-main-background);
+    color: var(--color-main-text);
+}
+.qa-form-group input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    margin: 0;
+}
+.qa-form-group input[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+    line-height: 1.2;
 }
 .qa-buttons {
     display: flex;

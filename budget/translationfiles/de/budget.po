@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-06-06 22:45+0000\n"
-"Last-Translator: Dayflare <hiazu@hotmail.de>\n"
+"PO-Revision-Date: 2026-06-02 23:01+0000\n"
+"Last-Translator: St0rml <n.f@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -7219,7 +7219,7 @@ msgstr "Buchungen jetzt erstellen"
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:475
 msgid "Creates paired debit/credit transactions immediately"
 msgstr ""
-"Neue Buchungspaare werden direkt nach Abschließen des Formulars erstellt"
+"Neue Buchungspaare werden sofort nach Abschließen des Formulars erstellt."
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:479
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4963
@@ -7234,68 +7234,66 @@ msgstr "Leer lassen, um das nächste Fälligkeitsdatum zu verwenden"
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:488
 msgid "Enable auto-pay (automatically create transactions when due)"
 msgstr ""
-"Automatische Zahlung einschalten (erstellt Buchungen automatisch, sobald sie "
-"fällig sind)"
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:495
 msgid "Update Transfer"
-msgstr "Umbuchung aktualisieren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:609
 msgid "Please select a source account"
-msgstr "Bitte wähle ein Ursprungskonto"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:614
 msgid "Please select a destination account"
-msgstr "Bitte wähle ein Zielkonto"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:658
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:671
 msgid "Failed to save transfer"
-msgstr "Fehler beim Speichern der Umbuchung"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:662
 msgid "Transfer updated"
-msgstr "Umbuchung aktualisiert"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:662
 msgid "Transfer added"
-msgstr "Umbuchung hinzugefügt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:677
 msgid "Are you sure you want to delete this transfer?"
-msgstr "Möchtest du diese Umbuchung wirklich löschen?"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:687
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:696
 msgid "Failed to delete transfer"
-msgstr "Fehler beim Löschen der Umbuchung"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:689
 msgid "Transfer deleted"
-msgstr "Umbuchung gelöscht"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:716
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:727
 msgid "Failed to update transfer"
-msgstr "Fehler beim Aktualisieren der Umbuchung"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:719
 msgid "Transfer deactivated"
-msgstr "Wiederkehrende Umbuchung deaktiviert"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:719
 msgid "Transfer activated"
-msgstr "Wiederkehrende Umbuchung aktiviert"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:749
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:758
 msgid "Failed to mark transfer as paid"
-msgstr "Fehler beim Markieren der Umbuchung als bezahlt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/modules/transfers/TransfersModule.js:751
 msgid "Transfer marked as paid"
-msgstr "Umbuchung wurde als bezahlt markiert"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/formatters.js:197
 msgid "Mortgage"
@@ -7303,45 +7301,45 @@ msgstr "Hypothek"
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:25
 msgid "This field is required"
-msgstr "Dieses Feld ist erforderlich"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:31
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:130
 msgid "Minimum {count} characters required"
-msgstr "Mindestens {count} Ziffern erforderlich"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:37
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:133
 msgid "Maximum {count} characters allowed"
-msgstr "Maximal {count} Ziffern erlaubt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:43
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:145
 msgid "Invalid format"
-msgstr "Ungültiges Format"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:49
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:94
 msgid "Invalid email address"
-msgstr "Ungültige E-Mail-Adresse"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:55
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:112
 msgid "Minimum value is {value}"
-msgstr "Mindestwert ist {value}"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:61
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:115
 msgid "Maximum value is {value}"
-msgstr "Maximalwert ist {value}"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:82
 msgid "{fieldName} is required"
-msgstr "{fieldName} ist erforderlich"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/src/utils/validators.js:109
 msgid "Must be a valid number"
-msgstr "Muss eine gültige Zahl sein"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:14
 msgid "Search here ..."
@@ -7349,11 +7347,11 @@ msgstr "Suche ..."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:15
 msgid "Search navigation"
-msgstr "Suchen und Navigieren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:20
 msgid "Clear search"
-msgstr "Suche leeren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:33
 msgid "Dashboard"
@@ -7393,9 +7391,8 @@ msgstr "Regeln"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:226
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4048
-#, fuzzy
 msgid "Exchange Rates"
-msgstr "Wechselkurse"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:236
 msgid "Sharing"
@@ -7409,7 +7406,7 @@ msgstr "Einstellungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:256
 msgid "Lock App"
-msgstr "App sperren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:276
 msgid "Add tiles"
@@ -7417,15 +7414,15 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:278
 msgid "Add Tiles"
-msgstr "Kacheln hinzufügen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:281
 msgid "Hidden Tiles"
-msgstr "Versteckte Kacheln"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:287
 msgid "Toggle dashboard lock"
-msgstr "Übersichtssperre umschalten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:532
 msgid "Last 6 Months"
@@ -7449,7 +7446,7 @@ msgstr "Diesen Monat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:555
 msgid "This Year"
-msgstr "Dieses Jahr"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:588
 msgid "No net worth history yet"
@@ -7465,7 +7462,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:590
 msgid "Record snapshot now"
-msgstr "Jetzt Schnappschuss aufnehmen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:612
 msgid "No asset value history yet"
@@ -7499,17 +7496,15 @@ msgstr "Plan"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:697
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3871
 msgid "Total Debt"
-msgstr "Gesamtschulden"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:705
-#, fuzzy
 msgid "Monthly Min"
-msgstr "Monatlicher Mindestbetrag"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:743
-#, fuzzy
 msgid "All Goals Progress"
-msgstr "Gesamtfortschritt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:835
 msgid "Year-over-Year Comparison"
@@ -7532,12 +7527,12 @@ msgstr "Leeren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:933
 msgid "Add new account"
-msgstr "Neues Konto hinzufügen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:948
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3585
 msgid "Total Assets"
-msgstr "Gesamtvermögenswert"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:959
 msgid "Total Liabilities"
@@ -7545,15 +7540,15 @@ msgstr "Summe der Verbindlichkeiten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1007
 msgid "Account Details"
-msgstr "Kontodetails"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1010
 msgid "Edit account"
-msgstr "Konto bearbeiten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1014
 msgid "Reconcile account"
-msgstr "Konto abgleichen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1016
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1294
@@ -7577,7 +7572,7 @@ msgstr "Verfügbares Guthaben"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1052
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4775
 msgid "Credit Limit"
-msgstr "Kreditlimit"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1071
 msgid "Total Transactions"
@@ -7585,24 +7580,24 @@ msgstr "Anzahl der Buchungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1080
 msgid "This Month Income"
-msgstr "Monatseinnahmen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1089
 msgid "This Month Expenses"
-msgstr "Monatsausgaben"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1098
 msgid "Avg. Transaction"
-msgstr "Mittlerer Buchungsbetrag"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1106
 msgid "Account Information"
-msgstr "Kontoinformation"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1109
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4717
 msgid "Account Number"
-msgstr "Kontonummer"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1113
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4734
@@ -7640,7 +7635,7 @@ msgstr "Letzter Abgleich"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1146
 msgid "Transaction History"
-msgstr "Buchungshistorie"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1158
 msgid "Export"
@@ -7649,7 +7644,7 @@ msgstr "Exportieren"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1160
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1284
 msgid "Toggle advanced filters"
-msgstr "Fortgeschrittene Filter umschalten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1162
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1286
@@ -7660,12 +7655,12 @@ msgstr "Filter"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1314
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5139
 msgid "Filter Transactions"
-msgstr "Buchungen filtern"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1183
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1334
 msgid "All Types"
-msgstr "Alle Typen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1191
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1342
@@ -7678,29 +7673,29 @@ msgstr "Status"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1194
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1345
 msgid "Cleared"
-msgstr "Zurückgesetzt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1200
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1351
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5150
 msgid "From Date"
-msgstr "Von Datum"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1205
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1356
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5155
 msgid "To Date"
-msgstr "Bis Datum"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1210
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1371
 msgid "Min Amount"
-msgstr "Mindestbetrag"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1215
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1376
 msgid "Max Amount"
-msgstr "Maximalbetrag"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1220
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1381
@@ -7710,22 +7705,22 @@ msgstr "Suchen"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1221
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1382
 msgid "Description, vendor, reference..."
-msgstr "Beschreibung, Empfänger, Referenz..."
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1231
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1392
 msgid "Apply Filters"
-msgstr "Filter anwenden"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1232
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1393
 msgid "Clear All"
-msgstr "Alle zurücksetzen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1233
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1394
 msgid "Save Preset"
-msgstr "Vorlage speichern"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1254
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1532
@@ -7755,11 +7750,11 @@ msgstr "Massenaktionen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1292
 msgid "Reconciliation mode"
-msgstr "Abgleichungsmodus"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1296
 msgid "Find suspected duplicate transactions"
-msgstr "Mögliche Buchungsduplikate finden"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1298
 msgid "Find Duplicates"
@@ -7767,7 +7762,7 @@ msgstr "Duplikate finden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1300
 msgid "Auto-match transfer transactions"
-msgstr "Automatisch Umbuchungen erkennen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1302
 msgid "Match All"
@@ -7775,11 +7770,11 @@ msgstr "Alle zuordnen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1304
 msgid "Add new transaction"
-msgstr "Neue Buchung hinzufügen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1361
 msgid "Created From"
-msgstr "Erstellt aus"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1366
 msgid "Created To"
@@ -7795,15 +7790,15 @@ msgstr "Nicht abgeglichen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1407
 msgid "Edit Fields..."
-msgstr "Felder bearbeiten..."
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1425
 msgid "Statement Balance"
-msgstr "Saldo laut Kontoauszug"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1429
 msgid "Statement Date"
-msgstr "Datum des Kontoauszugs"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1432
 msgid "Start Reconciliation"
@@ -7811,11 +7806,11 @@ msgstr "Abstimmung starten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1447
 msgid "Configure columns"
-msgstr "Spalten konfigurieren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1452
 msgid "Show/Hide Columns"
-msgstr "Zeige/Verstecke Spalten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1485
 msgid "25 per page"
@@ -7835,17 +7830,16 @@ msgstr "250 pro Seite"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1502
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5719
-#, fuzzy
 msgid "Select all"
-msgstr "Alle auswählen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1562
 msgid "Add new category"
-msgstr "Neue Kategorie hinzufügen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1566
 msgid "Category settings"
-msgstr "Kategorie-Einstellungen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1578
 msgid "Search categories..."
@@ -7853,28 +7847,26 @@ msgstr "Kategorien durchsuchen …"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1582
 msgid "Expand all"
-msgstr "Alle aufklappen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1585
 msgid "Collapse all"
-msgstr "Alle zusammenklappen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1614
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1909
 msgid "No categories yet"
-msgstr "Noch keine Kategorien"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1615
 msgid ""
 "Create your first category to start organizing your transactions, or use our "
 "recommended defaults."
 msgstr ""
-"Erstelle deine erste Kategorie, um deine Buchungen zu organisieren. Du "
-"kannst auch die empfohlenen Standardkategorien verwenden."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1623
 msgid "Use Default Categories"
-msgstr "Standardkategorien verwenden"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1634
 msgid "Category Details"
@@ -7882,16 +7874,16 @@ msgstr "Kategoriedetails"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1636
 msgid "Edit category"
-msgstr "Kategorie bearbeiten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1640
 msgid "Delete category"
-msgstr "Kategorie löschen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1654
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1738
 msgid "Select a category"
-msgstr "Kategorie auswählen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1661
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1858
@@ -7920,7 +7912,7 @@ msgstr "Alle Buchungen anzeigen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1722
 msgid "Add new tag set"
-msgstr "Schlagwortgruppe erstellen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1723
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2631
@@ -7932,12 +7924,10 @@ msgid ""
 "Choose a category from the tree to view details, budget information, and "
 "analytics."
 msgstr ""
-"Wähle eine Kategorie aus dem Baum, um Details, Budgetinformationen und "
-"Analysen einzusehen."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1750
 msgid "Add new tag"
-msgstr "Neues Schlagwort hinzufügen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1761
 msgid ""
@@ -7945,28 +7935,24 @@ msgid ""
 "regardless of category. For category-specific tags, use tag sets in the "
 "category detail view."
 msgstr ""
-"Schlagwörter, die hier erstellt werden, sind global und können zu allen "
-"Buchungen - unabhängig der Kategorie - zugeordnet werden. Für Kategorie-"
-"spezifische Schlagwörter nutze Schlagwortgruppen in der Kategorie-"
-"Detailansicht."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1772
 msgid "Total Tags"
-msgstr "Anzahl an Schlagwörtern"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1781
 msgid "Most Used"
-msgstr "Am meisten verwendet"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1790
 msgid "Recently Added"
-msgstr "Kürzlich hinzugefügt"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1809
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5380
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5406
 msgid "Tag Name"
-msgstr "Schlagwortname"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1810
 msgid "e.g., Business, Vacation, Groceries"
@@ -7997,57 +7983,57 @@ msgstr "Monat:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1849
 msgid "Total Budgeted"
-msgstr "In Budgets erfasst"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1876
 msgid "Categories with Budget"
-msgstr "Kategorien mit Budgets"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1910
 msgid "Create categories first to start setting up your budget."
-msgstr "Erstelle erst eine Kategorie, um Budgets zu erstellen."
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1913
 msgid "Go to Categories"
-msgstr "Gehe zu Kategorien"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1922
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2164
 msgid "Import Transactions"
-msgstr "Buchungen importieren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1926
 msgid "Import Wizard"
-msgstr "Importassistent"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1927
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2173
 msgid "Import History"
-msgstr "Importhistorie"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1936
 msgid "Select File"
-msgstr "Datei auswählen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1940
 msgid "Map Columns"
-msgstr "Spalten zuordnen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1944
 msgid "Review & Import"
-msgstr "Überprüfen & Importieren"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1952
 msgid "Step 1: Select File"
-msgstr "Schritt 1: Datei auswählen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1953
 msgid "Choose your bank statement file (CSV, OFX, or QIF format)"
-msgstr "Wähle deine Kontoauszug-Datei (CSV, OFX, oder QIF Format)"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1958
 msgid "Drag and drop your bank statement here"
-msgstr "Lege deinen Kontoauszug hier ab"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1959
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4444
@@ -8056,50 +8042,50 @@ msgstr "oder"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1960
 msgid "Browse for file to import"
-msgstr "Nach Datei zum Importieren durchsuchen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1960
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4445
 msgid "Browse Files"
-msgstr "Dateien durchsuchen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1965
 msgid "Supported Formats:"
-msgstr "Unterstütze Formate:"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1967
 msgid "Comma-separated values from any bank"
-msgstr "Komma-separierte Werte von jeder beliebigen Bank"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1968
 msgid "Open Financial Exchange format"
-msgstr "Open Financial Exchange Format"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1969
 msgid "Quicken Interchange Format"
-msgstr "Quicken Interchange Format"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1977
 msgid "Step 2: Map Columns"
-msgstr "Schritt 2: Spalten zuordnen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1978
 msgid "Match your file columns to budget fields"
-msgstr "Ordne die Spalten aus der Datei den entsprechenden Budget-Feldern zu"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1991
 msgid "CSV Delimiter"
-msgstr "CSV Trennzeichen"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1993
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4275
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4285
 msgid "Comma (,)"
-msgstr "Komma (,)"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1994
 msgid "Semicolon (;)"
-msgstr "Semikolon (;)"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1995
 msgid "Tab"
@@ -8107,7 +8093,7 @@ msgstr "Tab"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1997
 msgid "Change if columns are not detected correctly"
-msgstr "Ändere dies, wenn die spalten nicht richtig erkannt werden"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2006
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2012
@@ -8117,11 +8103,11 @@ msgstr "Ändere dies, wenn die spalten nicht richtig erkannt werden"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2046
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2052
 msgid "Select column..."
-msgstr "Spalte auswählen..."
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2014
 msgid "Or use separate income/expense columns below"
-msgstr "Oder verwende geteilte Einnahme/Ausgabe-Spalten mit den Feldern unten"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2018
 msgid "Income Column"
