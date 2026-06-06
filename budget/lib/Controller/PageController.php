@@ -17,14 +17,17 @@ class PageController extends Controller {
     private AccountMapper $accountMapper;
     private CategoryMapper $categoryMapper;
     private GranularShareService $granularShareService;
-    private string $userId;
+    private ?string $userId;
 
     public function __construct(
         IRequest $request,
         AccountMapper $accountMapper,
         CategoryMapper $categoryMapper,
         GranularShareService $granularShareService,
-        string $userId
+        // Nullable: the controller is constructed before the auth middleware
+        // runs, so an unauthenticated request injects null here (the page
+        // routes still require login, which the middleware enforces next).
+        ?string $userId
     ) {
         parent::__construct(Application::APP_ID, $request);
         $this->accountMapper = $accountMapper;

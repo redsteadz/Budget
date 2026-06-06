@@ -32,4 +32,17 @@ class PageControllerTest extends TestCase {
 	public function testControllerCanBeInstantiated(): void {
 		$this->assertInstanceOf(PageController::class, $this->controller);
 	}
+
+	public function testConstructsWithNullUserId(): void {
+		// Unauthenticated requests inject a null userId before the auth
+		// middleware runs — construction must not throw (issue #259).
+		$controller = new PageController(
+			$this->createMock(IRequest::class),
+			$this->createMock(AccountMapper::class),
+			$this->createMock(CategoryMapper::class),
+			$this->createMock(GranularShareService::class),
+			null
+		);
+		$this->assertInstanceOf(PageController::class, $controller);
+	}
 }
