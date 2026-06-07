@@ -1473,13 +1473,27 @@ export default class CategoriesModule {
         ).join('');
     }
 
+    /**
+     * Categories shown in the Budget view: the tree with categories that are
+     * excluded from reports removed (and their subtrees). Budgets/spend for
+     * excluded categories must not appear or count here (#266/#267).
+     */
+    filterBudgetCategories(categories) {
+        return (categories || [])
+            .filter(cat => !cat.excludedFromReports)
+            .map(cat => ({ ...cat, children: this.filterBudgetCategories(cat.children || []) }));
+    }
+
     async calculateCategorySpending() {
         // Initialize spending object and reset own-spending baseline
         this.categorySpending = {};
         this._ownSpending = {};
 
+        // Budget view excludes categories flagged "excluded from reports".
+        this._budgetTree = this.filterBudgetCategories(this.categoryTree || []);
+
         // Get all categories (not just ones with budgets — parents need children's spending)
-        const allCategories = this.flattenCategories(this.categoryTree || []);
+        const allCategories = this.flattenCategories(this._budgetTree);
 
         if (allCategories.length === 0) {
             return;
@@ -1533,8 +1547,9 @@ export default class CategoriesModule {
             this.categorySpending = {};
         }
 
-        // Aggregate children's spending into parent categories
-        this.aggregateParentSpending(this.categoryTree || []);
+        // Aggregate children's spending into parent categories (excluded-from-
+        // reports categories are already removed from the budget tree).
+        this.aggregateParentSpending(this._budgetTree || []);
     }
 
     /**
@@ -1600,8 +1615,10 @@ export default class CategoriesModule {
 
         if (!treeContainer) return;
 
-        // Filter categories by type
-        const filteredCategories = (this.categoryTree || []).filter(cat => cat.type === this.budgetType);
+        // Filter categories by type (excluded-from-reports categories are kept
+        // out of the budget view entirely — see filterBudgetCategories).
+        const budgetTree = this._budgetTree || this.filterBudgetCategories(this.categoryTree || []);
+        const filteredCategories = budgetTree.filter(cat => cat.type === this.budgetType);
 
         if (filteredCategories.length === 0) {
             treeContainer.innerHTML = '';
@@ -1873,7 +1890,8 @@ export default class CategoriesModule {
     }
 
     updateBudgetSummary() {
-        const categories = this.flattenCategories(this.categoryTree || [])
+        const budgetTree = this._budgetTree || this.filterBudgetCategories(this.categoryTree || []);
+        const categories = this.flattenCategories(budgetTree)
             .filter(cat => cat.type === this.budgetType);
 
         let totalBudgeted = 0;
