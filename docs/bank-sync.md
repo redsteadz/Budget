@@ -28,13 +28,19 @@ Bank Sync supports two providers, each covering different regions:
 | Provider | Region | Connection Method |
 |----------|--------|-------------------|
 | **GoCardless** | UK and European banks | OAuth authorization flow |
-| **SimpleFIN** | US banks | Token-based authentication |
+| **SimpleFIN** | US / Canadian banks | Token-based authentication |
 
 > **Tip:** If your bank isn't listed under one provider, try the other. Coverage varies and is continuously expanding.
+
+> **⚠️ Important — GoCardless no longer accepts new sign-ups.** As of late 2025, GoCardless (formerly Nordigen) has closed its free Bank Account Data API to new customers; it is moving to enterprise-only access. **Existing GoCardless connections continue to work**, but if you do not already have a GoCardless Bank Account Data account you will not be able to obtain the Secret ID / Secret Key needed below.
+>
+> There is currently **no free open-banking provider that onboards individual self-hosters** for EU/UK banks — the remaining aggregators (Enable Banking, Tink, TrueLayer, etc.) require a business contract and KYB verification, and SimpleFIN only covers North American banks. If automatic sync isn't available to you, use **[manual import](import.md)** instead: most banks let you export CSV / OFX / QIF, and the importer supports per-account routing and saved templates so repeat imports are quick. If you know of a provider that lets individuals access their own EU bank data without a business contract, please [open an issue](https://github.com/otherworld-dev/Budget/issues) — we'd like to add one.
 
 ## Connecting via GoCardless
 
 GoCardless uses a 3-step wizard to guide you through connecting a UK or European bank account.
+
+> **Note:** This requires an **existing** GoCardless Bank Account Data account. New sign-ups are no longer accepted (see the warning under [Supported Providers](#supported-providers) above). If you don't already have one, use [manual import](import.md) instead.
 
 ### Step 1: Enter API Credentials
 
