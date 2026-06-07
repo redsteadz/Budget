@@ -72,6 +72,7 @@ return [
         ['name' => 'category#tree', 'url' => '/api/categories/tree', 'verb' => 'GET'],
         ['name' => 'category#allSpending', 'url' => '/api/categories/spending', 'verb' => 'GET'],
         ['name' => 'category#transactionCounts', 'url' => '/api/categories/transaction-counts', 'verb' => 'GET'],
+        ['name' => 'category#recurringBudgets', 'url' => '/api/categories/recurring-budgets', 'verb' => 'GET'],
         ['name' => 'category#create', 'url' => '/api/categories', 'verb' => 'POST'],
         ['name' => 'category#details', 'url' => '/api/categories/{id}/details', 'verb' => 'GET'],
         ['name' => 'category#transactions', 'url' => '/api/categories/{id}/transactions', 'verb' => 'GET'],

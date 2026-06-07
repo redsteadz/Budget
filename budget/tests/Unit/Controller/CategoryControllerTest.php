@@ -8,6 +8,7 @@ use OCA\Budget\Controller\CategoryController;
 use OCA\Budget\Db\Category;
 use OCA\Budget\Service\CategoryService;
 use OCA\Budget\Service\GranularShareService;
+use OCA\Budget\Service\RecurringBudgetService;
 use OCA\Budget\Service\ValidationService;
 use OCP\AppFramework\Http;
 use OCP\IL10N;
@@ -19,6 +20,7 @@ class CategoryControllerTest extends TestCase {
 	private CategoryController $controller;
 	private CategoryService $service;
 	private ValidationService $validationService;
+	private RecurringBudgetService $recurringBudgetService;
 	private IRequest $request;
 
 	protected function setUp(): void {
@@ -37,11 +39,14 @@ class CategoryControllerTest extends TestCase {
 		$granularShareService = $this->createMock(GranularShareService::class);
 		$granularShareService->method('canAccess')->willReturn(true);
 
+		$this->recurringBudgetService = $this->createMock(RecurringBudgetService::class);
+
 		$this->controller = new CategoryController(
 			$this->request,
 			$this->service,
 			$this->validationService,
 			$granularShareService,
+			$this->recurringBudgetService,
 			$l,
 			'user1',
 			$logger

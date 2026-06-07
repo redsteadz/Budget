@@ -7,6 +7,7 @@ namespace OCA\Budget\Controller;
 use OCA\Budget\AppInfo\Application;
 use OCA\Budget\Service\CategoryService;
 use OCA\Budget\Service\GranularShareService;
+use OCA\Budget\Service\RecurringBudgetService;
 use OCA\Budget\Service\ValidationService;
 use OCA\Budget\Traits\ApiErrorHandlerTrait;
 use OCA\Budget\Traits\InputValidationTrait;
@@ -26,6 +27,7 @@ class CategoryController extends Controller {
 
     private CategoryService $service;
     private ValidationService $validationService;
+    private RecurringBudgetService $recurringBudgetService;
     private IL10N $l;
     private string $userId;
 
@@ -34,6 +36,7 @@ class CategoryController extends Controller {
         CategoryService $service,
         ValidationService $validationService,
         GranularShareService $granularShareService,
+        RecurringBudgetService $recurringBudgetService,
         IL10N $l,
         string $userId,
         LoggerInterface $logger
@@ -41,6 +44,7 @@ class CategoryController extends Controller {
         parent::__construct(Application::APP_ID, $request);
         $this->service = $service;
         $this->validationService = $validationService;
+        $this->recurringBudgetService = $recurringBudgetService;
         $this->l = $l;
         $this->userId = $userId;
         $this->setLogger($logger);
@@ -431,6 +435,21 @@ class CategoryController extends Controller {
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e, $this->l->t('Failed to retrieve effective budgets'));
+        }
+    }
+
+    /**
+     * Get the monthly-normalized recurring total committed per category, derived
+     * from active recurring bills and recurring income (#269). The budget view
+     * uses these as an automatic fallback for categories with no manual budget.
+     * @NoAdminRequired
+     */
+    public function recurringBudgets(): DataResponse {
+        try {
+            $budgets = $this->recurringBudgetService->getMonthlyBudgetsByCategory($this->userId);
+            return new DataResponse(['budgets' => $budgets]);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to retrieve recurring budgets'));
         }
     }
 

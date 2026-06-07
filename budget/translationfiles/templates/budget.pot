@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2026-06-07 20:12+0000\n"
+"POT-Creation-Date: 2026-06-07 20:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:444
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:559
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:284
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:288
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:307
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportTemplateController.php:146
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:146
@@ -625,21 +625,21 @@ msgstr ""
 msgid "Custom pattern must contain either \"months\" or \"dates\" field"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:76
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:80
 msgid "Failed to retrieve categories"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:113
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:117
 msgid "Failed to retrieve category tree"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:125
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:129
 msgid "Failed to retrieve transaction counts"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:137
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:346
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:358
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:141
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:350
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:362
 #: /var/www/html/apps-extra/budget/src/main.js:3468
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2587
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1676
@@ -667,40 +667,44 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:166
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:236
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:170
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:240
 msgid "Invalid category type. Must be income or expense"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:263
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:267
 msgid "Invalid budget period. Must be monthly, weekly, yearly, or quarterly"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:322
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:334
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:326
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:338
 msgid "Failed to retrieve category spending"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:370
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:392
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:422
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:445
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:374
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:396
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:426
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:464
 msgid "Invalid month format. Use YYYY-MM"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:398
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:402
 msgid "Failed to delete budget snapshot"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:411
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:415
 msgid "Failed to retrieve snapshot months"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:433
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:437
 msgid "Failed to retrieve effective budgets"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:451
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:452
+msgid "Failed to retrieve recurring budgets"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:470
 msgid "Invalid budget period"
 msgstr ""
 
@@ -1381,7 +1385,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:288
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:112
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1697
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1763
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:113
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:280
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:425
@@ -1395,7 +1399,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:289
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:734
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:115
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1696
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1762
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:116
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:283
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:428
@@ -1409,7 +1413,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:290
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:116
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1698
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1764
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:117
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:284
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:429
@@ -1423,7 +1427,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:291
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:735
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:118
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1699
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1765
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:119
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:286
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:430
@@ -1896,7 +1900,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/specialAppInfoFakeDummyForL10nScript.php:2
 #: /var/www/html/apps-extra/budget/src/main.js:845
 #: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:688
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1684
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1749
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1677
 #: /var/www/html/apps-extra/budget/templates/index.php:93
 #: /var/www/html/apps-extra/budget/templates/index.php:1987
@@ -4803,7 +4807,7 @@ msgid "Don't create any transaction (just mark as paid)"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:1011
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1301
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1358
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:1069
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:147
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:517
@@ -4847,7 +4851,7 @@ msgid "Cancel"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:1012
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1300
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1357
 msgid "Confirm"
 msgstr ""
 
@@ -4872,7 +4876,7 @@ msgid "Payment skipped. Advanced to next due date."
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:1171
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1352
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1409
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:616
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:2704
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:2859
@@ -5089,95 +5093,103 @@ msgstr ""
 msgid "Failed to create default categories"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1269
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1326
 msgid "Budgets adjusted from {month}"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1270
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1327
 msgid "Remove adjustment"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1283
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1340
 msgid "Adjust budgets from this month"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1296
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1353
 msgid ""
 "This will save the current budget values as a new baseline from {month} "
 "onwards. Previous months will keep their existing values. You can edit the "
 "new values after confirming."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1297
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1354
 msgid "Adjust budgets from {month}?"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1332
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1389
 msgid ""
 "Budget adjusted from {month}. You can now edit values for this month onwards."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1338
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1342
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1395
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1399
 msgid "Failed to create budget adjustment"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1351
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1408
 msgid "Budget adjustment created."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1390
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1447
 msgid "Budget adjustment removed"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1392
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1396
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1449
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1453
 msgid "Failed to remove budget adjustment"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1692
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1757
+msgid "Auto-calculated from recurring bills/income. Enter a value to override."
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1757
+msgid "auto"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1758
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1320
 #: /var/www/html/apps-extra/budget/templates/index.php:6186
 msgid "Total"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1694
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1760
 #: /var/www/html/apps-extra/budget/templates/index.php:2059
 #: /var/www/html/apps-extra/budget/templates/index.php:3019
 msgid "Period"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1702
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1768
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1678
 #: /var/www/html/apps-extra/budget/templates/index.php:2060
 msgid "Spent"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1705
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1771
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1679
 #: /var/www/html/apps-extra/budget/templates/index.php:2028
 #: /var/www/html/apps-extra/budget/templates/index.php:2061
 msgid "Remaining"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1708
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1774
 #: /var/www/html/apps-extra/budget/templates/index.php:2062
 msgid "Progress"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1714
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1780
 msgid "No budget set"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1872
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1938
 msgid "Budget updated"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1875
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1941
 msgid "Failed to update budget"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1888
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1954
 msgid "Failed to update budget: {message}"
 msgstr ""
 

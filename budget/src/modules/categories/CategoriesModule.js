@@ -1211,6 +1211,9 @@ export default class CategoriesModule {
         // Fetch effective budgets for this month (snapshot-aware)
         await this.fetchEffectiveBudgets();
 
+        // Fetch recurring-derived budgets (auto fallback when no manual budget)
+        await this.fetchRecurringBudgets();
+
         // Calculate spending for each category
         await this.calculateCategorySpending();
 
@@ -1253,6 +1256,60 @@ export default class CategoriesModule {
         } catch (error) {
             this._snapshotMonths = [];
         }
+    }
+
+    /**
+     * Fetch the monthly-normalized recurring total committed per category (#269).
+     * Used as an automatic fallback budget for categories with no manual budget.
+     */
+    async fetchRecurringBudgets() {
+        try {
+            const response = await fetch(
+                OC.generateUrl('/apps/budget/api/categories/recurring-budgets'),
+                { headers: this.app.getAuthHeaders() }
+            );
+            if (response.ok) {
+                const data = await response.json();
+                this._recurringBudgets = data.budgets || {};
+            } else {
+                this._recurringBudgets = {};
+            }
+        } catch (error) {
+            console.error('Failed to fetch recurring budgets:', error);
+            this._recurringBudgets = {};
+        }
+    }
+
+    /**
+     * Recurring-derived budget for a category, converted from the monthly total
+     * to the category's budget period. Returns 0 when there's no recurring item.
+     */
+    _getRecurringBudgetAmount(categoryId, period) {
+        const monthly = this._recurringBudgets ? parseFloat(this._recurringBudgets[categoryId]) : 0;
+        if (!monthly) return 0;
+        return this._convertMonthlyToPeriod(monthly, period || 'monthly');
+    }
+
+    /** Convert a monthly amount into the equivalent amount for a budget period. */
+    _convertMonthlyToPeriod(monthly, period) {
+        switch (period) {
+            case 'weekly': return monthly * 12 / 52;
+            case 'quarterly': return monthly * 3;
+            case 'yearly': return monthly * 12;
+            case 'monthly':
+            default: return monthly;
+        }
+    }
+
+    /**
+     * Budget used for calculations (spent/remaining/progress and aggregation):
+     * the manually-set/snapshot budget when present, otherwise the recurring-
+     * derived fallback (#269). Variable amounts typed in always win.
+     */
+    _getEffectiveBudgetForCalc(categoryId, fallback, period) {
+        const manual = this._getEffectiveBudgetAmount(categoryId, fallback);
+        if (manual > 0) return manual;
+        return this._getRecurringBudgetAmount(categoryId, period);
     }
 
     renderSnapshotControls() {
@@ -1570,19 +1627,22 @@ export default class CategoriesModule {
                     this._ownSpending[category.id] = this.categorySpending[category.id] || 0;
                 }
 
-                // Sum all children's spending and budgets into this parent
+                // Sum all children's spending and budgets into this parent.
+                // Budgets fall back to the recurring-derived amount when unset (#269).
                 let childSpentTotal = 0;
                 let childBudgetTotal = 0;
                 for (const child of category.children) {
                     childSpentTotal += this.categorySpending[child.id] || 0;
-                    childBudgetTotal += this._getEffectiveBudgetAmount(child.id, child.budgetAmount);
+                    const childPeriod = this._getEffectiveBudgetPeriod(child.id, child.budgetPeriod);
+                    childBudgetTotal += this._getEffectiveBudgetForCalc(child.id, child.budgetAmount, childPeriod);
                 }
 
                 // Own spending + children's spending (idempotent)
                 this.categorySpending[category.id] = this._ownSpending[category.id] + childSpentTotal;
 
                 // Store aggregated budget: parent's own budget + children's budgets
-                const ownBudget = this._getEffectiveBudgetAmount(category.id, category.budgetAmount);
+                const ownPeriod = this._getEffectiveBudgetPeriod(category.id, category.budgetPeriod);
+                const ownBudget = this._getEffectiveBudgetForCalc(category.id, category.budgetAmount, ownPeriod);
                 category._aggregatedBudget = ownBudget + childBudgetTotal;
             }
         }
@@ -1640,9 +1700,14 @@ export default class CategoriesModule {
         return categories.map(category => {
             const hasChildren = category.children && category.children.length > 0;
 
-            // Get effective budget (snapshot-aware)
-            const effectiveBudgetAmount = this._getEffectiveBudgetAmount(category.id, category.budgetAmount);
+            // Manually-set/snapshot budget (what populates the input box)
+            const manualBudgetAmount = this._getEffectiveBudgetAmount(category.id, category.budgetAmount);
             const effectivePeriod = this._getEffectiveBudgetPeriod(category.id, category.budgetPeriod);
+
+            // Recurring-derived fallback used when no manual budget is set (#269)
+            const recurringBudgetAmount = this._getRecurringBudgetAmount(category.id, effectivePeriod);
+            const isAutoBudget = manualBudgetAmount <= 0 && recurringBudgetAmount > 0;
+            const effectiveBudgetAmount = manualBudgetAmount > 0 ? manualBudgetAmount : recurringBudgetAmount;
 
             // Get spending for this category (already calculated for the period)
             const spent = this.categorySpending[category.id] || 0;
@@ -1683,12 +1748,13 @@ export default class CategoriesModule {
                     </div>
                     <div class="budget-input-wrapper" data-label="${t('budget', 'Budget')}">
                         <input type="number"
-                               class="budget-input"
+                               class="budget-input ${isAutoBudget ? 'auto-budget' : ''}"
                                data-category-id="${category.id}"
-                               value="${effectiveBudgetAmount ? Math.round(effectiveBudgetAmount * 100) / 100 : ''}"
-                               placeholder="0.00"
+                               value="${manualBudgetAmount ? Math.round(manualBudgetAmount * 100) / 100 : ''}"
+                               placeholder="${isAutoBudget ? Math.round(recurringBudgetAmount * 100) / 100 : '0.00'}"
                                step="0.01"
                                min="0">
+                        ${isAutoBudget ? `<span class="budget-auto-hint" title="${t('budget', 'Auto-calculated from recurring bills/income. Enter a value to override.')}">${t('budget', 'auto')}</span>` : ''}
                         ${hasChildren && budget > effectiveBudgetAmount ? `<span class="budget-aggregate-hint">${t('budget', 'Total')}: ${this.formatCurrency(budget)}</span>` : ''}
                     </div>
                     <div data-label="${t('budget', 'Period')}">
@@ -1899,8 +1965,9 @@ export default class CategoriesModule {
         let categoriesWithBudget = 0;
 
         categories.forEach(cat => {
-            const budget = this._getEffectiveBudgetAmount(cat.id, cat.budgetAmount);
             const period = this._getEffectiveBudgetPeriod(cat.id, cat.budgetPeriod);
+            // Manual budget, falling back to the recurring-derived amount (#269)
+            const budget = this._getEffectiveBudgetForCalc(cat.id, cat.budgetAmount, period);
             // Normalize to monthly so the summary cards stay consistent
             const monthlyBudget = formatters.prorateBudget(budget, period, 'monthly');
             // Use own spending (not aggregated) to avoid double-counting
