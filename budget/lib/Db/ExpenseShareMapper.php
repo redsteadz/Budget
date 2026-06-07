@@ -108,6 +108,42 @@ class ExpenseShareMapper extends QBMapper {
     }
 
     /**
+     * Find expense shares directed at a given Nextcloud user — i.e. shares whose
+     * contact is linked to that user (contacts.nextcloud_user_id). This is the
+     * recipient side: "expenses shared with me" (#248).
+     *
+     * Returns raw rows enriched with the owner (share creator) and transaction
+     * details, since these span the owner's transaction which the recipient
+     * doesn't own.
+     *
+     * @return array[] Rows with keys: id, owner_user_id, transaction_id, amount,
+     *                 is_settled, notes, currency, created_at, contact_name,
+     *                 transaction_description, transaction_date, transaction_amount,
+     *                 transaction_type
+     */
+    public function findSharedWithNextcloudUser(string $nextcloudUserId): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('es.id', 'es.transaction_id', 'es.amount', 'es.is_settled', 'es.notes', 'es.currency', 'es.created_at')
+            ->selectAlias('es.user_id', 'owner_user_id')
+            ->selectAlias('c.name', 'contact_name')
+            ->selectAlias('t.description', 'transaction_description')
+            ->selectAlias('t.date', 'transaction_date')
+            ->selectAlias('t.amount', 'transaction_amount')
+            ->selectAlias('t.type', 'transaction_type')
+            ->from($this->getTableName(), 'es')
+            ->innerJoin('es', 'budget_contacts', 'c', $qb->expr()->eq('es.contact_id', 'c.id'))
+            ->leftJoin('es', 'budget_transactions', 't', $qb->expr()->eq('es.transaction_id', 't.id'))
+            ->where($qb->expr()->eq('c.nextcloud_user_id', $qb->createNamedParameter($nextcloudUserId)))
+            ->orderBy('es.created_at', 'DESC');
+
+        $result = $qb->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+
+        return $rows;
+    }
+
+    /**
      * Delete all shares for a transaction.
      */
     public function deleteByTransaction(int $transactionId, string $userId): void {

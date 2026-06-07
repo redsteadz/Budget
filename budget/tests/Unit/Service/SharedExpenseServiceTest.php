@@ -15,6 +15,8 @@ use OCA\Budget\Db\Transaction;
 use OCA\Budget\Db\TransactionMapper;
 use OCA\Budget\Service\SharedExpenseService;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IUser;
+use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 
 class SharedExpenseServiceTest extends TestCase {
@@ -23,6 +25,7 @@ class SharedExpenseServiceTest extends TestCase {
     private ExpenseShareMapper $expenseShareMapper;
     private SettlementMapper $settlementMapper;
     private TransactionMapper $transactionMapper;
+    private IUserManager $userManager;
 
     protected function setUp(): void {
         $this->contactMapper = $this->createMock(ContactMapper::class);
@@ -30,6 +33,7 @@ class SharedExpenseServiceTest extends TestCase {
         $this->settlementMapper = $this->createMock(SettlementMapper::class);
         $this->transactionMapper = $this->createMock(TransactionMapper::class);
         $accountMapper = $this->createMock(AccountMapper::class);
+        $this->userManager = $this->createMock(IUserManager::class);
 
         // Default: accountMapper->find returns an account with USD currency
         $account = new \OCA\Budget\Db\Account();
@@ -45,8 +49,59 @@ class SharedExpenseServiceTest extends TestCase {
             $this->expenseShareMapper,
             $this->settlementMapper,
             $this->transactionMapper,
-            $accountMapper
+            $accountMapper,
+            $this->userManager
         );
+    }
+
+    public function testGetExpensesSharedWithMeEnrichesOwnerAndTransaction(): void {
+        $this->expenseShareMapper->method('findSharedWithNextcloudUser')
+            ->with('bob')
+            ->willReturn([
+                [
+                    'id' => 7,
+                    'owner_user_id' => 'alice',
+                    'transaction_id' => 10,
+                    'amount' => 25.0,
+                    'is_settled' => false,
+                    'notes' => null,
+                    'currency' => 'USD',
+                    'created_at' => '2026-06-01 00:00:00',
+                    'contact_name' => 'Bob',
+                    'transaction_description' => 'Dinner',
+                    'transaction_date' => '2026-05-30',
+                    'transaction_amount' => 50.0,
+                    'transaction_type' => 'debit',
+                ],
+            ]);
+
+        $aliceUser = $this->createMock(IUser::class);
+        $aliceUser->method('getDisplayName')->willReturn('Alice Smith');
+        $this->userManager->method('get')->with('alice')->willReturn($aliceUser);
+
+        $result = $this->service->getExpensesSharedWithMe('bob');
+
+        $this->assertCount(1, $result);
+        $this->assertSame('alice', $result[0]['ownerUserId']);
+        $this->assertSame('Alice Smith', $result[0]['ownerName']);
+        $this->assertSame('Dinner', $result[0]['transactionDescription']);
+        $this->assertEqualsWithDelta(25.0, $result[0]['amount'], 0.001);
+        $this->assertFalse($result[0]['isSettled']);
+    }
+
+    public function testGetExpensesSharedWithMeFallsBackToUidWhenUserMissing(): void {
+        $this->expenseShareMapper->method('findSharedWithNextcloudUser')->willReturn([
+            ['id' => 1, 'owner_user_id' => 'ghost', 'transaction_id' => 0, 'amount' => 5.0,
+             'is_settled' => true, 'notes' => null, 'currency' => null, 'created_at' => '2026-06-01',
+             'contact_name' => null, 'transaction_description' => null, 'transaction_date' => null,
+             'transaction_amount' => null, 'transaction_type' => null],
+        ]);
+        $this->userManager->method('get')->willReturn(null);
+
+        $result = $this->service->getExpensesSharedWithMe('bob');
+
+        $this->assertSame('ghost', $result[0]['ownerName']);
+        $this->assertTrue($result[0]['isSettled']);
     }
 
     private function makeContact(int $id = 1, string $name = 'Alice'): Contact {

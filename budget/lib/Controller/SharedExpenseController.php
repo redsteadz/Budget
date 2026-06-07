@@ -246,6 +246,28 @@ class SharedExpenseController extends Controller {
     }
 
     /**
+     * Get expenses that other users have shared with the current user.
+     *
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function sharedWithMe(): DataResponse {
+        try {
+            $shares = $this->service->getExpensesSharedWithMe($this->getEffectiveUserId());
+            return new DataResponse($shares);
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to get expenses shared with me', [
+                'exception' => $e,
+                'userId' => $this->getEffectiveUserId(),
+            ]);
+            return new DataResponse(
+                ['error' => $this->l->t('Failed to get shared expenses')],
+                Http::STATUS_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
      * Get transaction IDs that have been shared with contacts.
      *
      * @NoAdminRequired

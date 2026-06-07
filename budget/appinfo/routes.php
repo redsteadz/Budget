@@ -260,6 +260,7 @@ return [
         ['name' => 'sharedExpense#contactDetails', 'url' => '/api/shared/contacts/{id}/details', 'verb' => 'GET'],
         // Shared Expense routes - balances
         ['name' => 'sharedExpense#balances', 'url' => '/api/shared/balances', 'verb' => 'GET'],
+        ['name' => 'sharedExpense#sharedWithMe', 'url' => '/api/shared/shared-with-me', 'verb' => 'GET'],
         ['name' => 'sharedExpense#sharedTransactionIds', 'url' => '/api/shared/transaction-ids', 'verb' => 'GET'],
         // Shared Expense routes - expense shares
         ['name' => 'sharedExpense#shareExpense', 'url' => '/api/shared/shares', 'verb' => 'POST'],

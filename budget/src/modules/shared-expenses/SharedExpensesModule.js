@@ -25,11 +25,62 @@ export default class SharedExpensesModule {
     async loadSharedExpensesView() {
         await this.loadBalanceSummary();
         await this.loadContacts();
+        await this.loadSharedWithMe();
 
         // Setup event listeners (only once)
         if (!this._sharedEventsSetup) {
             this.setupSharedExpenseEventListeners();
             this._sharedEventsSetup = true;
+        }
+    }
+
+    /**
+     * Load and render expenses other users have split with the current user.
+     * Read-only — the owner of each split manages settlement (#248).
+     */
+    async loadSharedWithMe() {
+        const section = document.getElementById('shared-with-me-section');
+        const list = document.getElementById('shared-with-me-list');
+        if (!section || !list) return;
+
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/shared/shared-with-me'), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const shares = await response.json();
+
+            if (!Array.isArray(shares) || shares.length === 0) {
+                section.style.display = 'none';
+                list.innerHTML = '';
+                return;
+            }
+
+            section.style.display = 'block';
+            list.innerHTML = shares.map(s => {
+                const desc = dom.escapeHtml(s.transactionDescription || t('budget', 'Shared expense'));
+                const owner = dom.escapeHtml(s.ownerName || s.ownerUserId || '');
+                const date = s.transactionDate ? formatters.formatDate(s.transactionDate, this.settings) : '';
+                const amount = this.formatCurrency(s.amount, s.currency);
+                const statusBadge = s.isSettled
+                    ? `<span class="status-badge" style="background:#2e7d32;">${t('budget', 'Settled')}</span>`
+                    : `<span class="status-badge" style="background:#c9700a;">${t('budget', 'Outstanding')}</span>`;
+                return `
+                    <div class="shared-with-me-item">
+                        <div class="shared-with-me-main">
+                            <span class="shared-with-me-desc">${desc}</span>
+                            <span class="shared-with-me-meta">${t('budget', 'from {owner}', { owner })}${date ? ' · ' + date : ''}</span>
+                        </div>
+                        <div class="shared-with-me-right">
+                            <span class="shared-with-me-amount">${amount}</span>
+                            ${statusBadge}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load shared-with-me expenses:', error);
+            section.style.display = 'none';
         }
     }
 

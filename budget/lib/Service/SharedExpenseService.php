@@ -14,6 +14,7 @@ use OCA\Budget\Db\Settlement;
 use OCA\Budget\Db\SettlementMapper;
 use OCA\Budget\Db\TransactionMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IUserManager;
 
 class SharedExpenseService {
     private ContactMapper $contactMapper;
@@ -21,19 +22,62 @@ class SharedExpenseService {
     private SettlementMapper $settlementMapper;
     private TransactionMapper $transactionMapper;
     private AccountMapper $accountMapper;
+    private IUserManager $userManager;
 
     public function __construct(
         ContactMapper $contactMapper,
         ExpenseShareMapper $expenseShareMapper,
         SettlementMapper $settlementMapper,
         TransactionMapper $transactionMapper,
-        AccountMapper $accountMapper
+        AccountMapper $accountMapper,
+        IUserManager $userManager
     ) {
         $this->contactMapper = $contactMapper;
         $this->expenseShareMapper = $expenseShareMapper;
         $this->settlementMapper = $settlementMapper;
         $this->transactionMapper = $transactionMapper;
         $this->accountMapper = $accountMapper;
+        $this->userManager = $userManager;
+    }
+
+    /**
+     * Get expenses that other users have shared with the current user — i.e.
+     * splits assigned to a contact linked to this Nextcloud account (#248).
+     * Read-only from the recipient's side; the owner manages settlement.
+     *
+     * @return array[] Each: {id, ownerUserId, ownerName, transactionId,
+     *                 transactionDescription, transactionDate, transactionAmount,
+     *                 transactionType, amount, isSettled, currency, notes}
+     */
+    public function getExpensesSharedWithMe(string $userId): array {
+        $rows = $this->expenseShareMapper->findSharedWithNextcloudUser($userId);
+
+        $nameCache = [];
+        $result = [];
+        foreach ($rows as $row) {
+            $ownerId = $row['owner_user_id'];
+            if (!array_key_exists($ownerId, $nameCache)) {
+                $user = $this->userManager->get($ownerId);
+                $nameCache[$ownerId] = $user !== null ? $user->getDisplayName() : $ownerId;
+            }
+
+            $result[] = [
+                'id' => (int) $row['id'],
+                'ownerUserId' => $ownerId,
+                'ownerName' => $nameCache[$ownerId],
+                'transactionId' => (int) $row['transaction_id'],
+                'transactionDescription' => $row['transaction_description'] ?? null,
+                'transactionDate' => $row['transaction_date'] ?? null,
+                'transactionAmount' => $row['transaction_amount'] !== null ? (float) $row['transaction_amount'] : null,
+                'transactionType' => $row['transaction_type'] ?? null,
+                'amount' => (float) $row['amount'],
+                'isSettled' => (bool) $row['is_settled'],
+                'currency' => $row['currency'] ?? null,
+                'notes' => $row['notes'] ?? null,
+            ];
+        }
+
+        return $result;
     }
 
     /**

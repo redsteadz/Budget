@@ -4282,6 +4282,13 @@ style('budget', 'budget-app');
                     <p><?php p($l->t('Add contacts to start splitting expenses')); ?></p>
                 </div>
             </div>
+
+            <!-- Expenses other users have shared with me (read-only) -->
+            <div id="shared-with-me-section" class="shared-with-me-section" style="display: none;">
+                <h3><?php p($l->t('Shared with me')); ?></h3>
+                <p class="section-subtitle"><?php p($l->t('Expenses other people have split with you. The person who created the split manages settlement.')); ?></p>
+                <div id="shared-with-me-list"></div>
+            </div>
         </div>
 
         <!-- Exchange Rates View -->
