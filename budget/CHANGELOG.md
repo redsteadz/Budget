@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.28.1] - 2026-06-07
+
+### Fixed
+- Install/upgrade aborted on **Nextcloud 32 and earlier** with *"Primary index name on `oc_budget_import_templates` is too long"*. The `budget_import_templates` migration created its primary key without an explicit name, so Nextcloud derived a default name and hit the Oracle-compatibility identifier limit (the unprefixed table name is exactly 23 characters). The primary key now has an explicit short name. Thanks to @TheUnderdev for the report and fix ([#272](https://github.com/otherworld-dev/Budget/pull/272))
+
 ## [2.28.0] - 2026-06-07
 
 ### Added

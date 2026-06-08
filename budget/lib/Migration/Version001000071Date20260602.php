@@ -59,7 +59,11 @@ class Version001000071Date20260602 extends SimpleMigrationStep {
                 'notnull' => false,
             ]);
 
-            $table->setPrimaryKey(['id']);
+            // Explicit short PK name — without it Nextcloud derives a default
+            // name and rejects it on NC <= 32 (Oracle-compat limit) because the
+            // unprefixed table name 'budget_import_templates' is exactly 23
+            // chars (>= 23 throws). An explicit name bypasses that check (#272).
+            $table->setPrimaryKey(['id'], 'bdgt_imptpl_pk');
             $table->addIndex(['user_id'], 'bdgt_imptpl_user_idx');
             $table->addUniqueIndex(['user_id', 'name'], 'bdgt_imptpl_name_unq');
         }
