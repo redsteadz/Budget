@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-06-10 10:01+0000\n"
+"PO-Revision-Date: 2026-06-11 13:30+0000\n"
 "Last-Translator: SGiersch <Forum@SGiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -8242,7 +8242,7 @@ msgstr "Alle Rechnungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2270
 msgid "No bills yet"
-msgstr ""
+msgstr "Noch keine Rechnungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2271
 msgid "Add your recurring bills to track due dates and never miss a payment."
@@ -8252,39 +8252,41 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2274
 msgid "Add Your First Bill"
-msgstr ""
+msgstr "Füge deine erste Rechnung hinzu"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2283
 msgid "Detected Recurring Transactions"
-msgstr ""
+msgstr "Erkannte wiederkehrende Transaktionen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2284
 msgid "We found these potential recurring bills in your transaction history"
 msgstr ""
+"Wir haben in deinem Transaktionsverlauf diese möglichen wiederkehrenden "
+"Rechnungen erkannt"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2293
 msgid "Add Selected Bills"
-msgstr ""
+msgstr "Ausgewählte Zahlungen hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2309
 msgid "Apply rules to transactions"
-msgstr ""
+msgstr "Regeln auf Transaktionen anwenden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2313
 msgid "Add new rule"
-msgstr ""
+msgstr "Neue Regel hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2328
 msgid "Total Rules"
-msgstr ""
+msgstr "Regeln gesamt"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2347
 msgid "Pri"
-msgstr ""
+msgstr "Prio."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2350
 msgid "Criteria"
-msgstr ""
+msgstr "Kriterien"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2363
 msgid "No rules yet"
