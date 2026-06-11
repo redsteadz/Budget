@@ -8,15 +8,16 @@ A comprehensive financial management app for Nextcloud. Track spending habits, m
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
-## What's New in v2.27
+## What's New in v2.28
 
-- **Quick Add Standalone Page** - Minimal mobile page for adding transactions without exposing balances. Bookmark it or add to your home screen ([#235](https://github.com/otherworld-dev/Budget/issues/235))
-- **Shared Account Support** - Reports, forecasts, net worth, and dashboard now include data from shared accounts. Shared users can delete, update, and split transactions ([#215](https://github.com/otherworld-dev/Budget/issues/215), [#245](https://github.com/otherworld-dev/Budget/issues/245))
-- **Dismissed Imports** - Deleted bank sync transactions won't be re-imported. Force re-sync button available when needed ([#230](https://github.com/otherworld-dev/Budget/issues/230))
-- **Transaction Type Rule Criteria** - Rules can now filter by Income or Expense, with Auto-Link as Transfer action ([#229](https://github.com/otherworld-dev/Budget/issues/229))
-- **Semi-Monthly Frequency** - Twice-per-month option for bills, income, and transfers ([Discussion #239](https://github.com/otherworld-dev/Budget/discussions/239))
-- **System Info Diagnostics** - Settings panel with data stats, server info, and logs for troubleshooting ([#228](https://github.com/otherworld-dev/Budget/issues/228))
-- **CI Pipeline** - Automated linting, tests, and migration name validation on every push
+- **Rock-Solid Balances** - Account balances are now derived directly from your transactions (opening balance + ledger), eliminating the entire class of balance-drift bugs — past inconsistencies self-heal and displayed balances are preserved on upgrade ([#274](https://github.com/otherworld-dev/Budget/issues/274))
+- **Shared Savings Goals** - Share a savings goal with another user; write access allows editing and adding money ([#255](https://github.com/otherworld-dev/Budget/issues/255))
+- **Auto-Derived Budgets** - Categories without a manual budget automatically use their committed recurring bills/income as the limit, marked "auto" ([#269](https://github.com/otherworld-dev/Budget/issues/269))
+- **Forecast Accuracy** - Mark extraordinary one-time transactions (or recurring items, or import rules) as excluded from the forecast so they don't skew projections ([#270](https://github.com/otherworld-dev/Budget/issues/270))
+- **Smarter Imports** - Reusable CSV import templates, OFX/QIF multi-account routing, reliable duplicate detection (identical legitimate rows import correctly), and "skip duplicates off" now imports the whole batch ([#247](https://github.com/otherworld-dev/Budget/issues/247), [#275](https://github.com/otherworld-dev/Budget/issues/275), [#276](https://github.com/otherworld-dev/Budget/issues/276))
+- **Bank Sync Pending Transactions** - Optionally import not-yet-posted transactions, auto-reconciled when they clear ([#257](https://github.com/otherworld-dev/Budget/issues/257))
+- **Bill Start Dates & "Shared with me"** - Bills can start at a future date; recipients can now see expenses shared with them ([#268](https://github.com/otherworld-dev/Budget/issues/268), [#248](https://github.com/otherworld-dev/Budget/issues/248))
+- **Mobile Dashboard** - Collapses to a clean single-column layout on phones ([#249](https://github.com/otherworld-dev/Budget/issues/249))
 
 See the [full changelog](budget/CHANGELOG.md) for details.
 
@@ -56,8 +57,9 @@ Popular topics:
 
 ### Import & Automation
 - **Bank Sync (Beta)** - Connect external bank accounts for automatic transaction imports
-  - GoCardless provider for UK/Europe banks with guided setup wizard and bank selection
-  - SimpleFIN provider for US banks
+  - GoCardless provider for UK/Europe banks with guided setup wizard and bank selection (note: GoCardless no longer accepts new sign-ups — existing accounts keep working; see [docs](docs/bank-sync.md))
+  - SimpleFIN provider for US/Canadian banks
+  - Optional pending-transaction import with automatic reconciliation when they post
   - Daily background sync with duplicate detection
   - Re-authorization flow when bank consent expires (PSD2 90-day limit)
   - Sync all connections at once with aggregated results
