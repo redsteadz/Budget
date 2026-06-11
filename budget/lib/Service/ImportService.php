@@ -391,12 +391,36 @@ class ImportService {
         ];
     }
 
+    /**
+     * Make content-hash import IDs occurrence-aware so identical rows within
+     * one file import as distinct transactions instead of being flagged as
+     * duplicates of each other (#276) — e.g. two same-priced purchases on the
+     * same day. The first occurrence keeps the plain legacy hash (so dedup
+     * against previously imported data still works); repeats get an _occN
+     * suffix, which also dedups correctly when the same file is re-imported.
+     * OFX FITIDs pass through untouched: a repeated FITID genuinely is the
+     * same transaction.
+     *
+     * @param string $baseId Import ID from TransactionNormalizer::generateImportId
+     * @param int|string $accountKey Destination account discriminator for the counter
+     * @param array &$counts Per-import occurrence counter, keyed by account + base ID
+     */
+    private function occurrenceAwareImportId(string $baseId, int|string $accountKey, array &$counts): string {
+        if (!str_starts_with($baseId, 'hash_')) {
+            return $baseId;
+        }
+        $key = $accountKey . '|' . $baseId;
+        $counts[$key] = ($counts[$key] ?? 0) + 1;
+        return $counts[$key] === 1 ? $baseId : $baseId . '_occ' . $counts[$key];
+    }
+
     private function previewMultiAccountImport(string $userId, string $content, string $format, array $accountMapping, bool $skipDuplicates): array {
         $parsedData = $this->parserFactory->parseFull($content, $format);
         $transactions = [];
         $duplicates = 0;
         $errors = [];
         $accountSummaries = [];
+        $hashCounts = [];
 
         foreach ($parsedData['accounts'] as $sourceAccount) {
             $sourceId = $sourceAccount['accountId'];
@@ -416,7 +440,11 @@ class ImportService {
             foreach ($sourceAccount['transactions'] as $index => $txn) {
                 try {
                     $transaction = $this->normalizer->mapOfxTransaction($txn);
-                    $importId = $this->normalizer->generateImportId('preview', $sourceId . '_' . $index, $transaction);
+                    $importId = $this->occurrenceAwareImportId(
+                        $this->normalizer->generateImportId('preview', $sourceId . '_' . $index, $transaction),
+                        (int)$destAccountId,
+                        $hashCounts
+                    );
                     $isDuplicate = $this->duplicateDetector->isDuplicate((int)$destAccountId, $transaction, $importId);
 
                     if ($skipDuplicates && $isDuplicate) {
@@ -498,6 +526,7 @@ class ImportService {
         $errors = [];
         $categoriesToCreate = [];
         $skippedByPreset = 0;
+        $hashCounts = [];
 
         // Detect date format from all rows before processing individually (unless preset set it)
         if (!$preset) {
@@ -549,7 +578,11 @@ class ImportService {
                 }
 
                 if ($txAccountId) {
-                    $importId = $this->normalizer->generateImportId('preview', $index, $transaction);
+                    $importId = $this->occurrenceAwareImportId(
+                        $this->normalizer->generateImportId('preview', $index, $transaction),
+                        $txAccountId,
+                        $hashCounts
+                    );
                     $isDuplicate = $this->duplicateDetector->isDuplicate($txAccountId, $transaction, $importId);
 
                     if ($skipDuplicates && $isDuplicate) {
@@ -631,6 +664,7 @@ class ImportService {
         $errors = [];
         $transferLinkIds = [];
         $accountResults = [];
+        $hashCounts = [];
 
         foreach ($parsedData['accounts'] as $sourceAccount) {
             $sourceId = $sourceAccount['accountId'];
@@ -650,7 +684,11 @@ class ImportService {
             foreach ($sourceAccount['transactions'] as $index => $txn) {
                 try {
                     $transaction = $this->normalizer->mapOfxTransaction($txn);
-                    $importId = $this->normalizer->generateImportId($fileId, $sourceId . '_' . $index, $transaction);
+                    $importId = $this->occurrenceAwareImportId(
+                        $this->normalizer->generateImportId($fileId, $sourceId . '_' . $index, $transaction),
+                        (int)$destAccountId,
+                        $hashCounts
+                    );
 
                     if ($skipDuplicates && $this->duplicateDetector->isDuplicateByImportId((int)$destAccountId, $importId)) {
                         $skipped++;
@@ -778,6 +816,7 @@ class ImportService {
         $errors = [];
         $categoriesCreated = 0;
         $transferLinkIds = [];
+        $hashCounts = [];
 
         // Detect date format from all rows before processing individually (unless preset set it)
         if (!$preset) {
@@ -822,7 +861,11 @@ class ImportService {
                     $txAccountId = $resolvedAccounts[$txAccountName];
                 }
 
-                $importId = $this->normalizer->generateImportId($fileId, $index, $transaction);
+                $importId = $this->occurrenceAwareImportId(
+                    $this->normalizer->generateImportId($fileId, $index, $transaction),
+                    $txAccountId,
+                    $hashCounts
+                );
 
                 if ($skipDuplicates && $this->duplicateDetector->isDuplicateByImportId($txAccountId, $importId)) {
                     $skipped++;

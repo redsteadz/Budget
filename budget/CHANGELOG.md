@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Import duplicate detection no longer gives false positives for legitimately identical rows — e.g. two same-priced purchases on the same day with the same description. Identical rows within one file now import as distinct transactions (occurrence-aware import IDs), while re-importing the same statement still skips everything it already imported. Re-importing an older statement also recovers transactions the previous logic wrongly skipped ([#276](https://github.com/otherworld-dev/Budget/issues/276))
+
 ## [2.28.1] - 2026-06-07
 
 ### Fixed

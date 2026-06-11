@@ -290,6 +290,130 @@ class ImportServiceTest extends TestCase {
         $this->assertEquals(1, $result['skipped']);
     }
 
+    // ===== occurrence-aware duplicate detection (#276) =====
+
+    public function testProcessImportsIdenticalRowsAsDistinctTransactions(): void {
+        // Two legitimate transactions sharing date/amount/description must both
+        // import: the second occurrence gets an _occ2-suffixed import ID.
+        $file = $this->createMock(ISimpleFile::class);
+        $file->method('getContent')->willReturn('csv data');
+        $folder = $this->createMock(ISimpleFolder::class);
+        $folder->method('getFile')->willReturn($file);
+        $this->appData->method('getFolder')->willReturn($folder);
+
+        $this->parserFactory->method('detectFormat')->willReturn('csv');
+        $row = ['date' => '2025-01-01', 'amount' => '3.50', 'description' => 'Coffee'];
+        $this->parserFactory->method('parse')->willReturn([$row, $row]);
+
+        $this->accountMapper->method('find')->willReturn($this->makeAccount(1, 'Checking'));
+        $this->normalizer->method('mapRowToTransaction')->willReturn([
+            'date' => '2025-01-01', 'amount' => 3.50, 'description' => 'Coffee', 'type' => 'debit',
+        ]);
+        $this->normalizer->method('generateImportId')->willReturn('hash_abc');
+
+        $checkedIds = [];
+        $this->duplicateDetector->method('isDuplicateByImportId')
+            ->willReturnCallback(function ($accountId, $importId) use (&$checkedIds) {
+                $checkedIds[] = $importId;
+                return false;
+            });
+        $this->ruleApplicator->method('applyRules')->willReturnArgument(1);
+        $this->transactionService->expects($this->exactly(2))->method('create');
+
+        $result = $this->service->processImport('user1', 'file.csv', ['date' => 'date'], 1);
+
+        $this->assertEquals(2, $result['imported']);
+        $this->assertEquals(0, $result['skipped']);
+        $this->assertSame(['hash_abc', 'hash_abc_occ2'], $checkedIds);
+    }
+
+    public function testProcessReimportSkipsAllOccurrences(): void {
+        // Re-importing the same file must skip both occurrences (idempotent).
+        $file = $this->createMock(ISimpleFile::class);
+        $file->method('getContent')->willReturn('csv data');
+        $folder = $this->createMock(ISimpleFolder::class);
+        $folder->method('getFile')->willReturn($file);
+        $this->appData->method('getFolder')->willReturn($folder);
+
+        $this->parserFactory->method('detectFormat')->willReturn('csv');
+        $row = ['date' => '2025-01-01', 'amount' => '3.50', 'description' => 'Coffee'];
+        $this->parserFactory->method('parse')->willReturn([$row, $row]);
+
+        $this->accountMapper->method('find')->willReturn($this->makeAccount(1, 'Checking'));
+        $this->normalizer->method('mapRowToTransaction')->willReturn([
+            'date' => '2025-01-01', 'amount' => 3.50, 'description' => 'Coffee', 'type' => 'debit',
+        ]);
+        $this->normalizer->method('generateImportId')->willReturn('hash_abc');
+        $this->duplicateDetector->method('isDuplicateByImportId')->willReturn(true);
+        $this->transactionService->expects($this->never())->method('create');
+
+        $result = $this->service->processImport('user1', 'file.csv', ['date' => 'date'], 1);
+
+        $this->assertEquals(0, $result['imported']);
+        $this->assertEquals(2, $result['skipped']);
+    }
+
+    public function testProcessImportLeavesFitidImportIdsUntouched(): void {
+        // Bank-issued FITIDs are unique per transaction: a repeat genuinely is
+        // the same transaction, so no occurrence suffix may be applied.
+        $file = $this->createMock(ISimpleFile::class);
+        $file->method('getContent')->willReturn('csv data');
+        $folder = $this->createMock(ISimpleFolder::class);
+        $folder->method('getFile')->willReturn($file);
+        $this->appData->method('getFolder')->willReturn($folder);
+
+        $this->parserFactory->method('detectFormat')->willReturn('csv');
+        $row = ['date' => '2025-01-01', 'amount' => '3.50', 'description' => 'Coffee'];
+        $this->parserFactory->method('parse')->willReturn([$row, $row]);
+
+        $this->accountMapper->method('find')->willReturn($this->makeAccount(1, 'Checking'));
+        $this->normalizer->method('mapRowToTransaction')->willReturn([
+            'date' => '2025-01-01', 'amount' => 3.50, 'description' => 'Coffee', 'type' => 'debit',
+        ]);
+        $this->normalizer->method('generateImportId')->willReturn('ofx_fitid_42');
+
+        $checkedIds = [];
+        $this->duplicateDetector->method('isDuplicateByImportId')
+            ->willReturnCallback(function ($accountId, $importId) use (&$checkedIds) {
+                $checkedIds[] = $importId;
+                return false;
+            });
+        $this->ruleApplicator->method('applyRules')->willReturnArgument(1);
+
+        $this->service->processImport('user1', 'file.csv', ['date' => 'date'], 1);
+
+        $this->assertSame(['ofx_fitid_42', 'ofx_fitid_42'], $checkedIds);
+    }
+
+    public function testPreviewMarksIdenticalRowsAsDistinct(): void {
+        // Preview must use the same occurrence-aware IDs as execute so the
+        // preview's duplicate count matches what the import will actually do.
+        $this->mockImportFile('file.csv', 'data');
+        $this->parserFactory->method('detectFormat')->willReturn('csv');
+        $row = ['date' => '2025-01-01', 'amount' => '3.50', 'description' => 'Coffee'];
+        $this->parserFactory->method('parse')->willReturn([$row, $row]);
+
+        $this->accountMapper->method('find')->willReturn($this->makeAccount(1, 'Checking'));
+        $this->normalizer->method('mapRowToTransaction')->willReturn([
+            'date' => '2025-01-01', 'amount' => 3.50, 'description' => 'Coffee', 'type' => 'debit',
+        ]);
+        $this->normalizer->method('generateImportId')->willReturn('hash_abc');
+
+        $checkedIds = [];
+        $this->duplicateDetector->method('isDuplicate')
+            ->willReturnCallback(function ($accountId, $transaction, $importId) use (&$checkedIds) {
+                $checkedIds[] = $importId;
+                return false;
+            });
+        $this->ruleApplicator->method('applyRules')->willReturnArgument(1);
+
+        $result = $this->service->previewImport('user1', 'file.csv', ['date' => 'date'], 1);
+
+        $this->assertEquals(2, $result['validTransactions']);
+        $this->assertEquals(0, $result['duplicates']);
+        $this->assertSame(['hash_abc', 'hash_abc_occ2'], $checkedIds);
+    }
+
     public function testProcessImportCleansUpFile(): void {
         $file = $this->createMock(ISimpleFile::class);
         $file->method('getContent')->willReturn('csv data');
