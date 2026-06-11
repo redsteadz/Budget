@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
 "PO-Revision-Date: 2026-06-11 13:30+0000\n"
-"Last-Translator: SGiersch <Forum@SGiersch.de>\n"
+"Last-Translator: St0rml <n.f@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -7393,7 +7393,6 @@ msgstr "Regeln"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:226
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4048
-#, fuzzy
 msgid "Exchange Rates"
 msgstr "Wechselkurse"
 
@@ -7835,7 +7834,6 @@ msgstr "250 pro Seite"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:1502
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5719
-#, fuzzy
 msgid "Select all"
 msgstr "Alle auswählen"
 
@@ -8290,17 +8288,19 @@ msgstr "Kriterien"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2363
 msgid "No rules yet"
-msgstr ""
+msgstr "Noch keine Regeln"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2364
 msgid ""
 "Create rules to automatically categorize your transactions based on "
 "description, vendor, or other fields."
 msgstr ""
+"Erstelle Regeln, um automatisch Buchungen zu kategorisieren z.B. nach "
+"Beschreibung, Empfänger oder anderen Feldern."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2367
 msgid "Create Your First Rule"
-msgstr ""
+msgstr "Erstelle deine erste Regel"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2379
 msgid "Auto-detect recurring income from transactions"
@@ -8312,23 +8312,23 @@ msgstr "Wiederkehrende Einnahmen hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2385
 msgid "Add Income"
-msgstr ""
+msgstr "Einnahme hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2398
 msgid "Expected This Month"
-msgstr ""
+msgstr "Erwartet in diesem Monat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2416
 msgid "Received This Month"
-msgstr ""
+msgstr "Erhalten in diesem Monat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2425
 msgid "Active Sources"
-msgstr ""
+msgstr "Aktive Einnahmequellen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2432
 msgid "All Income"
-msgstr ""
+msgstr "Alle Einnahmen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2446
 msgid "No recurring income yet"
@@ -8338,10 +8338,12 @@ msgstr "Noch keine wiederkehrenden Einnahmen"
 msgid ""
 "Track your expected income sources like salary, dividends, or rental income."
 msgstr ""
+"Verfolge deine erwarteten Einnahmequellen wie z.B. Gehalt, Dividenden oder "
+"Mieteinnahmen."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2450
 msgid "Add Your First Income Source"
-msgstr ""
+msgstr "Füge deine erste Einnahmequelle hinzu"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2459
 msgid "Detected Recurring Income"
@@ -8356,7 +8358,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2469
 msgid "Add Selected Income"
-msgstr ""
+msgstr "Ausgewählte Einnahme hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2479
 msgid "Add new savings goal"
@@ -8368,15 +8370,15 @@ msgstr "Ziel hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2493
 msgid "Active Goals"
-msgstr ""
+msgstr "Aktive Sparziele"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2502
 msgid "Total Saved"
-msgstr ""
+msgstr "Insgesamt gespart"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2511
 msgid "Total Target"
-msgstr ""
+msgstr "Sparzielsumme"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2535
 msgid ""
@@ -8392,76 +8394,76 @@ msgstr "Erstellen Sie Ihr erstes Ziel"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2553
 msgid "Goal Name"
-msgstr ""
+msgstr "Sparzielname"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2554
 msgid "e.g., Emergency Fund, Vacation, New Car"
-msgstr ""
+msgstr "z.B. Notgroschen, Urlaub, neues Auto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2559
 msgid "Target Amount"
-msgstr ""
+msgstr "Zielbetrag"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2563
 msgid "Current Amount"
-msgstr ""
+msgstr "Aktueller Betrag"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2570
 msgid "Linked Account (optional)"
-msgstr ""
+msgstr "Verknüpfter Account (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2577
 msgid "Target Date (optional)"
-msgstr ""
+msgstr "Zieldatum (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2583
 msgid "Linked Tag (optional)"
-msgstr ""
+msgstr "Verknüpftes Schlagwort (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2589
 msgid ""
 "Current amount will be automatically calculated from tagged transactions."
-msgstr ""
+msgstr "Aktueller Betrag wird automatisch anhand von Schlagwörtern berechnet."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2603
 msgid "Any notes about this goal..."
-msgstr ""
+msgstr "Notizen über das Ziel..."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2610
 msgid "Save Goal"
-msgstr ""
+msgstr "Sparziel speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2620
 msgid "Add to"
-msgstr ""
+msgstr "Hinzufügen zu"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2625
 msgid "Amount to Add"
-msgstr ""
+msgstr "Hinzuzufügender Betrag"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2640
 msgid "Financial Forecast"
-msgstr ""
+msgstr "Finanzprognose"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2642
 msgid "Forecast Period:"
-msgstr ""
+msgstr "Prognosezeitraum:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2644
 msgid "3 months"
-msgstr ""
+msgstr "3 Monate"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2645
 msgid "6 months"
-msgstr ""
+msgstr "6 Monate"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2646
 msgid "12 months"
-msgstr ""
+msgstr "12 Monate"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2647
 msgid "24 months"
-msgstr ""
+msgstr "24 Monate"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2658
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3224
@@ -8475,91 +8477,98 @@ msgid ""
 "shifts in spending behavior. Use these projections as guidance rather than "
 "guarantees."
 msgstr ""
+"Prognosen sind Schätzungen, die auf historischen Ausgabengewohnheiten und "
+"Trends basieren. Die tatsächlichen Ergebnisse können aufgrund unerwarteter "
+"Ausgaben, Einkommensveränderungen oder Veränderungen im Ausgabeverhalten "
+"abweichen. Betrachte diese Prognosen als Orientierungshilfe und nicht als "
+"Garantien."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2665
 msgid "Calculating forecast..."
-msgstr ""
+msgstr "Prognose wird berechnet..."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2671
 msgid "Not Enough Data"
-msgstr ""
+msgstr "Keine ausreichenden Daten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2672
 msgid ""
 "Add more transactions to generate an accurate forecast. We need at least 1 "
 "month of transaction history."
 msgstr ""
+"Füge mehr Buchungen hinzu für eine präzisere Drohne. Benötigt wird "
+"mindestens ein Monat Buchungshistorie."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2692
 msgid "Monthly Trends"
-msgstr ""
+msgstr "Monatliche Trends"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2695
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2987
 msgid "Avg Monthly Income"
-msgstr ""
+msgstr "Durchschnittliches Monatseinkommen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2700
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2993
 msgid "Avg Monthly Expenses"
-msgstr ""
+msgstr "Durchschnittliche Monatsausgaben"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2705
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2999
 msgid "Avg Monthly Savings"
-msgstr ""
+msgstr "Durchschnittliche monatliche Ersparnisse"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2714
 msgid "Savings Projection"
-msgstr ""
+msgstr "Einsparungsprognose"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2721
 msgid "Current Monthly Savings"
-msgstr ""
+msgstr "Aktuelle monatliche Ersparnisse"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2725
 msgid "Projected Total Savings"
-msgstr ""
+msgstr "Prognostizierte Gesamteinsparungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2738
 msgid "Balance Projection"
-msgstr ""
+msgstr "Saldenprognose"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2753
 msgid "Forecast Confidence:"
-msgstr ""
+msgstr "Prognosesicherheit:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2763
 msgid "Financial Reports"
-msgstr ""
+msgstr "Finanzberichte"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2765
 msgid "Export as CSV"
-msgstr ""
+msgstr "Exportieren als CSV"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2769
 msgid "Export as PDF"
-msgstr ""
+msgstr "Exportieren als PDF"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2779
 msgid "Report Type"
-msgstr ""
+msgstr "Berichttyp"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2781
 msgid "Summary Dashboard"
-msgstr ""
+msgstr "Übersicht-Dashboard"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2784
 msgid "Year over Year"
-msgstr ""
+msgstr "Jahresvergleich"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2785
 msgid "Bills Calendar"
-msgstr ""
+msgstr "Rechnungskalender"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2794
 msgid "Year to Date"
-msgstr ""
+msgstr "Seit Jahresbeginn"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2795
 msgid "Last Year"
@@ -8568,51 +8577,51 @@ msgstr "Letztes Jahr"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2796
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2801
 msgid "Custom Range"
-msgstr ""
+msgstr "Individueller Bereich"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2803
 msgid "Start date"
-msgstr ""
+msgstr "Startdatum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2804
 msgid "to"
-msgstr ""
+msgstr "bis"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2817
 msgid "Filter by Tags"
-msgstr ""
+msgstr "Nach Schlagwörtern filtern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2826
 msgid "Include untagged transactions"
-msgstr ""
+msgstr "Buchungen ohne Schlagwörter einbeziehen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2830
 msgid "Generate Report"
-msgstr ""
+msgstr "Bericht erstellen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2836
 msgid "Generating report..."
-msgstr ""
+msgstr "Bericht wird erstellt..."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2852
 msgid "Total Income"
-msgstr ""
+msgstr "Gesamteinnahmen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2864
 msgid "Total Expenses"
-msgstr ""
+msgstr "Gesamtausgaben"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2876
 msgid "Net Income"
-msgstr ""
+msgstr "Nettoeinkommen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2897
 msgid "Income vs Expenses Trend"
-msgstr ""
+msgstr "Einnahme vs. Ausgabe Trend"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2907
 msgid "Account Breakdown"
-msgstr ""
+msgstr "Aufschlüsselung des Kontos"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2916
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3027
@@ -8622,24 +8631,24 @@ msgstr "Netto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2943
 msgid "Category Breakdown"
-msgstr ""
+msgstr "Aufschlüsselung nach Kategorien"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2951
 #, php-format
 msgid "%% of Total"
-msgstr ""
+msgstr "%% des Gesamtbetrags"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:2964
 msgid "Top Vendors"
-msgstr ""
+msgstr "Top Empfänger"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3008
 msgid "Monthly Cash Flow"
-msgstr ""
+msgstr "Monatlicher Cash Flow"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3018
 msgid "Monthly Breakdown"
-msgstr ""
+msgstr "Monatliche Aufschlüsselung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3024
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3058
@@ -8648,39 +8657,39 @@ msgstr "Monat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3028
 msgid "Cumulative"
-msgstr ""
+msgstr "Kumulativ"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3042
 msgid "Comparison Type"
-msgstr ""
+msgstr "Vergleichstyp"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3044
 msgid "Full Year Comparison"
-msgstr ""
+msgstr "Vergleich über das gesamte Jahr"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3045
 msgid "Same Month Comparison"
-msgstr ""
+msgstr "Vergleich mit dem Vormonat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3046
 msgid "Category Spending"
-msgstr ""
+msgstr "Ausgaben nach Kategorien"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3050
 msgid "Years to Compare"
-msgstr ""
+msgstr "Zu vergleichende Jahre"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3052
 msgid "2 Years"
-msgstr ""
+msgstr "2 Jahre"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3053
 msgid "3 Years"
-msgstr ""
+msgstr "3 Jahre"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3054
 msgid "5 Years"
-msgstr ""
+msgstr "5 Jahre"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3074
 msgid "Compare"
@@ -8688,11 +8697,11 @@ msgstr "Vergleichen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3087
 msgid "Income & Expenses by Year"
-msgstr ""
+msgstr "Einnahmen & Ausgaben nach Jahr"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3097
 msgid "Category Spending by Year"
-msgstr ""
+msgstr "Ausgaben nach Kategorien und Jahr"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3118
 msgid "Year"
@@ -8700,19 +8709,19 @@ msgstr "Jahr"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3124
 msgid "Bill Status"
-msgstr ""
+msgstr "Rechnungsstatus"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3126
 msgid "Active Only"
-msgstr ""
+msgstr "Nur Aktive"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3127
 msgid "Inactive Only"
-msgstr ""
+msgstr "Nur Inaktive"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3134
 msgid "Include Recurring Transfers"
-msgstr ""
+msgstr "Wiederkehrende Buchungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3144
 msgid "View"
@@ -8720,11 +8729,11 @@ msgstr "Ansicht"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3146
 msgid "Table View"
-msgstr ""
+msgstr "Tabellenansicht"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3147
 msgid "Calendar Heatmap"
-msgstr ""
+msgstr "Kalender-Heatmap"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3150
 msgid "Generate"
@@ -8732,19 +8741,19 @@ msgstr "Generieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3156
 msgid "Monthly Bill Totals"
-msgstr ""
+msgstr "Gesamte monatliche Rechnungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3166
 msgid "Bills by Month"
-msgstr ""
+msgstr "Rechnungen nach Monat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3198
 msgid "Bills Calendar Heatmap"
-msgstr ""
+msgstr "Kalender-Heatmap für Rechnungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3212
 msgid "Add new pension"
-msgstr ""
+msgstr "Neue Rente hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3224
 msgid ""
@@ -8761,79 +8770,81 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3238
 msgid "Total Pension Worth"
-msgstr ""
+msgstr "Gesamtwert der Rente"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3249
 msgid "Projected at Retirement"
-msgstr ""
+msgstr "Prognose zum Zeitpunkt des Renteneintritts"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3260
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3455
 msgid "Projected Annual Income"
-msgstr ""
+msgstr "Prognostiziertes Jahreseinkommen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3271
 msgid "Pension Accounts"
-msgstr ""
+msgstr "Rentenkonten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3287
 msgid "No pensions yet"
-msgstr ""
+msgstr "Noch keine Renten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3288
 msgid ""
 "Track your pension accounts to visualize your retirement savings and "
 "projections."
 msgstr ""
+"Behalte deine Rentenkonten im Blick, um dir einen Überblick über deine "
+"Altersvorsorge und die entsprechenden Prognosen zu verschaffen."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3291
 msgid "Add Your First Pension"
-msgstr ""
+msgstr "Füge deine erste Rente hinzu"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3300
 msgid "Pension Details"
-msgstr ""
+msgstr "Rentendetails"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3302
 msgid "Edit pension"
-msgstr ""
+msgstr "Rente bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3317
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3432
 msgid "Monthly Contribution"
-msgstr ""
+msgstr "Monatlicher Beitrag"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3321
 msgid "Expected Return"
-msgstr ""
+msgstr "Erwartete Rendite"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3325
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3444
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3467
 msgid "Retirement Age"
-msgstr ""
+msgstr "Rentenalter"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3333
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3485
 msgid "Update Balance"
-msgstr ""
+msgstr "Saldo aktualisieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3337
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3510
 msgid "Log Contribution"
-msgstr ""
+msgstr "Beitrag protokollieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3343
 msgid "Balance History"
-msgstr ""
+msgstr "Saldohistorie"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3351
 msgid "Projected Growth"
-msgstr ""
+msgstr "Prognostiziertes Wachstum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3359
 msgid "Recent Activity"
-msgstr ""
+msgstr "Letzte Aktivitäten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3387
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4655
@@ -8842,31 +8853,31 @@ msgstr "Grundlegende Informationen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3390
 msgid "Pension Name"
-msgstr ""
+msgstr "Rentenname"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3391
 msgid "e.g., Company Pension, Vanguard SIPP"
-msgstr ""
+msgstr "z.B. betriebliche Altersvorsorge, private Altersvorsorge"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3392
 msgid "A descriptive name for this pension"
-msgstr ""
+msgstr "Beschreibender Name für diese Rente"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3396
 msgid "Pension Type"
-msgstr ""
+msgstr "Rentenart"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3398
 msgid "Workplace Pension"
-msgstr ""
+msgstr "Betriebsrente"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3399
 msgid "Personal Pension"
-msgstr ""
+msgstr "Private Altersvorsorge"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3404
 msgid "Determines which fields are available below"
-msgstr ""
+msgstr "Legt fest, welche Felder unten angezeigt werden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3408
 msgid "Provider"
@@ -8874,60 +8885,60 @@ msgstr "Anbieter"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3409
 msgid "e.g., Scottish Widows, Aviva"
-msgstr ""
+msgstr "z.B. Lebensversicherungen, Investments"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3410
 msgid "Pension provider or scheme administrator"
-msgstr ""
+msgstr "Rentenversicherer oder Verwalter des Rentensystems"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3423
 msgid "Financial Details"
-msgstr ""
+msgstr "Finanzielle Details"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3428
 msgid "Current total value of the pension pot"
-msgstr ""
+msgstr "Aktueller Gesamtwert des Rentenvermögens"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3434
 msgid "Combined employee and employer contribution"
-msgstr ""
+msgstr "Gesamtbeitrag von Arbeitnehmer und Arbeitgeber"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3438
 #, php-format
 msgid "Expected Annual Return (%%)"
-msgstr ""
+msgstr "Erwartete jährliche Rendite (%%)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3440
 msgid "Estimated yearly growth rate for projections"
-msgstr ""
+msgstr "Geschätzte jährliche Wachstumsrate für Prognosen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3446
 msgid "Age you plan to start drawing this pension"
-msgstr ""
+msgstr "Alter, ab dem du diese Rente beziehen möchtest"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3452
 msgid "Income Details"
-msgstr ""
+msgstr "Einnahmedetails"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3457
 msgid "Expected yearly income at retirement"
-msgstr ""
+msgstr "Erwartetes Jahreseinkommen im Ruhestand"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3461
 msgid "Transfer Value"
-msgstr ""
+msgstr "Buchungswert"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3463
 msgid "Cash equivalent transfer value (CETV) if known"
-msgstr ""
+msgstr "Bargeldäquivalenter Übertragungswert, sofern bekannt"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3469
 msgid "Normal retirement age for this scheme"
-msgstr ""
+msgstr "Reguläres Renteneintrittsalter für dieses System"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3475
 msgid "Save Pension"
-msgstr ""
+msgstr "Rente speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3500
 msgid "Update"
@@ -8939,7 +8950,7 @@ msgstr "Notiz"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3524
 msgid "e.g., Bonus top-up"
-msgstr ""
+msgstr "z. B. Bonusaufladung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3529
 msgid "Log"
@@ -8947,96 +8958,101 @@ msgstr "Log"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3539
 msgid "Add new asset"
-msgstr ""
+msgstr "Neues Aktiva hinzufügen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3550
 msgid ""
 "Track non-cash assets like property, vehicles, and collectibles. Values and "
 "projections are estimates based on annual appreciation/depreciation rates."
 msgstr ""
+"Verfolge nicht liquide Vermögenswerte wie Immobilien, Fahrzeuge und "
+"Sammlerstücke. Die Werte und Prognosen sind Schätzungen, die auf den "
+"jährlichen Wertsteigerungs- bzw. Wertminderungsraten basieren."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3563
 msgid "Total Asset Worth"
-msgstr ""
+msgstr "Gesamtvermögenswert"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3574
 msgid "Projected Value (10yr)"
-msgstr ""
+msgstr "Prognostizierter Wert (10 Jahre)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3603
 msgid "No assets yet"
-msgstr ""
+msgstr "Noch keine Aktiva"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3604
 msgid ""
 "Track your non-cash assets like property, vehicles, and collectibles to see "
 "your full net worth."
 msgstr ""
+"Erfasse Sachwerte wie Immobilien, Fahrzeuge und Sammlerstücke, um das "
+"gesamte Vermögen zu ermitteln."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3607
 msgid "Add Your First Asset"
-msgstr ""
+msgstr "Füge dein erstes Aktiva hinzu"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3624
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3748
 msgid "Asset Details"
-msgstr ""
+msgstr "Aktivadetails"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3627
 msgid "Update value"
-msgstr ""
+msgstr "Wert aktualisieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3629
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3831
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3850
 msgid "Update Value"
-msgstr ""
+msgstr "Wert aktualisieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3631
 msgid "Edit asset"
-msgstr ""
+msgstr "Aktiva bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3645
 msgid "Asset Name"
-msgstr ""
+msgstr "Name des Aktivas"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3659
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3791
 msgid "Purchase Price"
-msgstr ""
+msgstr "Kaufpreis"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3663
 msgid "Gain / Loss"
-msgstr ""
+msgstr "Gewinn / Verlust"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3678
 msgid "Annual Change Rate"
-msgstr ""
+msgstr "Jährliche Veränderungsrate"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3687
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3797
 msgid "Purchase Date"
-msgstr ""
+msgstr "Kaufdatum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3696
 msgid "10yr Projected Value"
-msgstr ""
+msgstr "Prognostizierter Wert in 10 Jahren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3705
 msgid "Value Snapshots"
-msgstr ""
+msgstr "Wertübersichten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3714
 msgid "Value History"
-msgstr ""
+msgstr "Kursentwicklung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3752
 msgid "e.g., 42 Maple Street, Tesla Model 3"
-msgstr ""
+msgstr "z.B. Unter den Linden 20, Tesla Model 3"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3753
 msgid "A descriptive name for this asset"
-msgstr ""
+msgstr "Bezeichnung für dieses Aktivum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3769
 msgid "Optional notes about this asset"
@@ -9597,7 +9613,7 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4545
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4550
 msgid "Factory Reset"
-msgstr ""
+msgstr "Auf Werkeinstellungen zurücksetzen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4546
 msgid ""
@@ -9605,18 +9621,22 @@ msgid ""
 "categories, settings, and more. Only audit logs will be preserved for "
 "compliance. This action cannot be undone."
 msgstr ""
+"Lösche ALLE deiner Daten dauerhaft, einschließlich Konten, Transaktionen, "
+"Rechnungen, Kategorien, Einstellungen und mehr. Nur die Prüfprotokolle "
+"werden aus Compliance-Gründen aufbewahrt. Dieser Vorgang kann nicht "
+"rückgängig gemacht werden."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4564
 msgid "Reset All to Defaults"
-msgstr ""
+msgstr "Alle Einstellungen auf Standardwerte zurücksetzen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4575
 msgid "Add/Edit Transaction"
-msgstr ""
+msgstr "Buchung hinzufügen/bearbeiten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4581
 msgid "Select the transaction date"
-msgstr ""
+msgstr "Buchungsdatum auswählen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4588
 msgid "Select which account this transaction belongs to"
