@@ -57,6 +57,7 @@ When a rule matches a transaction, one or more actions are applied:
 | Set account | Assign to a specific account |
 | Set type | Mark as expense or income |
 | Set reference | Set the reference field |
+| Exclude from Forecast | Mark the transaction as extraordinary so it stays out of [forecast](forecast.md) projections |
 | Auto-Link as Transfer | Find and link a matching opposite transaction as a transfer |
 
 You can configure multiple actions per rule — for example, set the category to "Subscriptions" and add a "streaming" tag simultaneously.

@@ -29,6 +29,16 @@ The forecast engine analyzes your transaction history across several dimensions:
 
 The combination of these factors produces a projected daily balance for each day in the forecast horizon.
 
+## Excluding One-Time Items
+
+Extraordinary amounts — selling a car, an insurance payout, a one-off purchase — distort the averages the forecast extrapolates from. You can mark these as **excluded from the forecast** in three places:
+
+- **Per transaction** — tick *"Exclude from forecast (extraordinary / one-time)"* in the add/edit form. Excluded transactions show a **No forecast** badge in the transaction list.
+- **Per recurring bill or income** — tick *"Exclude from forecast (extraordinary)"* on the bill or income; every transaction it generates is excluded automatically.
+- **Via import rules** — add an **Exclude from Forecast** action to a rule to mark matching transactions automatically on import or bank sync.
+
+Excluded amounts still affect your **real account balance** — they only stay out of the projection math, so a one-off windfall doesn't inflate next month's expected income.
+
 ## Reading the Forecast
 
 The forecast chart shows:

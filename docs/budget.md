@@ -57,6 +57,16 @@ To revert an adjustment, remove it from the same interface. An undo notification
 
 > **Warning:** Removing an adjustment reverts all categories to the values from the previous baseline. Make sure this is what you intend.
 
+## Automatic Budgets from Recurring Items
+
+A category with **no manually-set budget** automatically uses its committed recurring amounts as the budget limit: the sum of the category's active [recurring bills](bills.md) and [recurring income](income.md), normalized to the category's budget period. Split-template bills contribute to each split's category.
+
+Auto-derived budgets are shown as a placeholder value with a small **auto** marker so you can tell them apart from limits you typed in. They feed the spent/remaining/progress indicators, parent-category totals, and the summary cards just like manual budgets.
+
+Typing any value in the budget field **always overrides** the automatic figure — use this to add variable spending on top of the fixed recurring amounts. Clearing the field returns the category to automatic mode.
+
+> **Tip:** This means the "fixed" part of your budget maintains itself: assign your rent, subscriptions, and salary to categories via bills and recurring income, and only hand-enter budgets for variable categories like groceries.
+
 ## Parent Category Aggregation
 
 Parent categories automatically display the sum of:

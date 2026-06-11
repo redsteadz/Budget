@@ -73,11 +73,23 @@ The app estimates when you will reach your goal based on your recent saving rate
 
 > **Tip:** If you are behind on a goal, the app shows the monthly contribution needed to get back on track. Use this to adjust your budget.
 
+## Sharing Goals
+
+A savings goal can be shared with another Nextcloud user via **Settings > Sharing** (granular sharing). Shared goals show a **Shared** badge for the recipient.
+
+| Permission | What the recipient can do |
+|------------|---------------------------|
+| **Read** | View the goal, its progress, and forecast. |
+| **Write** | Additionally edit the goal and add money toward it. |
+
+Only the goal's **owner** can delete a shared goal. Progress for tag-linked shared goals is calculated against the owner's transactions, so both people see the same numbers.
+
 ## Related Features
 
 - [Tags](categories.md) — Tag-linked goals use the tag system for automatic progress calculation.
 - [Dashboard](dashboard.md) — The Savings Goals tile shows an overview of all active goals and their progress.
 - [Accounts](accounts.md) — Goals can be linked to specific accounts for balance-based tracking.
+- [Sharing](sharing.md) — How granular sharing works across the app.
 
 ## Settings
 

@@ -19,6 +19,7 @@ Navigate to an account's transaction list and click **Add Transaction**, or use 
 | **Vendor** | No | The merchant, payee, or payer name. |
 | **Reference** | No | A check number, confirmation code, or other external reference. |
 | **Notes** | No | Free-text notes for any additional context. |
+| **Exclude from forecast** | No | Marks the transaction as extraordinary/one-time so it doesn't skew [forecast](forecast.md) projections. It still affects your account balance. Excluded transactions show a **No forecast** badge in the list. |
 
 > **Tip:** If you find yourself entering similar transactions repeatedly, use the [duplicate feature](#duplicating-a-transaction) to copy an existing transaction and modify only what changed.
 

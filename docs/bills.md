@@ -12,9 +12,11 @@ Navigate to **Bills > Add Bill** to create a new bill.
 | **Amount** | The expected payment amount. For variable bills, enter your typical or average payment. |
 | **Frequency** | How often the bill recurs. See [Frequency Options](#frequency-options) below. |
 | **Due Day** | The day of the month (or week) the payment is due. |
+| **Start Date** | Optional. The bill only occurs on or after this date — useful when a recurring cost changes mid-year: end one bill and start its replacement at a specific date. |
 | **Category** | The spending category to assign when marking paid. |
-| **Account** | The account the payment comes from. Required for auto-pay. |
+| **Account** | The account the payment comes from. Required for auto-pay, and needed for "Mark Paid" to record a transaction. |
 | **Auto-Detect Pattern** | A text pattern to match imported transactions against this bill (e.g., "NETFLIX" or "ELECTRIC CO"). When an imported transaction matches, it is automatically linked to this bill. |
+| **Exclude from Forecast** | Marks the bill as extraordinary: transactions it generates are left out of [forecast](forecast.md) projections (they still affect your balance). |
 | **Notes** | Optional free-text notes about the bill. |
 
 > **Tip:** Setting an auto-detect pattern helps the app automatically recognize bill payments when you import bank statements, saving you from manually marking each one as paid.
@@ -67,6 +69,8 @@ Click **Mark Paid** on any bill to record the payment. This:
 1. Creates a cleared transaction in the linked account for the bill amount and category.
 2. Advances the due date to the next occurrence based on the frequency.
 3. Shows an **Undo** notification for approximately 5 seconds, allowing you to reverse the action if clicked accidentally.
+
+> **Important:** If the bill has **no account assigned** (or the transaction cannot be created), the bill is still marked paid but **no money movement is recorded** — your account balance will not reflect the payment. The app shows a clear warning when this happens. Assign an account to the bill, or add the transaction manually, so your tracked balance stays in step with your bank.
 
 ### Skipping a Payment
 

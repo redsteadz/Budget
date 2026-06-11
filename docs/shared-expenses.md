@@ -64,6 +64,10 @@ Click on a contact to see a detailed breakdown of all shared expenses between yo
 
 > **Tip:** Balances are net amounts. If you owe someone for dinner but they owe you for groceries, the balance shows only the net difference.
 
+## Shared With Me
+
+If a contact is linked to a Nextcloud user on the same instance, expenses shared **with you** appear in the **Shared with me** section of the Shared Expenses view. This gives recipients visibility into what others have recorded against them — who paid, the total, your share, and whether it has been settled — without needing access to the other person's accounts.
+
 ## Recording Settlements
 
 When someone pays what they owe (or you pay them), record a settlement:

@@ -172,10 +172,15 @@ The app automatically checks for duplicate transactions during import. A transac
 - Date
 - Amount
 - Description
+- Reference (if mapped)
 
 Duplicates are skipped during import and reported in the results summary. This makes it safe to import overlapping date ranges without creating duplicate entries.
 
-> **Note:** Duplicate detection is based on exact matching. If your bank changes the description text between exports, the same transaction may not be recognized as a duplicate.
+Detection is **occurrence-aware**: if one file legitimately contains several identical rows (e.g. two same-priced coffees on the same day), they all import as distinct transactions — and re-importing the same statement still skips every one of them. Re-importing an older statement also recovers any rows that earlier versions mis-flagged as duplicates.
+
+If you disable **Skip Duplicate Transactions**, the entire batch imports — including rows that match existing transactions.
+
+> **Note:** Duplicate detection is based on exact matching. If your bank changes the description text between exports, the same transaction may not be recognized as a duplicate. If your export has a unique sequence number per transaction, map it to the **Reference** column — it is stored on each transaction and makes duplicate detection exact. (OFX imports use the bank's own unique transaction IDs automatically.)
 
 ## Rolling Back an Import
 

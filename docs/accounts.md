@@ -112,6 +112,20 @@ Each account has optional banking detail fields for your reference. These fields
 
 The account form dynamically shows and hides these fields based on the account type you select. For example, selecting **Checking** shows routing number and IBAN fields, while selecting **Cryptocurrency** shows the wallet address field instead.
 
+## How Balances Are Calculated
+
+An account's current balance is always derived from its ledger:
+
+```
+current balance = opening balance + net of all non-scheduled transactions
+```
+
+The **opening balance** represents what the account held before the first transaction you track in the app. It is set when you create the account and can be edited later — useful when you start tracking mid-life of a real account, or to true-up after reconciling.
+
+Because the balance is recomputed from your transactions on every change, it can never drift out of step with the ledger: editing, moving, or deleting a transaction always leaves the balance exactly consistent with what the transaction list shows.
+
+> **Note:** Scheduled (future-dated) transactions don't count toward the current balance — they appear in the projected balance instead. See [Transaction Status](transactions.md#transaction-status).
+
 ## Reconciling Accounts
 
 Reconciliation verifies that your tracked balance matches your actual bank statement. This helps catch missing or incorrect transactions.
