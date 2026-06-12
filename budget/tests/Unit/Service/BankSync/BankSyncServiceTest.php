@@ -165,14 +165,40 @@ class BankSyncServiceTest extends TestCase {
 		$this->service->sync(self::USER_ID, 1);
 	}
 
-	public function testSyncThrowsWhenConnectionNotActive(): void {
+	public function testSyncThrowsWhenConnectionExpired(): void {
 		$this->adminSettings->method('isBankSyncEnabled')->willReturn(true);
 
 		$connection = $this->createConnection(1, 'simplefin', 'My Bank', 'expired');
 		$this->connectionMapper->method('find')->with(1, self::USER_ID)->willReturn($connection);
 
 		$this->expectException(\Exception::class);
-		$this->expectExceptionMessage('Connection is not active');
+		$this->expectExceptionMessage('Bank authorization has expired');
+
+		$this->service->sync(self::USER_ID, 1);
+	}
+
+	public function testSyncRetriesConnectionInErrorState(): void {
+		// A failed fetch sets status 'error'; the next sync must attempt the
+		// provider again instead of throwing 'Connection is not active' forever
+		$this->adminSettings->method('isBankSyncEnabled')->willReturn(true);
+
+		$connection = $this->createConnection(1, 'simplefin', 'My Bank', 'error');
+		$this->connectionMapper->method('find')->with(1, self::USER_ID)->willReturn($connection);
+
+		$this->providerFactory->method('getProvider')->willReturn($this->provider);
+		$this->provider->method('requiresReauthorization')->willReturn(false);
+		$this->provider->expects($this->once())->method('fetchAccounts')
+			->willThrowException(new \Exception('Payment required (402)'));
+
+		$this->connectionMapper->expects($this->once())->method('update')
+			->willReturnCallback(function (BankConnection $conn) {
+				$this->assertEquals('Payment required (402)', $conn->getLastError());
+				return $conn;
+			});
+
+		// The real provider error surfaces, not the status gate
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('Payment required (402)');
 
 		$this->service->sync(self::USER_ID, 1);
 	}

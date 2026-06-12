@@ -117,8 +117,16 @@ class BankSyncService {
         $this->requireEnabled();
 
         $connection = $this->connectionMapper->find($connectionId, $userId);
-        if (!in_array($connection->getStatus(), ['active', 'pending_auth'], true)) {
-            throw new \Exception('Connection is not active');
+        // 'error' is retryable: it marks a failed fetch (bridge outage, lapsed
+        // subscription, transient network), and blocking it here would leave the
+        // connection permanently stuck — a successful sync is the only path back
+        // to 'active'. Only 'expired' stays blocked (needs re-authorization).
+        if (!in_array($connection->getStatus(), ['active', 'pending_auth', 'error'], true)) {
+            throw new \Exception(
+                $connection->getStatus() === 'expired'
+                    ? 'Bank authorization has expired. Please reconnect.'
+                    : 'Connection is not active'
+            );
         }
 
         $provider = $this->providerFactory->getProvider($connection->getProvider());

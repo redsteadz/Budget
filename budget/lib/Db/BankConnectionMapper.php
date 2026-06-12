@@ -77,9 +77,14 @@ class BankConnectionMapper extends QBMapper {
      */
     public function findActiveIdsForSync(): array {
         $qb = $this->db->getQueryBuilder();
+        // 'error' connections are included so transient provider failures
+        // self-heal on the next daily run (a successful sync resets the status)
         $qb->select('id', 'user_id')
             ->from($this->getTableName())
-            ->where($qb->expr()->eq('status', $qb->createNamedParameter('active')));
+            ->where($qb->expr()->in('status', $qb->createNamedParameter(
+                ['active', 'error'],
+                IQueryBuilder::PARAM_STR_ARRAY
+            )));
 
         $result = $qb->executeQuery();
         $rows = [];

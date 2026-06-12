@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Transaction search is now case-insensitive on PostgreSQL and SQLite (plain `LIKE` is case-sensitive there — searching "rent" missed "Rent"; MySQL/MariaDB installs were unaffected)
+- Bank sync connections no longer get permanently stuck after a failed sync: one transient provider failure (bridge outage, lapsed SimpleFIN subscription, network error) set the connection to an error state that every later sync — manual and the daily background job — refused to touch ("Connection is not active"), with no path back. Failed connections are now retried, so they self-heal once the provider recovers, and the real provider error is surfaced instead of the status gate ([#277](https://github.com/otherworld-dev/Budget/issues/277))
 
 ## [2.28.3] - 2026-06-12
 
