@@ -262,6 +262,32 @@ class BudgetCarryoverServiceTest extends TestCase {
         $this->assertSame(60.0, $result[1]);
     }
 
+    public function testLateStartDayMapsPeriodToContainingMonth(): void {
+        // Start day 25: budget month M is the period CONTAINING the 15th of M
+        // (matches the Budget view): "May" = Apr 25 – May 24, "June" = May 25 – Jun 24.
+        // Spending on Jun 10 belongs to JUNE's envelope month.
+        $settingService = $this->createMock(SettingService::class);
+        $settingService->method('get')->willReturn('25');
+        $service = new TestableBudgetCarryoverService(
+            $this->createMock(CategoryMapper::class),
+            $this->snapshotMapper,
+            $this->transactionMapper,
+            $this->splitMapper,
+            $this->recurringBudgetService,
+            $settingService
+        );
+        $service->currentMonth = '2026-06';
+
+        $this->directSpending = [1 => ['2026-05-28' => 100.0, '2026-06-10' => 30.0]];
+
+        $result = $service->getCarryovers('alice', '2026-07', [
+            $this->makeCategory(['budgetAmount' => 50.0, 'rolloverStart' => '2026-06']),
+        ]);
+
+        // June period (May 25 – Jun 24) spent = 100 + 30; carry = 50 − 130 = −80
+        $this->assertSame(-80.0, $result[1]);
+    }
+
     public function testCustomStartDayBucketsByPeriod(): void {
         // Start day 15: "March" period is Mar 15 – Apr 14. Spending on Apr 10
         // belongs to March's envelope month, Apr 20 to April's.

@@ -285,26 +285,42 @@ class BudgetCarryoverService {
 
     /**
      * Period range [start, end] (Y-m-d) of budget month $month with a custom
-     * start day, clamped to each month's length — mirrors
-     * BudgetAlertService::calculateMonthlyRange's bounds.
+     * start day. Mirrors the app-wide convention (frontend
+     * getPeriodDateRange with the 15th as reference, and
+     * BudgetAlertService::calculateMonthlyRange): budget month M is the
+     * period CONTAINING the 15th of M. With start day 25, "June" is
+     * May 25 – Jun 24; with start day 10, "June" is Jun 10 – Jul 9.
      *
      * @return array{0: string, 1: string}
      */
     private function periodRange(string $month, int $startDay): array {
-        $monthStart = \DateTime::createFromFormat('Y-m-d', $month . '-01');
+        $monthStart = \DateTime::createFromFormat('!Y-m-d', $month . '-01');
         $daysInMonth = (int) $monthStart->format('t');
-        $start = sprintf('%s-%02d', $month, min($startDay, $daysInMonth));
+        $effectiveStartDay = min($startDay, $daysInMonth);
 
-        $next = (clone $monthStart)->modify('first day of next month');
-        $daysInNext = (int) $next->format('t');
-        $nextStart = (clone $next)->setDate(
-            (int) $next->format('Y'),
-            (int) $next->format('n'),
-            min($startDay, $daysInNext)
-        );
-        $end = $nextStart->modify('-1 day')->format('Y-m-d');
+        if ($effectiveStartDay <= 15) {
+            // Period starts in $month, ends the day before next month's start day
+            $start = sprintf('%s-%02d', $month, $effectiveStartDay);
+            $next = (clone $monthStart)->modify('first day of next month');
+            $end = $this->clampedDay($next, $startDay)->modify('-1 day')->format('Y-m-d');
+        } else {
+            // Period starts in the PREVIOUS month, ends the day before $month's start day
+            $prev = (clone $monthStart)->modify('first day of last month');
+            $start = $this->clampedDay($prev, $startDay)->format('Y-m-d');
+            $end = sprintf('%s-%02d', $month, $effectiveStartDay);
+            $end = \DateTime::createFromFormat('!Y-m-d', $end)->modify('-1 day')->format('Y-m-d');
+        }
 
         return [$start, $end];
+    }
+
+    private function clampedDay(\DateTime $monthStart, int $startDay): \DateTime {
+        $day = min($startDay, (int) $monthStart->format('t'));
+        return (clone $monthStart)->setDate(
+            (int) $monthStart->format('Y'),
+            (int) $monthStart->format('n'),
+            $day
+        );
     }
 
     private function getBudgetStartDay(string $userId): int {
