@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Auto-derived category budgets ([#269](https://github.com/otherworld-dev/Budget/issues/269)) now handle every supported frequency correctly: semi-annual bills were over-counted 6×, semi-monthly halved, custom-schedule bills counted every month, and one-time bills inflated the budget monthly until marked paid (now excluded). Frequency math is delegated to the shared calculator, which also gained the missing semi-monthly conversion
+- Auto-derived budgets no longer apply to past months — they reflect today's recurring bills/income and were rewriting history (including overriding explicitly-zeroed snapshot budgets)
+- Multi-account import: an invalid destination account mid-import no longer aborts the batch, and deferred balance recomputes now always run for already-imported rows
+- Bank sync: the post-import balance recompute now keys on transaction creation, not the import counter, so a row persisted just before a non-fatal error still gets its balance update
+- The scheduled-transactions background job now recomputes balances from the ledger (it was the last remaining hand-computed balance delta, and could race concurrent imports)
+- Import preview now flags a repeated bank transaction ID (OFX FITID) within one file as the duplicate it is, matching what import actually does; per-account preview counts include rows that will import with skip-duplicates off
+- Marking a bill paid by linking an existing transaction now warns if the link silently failed (no money movement recorded)
+- Extremely long OFX FITIDs are hashed to stay within the import-ID column
+
 ## [2.28.2] - 2026-06-11
 
 ### Fixed

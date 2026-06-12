@@ -225,6 +225,7 @@ class BankSyncService {
             $imported = 0;
             $transferLinkIds = [];
             $skipped = 0;
+            $createdAny = false;
 
             // Load existing pending bank-sync holds on this account so we can
             // reconcile them against their posted versions (issue #257).
@@ -306,6 +307,10 @@ class BankSyncService {
                         excludedFromForecast: !empty($txData['excludedFromForecast']),
                         deferBalanceUpdate: true
                     );
+                    // Set immediately after create: a later failure (e.g. tag
+                    // application) is swallowed by the catch below, and the
+                    // persisted row must still get its balance recompute.
+                    $createdAny = true;
 
                     // Apply deferred tag actions from import rules
                     if (!empty($txData['_deferred_tags'])) {
@@ -338,7 +343,7 @@ class BankSyncService {
             }
 
             // Balance updates were deferred per-row; recompute once for this account
-            if ($imported > 0) {
+            if ($createdAny) {
                 $this->transactionService->recalculateAccountBalance($budgetAccountId, $userId);
             }
 

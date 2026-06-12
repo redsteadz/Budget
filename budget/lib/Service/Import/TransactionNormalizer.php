@@ -279,8 +279,13 @@ class TransactionNormalizer {
     public function generateImportId(string $fileId, int|string $index, array $transaction): string {
         // Use FITID from OFX if available (bank's unique transaction ID)
         if (!empty($transaction['id'])) {
-            // FITID is globally unique per bank, so we can use it directly
-            return 'ofx_fitid_' . $transaction['id'];
+            // FITID is globally unique per bank, so we can use it directly.
+            // The OFX spec allows FITIDs up to 255 chars but import_id is
+            // VARCHAR(255) and may gain _occN/_dupN suffixes — hash long ones.
+            $fitid = (string) $transaction['id'];
+            return strlen($fitid) > 200
+                ? 'ofx_fitid_h_' . md5($fitid)
+                : 'ofx_fitid_' . $fitid;
         }
 
         // Content-based hash for CSV/QIF imports (no fileId to ensure same transaction = same hash)

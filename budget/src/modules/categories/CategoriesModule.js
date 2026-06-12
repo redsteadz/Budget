@@ -1283,8 +1283,14 @@ export default class CategoriesModule {
     /**
      * Recurring-derived budget for a category, converted from the monthly total
      * to the category's budget period. Returns 0 when there's no recurring item.
+     * Past months never get the fallback: the figures reflect TODAY's recurring
+     * bills/income, and applying them retroactively would rewrite history
+     * (including overriding budgets the user explicitly zeroed back then).
      */
     _getRecurringBudgetAmount(categoryId, period) {
+        const now = new Date();
+        const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        if (this.budgetMonth && this.budgetMonth < currentMonth) return 0;
         const monthly = this._recurringBudgets ? parseFloat(this._recurringBudgets[categoryId]) : 0;
         if (!monthly) return 0;
         return this._convertMonthlyToPeriod(monthly, period || 'monthly');

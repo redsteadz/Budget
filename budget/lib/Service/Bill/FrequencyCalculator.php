@@ -221,6 +221,7 @@ class FrequencyCalculator {
             'daily' => $amount * 30,
             'weekly' => $amount * 52 / 12,
             'biweekly' => $amount * 26 / 12,
+            'semi-monthly' => $amount * 2,
             'monthly' => $amount,
             'quarterly' => $amount / 3,
             'semi-annually' => $amount / 6,

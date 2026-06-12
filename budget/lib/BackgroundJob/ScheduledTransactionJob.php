@@ -39,27 +39,36 @@ class ScheduledTransactionJob extends TimedJob {
             $count = 0;
             $now = date('Y-m-d H:i:s');
 
+            $touchedAccounts = [];
             foreach ($transactions as $transaction) {
                 try {
                     $transaction->setStatus('cleared');
                     $transaction->setUpdatedAt($now);
                     $mapper->update($transaction);
-
-                    // Update account balance: scheduled transactions don't affect
-                    // balance, so transitioning to cleared must apply the effect now
-                    $account = $accountMapper->findById($transaction->getAccountId());
-                    $currentBalance = (string) $account->getBalance();
-                    $amount = (string) $transaction->getAmount();
-                    $newBalance = $transaction->getType() === 'credit'
-                        ? MoneyCalculator::add($currentBalance, $amount)
-                        : MoneyCalculator::subtract($currentBalance, $amount);
-                    $accountMapper->updateBalance($account->getId(), $newBalance, $account->getUserId());
-
+                    $touchedAccounts[$transaction->getAccountId()] = true;
 
                     $count++;
                 } catch (\Exception $e) {
                     $logger->warning('Failed to transition scheduled transaction {id}: {error}', [
                         'id' => $transaction->getId(),
+                        'error' => $e->getMessage(),
+                        'app' => 'budget',
+                    ]);
+                }
+            }
+
+            // Recompute balances from the ledger (cleared rows now count).
+            // No hand-computed deltas: a read-modify-write here could race a
+            // concurrent import/sync recompute and reintroduce drift (#274).
+            foreach (array_keys($touchedAccounts) as $accountId) {
+                try {
+                    $account = $accountMapper->findById($accountId);
+                    $openingBalance = (string) ($account->getOpeningBalance() ?? 0);
+                    $newBalance = MoneyCalculator::add($openingBalance, $mapper->getNetChangeAll($accountId));
+                    $accountMapper->updateBalance($accountId, $newBalance, $account->getUserId());
+                } catch (\Exception $e) {
+                    $logger->warning('Failed to recalculate balance for account {id}: {error}', [
+                        'id' => $accountId,
                         'error' => $e->getMessage(),
                         'app' => 'budget',
                     ]);

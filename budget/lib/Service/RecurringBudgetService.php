@@ -19,13 +19,16 @@ namespace OCA\Budget\Service;
 class RecurringBudgetService {
     private BillService $billService;
     private RecurringIncomeService $recurringIncomeService;
+    private Bill\FrequencyCalculator $frequencyCalculator;
 
     public function __construct(
         BillService $billService,
-        RecurringIncomeService $recurringIncomeService
+        RecurringIncomeService $recurringIncomeService,
+        Bill\FrequencyCalculator $frequencyCalculator
     ) {
         $this->billService = $billService;
         $this->recurringIncomeService = $recurringIncomeService;
+        $this->frequencyCalculator = $frequencyCalculator;
     }
 
     /**
@@ -41,7 +44,10 @@ class RecurringBudgetService {
         $totals = [];
 
         foreach ($this->billService->findActive($userId) as $bill) {
-            $factor = $this->monthlyFactor($bill->getFrequency());
+            $factor = $this->monthlyFactor($bill->getFrequency(), $bill->getCustomRecurrencePattern());
+            if ($factor == 0.0) {
+                continue; // e.g. one-time bills: not a recurring commitment
+            }
             $splits = $bill->getSplitTemplateArray();
             if (!empty($splits)) {
                 foreach ($splits as $split) {
@@ -61,8 +67,11 @@ class RecurringBudgetService {
             if (!$income->getCategoryId()) {
                 continue;
             }
-            $catId = (int)$income->getCategoryId();
             $factor = $this->monthlyFactor($income->getFrequency());
+            if ($factor == 0.0) {
+                continue;
+            }
+            $catId = (int)$income->getCategoryId();
             $totals[$catId] = ($totals[$catId] ?? 0.0) + (float)$income->getAmount() * $factor;
         }
 
@@ -75,21 +84,19 @@ class RecurringBudgetService {
 
     /**
      * Factor converting an amount at the given frequency into a monthly amount.
+     * Delegates to FrequencyCalculator so every frequency the app supports
+     * (incl. semi-monthly, semi-annually, daily, custom patterns) is handled
+     * by one shared implementation.
      */
-    private function monthlyFactor(string $frequency): float {
-        switch ($frequency) {
-            case 'weekly':
-                return 52.0 / 12.0;
-            case 'biweekly':
-                return 26.0 / 12.0;
-            case 'quarterly':
-                return 1.0 / 3.0;
-            case 'yearly':
-                return 1.0 / 12.0;
-            case 'monthly':
-            case 'custom':
-            default:
-                return 1.0;
+    private function monthlyFactor(string $frequency, ?string $customPattern = null): float {
+        if ($frequency === 'one-time') {
+            // A one-off is not a recurring monthly commitment: counting it
+            // every month until it's marked paid would inflate the budget.
+            return 0.0;
         }
+        if ($frequency === 'custom') {
+            return $this->frequencyCalculator->getCustomOccurrencesPerYear($customPattern) / 12.0;
+        }
+        return $this->frequencyCalculator->getMonthlyEquivalentFromValues(1.0, $frequency);
     }
 }

@@ -800,8 +800,9 @@ class TransactionService {
     public function recalculateAccountBalance(int $accountId, string $userId): void {
         $account = $this->accountMapper->find($accountId, $userId);
         $openingBalance = (string) ($account->getOpeningBalance() ?? 0);
-        $transactionNet = (string) $this->mapper->getNetChangeAll($accountId);
-        $newBalance = MoneyCalculator::add($openingBalance, $transactionNet);
+        // Pass the float through: MoneyCalculator normalizes it without
+        // scientific notation (a string cast would bypass that)
+        $newBalance = MoneyCalculator::add($openingBalance, $this->mapper->getNetChangeAll($accountId));
 
         $this->accountMapper->updateBalance($accountId, $newBalance, $userId);
     }

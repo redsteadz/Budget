@@ -6,6 +6,7 @@ namespace OCA\Budget\Tests\Unit\Service;
 
 use OCA\Budget\Db\Bill;
 use OCA\Budget\Db\RecurringIncome;
+use OCA\Budget\Service\Bill\FrequencyCalculator;
 use OCA\Budget\Service\BillService;
 use OCA\Budget\Service\RecurringBudgetService;
 use OCA\Budget\Service\RecurringIncomeService;
@@ -19,14 +20,20 @@ class RecurringBudgetServiceTest extends TestCase {
     protected function setUp(): void {
         $this->billService = $this->createMock(BillService::class);
         $this->recurringIncomeService = $this->createMock(RecurringIncomeService::class);
-        $this->service = new RecurringBudgetService($this->billService, $this->recurringIncomeService);
+        // Real instance: pure math, and the point is shared frequency handling
+        $this->service = new RecurringBudgetService(
+            $this->billService,
+            $this->recurringIncomeService,
+            new FrequencyCalculator()
+        );
     }
 
-    private function makeBill(float $amount, string $frequency, ?int $categoryId, ?array $split = null): Bill {
+    private function makeBill(float $amount, string $frequency, ?int $categoryId, ?array $split = null, ?string $customPattern = null): Bill {
         $bill = new Bill();
         $bill->setAmount($amount);
         $bill->setFrequency($frequency);
         $bill->setCategoryId($categoryId);
+        $bill->setCustomRecurrencePattern($customPattern);
         if ($split !== null) {
             $bill->setSplitTemplateArray($split);
         }
@@ -92,6 +99,44 @@ class RecurringBudgetServiceTest extends TestCase {
 
         $this->assertSame(100.0, $result[5]);
         $this->assertSame(2000.0, $result[9]);
+    }
+
+    public function testSemiAnnualAndSemiMonthlyNormalized(): void {
+        $this->billService->method('findActive')->willReturn([
+            $this->makeBill(600.0, 'semi-annually', 5),  // 600/6 = 100/mo
+            $this->makeBill(50.0, 'semi-monthly', 6),    // 50*2 = 100/mo
+        ]);
+        $this->recurringIncomeService->method('findActive')->willReturn([]);
+
+        $result = $this->service->getMonthlyBudgetsByCategory('user1');
+
+        $this->assertSame(100.0, $result[5]);
+        $this->assertSame(100.0, $result[6]);
+    }
+
+    public function testOneTimeBillsExcluded(): void {
+        // A one-off is not a recurring commitment — counting it monthly until
+        // marked paid would inflate the derived budget.
+        $this->billService->method('findActive')->willReturn([
+            $this->makeBill(3000.0, 'one-time', 5),
+        ]);
+        $this->recurringIncomeService->method('findActive')->willReturn([]);
+
+        $result = $this->service->getMonthlyBudgetsByCategory('user1');
+
+        $this->assertArrayNotHasKey(5, $result);
+    }
+
+    public function testCustomPatternUsesOccurrencesPerYear(): void {
+        // Custom bill due in 2 specific months: 300 * 2 / 12 = 50/mo
+        $this->billService->method('findActive')->willReturn([
+            $this->makeBill(300.0, 'custom', 5, null, json_encode(['months' => [3, 9]])),
+        ]);
+        $this->recurringIncomeService->method('findActive')->willReturn([]);
+
+        $result = $this->service->getMonthlyBudgetsByCategory('user1');
+
+        $this->assertSame(50.0, $result[5]);
     }
 
     public function testBillWithoutCategoryIgnored(): void {

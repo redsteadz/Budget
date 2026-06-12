@@ -425,6 +425,28 @@ class ImportServiceTest extends TestCase {
         $this->assertSame(['ofx_fitid_42', 'ofx_fitid_42'], $checkedIds);
     }
 
+    public function testPreviewFlagsRepeatedFitidAsDuplicate(): void {
+        // A repeated FITID in one file is the same transaction twice — execute
+        // will skip the second occurrence, so preview must count it too.
+        $this->mockImportFile('file.csv', 'data');
+        $this->parserFactory->method('detectFormat')->willReturn('csv');
+        $row = ['date' => '2025-01-01', 'amount' => '3.50', 'description' => 'Coffee'];
+        $this->parserFactory->method('parse')->willReturn([$row, $row]);
+
+        $this->accountMapper->method('find')->willReturn($this->makeAccount(1, 'Checking'));
+        $this->normalizer->method('mapRowToTransaction')->willReturn([
+            'date' => '2025-01-01', 'amount' => 3.50, 'description' => 'Coffee', 'type' => 'debit',
+        ]);
+        $this->normalizer->method('generateImportId')->willReturn('ofx_fitid_42');
+        $this->duplicateDetector->method('isDuplicate')->willReturn(false); // not in DB
+        $this->ruleApplicator->method('applyRules')->willReturnArgument(1);
+
+        $result = $this->service->previewImport('user1', 'file.csv', ['date' => 'date'], 1);
+
+        $this->assertEquals(1, $result['validTransactions']);
+        $this->assertEquals(1, $result['duplicates']);
+    }
+
     public function testPreviewMarksIdenticalRowsAsDistinct(): void {
         // Preview must use the same occurrence-aware IDs as execute so the
         // preview's duplicate count matches what the import will actually do.

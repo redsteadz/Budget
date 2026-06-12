@@ -915,7 +915,7 @@ export default class BillsModule {
         await this.loadBillsView();
 
         let message;
-        if (choice.action === 'link') {
+        if (choice.action === 'link' && result.paymentTransactionRecorded !== false) {
             message = t('budget', 'Bill marked as paid. Linked to existing transaction.');
         } else if (choice.action === 'skip') {
             message = t('budget', 'Bill marked as paid. No transaction created.');

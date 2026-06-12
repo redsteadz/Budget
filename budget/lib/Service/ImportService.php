@@ -439,6 +439,7 @@ class ImportService {
         $errors = [];
         $accountSummaries = [];
         $hashCounts = [];
+        $seenImportIds = [];
 
         foreach ($parsedData['accounts'] as $sourceAccount) {
             $sourceId = $sourceAccount['accountId'];
@@ -463,7 +464,13 @@ class ImportService {
                         (int)$destAccountId,
                         $hashCounts
                     );
-                    $isDuplicate = $this->duplicateDetector->isDuplicate((int)$destAccountId, $transaction, $importId);
+                    // Within-batch repeats of non-hash IDs (e.g. a repeated OFX
+                    // FITID = the same transaction twice in one file) are
+                    // duplicates execute will skip — preview must agree.
+                    $seenKey = $destAccountId . '|' . $importId;
+                    $isDuplicate = $this->duplicateDetector->isDuplicate((int)$destAccountId, $transaction, $importId)
+                        || isset($seenImportIds[$seenKey]);
+                    $seenImportIds[$seenKey] = true;
 
                     if ($skipDuplicates && $isDuplicate) {
                         $duplicates++;
@@ -485,6 +492,8 @@ class ImportService {
                     if ($isDuplicate) {
                         $duplicates++;
                         $accountSummaries[$sourceId]['duplicates']++;
+                        // With skip-duplicates off these rows WILL import (#275)
+                        $accountSummaries[$sourceId]['transactionCount']++;
                     } else {
                         $accountSummaries[$sourceId]['transactionCount']++;
                     }
@@ -545,6 +554,7 @@ class ImportService {
         $categoriesToCreate = [];
         $skippedByPreset = 0;
         $hashCounts = [];
+        $seenImportIds = [];
 
         // Detect date format from all rows before processing individually (unless preset set it)
         if (!$preset) {
@@ -601,7 +611,12 @@ class ImportService {
                         $txAccountId,
                         $hashCounts
                     );
-                    $isDuplicate = $this->duplicateDetector->isDuplicate($txAccountId, $transaction, $importId);
+                    // Within-batch repeats of non-hash IDs are duplicates
+                    // execute will skip — preview must agree.
+                    $seenKey = $txAccountId . '|' . $importId;
+                    $isDuplicate = $this->duplicateDetector->isDuplicate($txAccountId, $transaction, $importId)
+                        || isset($seenImportIds[$seenKey]);
+                    $seenImportIds[$seenKey] = true;
 
                     if ($skipDuplicates && $isDuplicate) {
                         $duplicates++;
@@ -685,13 +700,22 @@ class ImportService {
         $hashCounts = [];
         $touchedAccounts = [];
 
+        try {
         foreach ($parsedData['accounts'] as $sourceAccount) {
             $sourceId = $sourceAccount['accountId'];
             $destAccountId = $accountMapping[$sourceId] ?? null;
 
             if (!$destAccountId) continue;
 
-            $destAccount = $this->accountMapper->find((int)$destAccountId, $userId);
+            // An invalid mapped destination (deleted between preview and
+            // execute, or a bad id) must not abort the whole import — earlier
+            // accounts' rows are already persisted.
+            try {
+                $destAccount = $this->accountMapper->find((int)$destAccountId, $userId);
+            } catch (\Exception $e) {
+                $errors[] = ['sourceAccountId' => $sourceId, 'error' => "Destination account {$destAccountId} not found"];
+                continue;
+            }
             $accountResults[$sourceId] = [
                 'sourceAccountId' => $sourceId,
                 'destinationAccountId' => $destAccountId,
@@ -768,9 +792,13 @@ class ImportService {
             }
         }
 
-        // Balance updates were deferred per-row; recompute once per account
-        foreach (array_keys($touchedAccounts) as $touchedAccountId) {
-            $this->transactionService->recalculateAccountBalance($touchedAccountId, $userId);
+        } finally {
+            // Balance updates were deferred per-row; recompute once per
+            // account — in a finally so persisted rows can never be left
+            // with a stale balance even if the import aborts mid-way.
+            foreach (array_keys($touchedAccounts) as $touchedAccountId) {
+                $this->transactionService->recalculateAccountBalance($touchedAccountId, $userId);
+            }
         }
 
         // Process deferred transfer linking
