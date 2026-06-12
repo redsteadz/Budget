@@ -848,6 +848,113 @@ class BillService {
     }
 
     /**
+     * Auto-mark bills paid from freshly imported transactions (#274).
+     *
+     * For each imported debit that matches an active bill's auto-detect
+     * pattern (amount within 10%, account matching when the bill has one,
+     * transaction date within the bill's current due window), the bill is
+     * marked paid with the transaction LINKED — no duplicate money movement
+     * is ever recorded. Marking paid advances the due date, so a second
+     * same-period transaction in the batch falls outside the new window and
+     * cannot double-advance the bill.
+     *
+     * @param \OCA\Budget\Db\Transaction[] $transactions freshly created rows
+     * @return int number of bills marked paid
+     */
+    public function autoMatchPaidFromImport(string $userId, array $transactions): int {
+        if (empty($transactions)) {
+            return 0;
+        }
+
+        $bills = array_filter(
+            $this->findActive($userId),
+            fn(Bill $bill) => !($bill->getIsTransfer() ?? false)
+                && !empty($bill->getAutoDetectPattern())
+                && $bill->getNextDueDate() !== null
+        );
+        if (empty($bills)) {
+            return 0;
+        }
+
+        $marked = 0;
+        foreach ($transactions as $transaction) {
+            if ($transaction->getType() !== 'debit') {
+                continue;
+            }
+            if (($transaction->getStatus() ?? 'cleared') === 'scheduled') {
+                continue;
+            }
+
+            foreach ($bills as $key => $bill) {
+                if (!$this->importedTransactionMatchesBill($bill, $transaction)) {
+                    continue;
+                }
+
+                try {
+                    $this->markPaid($bill->getId(), $userId, $transaction->getDate(), false, $transaction->getId());
+                    $marked++;
+                    // Reload: the due date advanced (or the bill deactivated),
+                    // which is what keeps this loop from double-advancing
+                    $bills[$key] = $this->find($bill->getId(), $userId);
+                    if (!$bills[$key]->getIsActive() || $bills[$key]->getNextDueDate() === null) {
+                        unset($bills[$key]);
+                    }
+                } catch (\Exception $e) {
+                    $this->logger->warning(
+                        "Auto-match failed marking bill {$bill->getId()} paid from imported transaction {$transaction->getId()}: {$e->getMessage()}"
+                    );
+                }
+                break; // one bill per transaction
+            }
+        }
+
+        return $marked;
+    }
+
+    /**
+     * Match an imported transaction against a bill: pattern in description
+     * or vendor, amount within 10%, account agreement, and the transaction
+     * date inside the bill's current due window (so historical re-imports
+     * can't advance bills through future periods).
+     */
+    private function importedTransactionMatchesBill(Bill $bill, \OCA\Budget\Db\Transaction $transaction): bool {
+        $pattern = (string) $bill->getAutoDetectPattern();
+        $haystack = $transaction->getDescription() . ' ' . ($transaction->getVendor() ?? '');
+        if (stripos($haystack, $pattern) === false) {
+            return false;
+        }
+
+        $billAmount = (float) $bill->getAmount();
+        if ($billAmount <= 0 || abs((float) $transaction->getAmount() - $billAmount) > $billAmount * 0.1) {
+            return false;
+        }
+
+        if ($bill->getAccountId() !== null && $bill->getAccountId() !== $transaction->getAccountId()) {
+            return false;
+        }
+
+        $dueDate = $bill->getNextDueDate();
+        $daysOff = abs((strtotime($transaction->getDate()) - strtotime($dueDate)) / 86400);
+
+        return $daysOff <= $this->dueDateToleranceDays($bill->getFrequency());
+    }
+
+    /**
+     * How far an imported payment may sit from the due date and still count
+     * as paying THIS occurrence — roughly half the recurrence interval,
+     * capped so monthly+ bills accept payments up to two weeks early/late.
+     */
+    private function dueDateToleranceDays(?string $frequency): int {
+        return match ($frequency) {
+            'daily' => 1,
+            'weekly' => 3,
+            'biweekly' => 6,
+            'semi-monthly' => 7,
+            default => 15, // monthly, quarterly, semi-annually, yearly, custom, one-time
+        };
+    }
+
+    /**
      * Attempt to auto-pay a bill and handle success/failure.
      *
      * @param int $id Bill ID

@@ -1463,6 +1463,14 @@ export default class ImportModule {
 
             if (response.ok) {
                 showSuccess(t('budget', 'Successfully imported {imported} transactions ({skipped} skipped)', { imported: result.imported, skipped: result.skipped }));
+                if (result.billsMarkedPaid > 0) {
+                    showSuccess(n(
+                        'budget',
+                        '%n bill was automatically marked as paid from matching transactions',
+                        '%n bills were automatically marked as paid from matching transactions',
+                        result.billsMarkedPaid
+                    ));
+                }
                 if (result.errors && result.errors.length > 0) {
                     // Partial failure (e.g. a mapped destination account was
                     // deleted) — must not masquerade as a full success

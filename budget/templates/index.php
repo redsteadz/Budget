@@ -5401,7 +5401,7 @@ style('budget', 'budget-app');
             <div class="form-group">
                 <label for="bill-auto-pattern"><?php p($l->t('Auto-detect Pattern')); ?></label>
                 <input type="text" id="bill-auto-pattern" aria-describedby="bill-auto-pattern-help" maxlength="255" placeholder="<?php p($l->t('e.g., NETFLIX, SPOTIFY')); ?>">
-                <small id="bill-auto-pattern-help" class="form-text"><?php p($l->t('Pattern to match in transaction descriptions for auto-linking')); ?></small>
+                <small id="bill-auto-pattern-help" class="form-text"><?php p($l->t('Imported transactions matching this pattern (similar amount, near the due date) automatically mark the bill as paid')); ?></small>
             </div>
 
             <div class="form-group">

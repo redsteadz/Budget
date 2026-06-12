@@ -15,7 +15,7 @@ Navigate to **Bills > Add Bill** to create a new bill.
 | **Start Date** | Optional. The bill only occurs on or after this date — useful when a recurring cost changes mid-year: end one bill and start its replacement at a specific date. |
 | **Category** | The spending category to assign when marking paid. |
 | **Account** | The account the payment comes from. Required for auto-pay, and needed for "Mark Paid" to record a transaction. |
-| **Auto-Detect Pattern** | A text pattern to match imported transactions against this bill (e.g., "NETFLIX" or "ELECTRIC CO"). When an imported transaction matches, it is automatically linked to this bill. |
+| **Auto-Detect Pattern** | A text pattern to match imported transactions against this bill (e.g., "NETFLIX" or "ELECTRIC CO"). When an import or bank sync brings in a matching transaction (amount within 10%, dated near the due date), the bill is automatically marked as paid with that transaction linked — no duplicate money movement, and the Bills Calendar ticks the month off. |
 | **Exclude from Forecast** | Marks the bill as extraordinary: transactions it generates are left out of [forecast](forecast.md) projections (they still affect your balance). |
 | **Notes** | Optional free-text notes about the bill. |
 

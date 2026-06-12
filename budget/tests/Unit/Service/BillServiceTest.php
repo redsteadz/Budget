@@ -486,4 +486,109 @@ class BillServiceTest extends TestCase {
 		$result = $this->service->detectRecurringBills('user1', 6);
 		$this->assertSame($expected, $result);
 	}
+
+	// ===== Auto-match bills from imported transactions (#274) =====
+
+	private function makeImportedTx(array $overrides = []): \OCA\Budget\Db\Transaction {
+		$tx = new \OCA\Budget\Db\Transaction();
+		$tx->setId($overrides['id'] ?? 500);
+		$tx->setAccountId($overrides['accountId'] ?? 1);
+		$tx->setDate($overrides['date'] ?? '2026-06-14');
+		$tx->setDescription($overrides['description'] ?? 'NETFLIX PAYMENT 12345');
+		$tx->setVendor($overrides['vendor'] ?? null);
+		$tx->setAmount($overrides['amount'] ?? 15.99);
+		$tx->setType($overrides['type'] ?? 'debit');
+		$tx->setStatus($overrides['status'] ?? 'cleared');
+		return $tx;
+	}
+
+	private function setupAutoMatchBill(array $overrides = []): Bill {
+		$bill = $this->makeBill(array_merge([
+			'autoDetectPattern' => 'NETFLIX',
+			'nextDueDate' => '2026-06-15',
+			'accountId' => 1,
+		], $overrides));
+		$this->mapper->method('findActive')->willReturn([$bill]);
+		// markPaid loads + saves the SAME instance, so the advanced state
+		// flows back into the matcher's reload naturally
+		$this->mapper->method('find')->willReturn($bill);
+		$this->mapper->method('update')->willReturnArgument(0);
+		$this->frequencyCalculator->method('calculateNextDueDate')->willReturn('2026-07-15');
+		return $bill;
+	}
+
+	public function testAutoMatchMarksBillPaidAndLinksTransaction(): void {
+		$bill = $this->setupAutoMatchBill();
+		$tx = $this->makeImportedTx();
+
+		// The existing transaction gets LINKED — no new money movement
+		$this->transactionService->expects($this->once())
+			->method('update')
+			->with(500, 'user1', ['billId' => 1]);
+
+		$marked = $this->service->autoMatchPaidFromImport('user1', [$tx]);
+
+		$this->assertSame(1, $marked);
+		$this->assertSame('2026-06-14', $bill->getLastPaidDate());
+		$this->assertSame('2026-07-15', $bill->getNextDueDate());
+	}
+
+	public function testAutoMatchMatchesPatternInVendor(): void {
+		$this->setupAutoMatchBill();
+		$tx = $this->makeImportedTx(['description' => 'Card payment 9912', 'vendor' => 'Netflix Inc']);
+
+		$this->assertSame(1, $this->service->autoMatchPaidFromImport('user1', [$tx]));
+	}
+
+	public function testAutoMatchSkipsTransactionOutsideDueWindow(): void {
+		$this->setupAutoMatchBill();
+		// 45 days before the due date — a historical re-import, not this period
+		$tx = $this->makeImportedTx(['date' => '2026-05-01']);
+
+		$this->transactionService->expects($this->never())->method('update');
+		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$tx]));
+	}
+
+	public function testAutoMatchSkipsWrongAccount(): void {
+		$this->setupAutoMatchBill(['accountId' => 1]);
+		$tx = $this->makeImportedTx(['accountId' => 2]);
+
+		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$tx]));
+	}
+
+	public function testAutoMatchSkipsAmountOutsideTolerance(): void {
+		$this->setupAutoMatchBill(['amount' => 15.99]);
+		$tx = $this->makeImportedTx(['amount' => 30.00]);
+
+		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$tx]));
+	}
+
+	public function testAutoMatchSkipsCreditsAndScheduled(): void {
+		$this->setupAutoMatchBill();
+
+		$credit = $this->makeImportedTx(['type' => 'credit']);
+		$scheduled = $this->makeImportedTx(['status' => 'scheduled']);
+
+		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$credit, $scheduled]));
+	}
+
+	public function testAutoMatchNeverDoubleAdvancesInOneBatch(): void {
+		$this->setupAutoMatchBill();
+		// Two same-period payments (e.g. duplicate rows in a statement):
+		// the first advances the due date to 2026-07-15, putting the second
+		// outside the new window
+		$tx1 = $this->makeImportedTx(['id' => 500, 'date' => '2026-06-14']);
+		$tx2 = $this->makeImportedTx(['id' => 501, 'date' => '2026-06-16']);
+
+		$this->transactionService->expects($this->once())->method('update');
+		$this->assertSame(1, $this->service->autoMatchPaidFromImport('user1', [$tx1, $tx2]));
+	}
+
+	public function testAutoMatchIgnoresTransferAndPatternlessBills(): void {
+		$transfer = $this->makeBill(['id' => 1, 'isTransfer' => true, 'autoDetectPattern' => 'NETFLIX', 'nextDueDate' => '2026-06-15']);
+		$patternless = $this->makeBill(['id' => 2, 'autoDetectPattern' => null, 'nextDueDate' => '2026-06-15']);
+		$this->mapper->method('findActive')->willReturn([$transfer, $patternless]);
+
+		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$this->makeImportedTx()]));
+	}
 }

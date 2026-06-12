@@ -67,6 +67,7 @@ class BankSyncServiceTest extends TestCase {
 			$dismissedImportMapper,
 			$ruleApplicator,
 			$transactionTagService,
+			$this->createMock(\OCA\Budget\Service\BillService::class),
 			$this->l,
 			$this->logger
 		);

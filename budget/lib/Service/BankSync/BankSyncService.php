@@ -31,6 +31,7 @@ class BankSyncService {
         private \OCA\Budget\Db\DismissedImportMapper $dismissedImportMapper,
         private \OCA\Budget\Service\Import\ImportRuleApplicator $ruleApplicator,
         private \OCA\Budget\Service\TransactionTagService $transactionTagService,
+        private \OCA\Budget\Service\BillService $billService,
         private IL10N $l,
         private LoggerInterface $logger
     ) {
@@ -198,6 +199,7 @@ class BankSyncService {
         }
 
         $mappingsByExternalId = [];
+        $createdForBillMatch = [];
         foreach ($enabledMappings as $m) {
             $mappingsByExternalId[$m->getExternalAccountId()] = $m;
         }
@@ -319,6 +321,7 @@ class BankSyncService {
                     // application) is swallowed by the catch below, and the
                     // persisted row must still get its balance recompute.
                     $createdAny = true;
+                    $createdForBillMatch[] = $createdTx;
 
                     // Apply deferred tag actions from import rules
                     if (!empty($txData['_deferred_tags'])) {
@@ -405,6 +408,16 @@ class BankSyncService {
                 'imported' => $imported,
                 'skipped' => $skipped,
             ];
+        }
+
+        // Auto-mark bills paid from matching synced transactions (#274).
+        // Best-effort: a matching failure must never fail the sync.
+        if (!empty($createdForBillMatch)) {
+            try {
+                $this->billService->autoMatchPaidFromImport($userId, $createdForBillMatch);
+            } catch (\Exception $e) {
+                $this->logger->warning('Bill auto-match after sync failed: ' . $e->getMessage(), ['app' => 'budget']);
+            }
         }
 
         // Update connection sync status

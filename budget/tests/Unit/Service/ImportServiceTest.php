@@ -79,6 +79,7 @@ class ImportServiceTest extends TestCase {
             $tagSetService,
             $transactionTagService,
             $accountLinkService,
+            $this->createMock(\OCA\Budget\Service\BillService::class),
             $l
         );
     }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2026-06-12 21:44+0000\n"
+"POT-Creation-Date: 2026-06-12 23:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1493,7 +1493,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:296
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:229
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1801
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1806
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:113
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:280
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:425
@@ -1508,7 +1508,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:297
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:769
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:232
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1800
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1805
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:116
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:283
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:428
@@ -1523,7 +1523,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:298
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:233
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1802
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1807
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:117
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:284
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:429
@@ -1537,7 +1537,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:299
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:770
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:235
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1803
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1808
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:119
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:286
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:430
@@ -2084,7 +2084,7 @@ msgstr[1] ""
 #: /var/www/html/apps-extra/budget/specialAppInfoFakeDummyForL10nScript.php:2
 #: /var/www/html/apps-extra/budget/src/main.js:859
 #: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:688
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1783
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1788
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1688
 #: /var/www/html/apps-extra/budget/templates/index.php:93
 #: /var/www/html/apps-extra/budget/templates/index.php:2004
@@ -2216,20 +2216,20 @@ msgid ""
 "transactions first."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:183
+#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:184
 msgid ""
 "No accounts are enabled for sync. Open Account Mappings to enable and map "
 "your accounts."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:195
+#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:196
 #, php-format
 msgid ""
 "Found %1$s account(s). Please open Account Mappings to enable and map them, "
 "then sync again."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:412
+#: /var/www/html/apps-extra/budget/lib/Service/BankSync/BankSyncService.php:425
 #, php-format
 msgid "Sync completed with %1$s error(s)"
 msgstr ""
@@ -2257,15 +2257,15 @@ msgstr ""
 msgid "Cannot skip an inactive bill"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:865
+#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:972
 msgid "Auto-pay is not enabled for this bill"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:878
+#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:985
 msgid "Bill has no account associated"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:888
+#: /var/www/html/apps-extra/budget/lib/Service/BillService.php:995
 msgid "Bill auto-paid successfully"
 msgstr ""
 
@@ -2400,35 +2400,35 @@ msgid ""
 "(^)."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:116
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:117
 #, php-format
 msgid "Failed to process upload: %1$s"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:285
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:286
 msgid "Import file not found"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:524
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:872
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:525
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:885
 msgid "Account ID is required for single-account imports"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:600
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:601
 msgid "Missing account name"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:738
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:740
 #, php-format
 msgid "Destination account %1$s not found"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:827
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:830
 #, php-format
 msgid "Failed to recalculate balance for account %1$s"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:945
+#: /var/www/html/apps-extra/budget/lib/Service/ImportService.php:959
 #, php-format
 msgid "Could not resolve account: %1$s"
 msgstr ""
@@ -2470,7 +2470,7 @@ msgstr ""
 msgid "The difference must be zero before finishing — %1$s left to resolve"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/lib/Service/ReconciliationService.php:237
+#: /var/www/html/apps-extra/budget/lib/Service/ReconciliationService.php:238
 msgid "No reconciliation in progress for this account"
 msgstr ""
 
@@ -3653,7 +3653,7 @@ msgid "Importing data... This may take a moment."
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:2270
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1487
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1495
 msgid "Import failed"
 msgstr ""
 
@@ -5529,50 +5529,46 @@ msgstr ""
 msgid "Failed to remove budget adjustment"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1791
-msgid "Auto-calculated from recurring bills/income. Enter a value to override."
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1791
-msgid "auto"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1792
-msgid "Unspent budget carried over from previous months"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1793
-msgid "{base} − {over} overspent = {available}"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1794
-msgid "{base} + {carried} carried = {available}"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1795
-msgid "(projected)"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1796
-#: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1320
-#: /var/www/html/apps-extra/budget/templates/index.php:6293
-msgid "Total"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1798
-#: /var/www/html/apps-extra/budget/templates/index.php:2076
-#: /var/www/html/apps-extra/budget/templates/index.php:3050
-msgid "Period"
-msgstr ""
-
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1808
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1785
 msgid ""
 "Envelope budgeting on: unspent budget carries to next month. Click to turn "
 "off."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1808
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1785
 msgid "Turn on envelope budgeting: unspent budget carries to next month"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1796
+msgid "Auto-calculated from recurring bills/income. Enter a value to override."
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1796
+msgid "auto"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1798
+msgid "{base} − {over} overspent = {available} available"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1799
+msgid "{base} + {carried} carried = {available} available"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1800
+msgid "(projected)"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1801
+#: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1320
+#: /var/www/html/apps-extra/budget/templates/index.php:6293
+msgid "Total"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1803
+#: /var/www/html/apps-extra/budget/templates/index.php:2076
+#: /var/www/html/apps-extra/budget/templates/index.php:3050
+msgid "Period"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/categories/CategoriesModule.js:1811
@@ -6507,81 +6503,88 @@ msgstr ""
 msgid "Successfully imported {imported} transactions ({skipped} skipped)"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1471
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1469
+msgid "%n bill was automatically marked as paid from matching transactions"
+msgid_plural ""
+"%n bills were automatically marked as paid from matching transactions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1479
 msgid "%n row could not be imported — check the server log for details."
 msgid_plural ""
 "%n rows could not be imported — check the server log for details."
 msgstr[0] ""
 msgstr[1] ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1478
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1486
 msgid "Import complete. %n category created — it may take a moment to appear."
 msgid_plural ""
 "Import complete. %n categories created — they may take a moment to appear."
 msgstr[0] ""
 msgstr[1] ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1491
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1499
 msgid "Failed to import transactions: {message}"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1514
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1522
 msgid "Auto-linked {count} transfer pairs"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1604
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1612
 msgid "Download"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1605
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1613
 msgid "Rollback"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1628
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1636
 msgid "0 Bytes"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1630
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1638
 msgid "Bytes"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1630
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1638
 msgid "KB"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1630
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1638
 msgid "MB"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1630
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1638
 msgid "GB"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1652
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1660
 msgid "Download failed"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1656
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1664
 msgid "Failed to download import file"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1661
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1669
 msgid ""
 "Are you sure you want to rollback this import? All imported transactions "
 "will be deleted."
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1676
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1684
 msgid "Rolled back %n transaction"
 msgid_plural "Rolled back %n transactions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1681
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1689
 msgid "Rollback failed"
 msgstr ""
 
-#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1685
+#: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:1693
 msgid "Failed to rollback import: {message}"
 msgstr ""
 
@@ -12172,8 +12175,9 @@ msgid "e.g., NETFLIX, SPOTIFY"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5404
-#: /var/www/html/apps-extra/budget/templates/index.php:5825
-msgid "Pattern to match in transaction descriptions for auto-linking"
+msgid ""
+"Imported transactions matching this pattern (similar amount, near the due "
+"date) automatically mark the bill as paid"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5409
@@ -12520,6 +12524,10 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5824
 msgid "e.g., PAYROLL, DIVIDEND"
+msgstr ""
+
+#: /var/www/html/apps-extra/budget/templates/index.php:5825
+msgid "Pattern to match in transaction descriptions for auto-linking"
 msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5839

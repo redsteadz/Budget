@@ -54,6 +54,7 @@ class ImportService {
         TagSetService $tagSetService,
         TransactionTagService $transactionTagService,
         ImportAccountLinkService $accountLinkService,
+        private \OCA\Budget\Service\BillService $billService,
         IL10N $l
     ) {
         $this->appData = $appData;
@@ -721,6 +722,7 @@ class ImportService {
         $accountResults = [];
         $hashCounts = [];
         $touchedAccounts = [];
+        $createdForBillMatch = [];
 
         try {
         foreach ($parsedData['accounts'] as $sourceAccount) {
@@ -785,6 +787,7 @@ class ImportService {
                         deferBalanceUpdate: true
                     );
                     $touchedAccounts[(int)$destAccountId] = true;
+                    $createdForBillMatch[] = $createdTx;
 
                     // Apply deferred tag actions from import rules
                     if (!empty($transaction['_deferred_tags'])) {
@@ -845,6 +848,15 @@ class ImportService {
 
         $totalProcessed = array_sum(array_map(fn($a) => count($a['transactions']), $parsedData['accounts']));
 
+        // Auto-mark bills paid from matching imported transactions (#274).
+        // Best-effort: a matching failure must never fail the import.
+        $billsMarkedPaid = 0;
+        try {
+            $billsMarkedPaid = $this->billService->autoMatchPaidFromImport($userId, $createdForBillMatch);
+        } catch (\Exception $e) {
+            // ignore
+        }
+
         // Remember the routing so the next same-format import can pre-fill it.
         // Best-effort: never let this break a completed import.
         try {
@@ -860,6 +872,7 @@ class ImportService {
             'totalProcessed' => $totalProcessed,
             'accountResults' => array_values($accountResults),
             'transfersLinked' => $transfersLinked,
+            'billsMarkedPaid' => $billsMarkedPaid,
         ];
     }
 
@@ -904,6 +917,7 @@ class ImportService {
         $transferLinkIds = [];
         $hashCounts = [];
         $touchedAccounts = [];
+        $createdForBillMatch = [];
 
         // Detect date format from all rows before processing individually (unless preset set it)
         if (!$preset) {
@@ -996,6 +1010,7 @@ class ImportService {
                     deferBalanceUpdate: true
                 );
                 $touchedAccounts[$txAccountId] = true;
+                $createdForBillMatch[] = $createdTx;
 
                 // Apply tags from preset (e.g., Toshl Tags)
                 if ($preset && !empty($transaction['_tagNames']) && !empty($transaction['categoryId'])) {
@@ -1079,6 +1094,15 @@ class ImportService {
             }
         }
 
+        // Auto-mark bills paid from matching imported transactions (#274).
+        // Best-effort: a matching failure must never fail the import.
+        $billsMarkedPaid = 0;
+        try {
+            $billsMarkedPaid = $this->billService->autoMatchPaidFromImport($userId, $createdForBillMatch);
+        } catch (\Exception $e) {
+            // ignore
+        }
+
         if ($hasAccountColumn) {
             $result = [
                 'imported' => $imported,
@@ -1087,6 +1111,7 @@ class ImportService {
                 'totalProcessed' => count($data),
                 'accountResults' => array_values($perAccountResults),
                 'accountsCreated' => $accountsCreated,
+                'billsMarkedPaid' => $billsMarkedPaid,
             ];
         } else {
             $result = [
@@ -1094,6 +1119,7 @@ class ImportService {
                 'skipped' => $skipped,
                 'errors' => $errors,
                 'totalProcessed' => count($data),
+                'billsMarkedPaid' => $billsMarkedPaid,
                 'accountResults' => [[
                     'destinationAccountId' => $accountId,
                     'destinationAccountName' => $account->getName(),
