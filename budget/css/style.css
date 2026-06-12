@@ -10283,27 +10283,41 @@ button.danger:hover {
     color: var(--color-error, #e9322d);
 }
 
+/* Compact inline icon next to the category name — fixed height so it can
+   never stretch the row; faint until hovered or active */
 .budget-rollover-toggle {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
     margin-left: 6px;
-    padding: 2px 8px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    border: 1px solid var(--color-border-dark, #ccc);
-    border-radius: var(--border-radius-pill, 100px);
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    line-height: 1;
+    border: none;
+    border-radius: 50%;
     background: transparent;
     color: var(--color-text-maxcontrast, #767676);
+    opacity: 0.35;
     cursor: pointer;
     vertical-align: middle;
 }
 
+.budget-category-row:hover .budget-rollover-toggle {
+    opacity: 0.8;
+}
+
 .budget-rollover-toggle:hover {
-    border-color: var(--color-primary-element, #0082c9);
+    opacity: 1;
+    background: var(--color-background-hover, rgba(0, 0, 0, 0.05));
     color: var(--color-primary-element, #0082c9);
 }
 
 .budget-rollover-toggle.active {
-    background: var(--color-primary-element-light, rgba(0, 130, 201, 0.15));
-    border-color: var(--color-primary-element, #0082c9);
+    opacity: 1;
+    background: var(--color-primary-element-light, rgba(0, 130, 201, 0.2));
     color: var(--color-primary-element, #0082c9);
 }
 

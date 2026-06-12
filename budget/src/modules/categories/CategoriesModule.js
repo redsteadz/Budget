@@ -1779,6 +1779,11 @@ export default class CategoriesModule {
                     <div class="budget-category-name level-${level}" data-label="">
                         <span class="category-color" style="background-color: ${category.color || '#3b82f6'}"></span>
                         <span class="category-label">${category.name}</span>
+                        ${rolloverEligible ? `<button class="budget-rollover-toggle ${rolloverEnabled ? 'active' : ''}"
+                                data-category-id="${category.id}"
+                                data-enabled="${rolloverEnabled ? '1' : '0'}"
+                                title="${rolloverEnabled ? t('budget', 'Envelope budgeting on: unspent budget carries to next month. Click to turn off.') : t('budget', 'Turn on envelope budgeting: unspent budget carries to next month')}"
+                                aria-pressed="${rolloverEnabled ? 'true' : 'false'}">&#8635;</button>` : ''}
                     </div>
                     <div class="budget-input-wrapper" data-label="${t('budget', 'Budget')}">
                         <input type="number"
@@ -1802,11 +1807,6 @@ export default class CategoriesModule {
                             <option value="quarterly" ${effectivePeriod === 'quarterly' ? 'selected' : ''}>${t('budget', 'Quarterly')}</option>
                             <option value="yearly" ${effectivePeriod === 'yearly' ? 'selected' : ''}>${t('budget', 'Yearly')}</option>
                         </select>
-                        ${rolloverEligible ? `<button class="budget-rollover-toggle ${rolloverEnabled ? 'active' : ''}"
-                                data-category-id="${category.id}"
-                                data-enabled="${rolloverEnabled ? '1' : '0'}"
-                                title="${rolloverEnabled ? t('budget', 'Envelope budgeting on: unspent budget carries to next month. Click to turn off.') : t('budget', 'Turn on envelope budgeting: unspent budget carries to next month')}"
-                                aria-pressed="${rolloverEnabled ? 'true' : 'false'}">&#8635;</button>` : ''}
                     </div>
                     <div class="budget-spent" data-label="${t('budget', 'Spent')}">
                         ${this.formatCurrency(spent)}
