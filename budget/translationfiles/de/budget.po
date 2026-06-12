@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-06-11 13:30+0000\n"
-"Last-Translator: St0rml <n.f@mailbox.org>\n"
+"PO-Revision-Date: 2026-06-12 19:30+0000\n"
+"Last-Translator: SGiersch <Forum@SGiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AccountController.php:73
 msgid "Failed to retrieve accounts"
@@ -209,7 +209,7 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:162
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:250
 msgid "Purchase date"
-msgstr "Kaufdatum"
+msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:181
 msgid "Failed to create asset"
@@ -7501,14 +7501,12 @@ msgid "Total Debt"
 msgstr "Gesamtschulden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:705
-#, fuzzy
 msgid "Monthly Min"
 msgstr "Monatlicher Mindestbetrag"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:743
-#, fuzzy
 msgid "All Goals Progress"
-msgstr "Gesamtfortschritt"
+msgstr "Fortschritt aller Ziele"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:835
 msgid "Year-over-Year Comparison"
@@ -9254,58 +9252,58 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4145
 msgid "This overrides the automatic rate for your account only."
-msgstr ""
+msgstr "Dies überschreibt den automatischen Wechselkurs nur für dieses Konto."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4149
 msgid "Save Rate"
-msgstr ""
+msgstr "Kurs speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4158
 msgid "Budget Sharing"
-msgstr ""
+msgstr "Budget teilen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4167
 msgid "Reset all settings to defaults"
-msgstr ""
+msgstr "Alle Einstellungen auf die Standardwerte zurücksetzen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4169
 msgid "Reset All"
-msgstr ""
+msgstr "Alles zurücksetzen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4171
 msgid "Save settings"
-msgstr ""
+msgstr "Einstellungen speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4173
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4560
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5414
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5439
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4181
 msgid "General Settings"
-msgstr ""
+msgstr "Allgemeine Einstellungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4186
 msgid "Default Currency"
-msgstr ""
+msgstr "Standardwährung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4187
 msgid "Default currency for new accounts and transactions"
-msgstr ""
+msgstr "Standardwährung für neue Konten und Transaktionen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4196
 msgid "Budget Period"
-msgstr ""
+msgstr "Budgetzeitraum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4197
 msgid "Default period for budget tracking"
-msgstr ""
+msgstr "Standardzeitraum für die Budgetauswertung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4209
 msgid "Budget Cycle Start Day"
-msgstr ""
+msgstr "tarttag des Budgetzyklus"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4210
 msgid ""
@@ -9318,43 +9316,43 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4220
 msgid "Display Settings"
-msgstr ""
+msgstr "Anzeigeeinstellungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4225
 msgid "Date Format"
-msgstr ""
+msgstr "Datumsformat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4226
 msgid "How dates are displayed throughout the app"
-msgstr ""
+msgstr "Legt fest, wie Datumsangaben in der gesamten App angezeigt werden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4229
 msgid "YYYY-MM-DD (2025-10-12)"
-msgstr ""
+msgstr "YYYY-MM-DD (2025-10-12)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4230
 msgid "MM/DD/YYYY (10/12/2025)"
-msgstr ""
+msgstr "MM/DD/YYYY (10/12/2025)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4231
 msgid "DD/MM/YYYY (12/10/2025)"
-msgstr ""
+msgstr "DD/MM/YYYY (12/10/2025)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4232
 msgid "DD.MM.YYYY (12.10.2025)"
-msgstr ""
+msgstr "DD.MM.YYYY (12.10.2025)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4233
 msgid "Mon D, YYYY (Oct 12, 2025)"
-msgstr ""
+msgstr "Mon D, YYYY (Oct 12, 2025)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4239
 msgid "First Day of Week"
-msgstr ""
+msgstr "Erster Tag der Woche"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4240
 msgid "Starting day for calendars and weekly reports"
-msgstr ""
+msgstr "Legt den ersten Tag für Kalender und Wochenberichte fest"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4253
 msgid "Number Format"
