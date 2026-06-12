@@ -67,6 +67,13 @@ return [
         ['name' => 'transaction#setTags', 'url' => '/api/transactions/{id}/tags', 'verb' => 'PUT'],
         ['name' => 'transaction#clearTags', 'url' => '/api/transactions/{id}/tags', 'verb' => 'DELETE'],
 
+        // Transaction receipt attachments
+        ['name' => 'attachment#counts', 'url' => '/api/attachments/transaction-ids', 'verb' => 'GET'],
+        ['name' => 'attachment#index', 'url' => '/api/transactions/{id}/attachments', 'verb' => 'GET'],
+        ['name' => 'attachment#attach', 'url' => '/api/transactions/{id}/attachments', 'verb' => 'POST'],
+        ['name' => 'attachment#upload', 'url' => '/api/transactions/{id}/attachments/upload', 'verb' => 'POST'],
+        ['name' => 'attachment#detach', 'url' => '/api/transactions/{id}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+
         // Category routes - specific paths before {id} wildcard
         ['name' => 'category#index', 'url' => '/api/categories', 'verb' => 'GET'],
         ['name' => 'category#tree', 'url' => '/api/categories/tree', 'verb' => 'GET'],
@@ -156,6 +163,11 @@ return [
         ['name' => 'bill#createFromDetected', 'url' => '/api/bills/create-from-detected', 'verb' => 'POST'],
         ['name' => 'bill#annualOverview', 'url' => '/api/bills/annual-overview', 'verb' => 'GET'],
         ['name' => 'bill#exportCalendar', 'url' => '/api/bills/export-calendar', 'verb' => 'POST'],
+
+        // Bills calendar feed (ICS): public token-authenticated feed + token management
+        ['name' => 'calendarFeed#billsIcs', 'url' => '/feed/bills.ics', 'verb' => 'GET'],
+        ['name' => 'calendarFeed#info', 'url' => '/api/calendar-feed', 'verb' => 'GET'],
+        ['name' => 'calendarFeed#regenerate', 'url' => '/api/calendar-feed/regenerate', 'verb' => 'POST'],
         ['name' => 'bill#show', 'url' => '/api/bills/{id}', 'verb' => 'GET'],
         ['name' => 'bill#update', 'url' => '/api/bills/{id}', 'verb' => 'PUT'],
         ['name' => 'bill#destroy', 'url' => '/api/bills/{id}', 'verb' => 'DELETE'],

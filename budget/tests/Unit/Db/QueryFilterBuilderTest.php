@@ -140,9 +140,9 @@ class QueryFilterBuilderTest extends TestCase {
         ], 't');
     }
 
-    public function testSearchFilterUsesLikeOnMultipleFields(): void {
+    public function testSearchFilterUsesCaseInsensitiveLikeOnMultipleFields(): void {
         $this->expr->expects($this->exactly(4))
-            ->method('like');
+            ->method('iLike');
 
         $this->expr->expects($this->once())->method('orX');
 

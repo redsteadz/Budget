@@ -135,6 +135,7 @@ Your layout is preserved exactly as you left it.
 - [Savings Goals](savings-goals.md) - Goals displayed in the Savings Goals tile
 - [Forecast](forecast.md) - Projections powering the Cash Flow Forecast widget
 - [Reports](reports.md) - Detailed analysis beyond dashboard summaries
+- [Nextcloud Integration](nextcloud-integration.md) - Budget widgets for Nextcloud's own dashboard
 
 ## Settings
 

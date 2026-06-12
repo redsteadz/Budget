@@ -471,27 +471,33 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
-     * Search transactions
+     * Search transactions by description, vendor or notes.
+     *
+     * @param int[]|null $visibleAccountIds Scope by account IDs (own + shared) instead of userId
      * @return Transaction[]
      */
-    public function search(string $userId, string $query, int $limit = 100): array {
+    public function search(string $userId, string $query, int $limit = 100, int $offset = 0, ?array $visibleAccountIds = null): array {
         $qb = $this->db->getQueryBuilder();
-        $searchPattern = '%' . $qb->escapeLikeParameter($query) . '%';
-        
+        // iLike + lowered pattern: plain LIKE is case-sensitive on PostgreSQL and SQLite
+        $searchPattern = '%' . $qb->escapeLikeParameter(mb_strtolower($query)) . '%';
+
         $qb->select('t.*')
             ->from($this->getTableName(), 't')
-            ->innerJoin('t', 'budget_accounts', 'a', $qb->expr()->eq('t.account_id', 'a.id'))
-            ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
-            ->andWhere(
+            ->innerJoin('t', 'budget_accounts', 'a', $qb->expr()->eq('t.account_id', 'a.id'));
+
+        $this->applyUserScope($qb, $userId, $visibleAccountIds);
+
+        $qb->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->like('t.description', $qb->createNamedParameter($searchPattern)),
-                    $qb->expr()->like('t.vendor', $qb->createNamedParameter($searchPattern)),
-                    $qb->expr()->like('t.notes', $qb->createNamedParameter($searchPattern))
+                    $qb->expr()->iLike('t.description', $qb->createNamedParameter($searchPattern)),
+                    $qb->expr()->iLike('t.vendor', $qb->createNamedParameter($searchPattern)),
+                    $qb->expr()->iLike('t.notes', $qb->createNamedParameter($searchPattern))
                 )
             )
             ->orderBy('t.date', 'DESC')
-            ->setMaxResults($limit);
-        
+            ->setMaxResults($limit)
+            ->setFirstResult($offset);
+
         return $this->findEntities($qb);
     }
 

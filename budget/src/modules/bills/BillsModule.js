@@ -243,6 +243,12 @@ export default class BillsModule {
             detectBillsBtn.addEventListener('click', () => this.detectBills());
         }
 
+        // Calendar feed subscription button
+        const calendarFeedBtn = document.getElementById('bills-calendar-feed-btn');
+        if (calendarFeedBtn) {
+            calendarFeedBtn.addEventListener('click', () => this.showCalendarFeedModal());
+        }
+
         // Bill form submission
         const billForm = document.getElementById('bill-form');
         if (billForm) {
@@ -833,6 +839,79 @@ export default class BillsModule {
             console.error('Failed to delete bill:', error);
             showError(t('budget', 'Failed to delete bill'));
         }
+    }
+
+    /**
+     * Show the calendar-subscription modal: fetches (or creates) the user's
+     * feed token and offers copyable webcal/https URLs plus regeneration.
+     */
+    async showCalendarFeedModal() {
+        let feed;
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/calendar-feed'), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            feed = await response.json();
+        } catch (error) {
+            console.error('Failed to fetch calendar feed info:', error);
+            showError(t('budget', 'Failed to get calendar feed'));
+            return;
+        }
+
+        const existing = document.getElementById('calendar-feed-modal');
+        if (existing) existing.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'calendar-feed-modal';
+        modal.className = 'modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>${t('budget', 'Bills calendar subscription')}</h3>
+                <p>${t('budget', 'Subscribe to this URL from any calendar app (Nextcloud Calendar, Thunderbird, your phone) to see upcoming bill due dates. Bills appear as all-day events for the next 12 months and refresh automatically.')}</p>
+                <div class="form-group">
+                    <label for="calendar-feed-url">${t('budget', 'Subscription URL')}</label>
+                    <input type="text" id="calendar-feed-url" readonly value="${dom.escapeHtml(feed.webcalUrl)}">
+                </div>
+                <p class="form-text">⚠️ ${t('budget', 'Anyone with this URL can read your bill names and amounts. Regenerate the link if it leaks.')}</p>
+                <div class="modal-buttons">
+                    <button type="button" class="primary" id="calendar-feed-copy">${t('budget', 'Copy link')}</button>
+                    <button type="button" class="secondary" id="calendar-feed-regenerate">${t('budget', 'Regenerate link')}</button>
+                    <button type="button" class="secondary" id="calendar-feed-close">${t('budget', 'Close')}</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.querySelector('#calendar-feed-copy').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(modal.querySelector('#calendar-feed-url').value);
+                showSuccess(t('budget', 'Link copied to clipboard'));
+            } catch (e) {
+                modal.querySelector('#calendar-feed-url').select();
+                showInfo(t('budget', 'Press Ctrl+C to copy the selected link'));
+            }
+        });
+
+        modal.querySelector('#calendar-feed-regenerate').addEventListener('click', async () => {
+            if (!confirm(t('budget', 'Regenerate the link? Existing calendar subscriptions will stop updating.'))) return;
+            try {
+                const response = await fetch(OC.generateUrl('/apps/budget/api/calendar-feed/regenerate'), {
+                    method: 'POST',
+                    headers: { 'requesttoken': OC.requestToken }
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const fresh = await response.json();
+                modal.querySelector('#calendar-feed-url').value = fresh.webcalUrl;
+                showSuccess(t('budget', 'New link generated'));
+            } catch (error) {
+                showError(t('budget', 'Failed to regenerate calendar feed token'));
+            }
+        });
+
+        modal.querySelector('#calendar-feed-close').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     }
 
     async markBillPaid(billId) {

@@ -195,22 +195,8 @@ class BillReminderJob extends TimedJob {
     }
 
     private function formatAmount(SettingService $settingService, string $userId, float $amount): string {
-        $currency = 'USD';
-
-        // Try to get user's currency setting
-        try {
-            $currency = $settingService->get($userId, 'currency') ?? 'USD';
-        } catch (\Exception $e) {
-            // Use default
-        }
-
-        $symbols = [
-            'USD' => '$', 'EUR' => '€', 'GBP' => '£', 'JPY' => '¥',
-            'CAD' => 'CA$', 'AUD' => 'A$', 'CHF' => 'CHF', 'CNY' => '¥',
-        ];
-
-        $symbol = $symbols[$currency] ?? $currency . ' ';
-        return $symbol . number_format($amount, 2);
+        // Shared implementation with the dashboard widgets and calendar feed
+        return (new \OCA\Budget\Service\AmountFormatter($settingService))->formatForUser($userId, $amount);
     }
 
     /**

@@ -3013,7 +3013,6 @@ export default class DashboardModule {
             const element = document.querySelector(`[data-widget-id="${widgetId}"]`);
             if (element) element.style.display = '';
         } else if (this.gridstack) {
-            const gridEl = document.querySelector('.dashboard-grid');
             let wrapper = document.querySelector(`[gs-id="${widgetId}"]`);
 
             if (wrapper) {
@@ -3200,13 +3199,11 @@ export default class DashboardModule {
             const positionedVisible = Object.keys(savedPositions).filter(id => visibility[id] !== false).length;
             if (positionedVisible >= visibleCount * 0.8) {
                 // Add auto-positions for any visible tiles missing from saved positions
-                let needsUpdate = false;
                 for (const [id, vis] of Object.entries(visibility)) {
                     if (vis !== false && !savedPositions[id]) {
                         const size = this.getWidgetSize(id, 'widgets');
                         const mapped = GRIDSTACK_SIZE_MAP[size] || { w: 1, h: 4 };
                         savedPositions[id] = { x: 0, y: 0, w: mapped.w, h: mapped.h, autoPosition: true };
-                        needsUpdate = true;
                     }
                 }
                 return savedPositions;

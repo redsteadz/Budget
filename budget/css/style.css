@@ -11484,6 +11484,69 @@ tr.scheduled-transaction:hover {
     margin-left: 6px;
 }
 
+/* Receipt attachments */
+.attachment-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    margin-left: 6px;
+    cursor: default;
+}
+
+.attachments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.attachment-item .attachment-thumb img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+.attachment-item a {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachment-item .attachment-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-maxcontrast);
+    padding: 2px 6px;
+}
+
+.attachment-item .attachment-remove:hover {
+    color: var(--color-error, #e9322d);
+}
+
+.attachment-missing {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.attachment-actions {
+    display: flex;
+    gap: 8px;
+}
+
 tr.pending-transaction td:first-child {
     box-shadow: inset 3px 0 0 var(--color-primary-element, #0082c9);
 }

@@ -142,6 +142,10 @@ To quickly create a transaction similar to an existing one, use the **Duplicate*
 
 This is especially useful for recurring expenses that are not exactly the same each time, like variable utility bills or grocery runs.
 
+## Receipt Attachments
+
+Receipts, invoices, and warranty documents can be attached to any saved transaction from the edit dialog's **Receipts** section — upload a new file or pick one already in your Nextcloud Files. Transactions with receipts show a 📎 badge in the list. Files always stay in your own Files space; removing an attachment (or the transaction) never deletes the file. See [Nextcloud Integration](nextcloud-integration.md#receipt-attachments) for details.
+
 ## Related Features
 
 - [Accounts](accounts.md) -- Manage the accounts that hold your transactions
@@ -149,6 +153,7 @@ This is especially useful for recurring expenses that are not exactly the same e
 - [Tags](tags.md) -- Add additional classification dimensions to transactions via tag sets
 - [Importing Bank Statements](import.md) -- Import transactions from CSV, OFX, or QIF files
 - [Import Rules](rules.md) -- Automatically categorize transactions based on description or vendor patterns
+- [Nextcloud Integration](nextcloud-integration.md) -- Attach receipts from your Files and find transactions in Nextcloud's unified search
 
 ## Settings
 

@@ -52,6 +52,7 @@ class FactoryResetServiceTest extends TestCase {
     private $assetMapper;
     private $assetSnapshotMapper;
     private TagMapper $tagMapper;
+    private \OCA\Budget\Db\AttachmentMapper $attachmentMapper;
 
     protected function setUp(): void {
         $this->db = $this->createMock(IDBConnection::class);
@@ -76,6 +77,7 @@ class FactoryResetServiceTest extends TestCase {
         $this->tagMapper = $this->createMock(TagMapper::class);
 
         $budgetSnapshotMapper = $this->createMock(BudgetSnapshotMapper::class);
+        $this->attachmentMapper = $this->createMock(\OCA\Budget\Db\AttachmentMapper::class);
 
         $this->service = new FactoryResetService(
             $this->accountMapper,
@@ -98,6 +100,7 @@ class FactoryResetServiceTest extends TestCase {
             $this->assetSnapshotMapper,
             $budgetSnapshotMapper,
             $this->tagMapper,
+            $this->attachmentMapper,
             $this->db
         );
     }
@@ -126,6 +129,7 @@ class FactoryResetServiceTest extends TestCase {
         $this->importRuleMapper->method('deleteAll')->willReturn(5);
         $this->settingMapper->method('deleteAll')->willReturn(8);
         $this->netWorthSnapshotMapper->method('deleteAll')->willReturn(12);
+        $this->attachmentMapper->method('deleteAll')->willReturn(7);
 
         $counts = $this->service->executeFactoryReset('user1');
 
@@ -133,6 +137,7 @@ class FactoryResetServiceTest extends TestCase {
         $this->assertEquals(4, $counts['accounts']);
         $this->assertEquals(10, $counts['categories']);
         $this->assertEquals(8, $counts['settings']);
+        $this->assertEquals(7, $counts['attachments']);
     }
 
     public function testExecuteFactoryResetRollsBackOnError(): void {

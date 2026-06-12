@@ -103,6 +103,10 @@ The Bills Calendar provides an annual overview of all your recurring bills. Acce
 
 > **Tip:** The Bills Calendar is especially useful at the start of the year for understanding your fixed monthly obligations and planning cash flow.
 
+### Calendar Feed Subscription
+
+Bills can also appear in your real calendar — Nextcloud Calendar, your phone, Thunderbird — via a token-authenticated ICS subscription. Click **Calendar feed** in the Bills view to get your subscription URL. See [Nextcloud Integration](nextcloud-integration.md#bills-calendar-feed) for details and security notes.
+
 ## Split Templates
 
 For bills that should be divided across multiple categories (e.g., a utility bill split between electricity and water), you can define a split template. When the bill is marked as paid, the resulting transaction is automatically split according to the template's category allocations.
@@ -125,6 +129,7 @@ These options are useful for installment plans, fixed-term subscriptions, or any
 - [Dashboard](index.md) — The Upcoming Bills tile shows bills due soon.
 - [Reports](reports.md) — The Bills Calendar provides annual bill overviews.
 - [Accounts](accounts.md) — Bills are linked to accounts for payment tracking.
+- [Nextcloud Integration](nextcloud-integration.md) — Subscribe to bills as a calendar feed; see upcoming bills on the Nextcloud dashboard.
 
 ## Settings
 

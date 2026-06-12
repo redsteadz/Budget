@@ -52,6 +52,12 @@
 | [Shared Expenses](shared-expenses.md) | Split expenses with contacts and track who owes whom |
 | [Sharing](sharing.md) | Share financial data with other Nextcloud users |
 
+## Nextcloud Integration
+
+| Document | Description |
+|----------|-------------|
+| [Nextcloud Integration](nextcloud-integration.md) | Dashboard widgets, unified search, bills calendar feed, and receipt attachments |
+
 ## Reports & Analysis
 
 | Document | Description |

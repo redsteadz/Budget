@@ -1,0 +1,9 @@
+/* Icon for the Budget widgets on the Nextcloud dashboard.
+ * The icon is black; --background-invert-if-dark flips it for dark themes. */
+.icon-budget-widget {
+    background-image: url('../img/app-dark.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: var(--background-invert-if-dark);
+}

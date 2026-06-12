@@ -23,6 +23,7 @@ class TransactionServiceTest extends TestCase {
     private AccountMapper $accountMapper;
     private TransactionTagMapper $transactionTagMapper;
     private ExpenseShareMapper $expenseShareMapper;
+    private \OCA\Budget\Db\AttachmentMapper $attachmentMapper;
 
     protected function setUp(): void {
         $this->mapper = $this->createMock(TransactionMapper::class);
@@ -32,6 +33,7 @@ class TransactionServiceTest extends TestCase {
         $splitMapper->method('findByTransactionIds')->willReturn([]);
         $this->expenseShareMapper = $this->createMock(ExpenseShareMapper::class);
         $dismissedImportMapper = $this->createMock(DismissedImportMapper::class);
+        $this->attachmentMapper = $this->createMock(\OCA\Budget\Db\AttachmentMapper::class);
 
         $this->service = new TransactionService(
             $this->mapper,
@@ -39,7 +41,8 @@ class TransactionServiceTest extends TestCase {
             $this->transactionTagMapper,
             $splitMapper,
             $this->expenseShareMapper,
-            $dismissedImportMapper
+            $dismissedImportMapper,
+            $this->attachmentMapper
         );
     }
 
@@ -355,6 +358,10 @@ class TransactionServiceTest extends TestCase {
         $this->transactionTagMapper->expects($this->once())
             ->method('deleteByTransaction')
             ->with(1);
+
+        $this->attachmentMapper->expects($this->once())
+            ->method('deleteByTransaction')
+            ->with(1, 'user1');
 
         $deleteHappenedBeforeRecalc = false;
         $this->mapper->expects($this->once())

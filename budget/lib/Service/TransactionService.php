@@ -31,7 +31,8 @@ class TransactionService {
         TransactionTagMapper $transactionTagMapper,
         TransactionSplitMapper $splitMapper,
         ExpenseShareMapper $expenseShareMapper,
-        DismissedImportMapper $dismissedImportMapper
+        DismissedImportMapper $dismissedImportMapper,
+        private \OCA\Budget\Db\AttachmentMapper $attachmentMapper
     ) {
         $this->mapper = $mapper;
         $this->accountMapper = $accountMapper;
@@ -497,9 +498,11 @@ class TransactionService {
             }
         }
 
-        // Cascade delete: Delete transaction tags and expense shares
+        // Cascade delete: tags, expense shares and attachment references
+        // (attachment files in the user's Files are never touched)
         $this->transactionTagMapper->deleteByTransaction($id);
         $this->expenseShareMapper->deleteByTransaction($id, $userId);
+        $this->attachmentMapper->deleteByTransaction($id, $userId);
 
         $this->mapper->delete($transaction);
 

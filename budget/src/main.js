@@ -179,7 +179,21 @@ class BudgetApp {
         this.setupEventListeners();
         await this.loadInitialData();
         this.bankSyncModule.init();
-        this.showView('dashboard');
+
+        // Honor a deep link in the URL hash (e.g. #/transactions?search=rent
+        // from unified search results) instead of always landing on the
+        // dashboard. Unknown hashes fall through to the dashboard.
+        const hashMatch = window.location.hash.match(/^#\/?([a-z-]+)(?:\?(.*))?$/);
+        if (hashMatch && Router.VIEW_LOADERS[hashMatch[1]]) {
+            if (hashMatch[1] === 'transactions' && hashMatch[2]) {
+                const search = new URLSearchParams(hashMatch[2]).get('search');
+                const searchInput = document.getElementById('filter-search');
+                if (search && searchInput) searchInput.value = search;
+            }
+            this.showView(hashMatch[1]);
+        } else {
+            this.showView('dashboard');
+        }
     }
 
 
@@ -1097,6 +1111,10 @@ class BudgetApp {
             const forecastExcludedBadge = transaction.excludedFromForecast
                 ? `<span class="forecast-excluded-badge" title="${t('budget', 'Excluded from forecast (extraordinary / one-time)')}">${t('budget', 'No forecast')}</span>`
                 : '';
+            const attachmentCount = this.attachmentCounts?.[transaction.id];
+            const attachmentBadge = attachmentCount
+                ? `<span class="attachment-indicator" title="${n('budget', '%n receipt attached', '%n receipts attached', attachmentCount)}">&#x1F4CE;${attachmentCount > 1 ? ' ' + attachmentCount : ''}</span>`
+                : '';
             return `
                 <tr class="transaction-row ${isLinked ? 'is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}${transaction.status === 'scheduled' ? ' scheduled-transaction' : ''}${transaction.status === 'pending' ? ' pending-transaction' : ''}" data-transaction-id="${transaction.id}">
                     <td class="select-column">
@@ -1117,7 +1135,7 @@ class BudgetApp {
                         <div class="transaction-description">
                             <span class="primary-text cell-display">${this.escapeHtml(transaction.description) || t('budget', 'No description')}</span>
                             ${transaction.reference ? `<span class="secondary-text">${this.escapeHtml(transaction.reference)}</span>` : ''}
-                            ${(linkedBadge || splitBadge || sharedBadge || pendingBadge || forecastExcludedBadge) ? `<div class="transaction-badges">${pendingBadge}${forecastExcludedBadge}${linkedBadge}${splitBadge}${sharedBadge}</div>` : ''}
+                            ${(linkedBadge || splitBadge || sharedBadge || pendingBadge || forecastExcludedBadge || attachmentBadge) ? `<div class="transaction-badges">${pendingBadge}${forecastExcludedBadge}${attachmentBadge}${linkedBadge}${splitBadge}${sharedBadge}</div>` : ''}
                         </div>
                     </td>
                     <td class="vendor-column editable-cell"
@@ -1358,10 +1376,11 @@ class BudgetApp {
             this.transactions = Array.isArray(result) ? result : (result.transactions || result);
             this.runningBalances = result.runningBalances ?? null;
 
-            // Load tags and shared status for all displayed transactions
+            // Load tags, shared status and attachment counts for all displayed transactions
             await Promise.all([
                 this.loadAllTransactionTags(),
                 this.loadSharedTransactionIds(),
+                this.loadAttachmentCounts(),
             ]);
 
             // Apply client-side filtering if backend doesn't support it
@@ -4097,6 +4116,24 @@ class BudgetApp {
         } catch (error) {
             console.error('Failed to load shared transaction statuses:', error);
             this.sharedTransactionStatuses = {};
+        }
+    }
+
+    /** Attachment counts per transaction (paperclip badges) — one bulk map per load. */
+    async loadAttachmentCounts() {
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/attachments/transaction-ids'), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) throw new Error('Failed to load attachment counts');
+            const counts = await response.json();
+            this.attachmentCounts = {};
+            for (const [id, count] of Object.entries(counts)) {
+                this.attachmentCounts[parseInt(id)] = count;
+            }
+        } catch (error) {
+            console.error('Failed to load attachment counts:', error);
+            this.attachmentCounts = {};
         }
     }
 

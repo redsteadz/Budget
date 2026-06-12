@@ -1307,6 +1307,9 @@ export default class TransactionsModule {
                 const excludeForecastEl = document.getElementById('transaction-excluded-from-forecast');
                 if (excludeForecastEl) excludeForecastEl.checked = !!transaction.excludedFromForecast;
 
+                // Receipt attachments (only on saved transactions)
+                this.setupAttachmentsSection(transaction.id);
+
                 // Load tag selectors for this transaction
                 this.app.renderTransactionTagSelectors(transaction.categoryId, transaction.id);
             } else {
@@ -1314,6 +1317,10 @@ export default class TransactionsModule {
                 document.getElementById('transaction-form').reset();
                 document.getElementById('transaction-id').value = '';
                 setDateValue('transaction-date', formatters.getTodayDateString());
+
+                // Attachments are only available once the transaction is saved
+                const attachmentsGroup = document.getElementById('transaction-attachments-group');
+                if (attachmentsGroup) attachmentsGroup.style.display = 'none';
 
                 // Reset cross-currency transfer fields
                 const destWrapper = document.getElementById('transfer-dest-amount-wrapper');
@@ -1447,6 +1454,131 @@ export default class TransactionsModule {
             // Open modal with all data pre-filled but no ID, so save creates a new transaction
             const duplicate = { ...transaction, id: null };
             this.showTransactionModal(duplicate);
+        }
+    }
+
+    // ===========================
+    // Receipt attachments
+    // ===========================
+
+    /** Show the receipts section for a saved transaction and wire its buttons (once). */
+    setupAttachmentsSection(transactionId) {
+        const group = document.getElementById('transaction-attachments-group');
+        if (!group) return;
+        group.style.display = '';
+        this._attachmentTxId = transactionId;
+
+        if (!this._attachmentsBound) {
+            this._attachmentsBound = true;
+            const fileInput = document.getElementById('attachment-file-input');
+            document.getElementById('attachment-upload-btn')?.addEventListener('click', () => fileInput?.click());
+            fileInput?.addEventListener('change', async () => {
+                for (const file of fileInput.files) {
+                    await this.uploadAttachment(this._attachmentTxId, file);
+                }
+                fileInput.value = '';
+                await this.loadAttachments(this._attachmentTxId);
+            });
+            document.getElementById('attachment-pick-btn')?.addEventListener('click', () => {
+                OC.dialogs.filepicker(
+                    t('budget', 'Select receipt'),
+                    async (path) => {
+                        await this.attachExistingFile(this._attachmentTxId, path);
+                        await this.loadAttachments(this._attachmentTxId);
+                    },
+                    false,
+                    ['image/*', 'application/pdf'],
+                    true
+                );
+            });
+        }
+
+        this.loadAttachments(transactionId);
+    }
+
+    async loadAttachments(transactionId) {
+        const list = document.getElementById('transaction-attachments-list');
+        if (!list) return;
+        try {
+            const response = await fetch(
+                OC.generateUrl(`/apps/budget/api/transactions/${transactionId}/attachments`),
+                { headers: { 'requesttoken': OC.requestToken } }
+            );
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const attachments = await response.json();
+
+            list.innerHTML = attachments.map(a => {
+                const thumb = a.isImage && !a.missing
+                    ? `<img src="${OC.generateUrl(`/core/preview?fileId=${a.fileId}&x=64&y=64&a=1`)}" alt="" onerror="this.replaceWith(document.createTextNode('📄'))">`
+                    : '📄';
+                const name = dom.escapeHtml(a.fileName || t('budget', 'Receipt'));
+                const openLink = a.missing
+                    ? `<span class="attachment-missing" title="${t('budget', 'The file no longer exists in your Files')}">${name}</span>`
+                    : `<a href="${OC.generateUrl('/f/' + a.fileId)}" target="_blank" rel="noopener">${name}</a>`;
+                return `
+                    <div class="attachment-item ${a.missing ? 'attachment-missing' : ''}" data-attachment-id="${a.id}">
+                        <span class="attachment-thumb">${thumb}</span>
+                        ${openLink}
+                        <button type="button" class="attachment-remove" title="${t('budget', 'Remove attachment')}" data-attachment-id="${a.id}">✕</button>
+                    </div>`;
+            }).join('') || `<span class="form-text">${t('budget', 'No receipts attached')}</span>`;
+
+            list.querySelectorAll('.attachment-remove').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    await this.detachAttachment(transactionId, parseInt(btn.dataset.attachmentId));
+                    await this.loadAttachments(transactionId);
+                });
+            });
+        } catch (error) {
+            console.error('Failed to load attachments:', error);
+            list.innerHTML = `<span class="form-text">${t('budget', 'Failed to load attachments')}</span>`;
+        }
+    }
+
+    async uploadAttachment(transactionId, file) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await fetch(
+                OC.generateUrl(`/apps/budget/api/transactions/${transactionId}/attachments/upload`),
+                { method: 'POST', headers: { 'requesttoken': OC.requestToken }, body: formData }
+            );
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || t('budget', 'Failed to upload receipt'));
+            this.app.attachmentCounts = null; // invalidate badge cache
+        } catch (error) {
+            showError(error.message || t('budget', 'Failed to upload receipt'));
+        }
+    }
+
+    async attachExistingFile(transactionId, path) {
+        try {
+            const response = await fetch(
+                OC.generateUrl(`/apps/budget/api/transactions/${transactionId}/attachments`),
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'requesttoken': OC.requestToken },
+                    body: JSON.stringify({ path })
+                }
+            );
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || t('budget', 'Failed to attach file'));
+            this.app.attachmentCounts = null;
+        } catch (error) {
+            showError(error.message || t('budget', 'Failed to attach file'));
+        }
+    }
+
+    async detachAttachment(transactionId, attachmentId) {
+        try {
+            const response = await fetch(
+                OC.generateUrl(`/apps/budget/api/transactions/${transactionId}/attachments/${attachmentId}`),
+                { method: 'DELETE', headers: { 'requesttoken': OC.requestToken } }
+            );
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            this.app.attachmentCounts = null;
+        } catch (error) {
+            showError(t('budget', 'Failed to remove attachment'));
         }
     }
 
@@ -1781,7 +1913,7 @@ export default class TransactionsModule {
         }
         amountInput.addEventListener('input', () => {
             amountInput.dataset.userEdited = 'true';
-            this.autoFillInlineSplitRemaining(amountInput);
+            this.autoFillInlineSplitRemaining();
         });
 
         row.querySelector('.split-remove-btn').addEventListener('click', (e) => {
@@ -1812,7 +1944,7 @@ export default class TransactionsModule {
         }
     }
 
-    autoFillInlineSplitRemaining(changedInput) {
+    autoFillInlineSplitRemaining() {
         const totalAmount = parseFloat(document.getElementById('transaction-amount')?.value) || 0;
         const rows = Array.from(document.querySelectorAll('#inline-splits-container .split-row'));
         let allocated = 0;

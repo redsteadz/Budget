@@ -53,6 +53,23 @@ class SettingMapper extends QBMapper {
     }
 
     /**
+     * Reverse lookup: find the setting row holding a given key/value pair —
+     * used to resolve the owning user of a calendar-feed token.
+     *
+     * @throws DoesNotExistException
+     */
+    public function findByKeyValue(string $key, string $value): Setting {
+        $qb = $this->db->getQueryBuilder();
+
+        $qb->select('*')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('key', $qb->createNamedParameter($key, IQueryBuilder::PARAM_STR)))
+            ->andWhere($qb->expr()->eq('value', $qb->createNamedParameter($value, IQueryBuilder::PARAM_STR)));
+
+        return $this->findEntity($qb);
+    }
+
+    /**
      * Delete a setting by key
      *
      * @param string $userId

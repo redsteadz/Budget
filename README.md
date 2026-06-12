@@ -8,16 +8,16 @@ A comprehensive financial management app for Nextcloud. Track spending habits, m
 
 ![Dashboard Screenshot](screenshots/dashboard.png)
 
-## What's New in v2.28
+## What's New in v2.29
 
-- **Rock-Solid Balances** - Account balances are now derived directly from your transactions (opening balance + ledger), eliminating the entire class of balance-drift bugs — past inconsistencies self-heal and displayed balances are preserved on upgrade ([#274](https://github.com/otherworld-dev/Budget/issues/274))
-- **Shared Savings Goals** - Share a savings goal with another user; write access allows editing and adding money ([#255](https://github.com/otherworld-dev/Budget/issues/255))
-- **Auto-Derived Budgets** - Categories without a manual budget automatically use their committed recurring bills/income as the limit, marked "auto" ([#269](https://github.com/otherworld-dev/Budget/issues/269))
-- **Forecast Accuracy** - Mark extraordinary one-time transactions (or recurring items, or import rules) as excluded from the forecast so they don't skew projections ([#270](https://github.com/otherworld-dev/Budget/issues/270))
-- **Smarter Imports** - Reusable CSV import templates, OFX/QIF multi-account routing, reliable duplicate detection (identical legitimate rows import correctly), and "skip duplicates off" now imports the whole batch ([#247](https://github.com/otherworld-dev/Budget/issues/247), [#275](https://github.com/otherworld-dev/Budget/issues/275), [#276](https://github.com/otherworld-dev/Budget/issues/276))
-- **Bank Sync Pending Transactions** - Optionally import not-yet-posted transactions, auto-reconciled when they clear ([#257](https://github.com/otherworld-dev/Budget/issues/257))
-- **Bill Start Dates & "Shared with me"** - Bills can start at a future date; recipients can now see expenses shared with them ([#268](https://github.com/otherworld-dev/Budget/issues/268), [#248](https://github.com/otherworld-dev/Budget/issues/248))
-- **Mobile Dashboard** - Collapses to a clean single-column layout on phones ([#249](https://github.com/otherworld-dev/Budget/issues/249))
+Budget now feels like a first-class Nextcloud citizen ([docs](docs/nextcloud-integration.md)):
+
+- **Nextcloud Dashboard Widgets** - Upcoming bills and a budget/balance overview right on Nextcloud's own dashboard
+- **Unified Search** - Find transactions from the Nextcloud search bar; results deep-link into the app with the term pre-filled
+- **Bills Calendar Feed** - Subscribe to your bills from Nextcloud Calendar, your phone, or Thunderbird via a token-secured ICS feed — including custom recurrence schedules and reminders as calendar alarms
+- **Receipt Attachments** - Attach receipts and invoices to transactions, stored in your own Files (upload or pick existing); 📎 badges, thumbnails, and renames followed automatically
+
+Highlights from v2.28: ledger-derived **rock-solid balances** ([#274](https://github.com/otherworld-dev/Budget/issues/274)), auto-derived budgets ([#269](https://github.com/otherworld-dev/Budget/issues/269)), forecast exclusions ([#270](https://github.com/otherworld-dev/Budget/issues/270)), smarter import duplicate handling ([#275](https://github.com/otherworld-dev/Budget/issues/275), [#276](https://github.com/otherworld-dev/Budget/issues/276)).
 
 See the [full changelog](budget/CHANGELOG.md) for details.
 
@@ -129,6 +129,12 @@ Popular topics:
 - **Bills Calendar** - Visualize when bills are due throughout the year
 - **Year-over-Year Reports** - Compare spending across multiple years side-by-side
 - **Reports & Charts** - Visualize spending patterns, income, and cash flow over time
+
+### Nextcloud Integration
+- **Dashboard Widgets** - Upcoming bills and budget overview on the Nextcloud dashboard
+- **Unified Search** - Transactions searchable from the Nextcloud top bar (own and shared accounts)
+- **Bills Calendar Feed** - Token-authenticated ICS subscription for any calendar client, with reminders as alarms
+- **Receipt Attachments** - Receipts linked from your own Files; never copied, never deleted by the app
 
 ### Security & Data Management
 - **Password Protection** - Optional secondary password layer for enhanced app security

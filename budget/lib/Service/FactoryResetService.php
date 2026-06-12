@@ -51,6 +51,7 @@ class FactoryResetService {
         private AssetSnapshotMapper $assetSnapshotMapper,
         private BudgetSnapshotMapper $budgetSnapshotMapper,
         private TagMapper $tagMapper,
+        private \OCA\Budget\Db\AttachmentMapper $attachmentMapper,
         private IDBConnection $db
     ) {
     }
@@ -76,6 +77,8 @@ class FactoryResetService {
             $counts['expenseShares'] = $this->safeDelete($this->expenseShareMapper, $userId);
             $counts['transactionSplits'] = $this->safeDelete($this->transactionSplitMapper, $userId);
             $counts['settlements'] = $this->safeDelete($this->settlementMapper, $userId);
+            // Attachment rows only — the receipt files stay in the user's Files
+            $counts['attachments'] = $this->safeDelete($this->attachmentMapper, $userId);
 
             // Level 2: Records dependent on accounts/categories
             $counts['transactions'] = $this->safeDelete($this->transactionMapper, $userId);

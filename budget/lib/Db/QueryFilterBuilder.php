@@ -107,14 +107,15 @@ class QueryFilterBuilder {
         }
 
         // Text search filter
+        // iLike + lowered pattern: plain LIKE is case-sensitive on PostgreSQL and SQLite
         if (!empty($filters['search'])) {
-            $searchPattern = '%' . $qb->escapeLikeParameter($filters['search']) . '%';
+            $searchPattern = '%' . $qb->escapeLikeParameter(mb_strtolower($filters['search'])) . '%';
             $qb->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->like("{$alias}.description", $qb->createNamedParameter($searchPattern)),
-                    $qb->expr()->like("{$alias}.vendor", $qb->createNamedParameter($searchPattern)),
-                    $qb->expr()->like("{$alias}.reference", $qb->createNamedParameter($searchPattern)),
-                    $qb->expr()->like("{$alias}.notes", $qb->createNamedParameter($searchPattern))
+                    $qb->expr()->iLike("{$alias}.description", $qb->createNamedParameter($searchPattern)),
+                    $qb->expr()->iLike("{$alias}.vendor", $qb->createNamedParameter($searchPattern)),
+                    $qb->expr()->iLike("{$alias}.reference", $qb->createNamedParameter($searchPattern)),
+                    $qb->expr()->iLike("{$alias}.notes", $qb->createNamedParameter($searchPattern))
                 )
             );
         }

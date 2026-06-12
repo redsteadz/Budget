@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Nextcloud dashboard widgets**: "Upcoming bills" (next five bills due within 60 days, with overdue/due-today wording) and "Overview" (total balance, this month's budget progress, and an attention line for over-budget categories) — enable them via Customize on the Nextcloud dashboard
+- **Unified search**: transactions (description, vendor, notes — own and shared accounts) now appear in Nextcloud's global search bar; clicking a result opens the Transactions view with the search pre-filled
+- **Bills calendar feed**: subscribe to your bills from Nextcloud Calendar, phones, or Thunderbird via a token-authenticated ICS feed (Bills > Calendar feed). Occurrences are materialized 12 months ahead — including custom recurrence patterns, semi-monthly schedules, end dates and remaining-payment limits — and bill reminders become calendar alarms. The token can be regenerated at any time; failed token guesses are rate-limited and brute-force protected
+- **Receipt attachments**: attach receipts/invoices (JPEG, PNG, WebP, HEIC, PDF — up to 25 MB) to transactions from the edit dialog — upload into `Budget/Receipts/<year>/` or pick an existing file from your Files. Files stay in your own Files space (quota, backups, ownership); the app stores only a reference and never deletes files. Transactions with receipts show a 📎 badge; image attachments get thumbnails; renames/moves in Files are followed automatically and deleted files are shown as missing instead of breaking
+- Deep links into the app (`#/transactions`, `#/bills`, …) are now honored on page load, including a pre-filled transaction search (`#/transactions?search=…`)
+
+### Fixed
+- Transaction search is now case-insensitive on PostgreSQL and SQLite (plain `LIKE` is case-sensitive there — searching "rent" missed "Rent"; MySQL/MariaDB installs were unaffected)
+
 ## [2.28.3] - 2026-06-12
 
 ### Security

@@ -2378,6 +2378,10 @@ style('budget', 'budget-app');
             <div class="view-header">
                 <h2><?php p($l->t('Bills')); ?></h2>
                 <div class="view-controls">
+                    <button id="bills-calendar-feed-btn" class="secondary" title="<?php p($l->t('Subscribe to your bills as a calendar')); ?>">
+                        <span class="icon-calendar-dark" aria-hidden="true"></span>
+                        <?php p($l->t('Calendar')); ?>
+                    </button>
                     <button id="detect-bills-btn" class="secondary" title="<?php p($l->t('Auto-detect recurring bills from transactions')); ?>">
                         <span class="icon-search" aria-hidden="true"></span>
                         <?php p($l->t('Detect Bills')); ?>
@@ -4972,6 +4976,17 @@ style('budget', 'budget-app');
 
             <!-- Transaction Tags Container -->
             <div id="transaction-tags-container"></div>
+
+            <div id="transaction-attachments-group" class="form-group" style="display: none;">
+                <label><?php p($l->t('Receipts')); ?></label>
+                <div id="transaction-attachments-list" class="attachments-list"></div>
+                <div class="attachment-actions">
+                    <button type="button" id="attachment-upload-btn" class="secondary"><?php p($l->t('Upload receipt')); ?></button>
+                    <input type="file" id="attachment-file-input" accept="image/*,application/pdf" multiple style="display: none;">
+                    <button type="button" id="attachment-pick-btn" class="secondary"><?php p($l->t('Choose from Files')); ?></button>
+                </div>
+                <small class="form-text"><?php p($l->t('Receipts are stored in your Files (Budget/Receipts) and linked to this transaction.')); ?></small>
+            </div>
 
             <div class="form-group">
                 <label for="transaction-notes"><?php p($l->t('Notes')); ?></label>

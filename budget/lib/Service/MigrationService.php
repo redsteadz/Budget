@@ -177,7 +177,11 @@ class MigrationService {
                 'bills' => count($billsData),
                 'importRules' => count($importRulesData),
                 'settings' => count($settingsData)
-            ]
+            ],
+            // Receipt attachments reference files in the user's Files space by
+            // instance-specific fileId — the files themselves are not part of
+            // this archive, and attachment links are not restored on import.
+            'attachmentsNote' => 'Receipt files are not included; file references do not survive export/import.',
         ];
 
         return [

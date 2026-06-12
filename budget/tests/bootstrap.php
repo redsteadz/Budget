@@ -16,6 +16,9 @@ require_once __DIR__ . '/stubs/doctrine_dbal.php';
 // Load OC server stub (required by OCP\Server::get() in background jobs)
 require_once __DIR__ . '/stubs/oc_server.php';
 
+// Load OC\Hooks\Emitter stub (IRootFolder extends it; not in the ocp dev package)
+require_once __DIR__ . '/stubs/oc_hooks_emitter.php';
+
 // Register test namespace so shared test helpers (e.g. MockPhpInputStream) are autoloaded
 $autoloader->addPsr4('OCA\\Budget\\Tests\\', __DIR__);
 

@@ -32,3 +32,5 @@
  * Copyright(c) 2015 Tiancheng "Timothy" Gu
  * MIT Licensed
  */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
