@@ -267,6 +267,59 @@ class BillMapperTest extends TestCase {
         $this->mapper->updateFields(1, 'user1', ['name' => 'Updated Bill']);
     }
 
+    /**
+     * Regression for #284: editing any bill failed with "Failed to update
+     * bill" because start_date was added as a persisted column (migration 075)
+     * but never added to UPDATABLE_COLUMNS, so the always-sent startDate field
+     * tripped the whitelist guard. start_date must be updatable.
+     */
+    public function testUpdateFieldsAllowsStartDate(): void {
+        $this->qb->expects($this->once())->method('executeStatement');
+
+        $this->mapper->updateFields(1, 'user1', ['start_date' => '2026-01-01']);
+    }
+
+    /**
+     * Guards the whole class of bug behind #284: every column the bill entity
+     * persists must be accepted by updateFields. Adding a persisted column to
+     * the entity/migrations without whitelisting it here breaks every edit of a
+     * bill carrying that field.
+     */
+    public function testUpdateFieldsAcceptsEveryPersistedColumn(): void {
+        foreach ($this->persistedBillColumns() as $column) {
+            try {
+                $this->mapper->updateFields(1, 'user1', [$column => 'x']);
+            } catch (\InvalidArgumentException $e) {
+                $this->fail("Persisted column '$column' is not in UPDATABLE_COLUMNS: " . $e->getMessage());
+            }
+        }
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Snake-cased names of every column the Bill entity persists, derived by
+     * reflection so new columns are covered automatically. Excludes identity
+     * (id/user_id), immutable (created_at) and the non-persisted currency
+     * helper, none of which go through updateFields.
+     */
+    private function persistedBillColumns(): array {
+        $skip = ['id', 'userId', 'createdAt', 'currency'];
+        $columns = [];
+        $reflection = new \ReflectionClass(Bill::class);
+        foreach ($reflection->getProperties(\ReflectionProperty::IS_PROTECTED) as $property) {
+            // Only domain properties declared on Bill itself, not framework internals
+            if ($property->getDeclaringClass()->getName() !== Bill::class) {
+                continue;
+            }
+            $name = $property->getName();
+            if (str_starts_with($name, '_') || in_array($name, $skip, true)) {
+                continue;
+            }
+            $columns[] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $name));
+        }
+        return $columns;
+    }
+
     // ===== deleteAll =====
 
     public function testDeleteAllReturnsAffectedRows(): void {
