@@ -391,7 +391,7 @@ class BudgetApp {
             });
 
             // Column visibility toggles
-            ['date', 'description', 'vendor', 'category', 'amount', 'account'].forEach(col => {
+            ['date', 'description', 'vendor', 'category', 'tags', 'amount', 'account'].forEach(col => {
                 const checkbox = document.getElementById(`col-toggle-${col}`);
                 if (checkbox) {
                     checkbox.addEventListener('change', () => {
@@ -3950,6 +3950,7 @@ class BudgetApp {
             description: true,
             vendor: true,
             category: true,
+            tags: true,
             amount: true,
             balance: true,
             account: true
@@ -3976,6 +3977,7 @@ class BudgetApp {
             description: 'description-column',
             vendor: 'vendor-column',
             category: 'category-column',
+            tags: 'tags-column',
             amount: 'amount-column',
             balance: 'balance-column',
             account: 'account-column'

@@ -1631,6 +1631,10 @@ style('budget', 'budget-app');
                                         <span><?php p($l->t('Category')); ?></span>
                                     </label>
                                     <label>
+                                        <input type="checkbox" id="col-toggle-tags" checked>
+                                        <span><?php p($l->t('Tags')); ?></span>
+                                    </label>
+                                    <label>
                                         <input type="checkbox" id="col-toggle-amount" checked>
                                         <span><?php p($l->t('Amount')); ?></span>
                                     </label>

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Dropdowns in the transaction list (the column-configuration gear menu and the in-cell category/tag/account editors) were cut off when the table had only a few rows, because the table area was shorter than the dropdowns. The transaction table now fills the available height, so every dropdown has room to open in full ([#280](https://github.com/otherworld-dev/Budget/issues/280))
+- The Tags column couldn't be shown/hidden — the Show/Hide Columns menu was missing a Tags entry, and the column wasn't wired into the visibility logic. Tags can now be toggled like the other columns ([#281](https://github.com/otherworld-dev/Budget/issues/281))
 
 ## [2.30.1] - 2026-06-13
 
