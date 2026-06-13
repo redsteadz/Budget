@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- The column-configuration menu (gear icon in the transaction list) overflowed badly and produced nested scrollbars on an otherwise empty page when there were few transactions. The table's horizontal scroll was applied to the whole container, which (per CSS rules) also clipped it vertically and trapped the dropdown; horizontal scrolling now wraps only the table, so the menu shows in full regardless of how short the table is ([#280](https://github.com/otherworld-dev/Budget/issues/280))
+
 ## [2.30.1] - 2026-06-13
 
 ### Fixed

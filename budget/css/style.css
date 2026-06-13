@@ -3544,6 +3544,13 @@ button.danger:hover {
     background: var(--color-main-background);
     border: 1px solid var(--color-border);
     border-radius: 4px;
+}
+
+/* Only the table scrolls horizontally — keeping it off .table-container
+   means the header's column-config dropdown isn't trapped in an overflow
+   context (overflow-x:auto forces overflow-y:auto, which clipped the menu
+   on short tables — #280) */
+.table-scroll {
     overflow-x: auto;
 }
 
