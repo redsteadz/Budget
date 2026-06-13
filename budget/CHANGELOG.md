@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- The column-configuration menu (gear icon in the transaction list) overflowed badly and produced nested scrollbars on an otherwise empty page when there were few transactions. The table's horizontal scroll was applied to the whole container, which (per CSS rules) also clipped it vertically and trapped the dropdown; horizontal scrolling now wraps only the table, so the menu shows in full regardless of how short the table is ([#280](https://github.com/otherworld-dev/Budget/issues/280))
+- Dropdowns in the transaction list (the column-configuration gear menu and the in-cell category/tag/account editors) were cut off and produced nested scrollbars when the table had only a few rows. The table's horizontal scroll clipped them vertically (a CSS side effect), and the table didn't fill the page. Horizontal scrolling now wraps only the table, and the table area stretches to fill the available height so every dropdown opens in full ([#280](https://github.com/otherworld-dev/Budget/issues/280))
 
 ## [2.30.1] - 2026-06-13
 

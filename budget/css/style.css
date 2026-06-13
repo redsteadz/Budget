@@ -3549,9 +3549,13 @@ button.danger:hover {
 /* Only the table scrolls horizontally — keeping it off .table-container
    means the header's column-config dropdown isn't trapped in an overflow
    context (overflow-x:auto forces overflow-y:auto, which clipped the menu
-   on short tables — #280) */
+   on short tables — #280).
+   The scroll area also stretches to fill the available height so that
+   in-cell dropdowns (category/tag/account editors) have room to open
+   instead of being clipped when the table has only a few rows. */
 .table-scroll {
     overflow-x: auto;
+    min-height: calc(100vh - 200px);
 }
 
 .table-header {
