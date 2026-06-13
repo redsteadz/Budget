@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Dropdowns in the transaction list (the column-configuration gear menu and the in-cell category/tag/account editors) were cut off and produced nested scrollbars when the table had only a few rows. The table's horizontal scroll clipped them vertically (a CSS side effect), and the table didn't fill the page. Horizontal scrolling now wraps only the table, and the table area stretches to fill the available height so every dropdown opens in full ([#280](https://github.com/otherworld-dev/Budget/issues/280))
+- Dropdowns in the transaction list (the column-configuration gear menu and the in-cell category/tag/account editors) were cut off when the table had only a few rows, because the table area was shorter than the dropdowns. The transaction table now fills the available height, so every dropdown has room to open in full ([#280](https://github.com/otherworld-dev/Budget/issues/280))
 
 ## [2.30.1] - 2026-06-13
 

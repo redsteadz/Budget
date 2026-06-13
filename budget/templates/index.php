@@ -1659,7 +1659,6 @@ style('budget', 'budget-app');
                     </div>
                 </div>
 
-                <div class="table-scroll">
                 <table id="transactions-table" class="transactions-table enhanced">
                     <thead>
                         <tr>
@@ -1699,7 +1698,6 @@ style('budget', 'budget-app');
                     </thead>
                     <tbody></tbody>
                 </table>
-                </div>
 
                 <div class="pagination-controls pagination-bottom">
                     <button id="prev-page-btn-bottom" class="secondary" disabled>←</button>
