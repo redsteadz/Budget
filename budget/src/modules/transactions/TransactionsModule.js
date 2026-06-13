@@ -623,13 +623,10 @@ export default class TransactionsModule {
     toggleBulkMode() {
         const bulkPanel = document.getElementById('bulk-actions-panel');
         const bulkBtn = document.getElementById('bulk-actions-btn');
-        const selectColumn = document.querySelectorAll('.select-column');
 
         if (bulkPanel.style.display === 'none') {
             bulkPanel.style.display = 'block';
             bulkBtn.classList.add('active');
-            selectColumn.forEach(col => col.style.display = 'table-cell');
-            this.app.loadTransactions(); // Reload to show checkboxes
         } else {
             this.cancelBulkMode();
         }
@@ -638,14 +635,18 @@ export default class TransactionsModule {
     cancelBulkMode() {
         const bulkPanel = document.getElementById('bulk-actions-panel');
         const bulkBtn = document.getElementById('bulk-actions-btn');
-        const selectColumn = document.querySelectorAll('.select-column');
 
         bulkPanel.style.display = 'none';
         bulkBtn.classList.remove('active');
-        selectColumn.forEach(col => col.style.display = 'none');
         this.selectedTransactions.clear();
+        // Uncheck any selected rows in place. The select column is always
+        // visible, so a full reload is unnecessary — and a reload here used
+        // to desync the persistent header cell from regenerated rows,
+        // misaligning the table until the page was refreshed (#279).
+        document.querySelectorAll('.transaction-checkbox:checked').forEach(cb => { cb.checked = false; });
+        const selectAll = document.getElementById('select-all-transactions');
+        if (selectAll) { selectAll.checked = false; selectAll.indeterminate = false; }
         this.updateBulkActionsState();
-        this.app.loadTransactions(); // Reload to hide checkboxes
     }
 
     toggleAllTransactionSelection(checked) {

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Adding a detected recurring bill (the **Detect Bills** results, and the new suggestions card) failed with a 500 error. `createFromDetected` passed misaligned positional arguments into bill creation — a value landed in the wrong parameter slot and threw a `TypeError` for every frequency. The call now uses named arguments so it can't drift, and numeric fields are coerced defensively ([#278](https://github.com/otherworld-dev/Budget/issues/278))
+- Cancelling bulk actions in the transaction list left the table misaligned (header columns shifted relative to rows) until a page reload. The checkbox column header was being hidden while the regenerated rows kept theirs; the column is now consistently always present and cancelling unchecks rows in place instead of reloading ([#279](https://github.com/otherworld-dev/Budget/issues/279))
 
 ## [2.30.0] - 2026-06-13
 
