@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Opening an account's detail page returned a 500 error (the reconciliation-history request failed). The reconciliation controller was missing a trait it relied on, so it couldn't be constructed and every reconciliation endpoint failed; the account page surfaced it via the history sidebar. Now fixed and covered by tests ([#283](https://github.com/otherworld-dev/Budget/issues/283))
 - The Budget Overview dashboard widget (and the digest, spending-anomaly and bill-reminder notifications) always showed amounts in US dollars regardless of your configured currency. The server-side amount formatter was reading the wrong settings key and falling back to USD; it now uses your default currency
 - The Budget Overview dashboard widget's "Total balance" now converts multi-currency accounts to your base currency instead of summing different currencies under one symbol (currencies without an exchange rate are excluded from the total and named)
 

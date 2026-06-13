@@ -10,6 +10,7 @@ use OCA\Budget\Service\ReconciliationConflictException;
 use OCA\Budget\Service\ReconciliationService;
 use OCA\Budget\Service\ValidationService;
 use OCA\Budget\Traits\ApiErrorHandlerTrait;
+use OCA\Budget\Traits\InputValidationTrait;
 use OCA\Budget\Traits\SharedAccessTrait;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -24,6 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 class ReconciliationController extends Controller {
     use ApiErrorHandlerTrait;
+    use InputValidationTrait;
     use SharedAccessTrait;
 
     protected string $userId;
