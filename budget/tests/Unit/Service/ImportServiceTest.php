@@ -207,6 +207,8 @@ class ImportServiceTest extends TestCase {
         $this->assertEquals(1, $result['validTransactions']);
         $this->assertEquals(0, $result['duplicates']);
         $this->assertNotEmpty($result['transactions']);
+        // categorizedCount is emitted and reflects the (uncategorized) row
+        $this->assertSame(0, $result['categorizedCount']);
     }
 
     public function testPreviewSingleAccountSkipsDuplicates(): void {
@@ -519,5 +521,29 @@ class ImportServiceTest extends TestCase {
 
         $result = $this->service->processImport('user1', 'file.csv', ['date' => 'date'], 1, null, true, false);
         $this->assertEquals(1, $result['imported']);
+    }
+
+    // ===== countCategorized (#285 audit) =====
+
+    /**
+     * The "Auto-categorized" tile must count over the WHOLE parsed set, not the
+     * 50-row preview sample. countCategorized counts any transaction carrying a
+     * resolved categoryId or a preset _categoryName (treating empty/zero/null
+     * as uncategorized).
+     */
+    public function testCountCategorizedCountsFullSetByCategoryIdOrName(): void {
+        $ref = new \ReflectionMethod(ImportService::class, 'countCategorized');
+        $ref->setAccessible(true);
+
+        $transactions = [
+            ['categoryId' => 5],                       // categorized by id
+            ['_categoryName' => 'Groceries'],          // categorized by preset name
+            ['categoryId' => null, '_categoryName' => null], // uncategorized
+            ['description' => 'no category fields'],    // uncategorized
+            ['categoryId' => 0],                        // 0 is empty -> uncategorized
+            ['_categoryName' => ''],                    // empty string -> uncategorized
+        ];
+
+        $this->assertSame(2, $ref->invoke($this->service, $transactions));
     }
 }

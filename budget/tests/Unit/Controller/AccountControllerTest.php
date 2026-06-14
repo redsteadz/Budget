@@ -159,6 +159,31 @@ class AccountControllerTest extends TestCase {
 		$this->assertSame('Account not found', $response->getData()['error']);
 	}
 
+	// ── metrics (#285) ──────────────────────────────────────────────
+
+	public function testGetMetricsReturnsServiceData(): void {
+		$metrics = [
+			'totalTransactions' => 1603,
+			'thisMonthIncome' => 300.0,
+			'thisMonthExpenses' => 180.0,
+			'avgTransaction' => 12.5,
+		];
+		$this->service->method('getAccountMetrics')->with(1, 'user1')->willReturn($metrics);
+
+		$response = $this->controller->getMetrics(1);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame($metrics, $response->getData());
+	}
+
+	public function testGetMetricsReturnsNotFoundOnError(): void {
+		$this->service->method('getAccountMetrics')->willThrowException(new \RuntimeException('no access'));
+
+		$response = $this->controller->getMetrics(999);
+
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+	}
+
 	// ── create ──────────────────────────────────────────────────────
 
 	public function testCreateSuccess(): void {

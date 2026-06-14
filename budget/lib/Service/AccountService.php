@@ -337,6 +337,31 @@ class AccountService extends AbstractCrudService {
         return array_reverse($history);
     }
 
+    /**
+     * Whole-account overview metrics for the account-detail tiles (#285):
+     * total transaction count, this month's income and expenses, and the
+     * average transaction amount. Computed server-side over the whole account
+     * so the values no longer reflect only the currently displayed page.
+     *
+     * @return array{totalTransactions: int, thisMonthIncome: float, thisMonthExpenses: float, avgTransaction: float}
+     */
+    public function getAccountMetrics(int $accountId, string $userId): array {
+        // Access check (throws if the account is not owned by / shared with the user)
+        $this->find($accountId, $userId);
+
+        $monthStart = date('Y-m-01');
+        $monthEnd = date('Y-m-t');
+
+        $metrics = $this->transactionMapper->getAccountMetrics($accountId, $monthStart, $monthEnd);
+
+        return [
+            'totalTransactions' => $metrics['count'],
+            'thisMonthIncome' => $metrics['monthIncome'],
+            'thisMonthExpenses' => $metrics['monthExpenses'],
+            'avgTransaction' => $metrics['average'],
+        ];
+    }
+
     public function reconcile(int $accountId, string $userId, float $statementBalance, ?string $statementDate = null): array {
         $account = $this->find($accountId, $userId);
 

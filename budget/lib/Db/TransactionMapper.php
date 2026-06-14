@@ -1641,6 +1641,54 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * Whole-account aggregates for the account-detail overview tiles (#285).
+     *
+     * Computed in SQL over every transaction in the account so the tiles are
+     * independent of how the transaction list is paginated (the previous
+     * frontend derived these from the single displayed page). Counts all
+     * statuses to match the list's total; income/expenses are summed for the
+     * given (current-month) date range.
+     *
+     * @return array{count: int, average: float, monthIncome: float, monthExpenses: float}
+     */
+    public function getAccountMetrics(int $accountId, string $monthStart, string $monthEnd): array {
+        // Count + average absolute amount over the whole account
+        $qb = $this->db->getQueryBuilder();
+        $qb->selectAlias($qb->func()->count('t.id'), 'cnt')
+            ->selectAlias($qb->createFunction('AVG(ABS(t.amount))'), 'avg_amt')
+            ->from($this->getTableName(), 't')
+            ->where($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
+        $result = $qb->executeQuery();
+        $row = $result->fetch();
+        $result->closeCursor();
+
+        return [
+            'count' => (int)($row['cnt'] ?? 0),
+            'average' => (float)($row['avg_amt'] ?? 0),
+            'monthIncome' => $this->sumAccountByTypeInRange($accountId, 'credit', $monthStart, $monthEnd),
+            'monthExpenses' => $this->sumAccountByTypeInRange($accountId, 'debit', $monthStart, $monthEnd),
+        ];
+    }
+
+    /**
+     * Sum of transaction amounts for one account, of a given type, within a date range.
+     */
+    private function sumAccountByTypeInRange(int $accountId, string $type, string $startDate, string $endDate): float {
+        $qb = $this->db->getQueryBuilder();
+        $qb->selectAlias($qb->func()->sum('t.amount'), 'total')
+            ->from($this->getTableName(), 't')
+            ->where($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)))
+            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter($type)))
+            ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
+            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
+        $result = $qb->executeQuery();
+        $total = $result->fetchOne();
+        $result->closeCursor();
+
+        return (float)($total ?? 0);
+    }
+
+    /**
      * Get monthly aggregates for trend data (single query for all months)
      * @param int[] $tagIds Optional tag filter (OR logic)
      * @param bool $includeUntagged Include untagged transactions when filtering by tags

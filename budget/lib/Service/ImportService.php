@@ -510,6 +510,7 @@ class ImportService {
             'transactions' => array_slice($transactions, 0, 50),
             'totalRows' => $totalRows,
             'validTransactions' => count($transactions),
+            'categorizedCount' => $this->countCategorized($transactions),
             'duplicates' => $duplicates,
             'errors' => $errors,
             'accountSummaries' => array_values($accountSummaries),
@@ -684,6 +685,7 @@ class ImportService {
                 'transactions' => array_slice($transactions, 0, 50),
                 'totalRows' => count($data),
                 'validTransactions' => count($transactions),
+                'categorizedCount' => $this->countCategorized($transactions),
                 'duplicates' => $duplicates,
                 'skippedByPreset' => $skippedByPreset,
                 'errors' => $errors,
@@ -694,6 +696,7 @@ class ImportService {
                 'transactions' => array_slice($transactions, 0, 50),
                 'totalRows' => count($data),
                 'validTransactions' => count($transactions),
+                'categorizedCount' => $this->countCategorized($transactions),
                 'duplicates' => $duplicates,
                 'skippedByPreset' => $skippedByPreset,
                 'errors' => $errors,
@@ -1254,6 +1257,21 @@ class ImportService {
             }
         }
         return 'checking';
+    }
+
+    /**
+     * Count how many of the parsed transactions resolved to a category, over the
+     * WHOLE parsed set (not just the 50-row preview sample). The preview payload
+     * only ships a sample, so the "Auto-categorized" tile must take its count
+     * from here to be accurate for large imports (#285 audit).
+     *
+     * @param array $transactions Full set of parsed transactions
+     */
+    private function countCategorized(array $transactions): int {
+        return count(array_filter(
+            $transactions,
+            static fn ($t) => !empty($t['categoryId']) || !empty($t['_categoryName'])
+        ));
     }
 
     /**

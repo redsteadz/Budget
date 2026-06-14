@@ -1110,43 +1110,36 @@ export default class AccountsModule {
         });
     }
 
-    async loadAccountMetrics(_accountId) {
+    async loadAccountMetrics(accountId) {
         try {
-            // Calculate metrics from transactions
-            const now = new Date();
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            // Metrics are aggregated server-side over the WHOLE account, not the
+            // currently displayed page of transactions (#285). Computing them
+            // from this.accountTransactions only saw one page (max
+            // accountRowsPerPage rows), so the count, this-month totals and
+            // average were all wrong for accounts with more than a page of data.
+            const response = await fetch(
+                OC.generateUrl(`/apps/budget/api/accounts/${accountId}/metrics`),
+                { headers: { 'requesttoken': OC.requestToken } }
+            );
 
-            // Filter transactions for this month
-            const thisMonthTransactions = this.accountTransactions.filter(tx => {
-                const transDate = new Date(tx.date);
-                return transDate >= startOfMonth && transDate <= endOfMonth;
-            });
+            if (!response.ok) {
+                throw new Error(`Metrics request failed with status ${response.status}`);
+            }
 
-            // Calculate metrics
-            const totalTransactions = this.accountTransactions.length;
-            const thisMonthIncome = thisMonthTransactions
-                .filter(tx => tx.type === 'credit')
-                .reduce((sum, tx) => sum + (parseFloat(tx.amount) || 0), 0);
-
-            const thisMonthExpenses = thisMonthTransactions
-                .filter(tx => tx.type === 'debit')
-                .reduce((sum, tx) => sum + (parseFloat(tx.amount) || 0), 0);
-
-            const avgTransaction = totalTransactions > 0
-                ? this.accountTransactions.reduce((sum, tx) => sum + Math.abs(parseFloat(tx.amount) || 0), 0) / totalTransactions
-                : 0;
-
+            const metrics = await response.json();
             const currency = this.currentAccount?.currency || this.getPrimaryCurrency();
 
-            // Update metrics display
-            document.getElementById('total-transactions').textContent = totalTransactions.toLocaleString();
-            document.getElementById('total-income').textContent = this.formatCurrency(thisMonthIncome, currency);
-            document.getElementById('total-expenses').textContent = this.formatCurrency(thisMonthExpenses, currency);
-            document.getElementById('avg-transaction').textContent = this.formatCurrency(avgTransaction, currency);
+            document.getElementById('total-transactions').textContent =
+                (metrics.totalTransactions || 0).toLocaleString();
+            document.getElementById('total-income').textContent =
+                this.formatCurrency(metrics.thisMonthIncome || 0, currency);
+            document.getElementById('total-expenses').textContent =
+                this.formatCurrency(metrics.thisMonthExpenses || 0, currency);
+            document.getElementById('avg-transaction').textContent =
+                this.formatCurrency(metrics.avgTransaction || 0, currency);
 
         } catch (error) {
-            console.error('Failed to calculate account metrics:', error);
+            console.error('Failed to load account metrics:', error);
             // Show zeros on error
             document.getElementById('total-transactions').textContent = '0';
             document.getElementById('total-income').textContent = this.formatCurrency(0);

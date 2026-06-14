@@ -617,6 +617,23 @@ class AccountController extends Controller {
     }
 
     /**
+     * Whole-account overview metrics (total transaction count, this month's
+     * income/expenses, average transaction) for the account-detail tiles.
+     * Aggregated server-side so the values reflect the whole account, not the
+     * currently displayed page of transactions (#285).
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function getMetrics(int $id): DataResponse {
+        try {
+            $metrics = $this->service->getAccountMetrics($id, $this->getEffectiveUserId());
+            return new DataResponse($metrics);
+        } catch (\Exception $e) {
+            return $this->handleNotFoundError($e, $this->l->t('Account'), ['accountId' => $id]);
+        }
+    }
+
+    /**
      * @NoAdminRequired
      */
     public function reconcile(int $id, float $statementBalance, ?string $statementDate = null): DataResponse {

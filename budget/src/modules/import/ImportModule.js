@@ -1104,14 +1104,22 @@ export default class ImportModule {
         document.getElementById('total-transactions').textContent = result.totalRows || 0;
         document.getElementById('new-transactions').textContent = result.validTransactions || 0;
         document.getElementById('duplicate-transactions').textContent = result.duplicates || 0;
-        // Count auto-categorized transactions (from preview sample)
-        const previewCategorized = (result.transactions || []).filter(tx => tx.categoryId || tx._categoryName).length;
-        const totalValid = result.validTransactions || result.transactions?.length || 0;
-        const previewSize = (result.transactions || []).length;
-        // If all preview items are categorized and there are more beyond the preview, extrapolate
-        const categorized = (previewCategorized === previewSize && totalValid > previewSize)
-            ? totalValid  // All sampled rows categorized → likely all are
-            : previewCategorized;
+        // Auto-categorized count. Prefer the server's full-dataset count; the
+        // transactions array is only a 50-row preview sample, so counting it
+        // (with the old all-or-nothing extrapolation) was wrong for larger
+        // imports (#285 audit).
+        let categorized;
+        if (typeof result.categorizedCount === 'number') {
+            categorized = result.categorizedCount;
+        } else {
+            // Fallback for any preview path without the server field
+            const previewCategorized = (result.transactions || []).filter(tx => tx.categoryId || tx._categoryName).length;
+            const totalValid = result.validTransactions || result.transactions?.length || 0;
+            const previewSize = (result.transactions || []).length;
+            categorized = (previewCategorized === previewSize && totalValid > previewSize)
+                ? totalValid
+                : previewCategorized;
+        }
         document.getElementById('categorized-transactions').textContent = categorized;
 
         // Show accounts to create for multi-account preset imports

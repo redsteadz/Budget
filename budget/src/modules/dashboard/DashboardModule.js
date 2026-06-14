@@ -2199,7 +2199,12 @@ export default class DashboardModule {
             legendContainer = document.getElementById('spending-chart-legend');
         }
         if (legendContainer) {
-            const totalSpending = data.reduce((sum, val) => sum + val, 0);
+            // Total across ALL categories, not just the top 10 shown in the chart,
+            // so the header total and per-category percentages reflect real
+            // spending. spendingData still holds the full set here (slice copies).
+            const totalSpending = spendingData.reduce(
+                (sum, item) => sum + Math.abs(item.total || item.amount || 0), 0
+            );
             legendContainer.innerHTML = `
                 <div class="spending-breakdown">
                     <div class="spending-breakdown-header">

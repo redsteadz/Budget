@@ -613,6 +613,38 @@ class TransactionMapperTest extends TestCase {
         $this->assertEquals(0.0, $netChange);
     }
 
+    // ===== getAccountMetrics (#285) =====
+
+    public function testGetAccountMetricsMapsAggregates(): void {
+        // First query (count + average) uses fetch(); the two range-sum queries use fetchOne()
+        $this->result->method('fetch')->willReturn(['cnt' => 7, 'avg_amt' => '244.2857']);
+        $this->result->method('fetchOne')->willReturnOnConsecutiveCalls('150', '60');
+        $this->result->method('closeCursor');
+        $this->qb->method('executeQuery')->willReturn($this->result);
+
+        $metrics = $this->mapper->getAccountMetrics(10, '2026-06-01', '2026-06-30');
+
+        $this->assertSame(7, $metrics['count']);
+        $this->assertEqualsWithDelta(244.2857, $metrics['average'], 0.0001);
+        $this->assertSame(150.0, $metrics['monthIncome']);
+        $this->assertSame(60.0, $metrics['monthExpenses']);
+    }
+
+    public function testGetAccountMetricsHandlesEmptyAccount(): void {
+        // No rows: count 0, AVG returns null, sums return null/false
+        $this->result->method('fetch')->willReturn(['cnt' => 0, 'avg_amt' => null]);
+        $this->result->method('fetchOne')->willReturn(false);
+        $this->result->method('closeCursor');
+        $this->qb->method('executeQuery')->willReturn($this->result);
+
+        $metrics = $this->mapper->getAccountMetrics(10, '2026-06-01', '2026-06-30');
+
+        $this->assertSame(0, $metrics['count']);
+        $this->assertSame(0.0, $metrics['average']);
+        $this->assertSame(0.0, $metrics['monthIncome']);
+        $this->assertSame(0.0, $metrics['monthExpenses']);
+    }
+
     // ===== getNetChangeAfterDate =====
 
     public function testGetNetChangeAfterDateReturnsFloat(): void {

@@ -359,4 +359,30 @@ class AccountServiceTest extends TestCase {
         $this->assertEquals(-10.0, $result['difference']);
         $this->assertFalse($result['isBalanced']);
     }
+
+    // ===== getAccountMetrics() (#285) =====
+
+    public function testGetAccountMetricsMapsMapperOutputForCurrentMonth(): void {
+        $this->accountMapper->method('find')->willReturn($this->makeAccount());
+        $this->transactionMapper->expects($this->once())
+            ->method('getAccountMetrics')
+            ->with(1, date('Y-m-01'), date('Y-m-t'))
+            ->willReturn(['count' => 1603, 'average' => 12.5, 'monthIncome' => 300.0, 'monthExpenses' => 180.0]);
+
+        $result = $this->service->getAccountMetrics(1, 'user1');
+
+        // Whole-account count, not a single page (the #285 fix)
+        $this->assertSame(1603, $result['totalTransactions']);
+        $this->assertSame(300.0, $result['thisMonthIncome']);
+        $this->assertSame(180.0, $result['thisMonthExpenses']);
+        $this->assertSame(12.5, $result['avgTransaction']);
+    }
+
+    public function testGetAccountMetricsRequiresAccessibleAccount(): void {
+        $this->accountMapper->method('find')->willThrowException(new DoesNotExistException('no access'));
+        $this->transactionMapper->expects($this->never())->method('getAccountMetrics');
+
+        $this->expectException(DoesNotExistException::class);
+        $this->service->getAccountMetrics(999, 'user1');
+    }
 }
