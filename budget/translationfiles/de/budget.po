@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-04-15 23:25+0000\n"
-"PO-Revision-Date: 2026-06-14 19:01+0000\n"
-"Last-Translator: SGiersch <Forum@SGiersch.de>\n"
+"PO-Revision-Date: 2026-06-14 22:53+0000\n"
+"Last-Translator: St0rml <n.f@mailbox.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
 "Language: de\n"
@@ -209,7 +209,7 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:162
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:250
 msgid "Purchase date"
-msgstr ""
+msgstr "Kaufdatum"
 
 #: /tmp/budget-v2.11.0/budget/lib/Controller/AssetController.php:181
 msgid "Failed to create asset"
@@ -9079,7 +9079,7 @@ msgstr "Jährliche Wachstumsrate (%%)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3808
 msgid "e.g., 3.5"
-msgstr ""
+msgstr "z.B. 3,5"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3809
 msgid ""
@@ -9139,7 +9139,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3928
 msgid "Compare Strategies"
-msgstr ""
+msgstr "Strategien vergleichen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3936
 msgid "Time to Debt Free"
@@ -9147,7 +9147,7 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3941
 msgid "Total Interest"
-msgstr ""
+msgstr "Gesamtzinsen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3945
 msgid "Total Paid"
@@ -9155,11 +9155,11 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3951
 msgid "Payoff Order"
-msgstr ""
+msgstr "Auszahlungsreihenfolge"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3958
 msgid "Strategy Comparison"
-msgstr ""
+msgstr "Strategievergleich"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:3961
 msgid "Debt Avalanche"
@@ -9198,47 +9198,47 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4017
 msgid "Owed to you"
-msgstr ""
+msgstr "Dir geschuldet"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4022
 msgid "You owe"
-msgstr ""
+msgstr "Du schuldest"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4050
 msgid "Refresh rates from online sources"
-msgstr ""
+msgstr "Wechselkurse aus Online-Quellen aktualisieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4063
 msgid "Rates shown as 1 base currency = X target currency."
-msgstr ""
+msgstr "Die Kurse werden wie folgt angegeben: 1 Basiswährung = X Zielwährung."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4064
 msgid "Fiat rates from"
-msgstr ""
+msgstr "Fiat-Preise von"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4065
 msgid "crypto from"
-msgstr ""
+msgstr "Krypto von"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4066
 msgid "Manual overrides take priority over automatic rates."
-msgstr ""
+msgstr "Manuelle Wechselkurse überschreiben automatisch abgerufene."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4080
 msgid "Total Currencies"
-msgstr ""
+msgstr "Anzahl der Währungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4091
 msgid "Auto Rates"
-msgstr ""
+msgstr "Automatische Wechselkurse"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4102
 msgid "Manual Overrides"
-msgstr ""
+msgstr "Manuell überschriebene Wechselkurse"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4110
 msgid "Fiat"
-msgstr ""
+msgstr "Fiatgeld"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4111
 msgid "Crypto"
@@ -9246,11 +9246,11 @@ msgstr "Krypto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4112
 msgid "Manual Only"
-msgstr ""
+msgstr "Nur manuell"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4113
 msgid "No Rate"
-msgstr ""
+msgstr "Kein Wechselkurs"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4145
 msgid "This overrides the automatic rate for your account only."
@@ -9358,40 +9358,40 @@ msgstr "Legt den ersten Tag für Kalender und Wochenberichte fest"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4253
 msgid "Number Format"
-msgstr ""
+msgstr "Zahlenformat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4258
 msgid "Decimal Places"
-msgstr ""
+msgstr "Dezimalstellen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4259
 msgid "Number of decimal places to display"
-msgstr ""
+msgstr "Anzahl der Dezimalstellen, die dargestellt werden sollen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4270
 msgid "Decimal Separator"
-msgstr ""
+msgstr "Dezimaltrennung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4271
 msgid "Character used for decimal separation"
-msgstr ""
+msgstr "Dezimaltrennzeichen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4274
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4286
 msgid "Period (.)"
-msgstr ""
+msgstr "Punkt (.)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4281
 msgid "Thousands Separator"
-msgstr ""
+msgstr "Tausendertrennung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4282
 msgid "Character used for thousands separation"
-msgstr ""
+msgstr "Tausendertrennzeichen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4287
 msgid "Space ( )"
-msgstr ""
+msgstr "Leerzeichen ( )"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4294
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5088
@@ -9405,54 +9405,55 @@ msgstr "Benachrichtigungen"
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4309
 msgid "Notify when approaching or exceeding budget limits"
 msgstr ""
+"Benachrichtigung bei Annäherung an oder Überschreitung von Budgetgrenzen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4318
 msgid "Forecast Warnings"
-msgstr ""
+msgstr "Prognosewarnungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4319
 msgid "Notify about negative cash flow predictions"
-msgstr ""
+msgstr "Über negative Cashflow-Prognosen informieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4328
 msgid "Import & Export"
-msgstr ""
+msgstr "Import & Export"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4335
 msgid "Auto-apply Import Rules"
-msgstr ""
+msgstr "Importregeln automatisch anwenden"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4336
 msgid "Automatically categorize transactions when importing"
-msgstr ""
+msgstr "Buchungen automatisch bei Import kategorisieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4345
 msgid "Skip Duplicate Transactions"
-msgstr ""
+msgstr "Doppelte Buchungen überspringen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4346
 msgid "Automatically skip duplicate transactions during import"
-msgstr ""
+msgstr "Buchungsduplikate bei Import automatisch überspringen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4353
 msgid "Default Export Format"
-msgstr ""
+msgstr "Standard Exportformat"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4354
 msgid "Preferred format for data exports"
-msgstr ""
+msgstr "Präferiertes Format für Datenexport"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4357
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4358
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4359
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4367
 msgid "Security"
@@ -9492,47 +9493,56 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4413
 msgid "Data Migration"
-msgstr ""
+msgstr "Datenmigration"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4414
 msgid ""
 "Export all your data for backup or migration to another Nextcloud instance. "
 "Import to restore or migrate data."
 msgstr ""
+"Exportiere alle Daten zur Sicherung oder zur Migration auf eine andere "
+"Nextcloud-Instanz. Importiere die Daten, um sie wiederherzustellen oder zu "
+"migrieren."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4419
 msgid "Export Data"
-msgstr ""
+msgstr "Daten exportieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4420
 msgid ""
 "Download all your accounts, transactions, categories, bills, import rules, "
 "and settings as a ZIP file."
 msgstr ""
+"Alle Konten, Transaktionen, Kategorien, Rechnungen, Importregeln und "
+"Einstellungen als ZIP-Datei herunterladen."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4423
 msgid "Security Notice:"
-msgstr ""
+msgstr "Sicherheitshinweis:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4423
 msgid ""
 "The export file contains sensitive data including decrypted banking details. "
 "Store it securely and delete after use."
 msgstr ""
+"Die Exportdatei enthält sensible Daten, darunter entschlüsselte Bankdaten. "
+"Bewahre sie sicher auf und lösche sie nach Verwendung."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4427
 msgid "Export All Data"
-msgstr ""
+msgstr "Alle Daten exportieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4433
 msgid "Import Data"
-msgstr ""
+msgstr "Daten importieren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4434
 msgid ""
 "Import data from a previously exported ZIP file. This will replace all "
 "existing data."
 msgstr ""
+"Daten aus einer zuvor exportierten ZIP-Datei importieren. Dabei werden alle "
+"vorhandenen Daten überschrieben."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4437
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4539
@@ -9544,38 +9554,41 @@ msgid ""
 "Importing will permanently delete all your current data and replace it with "
 "the imported data. This cannot be undone."
 msgstr ""
+"Durch den Import werden alle aktuellen Daten endgültig gelöscht und durch "
+"die importierten Daten ersetzt. Dieser Vorgang kann nicht rückgängig gemacht "
+"werden."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4443
 msgid "Drag and drop your export file here"
-msgstr ""
+msgstr "Lege die Exportdatei hier ab"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4447
 msgid "Supported format: ZIP (exported from Budget app)"
-msgstr ""
+msgstr "Unterstütztes Format: ZIP (exportiert aus Budget App)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4453
 msgid "Import Preview"
-msgstr ""
+msgstr "Importvorschau"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4457
 msgid "Export Version:"
-msgstr ""
+msgstr "Exportversion:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4461
 msgid "Exported At:"
-msgstr ""
+msgstr "Exportdatum:"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4484
 msgid "Import Rules"
-msgstr ""
+msgstr "Importregeln"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4497
 msgid "Confirm Import"
-msgstr ""
+msgstr "Import bestätigen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4505
 msgid "Processing import..."
-msgstr ""
+msgstr "Import wird durchgeführt..."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4511
 msgid "Done"
@@ -9583,11 +9596,11 @@ msgstr "Fertig"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4519
 msgid "Maintenance"
-msgstr ""
+msgstr "Wartung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4523
 msgid "Recalculate Account Balances"
-msgstr ""
+msgstr "Kontosalden neu berechnen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4524
 msgid ""
@@ -9600,15 +9613,17 @@ msgstr ""
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4528
 msgid "Recalculate"
-msgstr ""
+msgstr "Neu berechnen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4536
 msgid "Danger Zone"
-msgstr ""
+msgstr "Gefahrenzone"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4539
 msgid "Actions in this section are destructive and cannot be undone."
 msgstr ""
+"Die Vorgänge in diesem Abschnitt sind irreversibel und können nicht "
+"rückgängig gemacht werden."
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4545
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4550
@@ -9640,47 +9655,47 @@ msgstr "Buchungsdatum auswählen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4588
 msgid "Select which account this transaction belongs to"
-msgstr ""
+msgstr "Wähle das Konto zu dem diese Buchung gehört"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4593
 msgid "Choose transaction type"
-msgstr ""
+msgstr "Wähle den Buchungstyp"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4598
 msgid "Whether this is money coming in or going out"
-msgstr ""
+msgstr "Ob es sich nun um eingehende oder ausgehende Zahlungen handelt"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4603
 msgid "Choose destination account"
-msgstr ""
+msgstr "Wähle das Zielkonto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4605
 msgid "Select the account to transfer money to"
-msgstr ""
+msgstr "Das Konto, auf das du Geld überweisen möchten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4610
 msgid "Enter the transaction amount (positive number)"
-msgstr ""
+msgstr "Der Buchungsbetrag ist eine positive Zahl"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4615
 msgid "Brief description of the transaction"
-msgstr ""
+msgstr "Eine kurze Beschreibung der Buchung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4620
 msgid "Name of the merchant or person (optional)"
-msgstr ""
+msgstr "Name des Empfängers (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4627
 msgid "Organize this transaction by category (optional)"
-msgstr ""
+msgstr "Diese Buchung einer Kategorie zuordnen (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4636
 msgid "Additional notes or details (optional)"
-msgstr ""
+msgstr "Weiter Anmerkungen oder Details (optional)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4639
 msgid "Save transaction"
-msgstr ""
+msgstr "Buchung speichern"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4640
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4795
@@ -9691,7 +9706,7 @@ msgstr ""
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5584
 #: /tmp/budget-v2.11.0/budget/templates/index.php:5624
 msgid "Cancel and close dialog"
-msgstr ""
+msgstr "Abbrechen und Dialog schließen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4649
 msgid "Add/Edit Account"
@@ -9707,11 +9722,11 @@ msgstr "Kontoart auswählen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4670
 msgid "Investment Account"
-msgstr ""
+msgstr "Anlagekonto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4671
 msgid "Loan Account"
-msgstr ""
+msgstr "Darlehenskonto"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4675
 msgid "Select the type of account"
@@ -9723,7 +9738,7 @@ msgstr "Anfangskontostand"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4681
 msgid "The starting balance when this account was created"
-msgstr ""
+msgstr "Der Anfangssaldo bei der Eröffnung dieses Kontos"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4687
 msgid "The balance this account starts with"
@@ -9735,39 +9750,39 @@ msgstr "Kontowährung auswählen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4701
 msgid "Bank Information"
-msgstr ""
+msgstr "Bankinformationen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4707
 msgid "Bank or financial institution name"
-msgstr ""
+msgstr "Name der Bank oder Institution"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4711
 msgid "Account Holder Name"
-msgstr ""
+msgstr "Name des Kontoinhabers"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4713
 msgid "Name on the account"
-msgstr ""
+msgstr "Name des Kontos"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4719
 msgid "Your account number"
-msgstr ""
+msgstr "Deine Kontonummer"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4723
 msgid "Opening Date"
-msgstr ""
+msgstr "Kontoeröffnungsdatum"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4725
 msgid "When the account was opened"
-msgstr ""
+msgstr "Das Datum an dem das Konto eröffnet wurde"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4731
 msgid "Banking Details"
-msgstr ""
+msgstr "Bankverbindung"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4736
 msgid "9-digit routing number (US banks)"
-msgstr ""
+msgstr "9-stellige Bankleitzahl (US-Banken)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4742
 msgid "6-digit sort code (UK banks)"
@@ -9775,48 +9790,48 @@ msgstr "6-stellige Bankleitzahl (britische Banken)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4748
 msgid "International Bank Account Number"
-msgstr ""
+msgstr "Internationale Bankkontonummer"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4752
 msgid "SWIFT/BIC Code"
-msgstr ""
+msgstr "SWIFT-/BIC-Code"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4754
 msgid "SWIFT/BIC code for international transfers"
-msgstr ""
+msgstr "SWIFT-/BIC-Code für internationale Überweisungen"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4758
 msgid "Wallet Address"
-msgstr ""
+msgstr "Wallet Adresse"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4760
 msgid "Your wallet or exchange address (stored encrypted)"
-msgstr ""
+msgstr "Ihre Wallet- oder Börsenadresse (verschlüsselt gespeichert)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4766
 msgid "Account Limits & Rates"
-msgstr ""
+msgstr "Kontolimits und Gebühren"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4769
 #, php-format
 msgid "Interest Rate (%%)"
-msgstr ""
+msgstr "Zinssatz (%%)"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4771
 msgid "Annual interest rate percentage"
-msgstr ""
+msgstr "Jährlicher Zinssatz in Prozent"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4777
 msgid "Maximum credit limit for credit cards"
-msgstr ""
+msgstr "Maximales Kreditlimit für Kreditkarten"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4781
 msgid "Overdraft Limit"
-msgstr ""
+msgstr "Dispolimit"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4783
 msgid "Maximum overdraft amount"
-msgstr ""
+msgstr "Höhe des Dispolimits"
 
 #: /tmp/budget-v2.11.0/budget/templates/index.php:4787
 msgid "Minimum Payment"
