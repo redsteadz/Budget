@@ -286,7 +286,7 @@ class YearOverYearController extends Controller {
         $pdf->SetAutoPageBreak(true, 25);
         $pdf->AddPage();
 
-        $pdf->SetFont('helvetica', 'B', 16);
+        $pdf->SetFont('dejavusans', 'B', 16);
         $pdf->Cell(0, 10, 'Year-over-Year Report', 0, 1, 'C');
         $pdf->Ln(5);
 
@@ -308,10 +308,10 @@ class YearOverYearController extends Controller {
             ? ($data['monthName'] ?? 'Month') . ' Comparison'
             : 'Year Comparison';
 
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont('dejavusans', 'B', 12);
         $pdf->Cell(0, 8, $label, 0, 1);
 
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont('dejavusans', 'B', 9);
         $colWidths = [25, 35, 35, 35, 30, 35, 35];
         $headers = ['Year', 'Income', 'Expenses', 'Savings', 'Txns', 'Income Chg', 'Expense Chg'];
         foreach ($headers as $i => $h) {
@@ -319,7 +319,7 @@ class YearOverYearController extends Controller {
         }
         $pdf->Ln();
 
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont('dejavusans', '', 9);
         foreach ($data['years'] ?? [] as $year) {
             $pdf->Cell($colWidths[0], 6, $year['year'] ?? '', 1, 0, 'L');
             $pdf->Cell($colWidths[1], 6, number_format($year['income'] ?? 0, 2), 1, 0, 'R');
@@ -333,7 +333,7 @@ class YearOverYearController extends Controller {
     }
 
     private function renderYoYCategoriesPdf($pdf, array $data): void {
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont('dejavusans', 'B', 12);
         $pdf->Cell(0, 8, 'Category Spending Comparison', 0, 1);
 
         // Determine year columns
@@ -349,7 +349,7 @@ class YearOverYearController extends Controller {
         sort($years);
 
         // Header
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont('dejavusans', 'B', 9);
         $catWidth = 60;
         $yearWidth = count($years) > 0 ? min(40, (210 - $catWidth - 30) / count($years)) : 40;
         $changeWidth = 30;
@@ -361,7 +361,7 @@ class YearOverYearController extends Controller {
         $pdf->Cell($changeWidth, 6, 'Change %', 1, 1, 'R');
 
         // Data rows
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont('dejavusans', '', 9);
         foreach ($data['categories'] ?? [] as $cat) {
             $yearLookup = [];
             foreach ($cat['years'] ?? [] as $y) {

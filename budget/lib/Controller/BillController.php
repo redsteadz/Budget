@@ -979,7 +979,7 @@ class BillController extends Controller {
         $pdf->SetAutoPageBreak(true, 20);
         $pdf->AddPage();
 
-        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->SetFont('dejavusans', 'B', 14);
         $pdf->Cell(0, 8, "Bills Calendar {$year}", 0, 1, 'C');
         $pdf->Ln(3);
 
@@ -990,7 +990,7 @@ class BillController extends Controller {
         $totalW = 20;
 
         // Header
-        $pdf->SetFont('helvetica', 'B', 7);
+        $pdf->SetFont('dejavusans', 'B', 7);
         $pdf->Cell($nameW, 5, 'Bill', 1, 0, 'L');
         $pdf->Cell($amtW, 5, 'Amount', 1, 0, 'R');
         foreach ($months as $m) {
@@ -999,7 +999,7 @@ class BillController extends Controller {
         $pdf->Cell($totalW, 5, 'Annual', 1, 1, 'R');
 
         // Data rows
-        $pdf->SetFont('helvetica', '', 7);
+        $pdf->SetFont('dejavusans', '', 7);
         foreach ($data['bills'] ?? [] as $bill) {
             $pdf->Cell($nameW, 5, $bill['name'] ?? '', 1, 0, 'L');
             $pdf->Cell($amtW, 5, number_format((float)($bill['amount'] ?? 0), 2), 1, 0, 'R');
@@ -1016,7 +1016,7 @@ class BillController extends Controller {
         }
 
         // Totals row
-        $pdf->SetFont('helvetica', 'B', 7);
+        $pdf->SetFont('dejavusans', 'B', 7);
         $pdf->Cell($nameW, 5, 'Total', 1, 0, 'L');
         $pdf->Cell($amtW, 5, '', 1, 0, 'R');
         $grandTotal = 0;

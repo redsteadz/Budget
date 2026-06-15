@@ -8,6 +8,14 @@ namespace OCA\Budget\Service\Report;
  * Handles exporting reports to various formats (CSV, JSON, PDF).
  */
 class ReportExporter {
+    /**
+     * Unicode-capable embedded TrueType font for PDFs. The built-in core fonts
+     * (helvetica etc.) use WinAnsi encoding and render non-Latin-1 characters —
+     * Polish, Cyrillic, … — as "?" (#292). DejaVu Sans ships with TCPDF and
+     * covers Latin Extended + Cyrillic; bold is dejavusansb.
+     */
+    private const PDF_FONT = 'dejavusans';
+
     private ReportCalculator $calculator;
 
     public function __construct(ReportCalculator $calculator) {
@@ -101,13 +109,13 @@ class ReportExporter {
         $pdf->AddPage();
 
         // Title
-        $pdf->SetFont('helvetica', 'B', 18);
+        $pdf->SetFont(self::PDF_FONT, 'B', 18);
         $pdf->Cell(0, 10, ucfirst($type) . ' Report', 0, 1, 'C');
         $pdf->Ln(5);
 
         // Period
         if (isset($data['period'])) {
-            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetFont(self::PDF_FONT, '', 10);
             $periodText = 'Period: ' . ($data['period']['startDate'] ?? '') . ' to ' . ($data['period']['endDate'] ?? '');
             $pdf->Cell(0, 6, $periodText, 0, 1, 'C');
             $pdf->Ln(10);
@@ -262,9 +270,9 @@ class ReportExporter {
         $totals = $data['totals'] ?? [];
 
         // Summary section
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Financial Summary', 0, 1);
-        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetFont(self::PDF_FONT, '', 10);
 
         $summaryItems = [
             ['Total Income', $this->formatNumber($totals['totalIncome'] ?? 0)],
@@ -281,9 +289,9 @@ class ReportExporter {
         // Comparison section
         if (isset($data['comparison']['changes'])) {
             $pdf->Ln(5);
-            $pdf->SetFont('helvetica', 'B', 11);
+            $pdf->SetFont(self::PDF_FONT, 'B', 11);
             $pdf->Cell(0, 8, 'vs Previous Period', 0, 1);
-            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetFont(self::PDF_FONT, '', 10);
 
             foreach ($data['comparison']['changes'] as $key => $change) {
                 $direction = $change['direction'] ?? '';
@@ -296,18 +304,18 @@ class ReportExporter {
         // Account breakdown
         if (!empty($data['accounts'])) {
             $pdf->Ln(10);
-            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->SetFont(self::PDF_FONT, 'B', 12);
             $pdf->Cell(0, 8, 'Account Breakdown', 0, 1);
 
             // Table header
-            $pdf->SetFont('helvetica', 'B', 9);
+            $pdf->SetFont(self::PDF_FONT, 'B', 9);
             $pdf->Cell(50, 6, 'Account', 1, 0, 'L');
             $pdf->Cell(30, 6, 'Income', 1, 0, 'R');
             $pdf->Cell(30, 6, 'Expenses', 1, 0, 'R');
             $pdf->Cell(30, 6, 'Net', 1, 0, 'R');
             $pdf->Cell(30, 6, 'Balance', 1, 1, 'R');
 
-            $pdf->SetFont('helvetica', '', 9);
+            $pdf->SetFont(self::PDF_FONT, '', 9);
             foreach ($data['accounts'] as $account) {
                 $pdf->Cell(50, 6, $account['name'] ?? '', 1, 0, 'L');
                 $pdf->Cell(30, 6, $this->formatNumber($account['income'] ?? 0), 1, 0, 'R');
@@ -322,17 +330,17 @@ class ReportExporter {
      * Render spending report to PDF.
      */
     private function renderSpendingPdf($pdf, array $data): void {
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Spending by Category', 0, 1);
 
         // Table header
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(60, 6, 'Category', 1, 0, 'L');
         $pdf->Cell(40, 6, 'Amount', 1, 0, 'R');
         $pdf->Cell(40, 6, 'Transactions', 1, 0, 'R');
         $pdf->Cell(40, 6, '% of Total', 1, 1, 'R');
 
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont(self::PDF_FONT, '', 9);
         $total = $data['totals']['amount'] ?? 0;
 
         foreach ($data['data'] ?? [] as $item) {
@@ -345,7 +353,7 @@ class ReportExporter {
         }
 
         // Totals
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(60, 6, 'Total', 1, 0, 'L');
         $pdf->Cell(40, 6, $this->formatNumber($total), 1, 0, 'R');
         $pdf->Cell(40, 6, $data['totals']['transactions'] ?? 0, 1, 0, 'R');
@@ -357,9 +365,9 @@ class ReportExporter {
      */
     private function renderCashFlowPdf($pdf, array $data): void {
         // Averages section
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Monthly Averages', 0, 1);
-        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetFont(self::PDF_FONT, '', 10);
 
         $averages = $data['averageMonthly'] ?? [];
         $pdf->Cell(60, 6, 'Average Monthly Income:', 0, 0);
@@ -372,17 +380,17 @@ class ReportExporter {
         $pdf->Ln(10);
 
         // Monthly breakdown
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Monthly Breakdown', 0, 1);
 
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(35, 6, 'Month', 1, 0, 'L');
         $pdf->Cell(35, 6, 'Income', 1, 0, 'R');
         $pdf->Cell(35, 6, 'Expenses', 1, 0, 'R');
         $pdf->Cell(35, 6, 'Net', 1, 0, 'R');
         $pdf->Cell(35, 6, 'Cumulative', 1, 1, 'R');
 
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont(self::PDF_FONT, '', 9);
         $cumulative = 0;
 
         foreach ($data['data'] ?? [] as $month) {
@@ -400,15 +408,15 @@ class ReportExporter {
      * Render income report to PDF.
      */
     private function renderIncomePdf($pdf, array $data): void {
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Income Report', 0, 1);
 
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(70, 6, 'Source', 1, 0, 'L');
         $pdf->Cell(50, 6, 'Amount', 1, 0, 'R');
         $pdf->Cell(50, 6, 'Transactions', 1, 1, 'R');
 
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont(self::PDF_FONT, '', 9);
         foreach ($data['data'] ?? [] as $item) {
             $pdf->Cell(70, 6, $item['name'] ?? 'Unknown', 1, 0, 'L');
             $pdf->Cell(50, 6, $this->formatNumber($item['total'] ?? 0), 1, 0, 'R');
@@ -416,7 +424,7 @@ class ReportExporter {
         }
 
         // Totals
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(70, 6, 'Total', 1, 0, 'L');
         $pdf->Cell(50, 6, $this->formatNumber($data['totals']['amount'] ?? 0), 1, 0, 'R');
         $pdf->Cell(50, 6, $data['totals']['transactions'] ?? 0, 1, 1, 'R');
@@ -426,10 +434,10 @@ class ReportExporter {
      * Render budget report to PDF.
      */
     private function renderBudgetPdf($pdf, array $data): void {
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Budget Report', 0, 1);
 
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(40, 6, 'Category', 1, 0, 'L');
         $pdf->Cell(30, 6, 'Budgeted', 1, 0, 'R');
         $pdf->Cell(30, 6, 'Spent', 1, 0, 'R');
@@ -437,7 +445,7 @@ class ReportExporter {
         $pdf->Cell(25, 6, '%', 1, 0, 'R');
         $pdf->Cell(25, 6, 'Status', 1, 1, 'C');
 
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont(self::PDF_FONT, '', 9);
         foreach ($data['categories'] ?? [] as $category) {
             $pdf->Cell(40, 6, $category['categoryName'] ?? '', 1, 0, 'L');
             $pdf->Cell(30, 6, $this->formatNumber($category['budgeted'] ?? 0), 1, 0, 'R');
@@ -449,7 +457,7 @@ class ReportExporter {
 
         // Totals
         $totals = $data['totals'] ?? [];
-        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFont(self::PDF_FONT, 'B', 9);
         $pdf->Cell(40, 6, 'Total', 1, 0, 'L');
         $pdf->Cell(30, 6, $this->formatNumber($totals['budgeted'] ?? 0), 1, 0, 'R');
         $pdf->Cell(30, 6, $this->formatNumber($totals['spent'] ?? 0), 1, 0, 'R');
@@ -500,7 +508,7 @@ class ReportExporter {
     private function renderCategoryMonthlyPdf($pdf, array $data): void {
         $months = $data['period']['months'] ?? [];
 
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont(self::PDF_FONT, 'B', 12);
         $pdf->Cell(0, 8, 'Category Income & Expenses by Month', 0, 1);
         $pdf->Ln(1);
 
@@ -512,7 +520,7 @@ class ReportExporter {
         $colW = $numCols > 0 ? (267.0 - $catW) / $numCols : 20.0;
         $fontSize = $numCols > 13 ? 6.0 : ($numCols > 9 ? 6.5 : 8.0);
 
-        $pdf->SetFont('helvetica', 'B', $fontSize);
+        $pdf->SetFont(self::PDF_FONT, 'B', $fontSize);
         $pdf->Cell($catW, 6, 'Category', 1, 0, 'L');
         foreach ($months as $m) {
             $pdf->Cell($colW, 6, date('M y', strtotime($m . '-01')), 1, 0, 'R');
@@ -521,7 +529,7 @@ class ReportExporter {
 
         foreach ($data['rows'] ?? [] as $row) {
             $name = str_repeat('   ', (int) ($row['depth'] ?? 0)) . ($row['name'] ?? '');
-            $pdf->SetFont('helvetica', !empty($row['isParent']) ? 'B' : '', $fontSize);
+            $pdf->SetFont(self::PDF_FONT, !empty($row['isParent']) ? 'B' : '', $fontSize);
             $pdf->Cell($catW, 5, $this->truncateText($name, 40), 1, 0, 'L');
             foreach ($months as $m) {
                 $this->amountCell($pdf, $colW, (float) ($row['monthly'][$m] ?? 0), false);
@@ -529,7 +537,7 @@ class ReportExporter {
             $this->amountCell($pdf, $colW, (float) ($row['total'] ?? 0), true);
         }
 
-        $pdf->SetFont('helvetica', 'B', $fontSize);
+        $pdf->SetFont(self::PDF_FONT, 'B', $fontSize);
         $pdf->Cell($catW, 6, 'Net total', 1, 0, 'L');
         foreach ($months as $m) {
             $this->amountCell($pdf, $colW, (float) ($data['totals']['monthly'][$m] ?? 0), false);

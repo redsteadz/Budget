@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Category by Month report**: a new report (Reports → Category by Month) showing income and expenses per category broken down by month, with a column per month and an overall total. Categories are listed alphabetically with sub-categories grouped under their parents, and **parent rows include the totals of their sub-categories**; a toggle switches to sorting by total instead. Defaults to year-to-date, follows the report date-range and account filters, and exports to CSV and PDF ([#288](https://github.com/otherworld-dev/Budget/discussions/288))
 
 ### Fixed
+- PDF reports rendered non-Latin characters (Polish, Cyrillic, etc.) in account/category names as "?". The PDF exports used a built-in font limited to Western European characters; they now use an embedded Unicode font (DejaVu Sans), so names display correctly. Applies to the budget report, bills-calendar and year-over-year PDFs ([#292](https://github.com/otherworld-dev/Budget/issues/292))
 - Marking a recurring transfer as paid showed a success message but created no account entries. The Transfers screen was only updating the transfer's "last paid" date instead of calling the mark-paid action, so no transactions were recorded; it now creates the paired transfer transactions like the Bills screen does ([#291](https://github.com/otherworld-dev/Budget/issues/291))
 
 ## [2.31.0] - 2026-06-14
