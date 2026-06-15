@@ -734,14 +734,18 @@ export default class TransfersModule {
         try {
             const formattedDate = formatters.getTodayDateString();
 
-            const response = await fetch(OC.generateUrl(`/apps/budget/api/bills/${transferId}`), {
-                method: 'PUT',
+            // Use the dedicated mark-paid endpoint so the paired transfer
+            // transactions are actually created. A plain PUT of lastPaidDate
+            // records the date but creates no account entries (#291).
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/bills/${transferId}/paid`), {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'requesttoken': OC.requestToken
                 },
                 body: JSON.stringify({
-                    lastPaidDate: formattedDate
+                    paidDate: formattedDate,
+                    createNextTransaction: true
                 })
             });
 
