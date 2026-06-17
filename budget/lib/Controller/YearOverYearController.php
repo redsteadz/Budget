@@ -47,7 +47,7 @@ class YearOverYearController extends Controller {
      * @NoAdminRequired
      */
     #[UserRateLimit(limit: 30, period: 60)]
-    public function compareMonth(int $month = 0, int $years = 3, ?int $accountId = null): DataResponse {
+    public function compareMonth(int $month = 0, int $years = 3, ?int $accountId = null, ?array $accountIds = null): DataResponse {
         try {
             // Default to current month if not specified
             if ($month <= 0 || $month > 12) {
@@ -57,7 +57,8 @@ class YearOverYearController extends Controller {
             // Limit years to reasonable range
             $years = max(1, min(10, $years));
 
-            $comparison = $this->service->compareMonth($this->getEffectiveUserId(), $month, $years, $accountId);
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
+            $comparison = $this->service->compareMonth($this->getEffectiveUserId(), $month, $years, $accountId, $visibleAccountIds);
             return new DataResponse($comparison);
         } catch (\Exception $e) {
             $this->logger->error('Failed to compare month', [
@@ -77,12 +78,13 @@ class YearOverYearController extends Controller {
      * @NoAdminRequired
      */
     #[UserRateLimit(limit: 30, period: 60)]
-    public function compareYears(int $years = 3, ?int $accountId = null): DataResponse {
+    public function compareYears(int $years = 3, ?int $accountId = null, ?array $accountIds = null): DataResponse {
         try {
             // Limit years to reasonable range
             $years = max(1, min(10, $years));
 
-            $comparison = $this->service->compareYears($this->getEffectiveUserId(), $years, $accountId);
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
+            $comparison = $this->service->compareYears($this->getEffectiveUserId(), $years, $accountId, $visibleAccountIds);
             return new DataResponse($comparison);
         } catch (\Exception $e) {
             $this->logger->error('Failed to compare years', [
@@ -102,12 +104,13 @@ class YearOverYearController extends Controller {
      * @NoAdminRequired
      */
     #[UserRateLimit(limit: 30, period: 60)]
-    public function compareCategories(int $years = 2, ?int $accountId = null): DataResponse {
+    public function compareCategories(int $years = 2, ?int $accountId = null, ?array $accountIds = null): DataResponse {
         try {
             // Limit years to reasonable range
             $years = max(1, min(5, $years));
 
-            $comparison = $this->service->compareCategorySpending($this->getEffectiveUserId(), $years, $accountId);
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
+            $comparison = $this->service->compareCategorySpending($this->getEffectiveUserId(), $years, $accountId, $visibleAccountIds);
             return new DataResponse($comparison);
         } catch (\Exception $e) {
             $this->logger->error('Failed to compare categories', [
@@ -127,12 +130,13 @@ class YearOverYearController extends Controller {
      * @NoAdminRequired
      */
     #[UserRateLimit(limit: 30, period: 60)]
-    public function monthlyTrends(int $years = 2, ?int $accountId = null): DataResponse {
+    public function monthlyTrends(int $years = 2, ?int $accountId = null, ?array $accountIds = null): DataResponse {
         try {
             // Limit years to reasonable range
             $years = max(1, min(5, $years));
 
-            $trends = $this->service->getMonthlyTrends($this->getEffectiveUserId(), $years, $accountId);
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
+            $trends = $this->service->getMonthlyTrends($this->getEffectiveUserId(), $years, $accountId, $visibleAccountIds);
             return new DataResponse($trends);
         } catch (\Exception $e) {
             $this->logger->error('Failed to get monthly trends', [
@@ -156,20 +160,23 @@ class YearOverYearController extends Controller {
         string $format = 'csv',
         int $years = 3,
         int $month = 0,
-        ?int $accountId = null
+        ?int $accountId = null,
+        ?array $accountIds = null
     ): DataDownloadResponse|DataResponse {
         try {
             $years = max(1, min(10, $years));
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $data = match ($comparisonType) {
                 'month' => $this->service->compareMonth(
                     $this->getEffectiveUserId(),
                     ($month > 0 && $month <= 12) ? $month : (int) date('n'),
                     $years,
-                    $accountId
+                    $accountId,
+                    $visibleAccountIds
                 ),
-                'categories' => $this->service->compareCategorySpending($this->getEffectiveUserId(), min($years, 5), $accountId),
-                default => $this->service->compareYears($this->getEffectiveUserId(), $years, $accountId),
+                'categories' => $this->service->compareCategorySpending($this->getEffectiveUserId(), min($years, 5), $accountId, $visibleAccountIds),
+                default => $this->service->compareYears($this->getEffectiveUserId(), $years, $accountId, $visibleAccountIds),
             };
 
             if ($format === 'pdf') {

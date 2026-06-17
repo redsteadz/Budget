@@ -37,6 +37,32 @@ trait SharedAccessTrait {
         return $this->granularShareService->getVisibleAccountIds($this->userId);
     }
 
+    /**
+     * Resolve a report's account scope from a legacy single accountId and an
+     * optional multi-select accountIds array (#299). Returns
+     * [effectiveAccountId, visibleAccountIds] to pass to a report service:
+     *  - multi-select: scope is the selected accounts intersected with the ones
+     *    the user can actually see; the single accountId is cleared.
+     *  - single accountId: unchanged.
+     *  - neither: all visible accounts.
+     *
+     * @param int[]|null $accountIds
+     * @return array{0: ?int, 1: int[]}
+     */
+    protected function resolveAccountScope(?int $accountId, ?array $accountIds): array {
+        $visible = $this->getVisibleAccountIds();
+        if (!empty($accountIds)) {
+            $selected = array_values(array_intersect(
+                array_map('intval', $accountIds),
+                $visible
+            ));
+            // Fall back to all visible accounts if the selection resolves to
+            // nothing accessible, rather than scoping to an empty set.
+            return [null, $selected !== [] ? $selected : $visible];
+        }
+        return [$accountId, $visible];
+    }
+
     /** @return int[] */
     protected function getVisibleCategoryIds(): array {
         return $this->granularShareService->getVisibleCategoryIds($this->userId);

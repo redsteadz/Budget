@@ -49,7 +49,8 @@ class ReportController extends Controller {
         ?string $startDate = null,
         ?string $endDate = null,
         ?array $tagIds = null,
-        ?bool $includeUntagged = null
+        ?bool $includeUntagged = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -59,6 +60,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $summary = $this->service->generateSummary(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -66,7 +68,7 @@ class ReportController extends Controller {
                 $accountId,
                 $tagIds ?? [],
                 $includeUntagged ?? true,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($summary);
         } catch (\Exception $e) {
@@ -83,7 +85,8 @@ class ReportController extends Controller {
         ?string $endDate = null,
         string $groupBy = 'category',
         ?int $tagSetId = null,
-        ?int $categoryId = null
+        ?int $categoryId = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -93,6 +96,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $spending = $this->service->getSpendingReport(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -101,7 +105,7 @@ class ReportController extends Controller {
                 $groupBy,
                 $tagSetId,
                 $categoryId,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($spending);
         } catch (\Exception $e) {
@@ -118,7 +122,8 @@ class ReportController extends Controller {
         ?string $endDate = null,
         string $groupBy = 'month',
         ?int $tagSetId = null,
-        ?int $categoryId = null
+        ?int $categoryId = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -128,6 +133,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $income = $this->service->getIncomeReport(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -136,7 +142,7 @@ class ReportController extends Controller {
                 $groupBy,
                 $tagSetId,
                 $categoryId,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($income);
         } catch (\Exception $e) {
@@ -152,7 +158,8 @@ class ReportController extends Controller {
         string $format = 'csv',
         ?int $accountId = null,
         ?string $startDate = null,
-        ?string $endDate = null
+        ?string $endDate = null,
+        ?array $accountIds = null
     ): DataDownloadResponse|DataResponse {
         try {
             if (!$startDate) {
@@ -162,6 +169,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $export = $this->service->exportReport(
                 $this->getEffectiveUserId(),
                 $type,
@@ -169,7 +177,7 @@ class ReportController extends Controller {
                 $startDate,
                 $endDate,
                 $accountId,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
 
             return new DataDownloadResponse(
@@ -218,7 +226,8 @@ class ReportController extends Controller {
         ?string $startDate = null,
         ?string $endDate = null,
         ?array $tagIds = null,
-        ?bool $includeUntagged = null
+        ?bool $includeUntagged = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -228,6 +237,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $summary = $this->service->generateSummaryWithComparison(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -235,7 +245,7 @@ class ReportController extends Controller {
                 $accountId,
                 $tagIds ?? [],
                 $includeUntagged ?? true,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($summary);
         } catch (\Exception $e) {
@@ -251,7 +261,8 @@ class ReportController extends Controller {
         ?string $startDate = null,
         ?string $endDate = null,
         ?array $tagIds = null,
-        ?bool $includeUntagged = null
+        ?bool $includeUntagged = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -261,6 +272,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $cashflow = $this->service->getCashFlowReport(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -268,7 +280,7 @@ class ReportController extends Controller {
                 $accountId,
                 $tagIds ?? [],
                 $includeUntagged ?? true,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($cashflow);
         } catch (\Exception $e) {
@@ -284,7 +296,8 @@ class ReportController extends Controller {
         ?string $startDate = null,
         ?string $endDate = null,
         ?int $accountId = null,
-        ?int $categoryId = null
+        ?int $categoryId = null,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -294,13 +307,14 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $dimensions = $this->service->getTagDimensions(
                 $this->getEffectiveUserId(),
                 $startDate,
                 $endDate,
                 $accountId,
                 $categoryId,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($dimensions);
         } catch (\Exception $e) {
@@ -318,7 +332,8 @@ class ReportController extends Controller {
         ?int $accountId = null,
         ?int $categoryId = null,
         int $minCombinationSize = 2,
-        int $limit = 50
+        int $limit = 50,
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -328,6 +343,7 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $combinations = $this->service->getTagCombinationReport(
                 $this->getEffectiveUserId(),
                 $startDate,
@@ -336,7 +352,7 @@ class ReportController extends Controller {
                 $categoryId,
                 $minCombinationSize,
                 $limit,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($combinations);
         } catch (\Exception $e) {
@@ -452,7 +468,8 @@ class ReportController extends Controller {
         ?int $accountId = null,
         ?string $startDate = null,
         ?string $endDate = null,
-        string $sort = 'alpha'
+        string $sort = 'alpha',
+        ?array $accountIds = null
     ): DataResponse {
         try {
             if (!$startDate) {
@@ -462,13 +479,14 @@ class ReportController extends Controller {
                 $endDate = date('Y-m-d');
             }
 
+            [$accountId, $visibleAccountIds] = $this->resolveAccountScope($accountId, $accountIds);
             $report = $this->service->getCategoryMonthlyReport(
                 $this->getEffectiveUserId(),
                 $startDate,
                 $endDate,
                 $accountId,
                 $sort,
-                $this->getVisibleAccountIds()
+                $visibleAccountIds
             );
             return new DataResponse($report);
         } catch (\Exception $e) {

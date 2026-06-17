@@ -80,11 +80,8 @@ export default class ReportsModule {
             typeSelect.addEventListener('change', () => this.generateReport());
         }
 
-        // Account change - auto-regenerate report
-        const accountSelect = document.getElementById('report-account');
-        if (accountSelect) {
-            accountSelect.addEventListener('change', () => this.generateReport());
-        }
+        // Account multi-select (checklist) — wires its own change handlers (#299)
+        this.setupReportAccountMultiselect();
 
         // Export buttons
         document.getElementById('export-csv-btn')?.addEventListener('click', () => this.exportReport('csv'));
@@ -153,15 +150,112 @@ export default class ReportsModule {
         await this.generateReport();
     }
 
-    populateReportAccountDropdown() {
-        const dropdown = document.getElementById('report-account');
-        if (!dropdown) return;
+    /** Selected report account IDs (empty = all accounts). #299 */
+    getSelectedReportAccountIds() {
+        return this.selectedReportAccounts ? Array.from(this.selectedReportAccounts) : [];
+    }
 
-        dropdown.innerHTML = `<option value="">${t('budget', 'All Accounts')}</option>`;
+    /** Append the selected account IDs to a URLSearchParams as accountIds[]. */
+    appendAccountIds(params) {
+        this.getSelectedReportAccountIds().forEach(id => params.append('accountIds[]', id));
+    }
+
+    /** Build a query-string fragment (&accountIds[]=...) for the selected accounts. */
+    accountIdsQuery() {
+        return this.getSelectedReportAccountIds().map(id => `&accountIds[]=${id}`).join('');
+    }
+
+    setupReportAccountMultiselect() {
+        const wrapper = document.getElementById('report-account-multiselect');
+        const toggle = document.getElementById('report-account-toggle');
+        const menu = document.getElementById('report-account-menu');
+        if (!wrapper || !toggle || !menu) return;
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const open = menu.style.display !== 'none';
+            menu.style.display = open ? 'none' : 'block';
+            toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+        });
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                menu.style.display = 'none';
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        const allCb = document.getElementById('report-account-all');
+        if (allCb) {
+            allCb.addEventListener('change', () => {
+                if (allCb.checked) {
+                    this.selectedReportAccounts.clear();
+                    document.querySelectorAll('#report-account-options input[type="checkbox"]')
+                        .forEach(cb => { cb.checked = false; });
+                    this.updateReportAccountSummary();
+                    this.generateReport();
+                } else {
+                    // "All" can't be turned off directly — re-check it.
+                    allCb.checked = true;
+                }
+            });
+        }
+    }
+
+    populateReportAccountDropdown() {
+        this.selectedReportAccounts = this.selectedReportAccounts || new Set();
+        const container = document.getElementById('report-account-options');
+        if (!container) return;
+
+        // Drop selected ids that no longer exist
+        this.selectedReportAccounts.forEach(id => {
+            if (!this.accounts?.some(a => a.id === id)) this.selectedReportAccounts.delete(id);
+        });
+
+        container.innerHTML = '';
         if (Array.isArray(this.accounts)) {
             this.accounts.forEach(account => {
-                dropdown.innerHTML += `<option value="${account.id}">${account.name}</option>`;
+                const label = document.createElement('label');
+                label.className = 'account-multiselect-option';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = account.id;
+                cb.checked = this.selectedReportAccounts.has(account.id);
+                cb.addEventListener('change', () => this.onReportAccountToggle(cb, account.id));
+                const span = document.createElement('span');
+                span.textContent = account.name;
+                label.appendChild(cb);
+                label.appendChild(span);
+                container.appendChild(label);
             });
+        }
+        const allCb = document.getElementById('report-account-all');
+        if (allCb) allCb.checked = this.selectedReportAccounts.size === 0;
+        this.updateReportAccountSummary();
+    }
+
+    onReportAccountToggle(cb, accountId) {
+        if (cb.checked) {
+            this.selectedReportAccounts.add(accountId);
+        } else {
+            this.selectedReportAccounts.delete(accountId);
+        }
+        const allCb = document.getElementById('report-account-all');
+        if (allCb) allCb.checked = this.selectedReportAccounts.size === 0;
+        this.updateReportAccountSummary();
+        this.generateReport();
+    }
+
+    updateReportAccountSummary() {
+        const summary = document.getElementById('report-account-summary');
+        if (!summary) return;
+        const ids = this.getSelectedReportAccountIds();
+        if (ids.length === 0) {
+            summary.textContent = t('budget', 'All Accounts');
+        } else if (ids.length === 1) {
+            const acc = this.accounts?.find(a => a.id === ids[0]);
+            summary.textContent = acc ? acc.name : t('budget', '1 account');
+        } else {
+            summary.textContent = t('budget', '{count} accounts', { count: ids.length });
         }
     }
 
@@ -344,7 +438,6 @@ export default class ReportsModule {
         const reportType = document.getElementById('report-type')?.value || 'summary';
         const startDate = document.getElementById('report-start-date')?.value;
         const endDate = document.getElementById('report-end-date')?.value;
-        const accountId = document.getElementById('report-account')?.value || '';
 
         // Get selected tags from dropdown state
         const selectedTags = this.selectedReportTags ? Array.from(this.selectedReportTags) : [];
@@ -363,9 +456,10 @@ export default class ReportsModule {
         try {
             const params = new URLSearchParams({
                 startDate,
-                endDate,
-                ...(accountId && { accountId })
+                endDate
             });
+            // Multi-select account scope (#299)
+            this.appendAccountIds(params);
 
             // Add tag filters if any tags are selected
             if (selectedTags.length > 0) {
@@ -930,7 +1024,6 @@ export default class ReportsModule {
         const comparisonType = document.getElementById('yoy-comparison-type')?.value || 'years';
         const years = document.getElementById('yoy-years')?.value || 3;
         const month = document.getElementById('yoy-month')?.value || new Date().getMonth() + 1;
-        const accountId = document.getElementById('report-account')?.value || '';
 
         // Show loading
         const loadingEl = document.getElementById('report-loading');
@@ -942,7 +1035,7 @@ export default class ReportsModule {
         document.getElementById('yoy-category-table-container')?.style.setProperty('display', 'none');
 
         try {
-            const accountParam = accountId ? `&accountId=${accountId}` : '';
+            const accountParam = this.accountIdsQuery(); // multi-select account scope (#299)
             let endpoint;
             switch (comparisonType) {
                 case 'month':
@@ -1164,7 +1257,6 @@ export default class ReportsModule {
     async exportStandardReport(format, reportType) {
         const startDate = document.getElementById('report-start-date')?.value;
         const endDate = document.getElementById('report-end-date')?.value;
-        const accountId = document.getElementById('report-account')?.value || '';
 
         return fetch(OC.generateUrl('/apps/budget/api/reports/export'), {
             method: 'POST',
@@ -1177,7 +1269,7 @@ export default class ReportsModule {
                 format,
                 startDate,
                 endDate,
-                accountId: accountId || null
+                accountIds: this.getSelectedReportAccountIds() // multi-select scope (#299)
             })
         });
     }
@@ -1186,7 +1278,6 @@ export default class ReportsModule {
         const comparisonType = document.getElementById('yoy-comparison-type')?.value || 'years';
         const years = document.getElementById('yoy-years')?.value || 3;
         const month = document.getElementById('yoy-month')?.value || new Date().getMonth() + 1;
-        const accountId = document.getElementById('report-account')?.value || '';
 
         return fetch(OC.generateUrl('/apps/budget/api/yoy/export'), {
             method: 'POST',
@@ -1199,7 +1290,7 @@ export default class ReportsModule {
                 format,
                 years: parseInt(years),
                 month: parseInt(month),
-                accountId: accountId || null
+                accountIds: this.getSelectedReportAccountIds() // multi-select scope (#299)
             })
         });
     }

@@ -31,7 +31,7 @@ class YearOverYearService {
      * @param int|null $accountId Optional account filter
      * @return array Year comparison data
      */
-    public function compareMonth(string $userId, int $month, int $years = 3, ?int $accountId = null): array {
+    public function compareMonth(string $userId, int $month, int $years = 3, ?int $accountId = null, ?array $visibleAccountIds = null): array {
         $currentYear = (int) date('Y');
         $results = [];
 
@@ -40,7 +40,7 @@ class YearOverYearService {
             $startDate = sprintf('%04d-%02d-01', $year, $month);
             $endDate = date('Y-m-t', strtotime($startDate));
 
-            $monthData = $this->getMonthSummary($userId, $startDate, $endDate, $accountId);
+            $monthData = $this->getMonthSummary($userId, $startDate, $endDate, $accountId, $visibleAccountIds);
             $monthData['year'] = $year;
             $monthData['month'] = $month;
             $monthData['monthName'] = date('F', strtotime($startDate));
@@ -74,7 +74,7 @@ class YearOverYearService {
      * @param int|null $accountId Optional account filter
      * @return array Year comparison data
      */
-    public function compareYears(string $userId, int $years = 3, ?int $accountId = null): array {
+    public function compareYears(string $userId, int $years = 3, ?int $accountId = null, ?array $visibleAccountIds = null): array {
         $currentYear = (int) date('Y');
         $results = [];
 
@@ -88,7 +88,7 @@ class YearOverYearService {
                 $endDate = date('Y-m-d');
             }
 
-            $yearData = $this->getYearSummary($userId, $year, $startDate, $endDate, $accountId);
+            $yearData = $this->getYearSummary($userId, $year, $startDate, $endDate, $accountId, $visibleAccountIds);
             $yearData['year'] = $year;
             $yearData['isCurrent'] = ($year === $currentYear);
 
@@ -119,7 +119,7 @@ class YearOverYearService {
      * @param int|null $accountId Optional account filter
      * @return array Category comparison data
      */
-    public function compareCategorySpending(string $userId, int $years = 2, ?int $accountId = null): array {
+    public function compareCategorySpending(string $userId, int $years = 2, ?int $accountId = null, ?array $visibleAccountIds = null): array {
         $currentYear = (int) date('Y');
         $categories = $this->categoryMapper->findAll($userId);
         $categoryData = [];
@@ -145,7 +145,8 @@ class YearOverYearService {
                     $category->getId(),
                     $startDate,
                     $endDate,
-                    $accountId
+                    $accountId,
+                    $visibleAccountIds
                 );
 
                 $categoryYears[] = [
@@ -192,7 +193,7 @@ class YearOverYearService {
      * @param int|null $accountId Optional account filter
      * @return array Monthly data for each year
      */
-    public function getMonthlyTrends(string $userId, int $years = 2, ?int $accountId = null): array {
+    public function getMonthlyTrends(string $userId, int $years = 2, ?int $accountId = null, ?array $visibleAccountIds = null): array {
         $currentYear = (int) date('Y');
         $currentMonth = (int) date('n');
         $result = [];
@@ -210,7 +211,7 @@ class YearOverYearService {
                 $startDate = sprintf('%04d-%02d-01', $year, $month);
                 $endDate = date('Y-m-t', strtotime($startDate));
 
-                $monthSummary = $this->getMonthSummary($userId, $startDate, $endDate, $accountId);
+                $monthSummary = $this->getMonthSummary($userId, $startDate, $endDate, $accountId, $visibleAccountIds);
                 $monthSummary['month'] = $month;
                 $monthSummary['monthName'] = date('M', mktime(0, 0, 0, $month, 1));
 
@@ -236,8 +237,8 @@ class YearOverYearService {
     /**
      * Get month summary data.
      */
-    private function getMonthSummary(string $userId, string $startDate, string $endDate, ?int $accountId = null): array {
-        $transactions = $this->transactionMapper->findAllByUserAndDateRange($userId, $startDate, $endDate, $accountId);
+    private function getMonthSummary(string $userId, string $startDate, string $endDate, ?int $accountId = null, ?array $visibleAccountIds = null): array {
+        $transactions = $this->transactionMapper->findAllByUserAndDateRange($userId, $startDate, $endDate, $accountId, $visibleAccountIds);
 
         $income = 0.0;
         $expenses = 0.0;
@@ -262,8 +263,8 @@ class YearOverYearService {
     /**
      * Get year summary data with monthly breakdowns.
      */
-    private function getYearSummary(string $userId, int $year, string $startDate, string $endDate, ?int $accountId = null): array {
-        $transactions = $this->transactionMapper->findAllByUserAndDateRange($userId, $startDate, $endDate, $accountId);
+    private function getYearSummary(string $userId, int $year, string $startDate, string $endDate, ?int $accountId = null, ?array $visibleAccountIds = null): array {
+        $transactions = $this->transactionMapper->findAllByUserAndDateRange($userId, $startDate, $endDate, $accountId, $visibleAccountIds);
 
         $income = 0.0;
         $expenses = 0.0;

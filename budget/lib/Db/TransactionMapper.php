@@ -2215,7 +2215,7 @@ class TransactionMapper extends QBMapper {
      * Get spending for a single category within a date range for a user.
      * Only counts non-split debit transactions.
      */
-    public function getCategorySpending(string $userId, int $categoryId, string $startDate, string $endDate, ?int $accountId = null): float {
+    public function getCategorySpending(string $userId, int $categoryId, string $startDate, string $endDate, ?int $accountId = null, ?array $visibleAccountIds = null): float {
         $qb = $this->db->getQueryBuilder();
 
         $qb->selectAlias($qb->func()->sum('t.amount'), 'total')
@@ -2236,6 +2236,10 @@ class TransactionMapper extends QBMapper {
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
+        }
+        // Multi-account report scope (#299): restrict to the selected accounts.
+        if (!empty($visibleAccountIds)) {
+            $qb->andWhere($qb->expr()->in('t.account_id', $qb->createNamedParameter($visibleAccountIds, IQueryBuilder::PARAM_INT_ARRAY)));
         }
 
         $result = $qb->executeQuery();

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Run reports on multiple accounts at once**: the report Account filter is now a checklist — pick any set of accounts (e.g. all your credit cards, or all your checking accounts) or "All Accounts". Applies across the summary, spending, income, cash-flow, category-by-month and year-over-year reports and their CSV/PDF exports ([#299](https://github.com/otherworld-dev/Budget/issues/299))
 - Dashboard tiles that can be scoped to a specific account (Spending by Category, Income vs Expenses, Net Worth History, Recent Transactions, and the other account-aware widgets) now show a small label in their header naming the account they're analyzing — the account you picked in the tile's settings, or "All accounts" ([#296](https://github.com/otherworld-dev/Budget/issues/296))
 
 ### Fixed
