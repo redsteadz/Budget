@@ -350,6 +350,8 @@ export default class DashboardModule {
 
             // Show the read-only period indicator on date-range tiles
             this.updateTilePeriodIndicators();
+            // Show the read-only account indicator on account-scoped tiles
+            this.updateTileAccountIndicators();
 
             // Fetch data for duplicate instances (after Gridstack so tiles are sized)
             setTimeout(() => this.refreshAllInstances(), 50);
@@ -612,6 +614,49 @@ export default class DashboardModule {
             if (!indicator) {
                 indicator = document.createElement('span');
                 indicator.className = 'tile-period-indicator';
+                const controls = header.querySelector('.card-header-controls');
+                if (controls) {
+                    controls.insertBefore(indicator, controls.firstChild);
+                } else {
+                    header.appendChild(indicator);
+                }
+            }
+            indicator.textContent = label;
+        });
+    }
+
+    /** Display name for a tile's saved account selection ("All accounts" when none/invalid). */
+    _accountLabel(accountId) {
+        const valid = this._validAccountId(accountId);
+        if (!valid) return t('budget', 'All accounts');
+        const account = (this.accounts || []).find(a => String(a.id) === String(valid));
+        return account ? account.name : t('budget', 'All accounts');
+    }
+
+    /**
+     * Show a read-only indicator in each account-scoped tile's header naming the
+     * account it is analyzing (or "All accounts"). Eligibility follows the
+     * widget's own settings schema (any tile that offers an account selector),
+     * so it surfaces that gear selection on every such tile (issue #296).
+     */
+    updateTileAccountIndicators() {
+        const tileSettings = this.dashboardConfig?.widgets?.tileSettings || {};
+        document.querySelectorAll('.dashboard-card[data-widget-id]').forEach(card => {
+            const instanceId = card.getAttribute('data-widget-id');
+            const header = card.querySelector('.card-header');
+            if (!header) return;
+
+            let indicator = header.querySelector('.tile-account-indicator');
+
+            if (!this.findWidgetDef(instanceId)?.settingsSchema?.accountSelector) {
+                if (indicator) indicator.remove();
+                return;
+            }
+
+            const label = this._accountLabel(tileSettings[instanceId]?.accountId);
+            if (!indicator) {
+                indicator = document.createElement('span');
+                indicator.className = 'tile-account-indicator';
                 const controls = header.querySelector('.card-header-controls');
                 if (controls) {
                     controls.insertBefore(indicator, controls.firstChild);
@@ -2315,13 +2360,18 @@ export default class DashboardModule {
             this.charts[instanceId].destroy();
         }
 
+        // Toggle the chart container (not just the canvas) so the empty-state
+        // can fill the card body and stay vertically centered; show it as a
+        // flex box so its own centering rules apply (#294).
+        const container = canvas.closest('.chart-container');
         if (!data || data.length === 0) {
-            canvas.style.display = 'none';
-            if (emptyState) emptyState.style.display = 'block';
+            if (container) container.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'flex';
             if (statusEl) statusEl.style.display = 'none';
             return;
         }
 
+        if (container) container.style.display = '';
         canvas.style.display = 'block';
         if (emptyState) emptyState.style.display = 'none';
 
@@ -2426,12 +2476,17 @@ export default class DashboardModule {
 
         const history = data?.history || [];
 
+        // Toggle the chart container (not just the canvas) so the empty-state
+        // can fill the card body and stay vertically centered; show it as a
+        // flex box so its own centering rules apply (#294).
+        const container = canvas.closest('.chart-container');
         if (history.length === 0) {
-            canvas.style.display = 'none';
-            if (emptyState) emptyState.style.display = 'block';
+            if (container) container.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'flex';
             return;
         }
 
+        if (container) container.style.display = '';
         canvas.style.display = 'block';
         if (emptyState) emptyState.style.display = 'none';
 
@@ -4298,9 +4353,11 @@ export default class DashboardModule {
         // Refresh the tile to apply the new setting
         this.refreshTileAfterSettingsChange(widgetId, category);
 
-        // Keep the period indicator in sync with the new setting
+        // Keep the read-only indicators in sync with the new setting
         if (setting === 'dateRange') {
             this.updateTilePeriodIndicators();
+        } else if (setting === 'accountId') {
+            this.updateTileAccountIndicators();
         }
     }
 
@@ -4672,8 +4729,9 @@ export default class DashboardModule {
         // Fetch and render data
         await this.refreshWidgetInstance(instanceId);
 
-        // Show the period indicator on the new tile (if it supports a date range)
+        // Show the period and account indicators on the new tile
         this.updateTilePeriodIndicators();
+        this.updateTileAccountIndicators();
 
         // Update menu
         this.updateAddTilesMenu();

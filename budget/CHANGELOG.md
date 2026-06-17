@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Dashboard tiles that can be scoped to a specific account (Spending by Category, Income vs Expenses, Net Worth History, Recent Transactions, and the other account-aware widgets) now show a small label in their header naming the account they're analyzing — the account you picked in the tile's settings, or "All accounts" ([#296](https://github.com/otherworld-dev/Budget/issues/296))
+
+### Fixed
+- Large amounts (e.g. values over 100,000) on the dashboard hero tiles (Net Worth, Income/Expenses This Month, Net Savings, Cash Flow) wrapped onto a second line, splitting the number mid-digits. The amount now stays on one line and its font scales down to fit narrow tiles instead of wrapping ([#295](https://github.com/otherworld-dev/Budget/issues/295))
+- The "Asset Value History" dashboard tile (and "Net Worth History") showed its empty-state message anchored near the bottom of the tile instead of vertically centered. When there's no data the message now fills and centers within the chart area ([#294](https://github.com/otherworld-dev/Budget/issues/294))
+
 ## [2.32.0] - 2026-06-17
 
 ### Added
