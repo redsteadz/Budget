@@ -828,6 +828,40 @@ class TransactionMapperTest extends TestCase {
         $this->assertEquals('Food', $summary[0]['name']);
     }
 
+    public function testGetSpendingSummaryAddsSplitSpending(): void {
+        // First query = direct (non-split) spending; second = split allocations.
+        $direct = $this->createMock(IResult::class);
+        $direct->method('fetchAll')->willReturn([
+            ['id' => 5, 'name' => 'Food', 'color' => '#f00', 'icon' => null, 'total' => '100.00', 'count' => '2'],
+        ]);
+        $direct->method('closeCursor');
+
+        $split = $this->createMock(IResult::class);
+        $split->method('fetchAll')->willReturn([
+            ['id' => 5, 'name' => 'Food', 'color' => '#f00', 'icon' => null, 'total' => '50.00', 'count' => '1'],
+            ['id' => 9, 'name' => 'Rent', 'color' => '#0f0', 'icon' => null, 'total' => '850.00', 'count' => '1'],
+        ]);
+        $split->method('closeCursor');
+
+        $this->qb->method('executeQuery')->willReturnOnConsecutiveCalls($direct, $split);
+
+        $summary = $this->mapper->getSpendingSummary('user1', '2026-01-01', '2026-01-31');
+
+        $byId = [];
+        foreach ($summary as $row) {
+            $byId[(int)$row['id']] = $row;
+        }
+
+        // Food: 100 direct + 50 split = 150 (counts merged too)
+        $this->assertEqualsWithDelta(150.0, (float)$byId[5]['total'], 0.001);
+        $this->assertSame(3, (int)$byId[5]['count']);
+        // A category that only has split spending still appears
+        $this->assertArrayHasKey(9, $byId);
+        $this->assertEqualsWithDelta(850.0, (float)$byId[9]['total'], 0.001);
+        // Re-sorted by total descending — Rent (850) comes first
+        $this->assertSame(9, (int)$summary[0]['id']);
+    }
+
     // ===== getMonthlyTrendData =====
 
     public function testGetMonthlyTrendDataReturnsFormattedArray(): void {

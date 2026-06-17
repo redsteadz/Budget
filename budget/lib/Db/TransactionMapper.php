@@ -843,7 +843,98 @@ class TransactionMapper extends QBMapper {
         $summary = $result->fetchAll();
         $result->closeCursor();
 
-        return $summary;
+        // Split transactions carry no category of their own (the parent's
+        // category is nulled when it's split); their per-category amounts live
+        // in budget_transaction_splits. Add those so split allocations count
+        // toward category spending/budgets like ordinary transactions (#297).
+        $splitSummary = $this->getSplitSpendingSummary(
+            $userId, $startDate, $endDate, $accountId, $tagIds,
+            $includeUntagged, $excludeTransfers, $visibleAccountIds, $transactionType
+        );
+
+        return $this->mergeSpendingSummaries($summary, $splitSummary);
+    }
+
+    /**
+     * Per-category totals from transaction splits, honouring the same filters
+     * as getSpendingSummary (applied to the split's parent transaction).
+     * Companion to getSpendingSummary — see #297.
+     */
+    private function getSplitSpendingSummary(
+        string $userId,
+        string $startDate,
+        string $endDate,
+        ?int $accountId,
+        array $tagIds,
+        bool $includeUntagged,
+        bool $excludeTransfers,
+        ?array $visibleAccountIds,
+        string $transactionType
+    ): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('c.id', 'c.name', 'c.color', 'c.icon')
+            ->selectAlias($qb->func()->sum('s.amount'), 'total')
+            ->selectAlias($qb->createFunction('COUNT(DISTINCT t.id)'), 'count')
+            ->from($this->getTableName(), 't')
+            ->innerJoin('t', 'budget_accounts', 'a', $qb->expr()->eq('t.account_id', 'a.id'))
+            ->innerJoin('t', 'budget_tx_splits', 's', $qb->expr()->eq('s.transaction_id', 't.id'))
+            ->innerJoin('s', 'budget_categories', 'c', $qb->expr()->eq('s.category_id', 'c.id'));
+
+        $this->applyUserScope($qb, $userId, $visibleAccountIds);
+
+        $qb->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
+            ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
+            ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter($transactionType)))
+            ->andWhere($qb->expr()->eq('t.is_split', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)));
+
+        $this->excludeScheduledFuture($qb);
+
+        if ($accountId !== null) {
+            $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
+        }
+
+        if ($excludeTransfers) {
+            $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));
+        }
+
+        $this->applyTagFilter($qb, $tagIds, $includeUntagged);
+
+        $qb->groupBy('c.id', 'c.name', 'c.color', 'c.icon');
+
+        $result = $qb->executeQuery();
+        $rows = $result->fetchAll();
+        $result->closeCursor();
+
+        return $rows;
+    }
+
+    /**
+     * Merge direct- and split-spending summaries by category, summing totals
+     * and counts, and re-sort by total descending (matching getSpendingSummary).
+     */
+    private function mergeSpendingSummaries(array $direct, array $split): array {
+        if (empty($split)) {
+            return $direct;
+        }
+
+        $byId = [];
+        foreach ($direct as $row) {
+            $byId[(int)$row['id']] = $row;
+        }
+        foreach ($split as $row) {
+            $id = (int)$row['id'];
+            if (isset($byId[$id])) {
+                $byId[$id]['total'] = (float)$byId[$id]['total'] + (float)$row['total'];
+                $byId[$id]['count'] = (int)$byId[$id]['count'] + (int)$row['count'];
+            } else {
+                $byId[$id] = $row;
+            }
+        }
+
+        $merged = array_values($byId);
+        usort($merged, fn($a, $b) => (float)$b['total'] <=> (float)$a['total']);
+
+        return $merged;
     }
 
     /**
