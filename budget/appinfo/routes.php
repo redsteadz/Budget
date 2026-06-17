@@ -311,6 +311,12 @@ return [
         ['name' => 'report#categoryMonthly', 'url' => '/api/reports/categories/monthly', 'verb' => 'GET'],
         ['name' => 'report#export', 'url' => '/api/reports/export', 'verb' => 'POST'],
 
+        // Saved reports (#299)
+        ['name' => 'savedReport#index', 'url' => '/api/reports/saved', 'verb' => 'GET'],
+        ['name' => 'savedReport#create', 'url' => '/api/reports/saved', 'verb' => 'POST'],
+        ['name' => 'savedReport#update', 'url' => '/api/reports/saved/{id}', 'verb' => 'PUT'],
+        ['name' => 'savedReport#destroy', 'url' => '/api/reports/saved/{id}', 'verb' => 'DELETE'],
+
         // Tag Report routes
         ['name' => 'report#tagDimensions', 'url' => '/api/reports/tags/dimensions', 'verb' => 'GET'],
         ['name' => 'report#tagCombinations', 'url' => '/api/reports/tags/combinations', 'verb' => 'GET'],

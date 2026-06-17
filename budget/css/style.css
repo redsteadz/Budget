@@ -10697,6 +10697,20 @@ button.danger:hover {
     box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
 }
 
+/* Saved reports row (#299) */
+.report-saved-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.report-saved-row .report-select {
+    min-width: 160px;
+}
+.report-saved-row button {
+    height: 36px;
+    white-space: nowrap;
+}
+
 /* Report account multi-select (checklist dropdown) — #299 */
 .account-multiselect {
     position: relative;

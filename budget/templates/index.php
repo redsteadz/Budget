@@ -3039,6 +3039,17 @@ style('budget', 'budget-app');
 
             <!-- Report Controls -->
             <div class="reports-controls">
+                <div class="control-group report-saved-group">
+                    <label for="report-saved-select"><?php p($l->t('Saved Reports')); ?></label>
+                    <div class="report-saved-row">
+                        <select id="report-saved-select" class="report-select">
+                            <option value=""><?php p($l->t('Saved reports…')); ?></option>
+                        </select>
+                        <button type="button" id="report-save-btn" class="secondary" title="<?php p($l->t('Save the current report settings')); ?>"><?php p($l->t('Save')); ?></button>
+                        <button type="button" id="report-delete-saved-btn" class="secondary" title="<?php p($l->t('Delete the selected saved report')); ?>" disabled><?php p($l->t('Delete')); ?></button>
+                    </div>
+                </div>
+
                 <div class="control-group">
                     <label for="report-type"><?php p($l->t('Report Type')); ?></label>
                     <select id="report-type" class="report-select">

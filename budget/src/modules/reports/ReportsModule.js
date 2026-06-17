@@ -4,7 +4,7 @@
 import * as formatters from '../../utils/formatters.js';
 import * as dom from '../../utils/dom.js';
 import Chart from 'chart.js/auto';
-import { showSuccess, showError } from '../../utils/notifications.js';
+import { showSuccess, showError, showWarning } from '../../utils/notifications.js';
 import { setDateValue } from '../../utils/datepicker.js';
 import { translate as t, translatePlural as n } from '@nextcloud/l10n';
 
@@ -83,6 +83,9 @@ export default class ReportsModule {
         // Account multi-select (checklist) — wires its own change handlers (#299)
         this.setupReportAccountMultiselect();
 
+        // Saved reports (#299)
+        this.setupSavedReports();
+
         // Export buttons
         document.getElementById('export-csv-btn')?.addEventListener('click', () => this.exportReport('csv'));
         document.getElementById('export-pdf-btn')?.addEventListener('click', () => this.exportReport('pdf'));
@@ -139,6 +142,9 @@ export default class ReportsModule {
 
         // Populate account dropdown
         this.populateReportAccountDropdown();
+
+        // Load saved reports list
+        await this.loadSavedReports();
 
         // Load and populate tags dropdown
         await this.loadAllTagsForReports();
@@ -256,6 +262,169 @@ export default class ReportsModule {
             summary.textContent = acc ? acc.name : t('budget', '1 account');
         } else {
             summary.textContent = t('budget', '{count} accounts', { count: ids.length });
+        }
+    }
+
+    // ===== Saved reports (#299) =====
+
+    setupSavedReports() {
+        const select = document.getElementById('report-saved-select');
+        const saveBtn = document.getElementById('report-save-btn');
+        const delBtn = document.getElementById('report-delete-saved-btn');
+        if (select && !select.dataset.wired) {
+            select.dataset.wired = '1';
+            select.addEventListener('change', () => this.onSavedReportSelect());
+        }
+        if (saveBtn && !saveBtn.dataset.wired) {
+            saveBtn.dataset.wired = '1';
+            saveBtn.addEventListener('click', () => this.saveCurrentReport());
+        }
+        if (delBtn && !delBtn.dataset.wired) {
+            delBtn.dataset.wired = '1';
+            delBtn.addEventListener('click', () => this.deleteSavedReport());
+        }
+    }
+
+    async loadSavedReports() {
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/reports/saved'), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) return;
+            this.savedReports = await response.json();
+            this.renderSavedReportsSelect();
+        } catch (e) {
+            console.error('Failed to load saved reports:', e);
+        }
+    }
+
+    renderSavedReportsSelect(selectedId = '') {
+        const select = document.getElementById('report-saved-select');
+        if (!select) return;
+        const reports = Array.isArray(this.savedReports) ? this.savedReports : [];
+        select.innerHTML = `<option value="">${t('budget', 'Saved reports…')}</option>`;
+        reports.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = r.name;
+            select.appendChild(opt);
+        });
+        select.value = selectedId ? String(selectedId) : '';
+        const delBtn = document.getElementById('report-delete-saved-btn');
+        if (delBtn) delBtn.disabled = !select.value;
+    }
+
+    /** Capture the current report filter state for saving. */
+    getReportConfig() {
+        const preset = document.getElementById('report-period-preset')?.value || 'last-3-months';
+        const config = {
+            reportType: document.getElementById('report-type')?.value || 'summary',
+            periodPreset: preset,
+            accountIds: this.getSelectedReportAccountIds(),
+            tagIds: this.selectedReportTags ? Array.from(this.selectedReportTags) : [],
+            includeUntagged: document.getElementById('report-include-untagged')?.checked || false,
+            yoyComparisonType: document.getElementById('yoy-comparison-type')?.value || 'years',
+            yoyYears: document.getElementById('yoy-years')?.value || '3',
+            yoyMonth: document.getElementById('yoy-month')?.value || '',
+            categoryMonthlySort: this.categoryMonthlySort || 'alpha',
+        };
+        if (preset === 'custom') {
+            config.startDate = document.getElementById('report-start-date')?.value || '';
+            config.endDate = document.getElementById('report-end-date')?.value || '';
+        }
+        return config;
+    }
+
+    /** Apply a saved config to the controls, then run the report. */
+    applyReportConfig(config) {
+        if (!config) return;
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.value = val; };
+
+        setVal('report-type', config.reportType);
+        document.getElementById('report-type')?.dispatchEvent(new Event('change'));
+
+        const preset = config.periodPreset || 'last-3-months';
+        setVal('report-period-preset', preset);
+        const customRange = document.getElementById('custom-date-range');
+        if (preset === 'custom') {
+            if (customRange) customRange.style.display = '';
+            if (config.startDate) setDateValue('report-start-date', config.startDate);
+            if (config.endDate) setDateValue('report-end-date', config.endDate);
+        } else {
+            if (customRange) customRange.style.display = 'none';
+            this.setReportDateRange(preset);
+        }
+
+        // Restore account selection (then re-render the checklist)
+        this.selectedReportAccounts = new Set(Array.isArray(config.accountIds) ? config.accountIds : []);
+        this.populateReportAccountDropdown();
+
+        // Restore tags
+        this.selectedReportTags = new Set(Array.isArray(config.tagIds) ? config.tagIds : []);
+        this.populateReportTagsDropdown();
+        const inc = document.getElementById('report-include-untagged');
+        if (inc) inc.checked = !!config.includeUntagged;
+
+        // Report-specific options
+        setVal('yoy-comparison-type', config.yoyComparisonType);
+        setVal('yoy-years', config.yoyYears);
+        if (config.yoyMonth) setVal('yoy-month', config.yoyMonth);
+        if (config.categoryMonthlySort) {
+            this.categoryMonthlySort = config.categoryMonthlySort;
+            setVal('category-monthly-sort', config.categoryMonthlySort);
+        }
+
+        this.generateReport();
+    }
+
+    async saveCurrentReport() {
+        const name = window.prompt(t('budget', 'Name this report:'));
+        if (name === null) return;
+        if (!name.trim()) {
+            showWarning(t('budget', 'Please enter a name for the report'));
+            return;
+        }
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/reports/saved'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'requesttoken': OC.requestToken },
+                body: JSON.stringify({ name: name.trim(), config: this.getReportConfig() })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || t('budget', 'Failed to save report'));
+            showSuccess(t('budget', 'Report saved'));
+            await this.loadSavedReports();
+            this.renderSavedReportsSelect(data.id);
+        } catch (e) {
+            showError(e.message || t('budget', 'Failed to save report'));
+        }
+    }
+
+    onSavedReportSelect() {
+        const select = document.getElementById('report-saved-select');
+        const delBtn = document.getElementById('report-delete-saved-btn');
+        if (delBtn) delBtn.disabled = !select?.value;
+        if (!select?.value) return;
+        const report = (this.savedReports || []).find(r => String(r.id) === select.value);
+        if (report) this.applyReportConfig(report.config);
+    }
+
+    async deleteSavedReport() {
+        const select = document.getElementById('report-saved-select');
+        const id = select?.value;
+        if (!id) return;
+        const report = (this.savedReports || []).find(r => String(r.id) === id);
+        if (!confirm(t('budget', 'Delete saved report "{name}"?', { name: report?.name || '' }))) return;
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/reports/saved/${id}`), {
+                method: 'DELETE',
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            showSuccess(t('budget', 'Saved report deleted'));
+            await this.loadSavedReports();
+        } catch (e) {
+            showError(t('budget', 'Failed to delete saved report'));
         }
     }
 
