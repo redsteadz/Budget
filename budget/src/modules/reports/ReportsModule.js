@@ -149,8 +149,15 @@ export default class ReportsModule {
         // Load and populate tags dropdown
         await this.loadAllTagsForReports();
 
-        // Set default date range
-        this.setReportDateRange('last-3-months');
+        // Reflect the period selector's current value, which persists the user's
+        // last choice across reopening the tab. Show the custom-range inputs when
+        // a custom range is selected; otherwise generateReport() derives the dates
+        // from the preset so the report matches what the selector shows (#300).
+        const customRange = document.getElementById('custom-date-range');
+        if (customRange) {
+            const preset = document.getElementById('report-period-preset')?.value;
+            customRange.style.display = preset === 'custom' ? 'flex' : 'none';
+        }
 
         // Generate initial report
         await this.generateReport();
@@ -605,6 +612,15 @@ export default class ReportsModule {
 
     async generateReport() {
         const reportType = document.getElementById('report-type')?.value || 'summary';
+
+        // Keep the date range in step with the period selector so the report
+        // always matches the shown period (the selector persists the user's last
+        // choice on reopen); a custom range keeps its own dates (#300).
+        const periodPreset = document.getElementById('report-period-preset')?.value || 'last-3-months';
+        if (periodPreset !== 'custom') {
+            this.setReportDateRange(periodPreset);
+        }
+
         const startDate = document.getElementById('report-start-date')?.value;
         const endDate = document.getElementById('report-end-date')?.value;
 
