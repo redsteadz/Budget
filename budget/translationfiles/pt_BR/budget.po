@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud Budget\n"
 "Report-Msgid-Bugs-To: https://github.com/otherworld-dev/budget/issues\n"
 "POT-Creation-Date: 2026-04-11 09:45+0000\n"
-"PO-Revision-Date: 2026-06-14 19:01+0000\n"
-"Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-06-23 14:44+0000\n"
+"Last-Translator: Rods Kaden <services.effects831@passfwd.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "nextcloud-budget/budget/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -79,7 +79,7 @@ msgstr "{bill} ({amount}) está {overdueText}"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:61
 msgid "Failed to retrieve accounts"
-msgstr "Não há contas para exibir"
+msgstr "Não foi possível buscar as contas financeiras"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:74
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:427
@@ -185,7 +185,7 @@ msgstr "Essa conta não tem dados bancários sensíveis para revelar"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:474
 msgid "Failed to retrieve account summary"
-msgstr "Falha ao tentar recuperar o resumo da conta"
+msgstr "Não foi possível buscar o resumo das contas financeiras"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AccountController.php:546
 msgid "Failed to reconcile account"
@@ -193,19 +193,19 @@ msgstr "Falha ao tentar reconciliar a conta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AlertController.php:46
 msgid "Failed to retrieve budget alerts"
-msgstr "Falha ao tentar recuperar os alertas orçamentários"
+msgstr "Não foi possível buscar os alertas de orçamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AlertController.php:59
 msgid "Failed to retrieve budget status"
-msgstr "Não foi possível recuperar o status do orçamento"
+msgstr "Não foi possível buscar o status do orçamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AlertController.php:72
 msgid "Failed to retrieve budget summary"
-msgstr "Não foi possível recuperar o resumo do orçamento"
+msgstr "Não foi possível buscar o resumo do orçamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:73
 msgid "Failed to retrieve assets"
-msgstr "Não foi possível recuperar os investimentos"
+msgstr "Não foi possível buscar os ativos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:85
 msgid "Asset"
@@ -283,7 +283,7 @@ msgstr "Não foi possível excluir o investimento"
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:294
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:306
 msgid "Failed to retrieve snapshots"
-msgstr "Não foi possível recuperar os snapshots"
+msgstr "Não foi possível buscar os snapshots"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:315
 msgid "Value and date are required"
@@ -336,19 +336,19 @@ msgstr "Não foi possível apagar o snapshot"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:361
 msgid "Failed to retrieve asset summary"
-msgstr "Não foi possível recuperar resumo de ativos"
+msgstr "Não foi possível buscar o resumo de ativos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:373
 msgid "Failed to retrieve asset projection"
-msgstr "Não foi possível recuperar a projeção de ativos"
+msgstr "Não foi possível buscar a projeção de ativos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:385
 msgid "Failed to retrieve combined asset projection"
-msgstr "Não foi possível recuperar a projeção de ativos combinados"
+msgstr "Não foi possível buscar a projeção combinada dos ativos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AssetController.php:405
 msgid "Failed to retrieve asset value history"
-msgstr "Não foi possível recuperar o histórico de valor do ativo"
+msgstr "Não foi possível buscar o histórico de valor do ativo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/AuthController.php:71
 msgid "Failed to get auth status"
@@ -408,7 +408,7 @@ msgstr "Não foi possível alterar a senha"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:71
 msgid "Failed to retrieve bills"
-msgstr "Não foi possível recuperar as contas"
+msgstr "Não foi possível buscar as contas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:94
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:498
@@ -484,23 +484,23 @@ msgstr "Não foi possível marcar a conta como paga"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:528
 msgid "Failed to retrieve upcoming bills"
-msgstr "Não foi possível recuperar as contas que vencerão"
+msgstr "Não foi possível buscar as contas a vencer"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:541
 msgid "Failed to retrieve bills due this month"
-msgstr "Não foi possível recuperar contas com vencimento neste mês"
+msgstr "Não foi possível buscar as contas com vencimento neste mês"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:554
 msgid "Failed to retrieve overdue bills"
-msgstr "Não foi possível recuperar as contas em atraso"
+msgstr "Não foi possível buscar as contas em atraso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:567
 msgid "Failed to retrieve bill summary"
-msgstr "Não foi possível recuperar o resumo das contas"
+msgstr "Não foi possível buscar o resumo das contas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:580
 msgid "Failed to retrieve bill status"
-msgstr "Não foi possível recuperar o status das contas"
+msgstr "Não foi possível buscar o status das contas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/BillController.php:593
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:767
@@ -570,15 +570,15 @@ msgstr "O padrão personalizado deve conter o campo \"meses\" ou \"datas\""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:58
 msgid "Failed to retrieve categories"
-msgstr "Não foi possível recuperar as categorias"
+msgstr "Não foi possível buscar as categorias"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:70
 msgid "Failed to retrieve category tree"
-msgstr "Não foi possível recuperar a árvore de categorias"
+msgstr "Não foi possível buscar a árvore de categorias"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:82
 msgid "Failed to retrieve transaction counts"
-msgstr "Não foi possível recuperar contagens de transações"
+msgstr "Não foi possível buscar a contagens de transações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:94
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:288
@@ -605,7 +605,7 @@ msgstr "Não foi possível recuperar contagens de transações"
 #: /var/www/html/apps-extra/budget/templates/index.php:5551
 #: /var/www/html/apps-extra/budget/templates/index.php:5592
 msgid "Category"
-msgstr "Categorias"
+msgstr "Categoria"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:122
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:189
@@ -628,15 +628,15 @@ msgstr "Não foi possível excluir a categoria"
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:264
 #: /var/www/html/apps-extra/budget/lib/Controller/CategoryController.php:276
 msgid "Failed to retrieve category spending"
-msgstr "Não foi possível recuperar os gastos da categoria"
+msgstr "Não foi possível buscar os gastos da categoria"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/DebtController.php:52
 msgid "Failed to retrieve debts"
-msgstr "Não foi possível recuperar as dívidas"
+msgstr "Não foi possível buscar as dívidas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/DebtController.php:73
 msgid "Failed to retrieve debt summary"
-msgstr "Não foi possível recuperar o resumo da dívidas"
+msgstr "Não foi possível buscar o resumo das dívidas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/DebtController.php:90
 msgid "Invalid strategy. Must be \"avalanche\" or \"snowball\""
@@ -700,7 +700,7 @@ msgstr "Não foi possível gerar previsão de fluxo de caixa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ForecastController.php:102
 msgid "Failed to retrieve spending trends"
-msgstr "Não foi possível recuperar as tendências de gastos"
+msgstr "Não foi possível buscar as tendências de gastos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ForecastController.php:121
 msgid "Failed to run forecast scenarios"
@@ -712,7 +712,7 @@ msgstr "Não foi possível gerar a previsão aprimorada"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ForecastController.php:160
 msgid "Failed to retrieve live forecast"
-msgstr "Não foi possível recuperar a previsão ao vivo"
+msgstr "Não foi possível buscar a previsão em tempo real"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ForecastController.php:178
 msgid "Failed to export forecast"
@@ -720,12 +720,12 @@ msgstr "Não foi possível exportar a previsão"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:54
 msgid "Failed to retrieve goals"
-msgstr "Não foi possível recuperar as metas"
+msgstr "Não foi possível buscar as metas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:66
 #: /var/www/html/apps-extra/budget/templates/index.php:2609
 msgid "Goal"
-msgstr "Metas"
+msgstr "Meta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:102
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:181
@@ -771,11 +771,11 @@ msgstr "Não foi possível apagar a meta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:250
 msgid "Failed to retrieve goal progress"
-msgstr "Não foi possível recuperar o progresso da meta"
+msgstr "Não foi possível buscar o progresso da meta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/GoalsController.php:262
 msgid "Failed to retrieve goal forecast"
-msgstr "Não foi possível recuperar a previsão de meta"
+msgstr "Não foi possível buscar a previsão da meta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportController.php:55
 #: /var/www/html/apps-extra/budget/lib/Controller/MigrationController.php:83
@@ -805,11 +805,11 @@ msgstr "Não foi possível processar a importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportController.php:163
 msgid "Failed to retrieve import templates"
-msgstr "Não foi possível recuperar os modelos de importação"
+msgstr "Não foi possível buscar os modelos de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportController.php:175
 msgid "Failed to retrieve import history"
-msgstr "Não foi possível recuperar o histórico de importações"
+msgstr "Não foi possível buscar o histórico de importações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportController.php:187
 msgid "Failed to validate file"
@@ -825,7 +825,7 @@ msgstr "Falha ao reverter a importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:57
 msgid "Failed to retrieve import rules"
-msgstr "Falha ao recuperar as regras de importação"
+msgstr "Não foi possível buscar as regras de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:69
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:307
@@ -867,329 +867,333 @@ msgstr "Falha ao atualizar as regras de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:319
 msgid "Failed to test import rules"
-msgstr ""
+msgstr "Falha ao testar as regras de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:345
 msgid "Failed to preview rule application"
-msgstr ""
+msgstr "Não foi possível visualizar a aplicação da regra"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:373
 msgid "Failed to test rule against transactions"
-msgstr ""
+msgstr "Não foi possível testar a regra nas transações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:400
 msgid "Failed to apply rules to transactions"
-msgstr ""
+msgstr "Falha na aplicação de regras às transações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:414
 msgid "Failed to migrate import rule"
-msgstr ""
+msgstr "Falha ao migrar a regra de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ImportRuleController.php:431
 msgid "Failed to migrate import rules"
-msgstr ""
+msgstr "Falha ao migrar as regras de importação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/MigrationController.php:67
 msgid "Failed to export data"
-msgstr ""
+msgstr "Falha na exportação de dados"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/MigrationController.php:137
 msgid ""
 "Import not confirmed. This operation will replace ALL existing data. Pass "
 "confirmed=true to proceed."
 msgstr ""
+"Importação não confirmada. Esta ação irá substituir TODOS os dados "
+"existentes. Confirme com confirmed=true para prosseguir."
 
 #: /var/www/html/apps-extra/budget/lib/Controller/MigrationController.php:185
 msgid "Failed to import data"
-msgstr ""
+msgstr "Falha na importação de dados"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/NetWorthController.php:59
 msgid "Failed to calculate net worth"
-msgstr ""
+msgstr "Não foi possível calcular o patrimônio líquido"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/NetWorthController.php:74
 msgid "Failed to retrieve net worth snapshots"
-msgstr ""
+msgstr "Não foi possível buscar os snapshots do patrimônio líquido"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/NetWorthController.php:92
 msgid "Failed to create net worth snapshot"
-msgstr ""
+msgstr "Não foi possível criar o snapshot do patrimônio líquido"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/NetWorthController.php:105
 msgid "Snapshot deleted"
-msgstr ""
+msgstr "Snapshot excluído"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/NetWorthController.php:107
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:73
 msgid "Failed to retrieve pensions"
-msgstr ""
+msgstr "Não foi possível buscar os planos de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:85
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:198
 msgid "Pension"
-msgstr ""
+msgstr "Previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:129
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:223
 #, php-format
 msgid "Invalid pension type. Must be one of: %1$s"
 msgstr ""
+"Tipo de plano de previdência inválido. Selecione um dos seguintes: %1$s\""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:149
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:243
 msgid "Current balance cannot be negative"
-msgstr ""
+msgstr "O saldo atual não pode ser negativo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:152
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:246
 msgid "Monthly contribution cannot be negative"
-msgstr ""
+msgstr "A contribuição mensal não deve ser negativa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:155
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:249
 #, php-format
 msgid "Expected return rate must be between 0%% and 100%%"
-msgstr ""
+msgstr "A taxa de retorno esperada deve estar entre 0%% e 100%%"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:158
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:252
 msgid "Retirement age must be between 18 and 100"
-msgstr ""
+msgstr "A idade de aposentadoria deve estar entre 18 e 100"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:161
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:255
 msgid "Annual income cannot be negative"
-msgstr ""
+msgstr "A renda anual não pode ser negativa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:164
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:258
 msgid "Transfer value cannot be negative"
-msgstr ""
+msgstr "O valor de transferência não pode ser negativo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:182
 msgid "Failed to create pension"
-msgstr ""
+msgstr "Falha ao criar o plano de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:277
 msgid "Failed to update pension"
-msgstr ""
+msgstr "Falha ao atualizar o plano de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:288
 msgid "Pension deleted successfully"
-msgstr ""
+msgstr "Plano de previdência excluído com sucesso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:290
 #: /var/www/html/apps-extra/budget/src/modules/pensions/PensionsModule.js:421
 msgid "Failed to delete pension"
-msgstr ""
+msgstr "Falha ao excluir o plano de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:328
 msgid "Balance and date are required"
-msgstr ""
+msgstr "O saldo e a data são obrigatórios"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:333
 msgid "Balance cannot be negative"
-msgstr ""
+msgstr "O saldo não pode ser negativo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:374
 msgid "Failed to retrieve contributions"
-msgstr ""
+msgstr "Não foi possível buscar as contribuições"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:397
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:436
 msgid "Amount and date are required"
-msgstr ""
+msgstr "O valor e a data são obrigatórios"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:402
 msgid "Amount must be greater than zero"
-msgstr ""
+msgstr "O valor deve ser maior que zero"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:423
 msgid "Failed to create contribution"
-msgstr ""
+msgstr "Falha ao criar contribuição"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:434
 msgid "Contribution deleted successfully"
-msgstr ""
+msgstr "Contribuição excluída com sucesso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:436
 msgid "Failed to delete contribution"
-msgstr ""
+msgstr "Falha ao excluir a contribuição"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:452
 msgid "Failed to retrieve pension summary"
-msgstr ""
+msgstr "Não foi possível buscar o resumo dos planos de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:464
 msgid "Failed to retrieve pension projection"
-msgstr ""
+msgstr "Não foi possível buscar a projeção dos planos de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/PensionController.php:476
 msgid "Failed to retrieve combined pension projection"
-msgstr ""
+msgstr "Não foi possível buscar a projeção combinada dos planos de previdência"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:59
 msgid "Failed to retrieve recurring income"
-msgstr ""
+msgstr "Não foi possível buscar a renda recorrente"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:72
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:205
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:219
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:275
 msgid "Recurring income"
-msgstr ""
+msgstr "Renda recorrente"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:110
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:191
 msgid "Expected day must be between 1 and 31"
-msgstr ""
+msgstr "O dia esperado deve estar entre 1 e 31"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:115
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:198
 msgid "Expected month must be between 1 and 12"
-msgstr ""
+msgstr "O mês esperado deve estar entre 1 e 12"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:152
 msgid "Failed to create recurring income"
-msgstr ""
+msgstr "Não foi possível criar a renda recorrente"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:217
 msgid "Recurring income deleted"
-msgstr ""
+msgstr "Renda recorrente excluída"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:232
 msgid "Failed to retrieve upcoming income"
-msgstr ""
+msgstr "Não foi possível buscar a renda a receber"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:245
 msgid "Failed to retrieve expected income"
-msgstr ""
+msgstr "Não foi possível buscar a renda esperada"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:258
 msgid "Failed to retrieve income summary"
-msgstr ""
+msgstr "Não foi possível buscar o resumo da renda"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:288
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:642
 msgid "Failed to detect recurring income"
-msgstr ""
+msgstr "Não foi possível detectar a renda recorrente"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/RecurringIncomeController.php:310
 msgid "Failed to create recurring income from detected patterns"
 msgstr ""
+"Não foi possível criar a renda recorrente a partir dos padrões detectados"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:67
 msgid "Failed to generate summary report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de resumo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:101
 msgid "Failed to generate spending report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de gastos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:135
 msgid "Failed to generate income report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de renda"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:172
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1050
 msgid "Failed to export report"
-msgstr ""
+msgstr "Não foi possível exportar o relatório"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:198
 msgid "Failed to generate budget report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de orçamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:230
 msgid "Failed to generate comparison report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de comparação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:262
 msgid "Failed to generate cash flow report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de fluxo de caixa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:293
 msgid "Failed to generate tag dimensions"
-msgstr ""
+msgstr "Não foi possível gerar as dimensões de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:328
 msgid "Failed to generate tag combination report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de combinação de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:363
 msgid "Failed to generate cross-tabulation"
-msgstr ""
+msgstr "Não foi possível gerar a tabulação cruzada"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:394
 msgid "Failed to generate tag trend report"
-msgstr ""
+msgstr "Não foi possível gerar o relatório de tendências de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/ReportController.php:427
 msgid "Failed to generate tag set breakdown"
-msgstr ""
+msgstr "Não foi possível gerar a análise detalhada da coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:82
 msgid "Failed to retrieve settings"
-msgstr ""
+msgstr "Não foi possível buscar as configurações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:107
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:219
 msgid "Setting not found"
-msgstr ""
+msgstr "Configuração não encontrada"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:111
 msgid "Failed to retrieve setting"
-msgstr ""
+msgstr "Não foi possível buscar a configuração"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:153
 msgid "Settings updated successfully"
-msgstr ""
+msgstr "Configurações atualizadas com sucesso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:157
 msgid "Failed to update settings"
-msgstr ""
+msgstr "Não foi possível atualizar as configurações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:173
 msgid "Value parameter is required"
-msgstr ""
+msgstr "O parâmetro de valor é obrigatório"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:198
 msgid "Setting updated successfully"
-msgstr ""
+msgstr "Configuração atualizada com sucesso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:203
 msgid "Failed to update setting"
-msgstr ""
+msgstr "Não foi possível atualizar a configuração"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:225
 msgid "Setting reset to default"
-msgstr ""
+msgstr "Configuração redefinida para o padrão"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:230
 msgid "Failed to reset setting"
-msgstr ""
+msgstr "Não foi possível restaurar a configuração padrão"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:245
 msgid "All settings reset to defaults"
-msgstr ""
+msgstr "Todas as configurações restauradas para o padrão"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:250
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:169
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:178
 msgid "Failed to reset settings"
-msgstr ""
+msgstr "Não foi possível restaurar as configurações padrão"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:279
 #: /var/www/html/apps-extra/budget/templates/index.php:4255
 msgid "Sunday"
-msgstr ""
+msgstr "Domingo"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:280
 #: /var/www/html/apps-extra/budget/templates/index.php:4256
 msgid "Monday"
-msgstr ""
+msgstr "Segunda-feira"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:283
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:112
@@ -1202,7 +1206,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4835
 #: /var/www/html/apps-extra/budget/templates/index.php:5221
 msgid "Weekly"
-msgstr ""
+msgstr "Semanal"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:284
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:114
@@ -1215,7 +1219,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4837
 #: /var/www/html/apps-extra/budget/templates/index.php:5223
 msgid "Monthly"
-msgstr ""
+msgstr "Mensal"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:285
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:115
@@ -1228,7 +1232,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4838
 #: /var/www/html/apps-extra/budget/templates/index.php:5224
 msgid "Quarterly"
-msgstr ""
+msgstr "Trismestral"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SettingController.php:286
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:117
@@ -1241,33 +1245,36 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4840
 #: /var/www/html/apps-extra/budget/templates/index.php:5226
 msgid "Yearly"
-msgstr ""
+msgstr "Anual"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:59
 msgid "Budget app initialized successfully"
-msgstr ""
+msgstr "Aplicativo de orçamento inicializado com sucesso"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:95
 #, php-format
 msgid "%1$s duplicate categories removed"
-msgstr ""
+msgstr "%1$s categorias duplicadas removidas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:113
 #, php-format
 msgid "Reset complete: deleted %1$s, created %2$s"
-msgstr ""
+msgstr "Restauração concluída: %1$s excluído(s), %2$s criado(s)"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:133
 msgid ""
 "Factory reset requires confirmed=true parameter. This will permanently "
 "delete ALL your data."
 msgstr ""
+"A restauração de fábrica requer confirmação com confirmed=true. Esta ação "
+"excluirá permanentemente TODOS os seus dados."
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:151
 #: /var/www/html/apps-extra/budget/src/main.js:1936
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:609
 msgid "Factory reset completed successfully. All data has been deleted."
 msgstr ""
+"Restauração de fábrica concluída com sucesso. Todos os dados foram excluídos."
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SetupController.php:156
 #, php-format
@@ -1281,125 +1288,125 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:55
 msgid "Failed to get contacts"
-msgstr ""
+msgstr "Não foi possível carregar os contatos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:77
 msgid "Failed to create contact"
-msgstr ""
+msgstr "Não foi possível criar o contato"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:99
 msgid "Failed to update contact"
-msgstr ""
+msgstr "Não foi possível atualizar o contato"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:121
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:299
 msgid "Failed to delete contact"
-msgstr ""
+msgstr "Não foi possível excluir o contato"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:143
 msgid "Failed to get contact details"
-msgstr ""
+msgstr "Não foi possível carregar os detalhes do contato"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:167
 msgid "Failed to get balances"
-msgstr ""
+msgstr "Não foi possível carregar os saldos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:202
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:563
 msgid "Failed to share expense"
-msgstr ""
+msgstr "Não foi possível compartilhar a despesa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:224
 msgid "Failed to split expense"
-msgstr ""
+msgstr "Não foi possível dividir a despesa"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:246
 msgid "Failed to get shares"
-msgstr ""
+msgstr "Não foi possível carregar os compartilhamentos"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:268
 msgid "Failed to update share"
-msgstr ""
+msgstr "Não foi possível atualizar o compartilhamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:290
 msgid "Failed to mark settled"
-msgstr ""
+msgstr "Não foi possível marcar como quitado"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:312
 msgid "Failed to delete share"
-msgstr ""
+msgstr "Não foi possível excluir o compartilhamento"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:347
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:457
 msgid "Failed to record settlement"
-msgstr ""
+msgstr "Não foi possível registrar a quitação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:369
 msgid "Failed to settle"
-msgstr ""
+msgstr "Não foi possível quitar"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:391
 msgid "Failed to get settlements"
-msgstr ""
+msgstr "Não foi possível carregar as quitações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/SharedExpenseController.php:413
 msgid "Failed to delete settlement"
-msgstr ""
+msgstr "Não foi possível excluir as quitações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:59
 msgid "Failed to retrieve tag sets"
-msgstr ""
+msgstr "Não foi possível buscar as coleções de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:71
 msgid "Tag set"
-msgstr ""
+msgstr "Coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:85
 msgid "Category ID and name are required"
-msgstr ""
+msgstr "O ID e o nome da categoria são obrigatórios"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:109
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:460
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:561
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:919
 msgid "Failed to create tag set"
-msgstr ""
+msgstr "Não foi possível criar a coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:147
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:937
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:996
 msgid "Failed to update tag set"
-msgstr ""
+msgstr "Não foi possível atualizar a coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:160
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:477
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:579
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:853
 msgid "Failed to delete tag set"
-msgstr ""
+msgstr "Não foi possível excluir a coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:172
 msgid "Failed to retrieve tags"
-msgstr ""
+msgstr "Não foi possível buscar as etiquetas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:186
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:304
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:244
 msgid "Name is required"
-msgstr ""
+msgstr "O preenchimento do nome é obrigatório"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:218
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:509
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:602
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:1140
 msgid "Failed to create tag"
-msgstr ""
+msgstr "Não foi possível criar a etiqueta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:262
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:1158
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:1222
 msgid "Failed to update tag"
-msgstr ""
+msgstr "Não foi possível atualizar a etiqueta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:275
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:267
@@ -1407,27 +1414,27 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:620
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:886
 msgid "Failed to delete tag"
-msgstr ""
+msgstr "Não foi possível excluir a etiqueta"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:291
 msgid "Failed to retrieve global tags"
-msgstr ""
+msgstr "Não foi possível buscar as etiquetas globais"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:324
 msgid "Failed to create global tag"
-msgstr ""
+msgstr "Não foi possível criar a etiqueta global"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:360
 msgid "Failed to update global tag"
-msgstr ""
+msgstr "Não foi possível atualizar a etiqueta global"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TagSetController.php:373
 msgid "Failed to delete global tag"
-msgstr ""
+msgstr "Não foi possível excluir a etiqueta global"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:110
 msgid "Failed to retrieve transactions"
-msgstr ""
+msgstr "Não foi possível buscar as transações"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:122
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:321
@@ -1438,12 +1445,12 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:658
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:682
 msgid "Transaction"
-msgstr ""
+msgstr "Transação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:158
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:248
 msgid "Invalid transaction type. Must be credit or debit"
-msgstr ""
+msgstr "Tipo de transação inválido. Deve ser crédito ou débito"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:200
 msgid "Failed to create transaction"
@@ -1464,7 +1471,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:345
 msgid "Failed to retrieve uncategorized transactions"
-msgstr ""
+msgstr "Não foi possível buscar as transações não categorizadas"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:358
 msgid "Failed to categorize transactions"
@@ -1539,7 +1546,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1175
 #: /var/www/html/apps-extra/budget/templates/index.php:1326
 msgid "Split"
-msgstr ""
+msgstr "Dividir"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:674
 msgid "tagIds array is required"
@@ -1547,7 +1554,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:685
 msgid "Failed to set transaction tags"
-msgstr ""
+msgstr "Não foi possível definir as etiquetas da transação"
 
 #: /var/www/html/apps-extra/budget/lib/Controller/TransactionController.php:700
 msgid "Failed to clear transaction tags"
@@ -1976,7 +1983,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1165
 #: /var/www/html/apps-extra/budget/templates/index.php:1316
 msgid "Uncategorized"
-msgstr ""
+msgstr "Não categorizado"
 
 #: /var/www/html/apps-extra/budget/src/config/dashboardWidgets.js:27
 #: /var/www/html/apps-extra/budget/templates/index.php:473
@@ -2030,7 +2037,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:993
 #: /var/www/html/apps-extra/budget/templates/index.php:4484
 msgid "Accounts"
-msgstr ""
+msgstr "Contas Financeiras"
 
 #: /var/www/html/apps-extra/budget/src/config/dashboardWidgets.js:40
 #: /var/www/html/apps-extra/budget/templates/index.php:636
@@ -2161,7 +2168,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:353
 msgid "Share expense"
-msgstr ""
+msgstr "Compartilhar despesa"
 
 #: /var/www/html/apps-extra/budget/src/main.js:357
 msgid "Unlink transfer"
@@ -2328,7 +2335,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:5727
 #: /var/www/html/apps-extra/budget/templates/index.php:5814
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: /var/www/html/apps-extra/budget/src/main.js:1543
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:255
@@ -2418,7 +2425,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:1801
 msgid "Recalculating..."
-msgstr ""
+msgstr "Recalculando..."
 
 #: /var/www/html/apps-extra/budget/src/main.js:1815
 msgid "Recalculation failed"
@@ -2440,7 +2447,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:585
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:3375
 msgid "Deleting..."
-msgstr ""
+msgstr "Excluindo..."
 
 #: /var/www/html/apps-extra/budget/src/main.js:1929
 #: /var/www/html/apps-extra/budget/src/modules/settings/SettingsModule.js:602
@@ -2460,7 +2467,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:2026
 msgid "Exporting..."
-msgstr ""
+msgstr "Exportando..."
 
 #: /var/www/html/apps-extra/budget/src/main.js:2035
 msgid "Export failed"
@@ -2494,7 +2501,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/exchange-rates/ExchangeRatesModule.js:173
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:1703
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2132
 msgid "Failed to preview file: {error}"
@@ -2533,19 +2540,19 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:2190
 msgid "categories"
-msgstr ""
+msgstr "categorias"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2191
 msgid "accounts"
-msgstr ""
+msgstr "contas financeiras"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2192
 msgid "transactions"
-msgstr ""
+msgstr "transações"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2193
 msgid "bills"
-msgstr ""
+msgstr "contas"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2194
 msgid "import rules"
@@ -2553,7 +2560,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/main.js:2195
 msgid "settings"
-msgstr ""
+msgstr "configurações"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2203
 msgid "Import completed successfully"
@@ -2571,7 +2578,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/main.js:2443
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1006
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2420
 msgid ""
@@ -2590,7 +2597,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1516
 #: /var/www/html/apps-extra/budget/templates/index.php:2906
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2442
 msgid "Interest Rate"
@@ -2727,7 +2734,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:5354
 #: /var/www/html/apps-extra/budget/templates/index.php:5430
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2892
 msgid "Total Amount"
@@ -2755,7 +2762,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:5090
 #: /var/www/html/apps-extra/budget/templates/index.php:5552
 msgid "Amount"
-msgstr ""
+msgstr "Quantidade"
 
 #: /var/www/html/apps-extra/budget/src/main.js:2967
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:1853
@@ -2832,11 +2839,11 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:268
 msgid "Owed"
-msgstr ""
+msgstr "Devido"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:268
 msgid "Credit"
-msgstr ""
+msgstr "Crédito"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:307
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:1713
@@ -2869,7 +2876,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:576
 #: /var/www/html/apps-extra/budget/templates/index.php:1127
 msgid "Never"
-msgstr ""
+msgstr "Nunca"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:646
 #: /var/www/html/apps-extra/budget/src/modules/import/ImportModule.js:553
@@ -2884,7 +2891,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1184
 #: /var/www/html/apps-extra/budget/templates/index.php:1335
 msgid "Scheduled"
-msgstr ""
+msgstr "Agendado"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:684
 msgid "Transfer {direction} {account}"
@@ -2912,7 +2919,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1510
 #: /var/www/html/apps-extra/budget/templates/index.php:1738
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:968
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:195
@@ -3109,7 +3116,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2069
 msgid "Valid"
-msgstr ""
+msgstr "Válido"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2135
 #: /var/www/html/apps-extra/budget/templates/index.php:4679
@@ -3132,26 +3139,26 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:624
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:194
 msgid "Investment"
-msgstr ""
+msgstr "Investimento"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2155
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:626
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:196
 msgid "Loan"
-msgstr ""
+msgstr "Empréstimo"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2160
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:625
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:195
 #: /var/www/html/apps-extra/budget/templates/index.php:4684
 msgid "Cash"
-msgstr ""
+msgstr "Espécie"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2165
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:199
 #: /var/www/html/apps-extra/budget/templates/index.php:4685
 msgid "Cryptocurrency"
-msgstr ""
+msgstr "Criptomoeda"
 
 #: /var/www/html/apps-extra/budget/src/modules/accounts/AccountsModule.js:2187
 msgid "Credit utilization very high"
@@ -3185,7 +3192,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4603
 #: /var/www/html/apps-extra/budget/templates/index.php:5308
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:31
 msgid "Failed to load assets"
@@ -3199,24 +3206,24 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:92
 #: /var/www/html/apps-extra/budget/templates/index.php:3749
 msgid "Vehicle"
-msgstr ""
+msgstr "Veículo"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:97
 #: /var/www/html/apps-extra/budget/templates/index.php:3750
 msgid "Jewelry"
-msgstr ""
+msgstr "Joias"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:102
 #: /var/www/html/apps-extra/budget/templates/index.php:3751
 msgid "Collectibles"
-msgstr ""
+msgstr "Colecionáveis"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:107
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:1167
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:2455
 #: /var/www/html/apps-extra/budget/templates/index.php:3752
 msgid "Other"
-msgstr ""
+msgstr "Outros"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:138
 msgid "Purchased at {price}"
@@ -3231,7 +3238,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1627
 #: /var/www/html/apps-extra/budget/templates/index.php:3622
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:167
 #: /var/www/html/apps-extra/budget/src/modules/pensions/PensionsModule.js:120
@@ -3241,7 +3248,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:1397
 #: /var/www/html/apps-extra/budget/templates/index.php:1631
 msgid "Delete"
-msgstr ""
+msgstr "Excluir"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:174
 #: /var/www/html/apps-extra/budget/templates/index.php:3643
@@ -3300,7 +3307,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:566
 #: /var/www/html/apps-extra/budget/templates/index.php:3832
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: /var/www/html/apps-extra/budget/src/modules/assets/AssetsModule.js:639
 msgid "Projected Appreciation"
@@ -3349,7 +3356,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:231
 #: /var/www/html/apps-extra/budget/templates/index.php:2247
 msgid "Paid"
-msgstr ""
+msgstr "Pago"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:101
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:111
@@ -3357,7 +3364,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:2219
 #: /var/www/html/apps-extra/budget/templates/index.php:2246
 msgid "Overdue"
-msgstr ""
+msgstr "Vencido"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:104
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:110
@@ -3370,7 +3377,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:108
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:240
 msgid "Upcoming"
-msgstr ""
+msgstr "A vencer"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:113
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:114
@@ -3380,7 +3387,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4836
 #: /var/www/html/apps-extra/budget/templates/index.php:5222
 msgid "Bi-Weekly"
-msgstr ""
+msgstr "Quinzenal"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:116
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:117
@@ -3389,7 +3396,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4839
 #: /var/www/html/apps-extra/budget/templates/index.php:5225
 msgid "Semi-Annually"
-msgstr ""
+msgstr "Semestral"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:118
 #: /var/www/html/apps-extra/budget/src/modules/income/IncomeModule.js:119
@@ -3397,7 +3404,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4841
 #: /var/www/html/apps-extra/budget/templates/index.php:5227
 msgid "One-Time"
-msgstr ""
+msgstr "Único"
 
 #: /var/www/html/apps-extra/budget/src/modules/bills/BillsModule.js:139
 #: /var/www/html/apps-extra/budget/src/modules/transfers/TransfersModule.js:274
@@ -4129,7 +4136,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:2451
 msgid "Goals"
-msgstr ""
+msgstr "Metas"
 
 #: /var/www/html/apps-extra/budget/src/modules/dashboard/DashboardModule.js:2452
 #: /var/www/html/apps-extra/budget/templates/index.php:103
@@ -4565,7 +4572,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/pensions/PensionsModule.js:449
 #: /var/www/html/apps-extra/budget/templates/index.php:3389
 msgid "SIPP"
-msgstr ""
+msgstr "Plano de Previdência Individual"
 
 #: /var/www/html/apps-extra/budget/src/modules/pensions/PensionsModule.js:90
 #: /var/www/html/apps-extra/budget/src/modules/pensions/PensionsModule.js:450
@@ -4720,28 +4727,28 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:3162
 #: /var/www/html/apps-extra/budget/templates/index.php:4850
 msgid "Jan"
-msgstr ""
+msgstr "Jan"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3163
 #: /var/www/html/apps-extra/budget/templates/index.php:4851
 msgid "Feb"
-msgstr ""
+msgstr "Fev"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3164
 #: /var/www/html/apps-extra/budget/templates/index.php:4852
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3165
 #: /var/www/html/apps-extra/budget/templates/index.php:4853
 msgid "Apr"
-msgstr ""
+msgstr "Abr"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
@@ -4752,292 +4759,292 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:4880
 #: /var/www/html/apps-extra/budget/templates/index.php:5246
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3167
 #: /var/www/html/apps-extra/budget/templates/index.php:4855
 msgid "Jun"
-msgstr ""
+msgstr "Jun"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3168
 #: /var/www/html/apps-extra/budget/templates/index.php:4856
 msgid "Jul"
-msgstr ""
+msgstr "Jul"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3169
 #: /var/www/html/apps-extra/budget/templates/index.php:4857
 msgid "Aug"
-msgstr ""
+msgstr "Ago"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3170
 #: /var/www/html/apps-extra/budget/templates/index.php:4858
 msgid "Sep"
-msgstr ""
+msgstr "Set"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3171
 #: /var/www/html/apps-extra/budget/templates/index.php:4859
 msgid "Oct"
-msgstr ""
+msgstr "Out"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3172
 #: /var/www/html/apps-extra/budget/templates/index.php:4860
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1283
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:171
 #: /var/www/html/apps-extra/budget/templates/index.php:3173
 #: /var/www/html/apps-extra/budget/templates/index.php:4861
 msgid "Dec"
-msgstr ""
+msgstr "Dez"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1294
 msgid "Total Bills"
-msgstr ""
+msgstr "Total de Contas"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1308
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1358
 msgid "Monthly Totals"
-msgstr ""
+msgstr "Totais Mensais"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3049
 #: /var/www/html/apps-extra/budget/templates/index.php:4876
 #: /var/www/html/apps-extra/budget/templates/index.php:5242
 msgid "January"
-msgstr ""
+msgstr "Janeiro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3050
 #: /var/www/html/apps-extra/budget/templates/index.php:4877
 #: /var/www/html/apps-extra/budget/templates/index.php:5243
 msgid "February"
-msgstr ""
+msgstr "Fevereiro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3051
 #: /var/www/html/apps-extra/budget/templates/index.php:4878
 #: /var/www/html/apps-extra/budget/templates/index.php:5244
 msgid "March"
-msgstr ""
+msgstr "Março"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3052
 #: /var/www/html/apps-extra/budget/templates/index.php:4879
 #: /var/www/html/apps-extra/budget/templates/index.php:5245
 msgid "April"
-msgstr ""
+msgstr "Abril"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3054
 #: /var/www/html/apps-extra/budget/templates/index.php:4881
 #: /var/www/html/apps-extra/budget/templates/index.php:5247
 msgid "June"
-msgstr ""
+msgstr "Junho"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3055
 #: /var/www/html/apps-extra/budget/templates/index.php:4882
 #: /var/www/html/apps-extra/budget/templates/index.php:5248
 msgid "July"
-msgstr ""
+msgstr "Julho"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3056
 #: /var/www/html/apps-extra/budget/templates/index.php:4883
 #: /var/www/html/apps-extra/budget/templates/index.php:5249
 msgid "August"
-msgstr ""
+msgstr "Agosto"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3057
 #: /var/www/html/apps-extra/budget/templates/index.php:4884
 #: /var/www/html/apps-extra/budget/templates/index.php:5250
 msgid "September"
-msgstr ""
+msgstr "Setembro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3058
 #: /var/www/html/apps-extra/budget/templates/index.php:4885
 #: /var/www/html/apps-extra/budget/templates/index.php:5251
 msgid "October"
-msgstr ""
+msgstr "Outubro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3059
 #: /var/www/html/apps-extra/budget/templates/index.php:4886
 #: /var/www/html/apps-extra/budget/templates/index.php:5252
 msgid "November"
-msgstr ""
+msgstr "Novembro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1369
 #: /var/www/html/apps-extra/budget/templates/index.php:3060
 #: /var/www/html/apps-extra/budget/templates/index.php:4887
 #: /var/www/html/apps-extra/budget/templates/index.php:5253
 msgid "December"
-msgstr ""
+msgstr "Dezembro"
 
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1387
 #: /var/www/html/apps-extra/budget/src/modules/reports/ReportsModule.js:1389
 msgid "%n bill"
 msgid_plural "%n bills"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n conta"
+msgstr[1] "%n contas"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:83
 msgid "Failed to load rules"
-msgstr ""
+msgstr "Não foi possível carregar as regras"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:129
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:182
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:137
 msgid "contains"
-msgstr ""
+msgstr "contém"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:130
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:185
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:145
 msgid "equals"
-msgstr ""
+msgstr "é igual a"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:131
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:183
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:138
 msgid "starts with"
-msgstr ""
+msgstr "começa com"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:132
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:184
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:139
 msgid "ends with"
-msgstr ""
+msgstr "termina com"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:133
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:186
 msgid "matches"
-msgstr ""
+msgstr "corresponde a"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:143
 msgid "Click to disable"
-msgstr ""
+msgstr "Clique para desativar"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:143
 msgid "Click to enable"
-msgstr ""
+msgstr "Clique para ativar"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:147
 #: /var/www/html/apps-extra/budget/templates/index.php:206
 #: /var/www/html/apps-extra/budget/templates/index.php:1143
 #: /var/www/html/apps-extra/budget/templates/index.php:2135
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:152
 msgid "Edit rule"
-msgstr ""
+msgstr "Editar regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:153
 msgid "Delete rule"
-msgstr ""
+msgstr "Excluir regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:161
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:177
 msgid "Complex criteria"
-msgstr ""
+msgstr "Critérios avançados"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:173
 #: /var/www/html/apps-extra/budget/templates/index.php:1182
 #: /var/www/html/apps-extra/budget/templates/index.php:1333
 #: /var/www/html/apps-extra/budget/templates/index.php:4128
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:173
 msgid "Any"
-msgstr ""
+msgstr "Qualquer"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:174
 msgid "{operator} of {count} conditions"
-msgstr ""
+msgstr "{operator} de {count} condições"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:189
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:148
 msgid "between"
-msgstr ""
+msgstr "entre"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:190
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:153
 msgid "before"
-msgstr ""
+msgstr "antes de"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:191
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:154
 msgid "after"
-msgstr ""
+msgstr "depois de"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:194
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/CriteriaBuilder.js:113
 msgid "NOT"
-msgstr ""
+msgstr "NÃO"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:223
 msgid "Category #{id}"
-msgstr ""
+msgstr "Categoria #{id}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:230
 msgid "Vendor:"
-msgstr ""
+msgstr "Fornecedor:"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:235
 msgid "Set notes"
-msgstr ""
+msgstr "Definir notas"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:238
 msgid "No actions"
-msgstr ""
+msgstr "Nenhuma ação"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:404
 msgid "This rule has been upgraded to the new format with advanced features"
-msgstr ""
+msgstr "Esta regra foi atualizada para o novo formato com recursos avançados"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:407
 msgid "Failed to upgrade rule format"
-msgstr ""
+msgstr "Não foi possível atualizar o formato da regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:423
 msgid "Edit Rule"
-msgstr ""
+msgstr "Editar Regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:459
 #: /var/www/html/apps-extra/budget/templates/index.php:2304
 msgid "Add Rule"
-msgstr ""
+msgstr "Adicionar Regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:544
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:870
 msgid "Error: CriteriaBuilder not initialized"
-msgstr ""
+msgstr "Erro: CriteriaBuilder não inicializado"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:550
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:737
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:876
 msgid "Invalid criteria: {errors}"
-msgstr ""
+msgstr "Critérios inválidos: {errors}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:565
 #: /var/www/html/apps-extra/budget/src/modules/transactions/TransactionsModule.js:2843
@@ -5052,147 +5059,151 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:854
 #: /var/www/html/apps-extra/budget/templates/index.php:863
 msgid "Loading..."
-msgstr ""
+msgstr "Carregando..."
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:594
 msgid "Failed to preview rule: {error}"
-msgstr ""
+msgstr "Não foi possível visualizar a regra: {error}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:598
 #: /var/www/html/apps-extra/budget/templates/index.php:5118
 msgid "Preview Matches"
-msgstr ""
+msgstr "Pré-visualizar Correspondências"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:618
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:822
 #: /var/www/html/apps-extra/budget/templates/index.php:5091
 msgid "Current Category"
-msgstr ""
+msgstr "Categoria Atual"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:636
 msgid "No matching transactions found"
-msgstr ""
+msgstr "Nenhuma transação correspondente encontrada"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:666
 msgid "Saving..."
-msgstr ""
+msgstr "Salvando..."
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:674
 msgid "Failed to save rule"
-msgstr ""
+msgstr "Não foi possível salvar a regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:678
 msgid "Running..."
-msgstr ""
+msgstr "Executando..."
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:702
 msgid "Rule applied: %n transaction updated"
 msgid_plural "Rule applied: %n transactions updated"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Regra aplicada: %n transação atualizada"
+msgstr[1] "Regra aplicada: %n transações atualizadas"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:708
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:834
 msgid "No transactions were updated"
-msgstr ""
+msgstr "Nenhuma transação foi atualizada"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:713
 msgid "Failed to run rule: {error}"
-msgstr ""
+msgstr "Não foi possível executar a regra: {error}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:716
 #: /var/www/html/apps-extra/budget/templates/index.php:5119
 msgid "Run Rule Now"
-msgstr ""
+msgstr "Executar Regra Agora"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:732
 msgid "CriteriaBuilder not initialized"
-msgstr ""
+msgstr "CriteriaBuilder não inicializado"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:744
 msgid "ActionBuilder not initialized"
-msgstr ""
+msgstr "ActionBuilder não inicializado"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:749
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:890
 msgid "Invalid actions: {errors}"
-msgstr ""
+msgstr "Ações inválidas: {errors}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:827
 msgid "{count} updated"
-msgstr ""
+msgstr "{count} atualizado(s)"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:884
 msgid "Error: ActionBuilder not initialized"
-msgstr ""
+msgstr "Erro: ActionBuilder não inicializado"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:926
 msgid "Rule updated successfully"
-msgstr ""
+msgstr "Regra atualizada com sucesso"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:926
 msgid "Rule created successfully"
-msgstr ""
+msgstr "Regra criada com sucesso"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:931
 msgid "Failed to save rule: {error}"
-msgstr ""
+msgstr "Não foi possível salvar a regra: {error}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:947
 msgid "Failed to load rule"
-msgstr ""
+msgstr "Não foi possível carregar a regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:952
 msgid "Are you sure you want to delete this rule?"
-msgstr ""
+msgstr "Tem certeza que deseja excluir esta regra?"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:962
 msgid "Rule deleted successfully"
-msgstr ""
+msgstr "Regra excluida com sucesso"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:966
 msgid "Failed to delete rule"
-msgstr ""
+msgstr "Não foi possível excluir a regra"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1002
 msgid "Rule enabled"
-msgstr ""
+msgstr "Regra ativada"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1002
 msgid "Rule disabled"
-msgstr ""
+msgstr "Regra desativada"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1005
 msgid "Failed to update rule: {error}"
-msgstr ""
+msgstr "Não foi possível atualizar a regra: {error}"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1069
 msgid ""
 "Apply rules to matching transactions? This will modify the selected "
 "transactions."
 msgstr ""
+"Aplicar regras às transações correspondentes? Isso irá modificar as "
+"transações selecionadas."
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1078
 msgid "Applying..."
-msgstr ""
+msgstr "Aplicando..."
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1104
 msgid "Rules applied: {success} updated, {skipped} skipped, {failed} failed"
 msgstr ""
+"Regras aplicadas: {success} atualizado(s), {skipped} ignorado(s), {failed} "
+"falharam"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1113
 msgid "Failed to apply rules"
-msgstr ""
+msgstr "Não foi possível aplicar as regras"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/RulesModule.js:1116
 #: /var/www/html/apps-extra/budget/templates/index.php:2300
 #: /var/www/html/apps-extra/budget/templates/index.php:5187
 msgid "Apply Rules"
-msgstr ""
+msgstr "Aplicar Regras"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:88
 msgid "+ Add Action"
-msgstr ""
+msgstr "+ Adicionar Ação"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:89
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:119
@@ -5323,7 +5334,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:238
 msgid "No tag sets available"
-msgstr ""
+msgstr "Nenhuma coleção de etiquetas disponível"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:256
 msgid "Merge with existing tags"
@@ -5335,7 +5346,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:267
 msgid "Account:"
-msgstr ""
+msgstr "Conta financeira:"
 
 #: /var/www/html/apps-extra/budget/src/modules/rules/components/ActionBuilder.js:269
 msgid "-- Select Account --"
@@ -5655,7 +5666,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:379
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:409
 msgid "Settled"
-msgstr ""
+msgstr "Quitado"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:99
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:321
@@ -5696,6 +5707,8 @@ msgid ""
 "Are you sure you want to delete this contact? This will also remove all "
 "shared expense records with them."
 msgstr ""
+"Tem certeza que deseja excluir este contato? Isso também removerá todos os "
+"registros de despesas compartilhadas com ele."
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:294
 msgid "Contact deleted"
@@ -5708,7 +5721,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:363
 #: /var/www/html/apps-extra/budget/templates/index.php:5760
 msgid "No shared expenses"
-msgstr ""
+msgstr "Nenhuma despesa compartilhada"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:379
 msgid "Open"
@@ -5717,7 +5730,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:388
 #: /var/www/html/apps-extra/budget/templates/index.php:5766
 msgid "No settlements yet"
-msgstr ""
+msgstr "Sem quitações registradas"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:453
 msgid "Settlement recorded"
@@ -5727,18 +5740,20 @@ msgstr ""
 msgid ""
 "This will mark all shared expenses with this contact as settled. Continue?"
 msgstr ""
+"Isso marcará todas as despesas compartilhadas com este contato como "
+"quitadas. Deseja continuar?"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:480
 msgid "All expenses settled"
-msgstr ""
+msgstr "Todas as despesas quitadas"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:484
 msgid "Failed to settle expenses"
-msgstr ""
+msgstr "Não foi possível quitar as despesas"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:498
 msgid "Please add contacts first in Shared Expenses"
-msgstr ""
+msgstr "Por favor, adicione contatos primeiro em Despesas Compartilhadas"
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:509
 #: /var/www/html/apps-extra/budget/templates/index.php:5666
@@ -5755,7 +5770,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/shared-expenses/SharedExpensesModule.js:559
 msgid "Expense shared"
-msgstr ""
+msgstr "Despesa compartilhada"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:63
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:420
@@ -5815,24 +5830,26 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:376
 msgid "Save category first to manage tag sets"
-msgstr ""
+msgstr "Salve a categoria primeiro para gerenciar as coleções de etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:385
 #: /var/www/html/apps-extra/budget/templates/index.php:1710
 msgid "Tag Sets"
-msgstr ""
+msgstr "Coleções de Etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:387
 #: /var/www/html/apps-extra/budget/templates/index.php:5345
 #: /var/www/html/apps-extra/budget/templates/index.php:5358
 msgid "Add Tag Set"
-msgstr ""
+msgstr "Adicionar Coleção de Etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:393
 msgid ""
 "No tag sets yet. Add your first tag set to enable multi-dimensional "
 "categorization."
 msgstr ""
+"Nenhuma coleção de etiquetas cadastrada. Adicione sua primeira coleção de "
+"etiquetas para ativar a categorização multidimensional."
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:404
 msgid "Add tag"
@@ -5840,7 +5857,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:407
 msgid "Delete tag set"
-msgstr ""
+msgstr "Excluir coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:417
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:770
@@ -5850,12 +5867,13 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:440
 msgid "Enter tag set name (e.g., \"Priority\", \"Status\"):"
 msgstr ""
+"Digite o nome da coleção de etiquetas (ex.: \"Prioridade\", \"Status\"):"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:448
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:908
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:985
 msgid "A tag set named \"{name}\" already exists in this category"
-msgstr ""
+msgstr "Já existe uma coleção de etiquetas chamada \"{name}\" nesta categoria"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:452
 msgid "Enter description (optional):"
@@ -5864,17 +5882,19 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:457
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:916
 msgid "Tag set created successfully"
-msgstr ""
+msgstr "Coleção de etiquetas criada com sucesso"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:469
 msgid ""
 "Delete this tag set? All associated tags will be removed from transactions."
 msgstr ""
+"Excluir esta coleção de etiquetas? Todas as etiquetas associadas serão "
+"removidas das transações."
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:474
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:850
 msgid "Tag set deleted"
-msgstr ""
+msgstr "Coleção de etiquetas deletada"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:486
 msgid "Enter tag name:"
@@ -5884,7 +5904,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:1128
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:1210
 msgid "A tag named \"{name}\" already exists in this tag set"
-msgstr ""
+msgstr "Já existe uma etiqueta chamada \"{name}\" nesta coleção de etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:501
 msgid "Enter color (e.g., #FF5733):"
@@ -5897,12 +5917,12 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:729
 msgid "Select a category to manage tag sets"
-msgstr ""
+msgstr "Selecione uma categoria para gerenciar as coleções de etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:739
 #: /var/www/html/apps-extra/budget/templates/index.php:1717
 msgid "No tag sets yet."
-msgstr ""
+msgstr "Ainda não há coleções de etiquetas cadastradas."
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:771
 msgid "Delete tag"
@@ -5911,15 +5931,15 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:781
 #: /var/www/html/apps-extra/budget/templates/index.php:5420
 msgid "Edit Tag Set"
-msgstr ""
+msgstr "Editar Coleção de Etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:784
 msgid "Delete Tag Set"
-msgstr ""
+msgstr "Excluir Coleção de Etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:802
 msgid "Failed to load tag sets"
-msgstr ""
+msgstr "Não foi possível carregar as coleções de etiquetas"
 
 #: /var/www/html/apps-extra/budget/src/modules/tagsets/TagSetsModule.js:846
 msgid "Delete this tag set? All tags in this set will be removed."
@@ -6647,7 +6667,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/src/utils/formatters.js:197
 msgid "Mortgage"
-msgstr ""
+msgstr "Hipoteca"
 
 #: /var/www/html/apps-extra/budget/src/utils/validators.js:25
 msgid "This field is required"
@@ -6705,13 +6725,13 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:33
 msgid "Dashboard"
-msgstr ""
+msgstr "Painel"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:63
 #: /var/www/html/apps-extra/budget/templates/index.php:1538
 #: /var/www/html/apps-extra/budget/templates/index.php:4480
 msgid "Categories"
-msgstr ""
+msgstr "Categorias"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:113
 msgid "Transfers"
@@ -6726,7 +6746,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:3994
 #: /var/www/html/apps-extra/budget/templates/index.php:5754
 msgid "Shared Expenses"
-msgstr ""
+msgstr "Despesas Compartilhadas"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:173
 msgid "Forecast"
@@ -6743,7 +6763,7 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:216
 #: /var/www/html/apps-extra/budget/templates/index.php:2296
 msgid "Rules"
-msgstr ""
+msgstr "Regras"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:226
 #: /var/www/html/apps-extra/budget/templates/index.php:4067
@@ -7251,7 +7271,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:1674
 msgid "Trend"
-msgstr ""
+msgstr "Tendência"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:1688
 msgid "Monthly Spending"
@@ -9163,7 +9183,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:4842
 msgid "Custom"
-msgstr ""
+msgstr "Personalizado"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:4844
 msgid "How often this bill is due"
@@ -9729,11 +9749,11 @@ msgstr ""
 #: /var/www/html/apps-extra/budget/templates/index.php:5653
 #: /var/www/html/apps-extra/budget/templates/index.php:5690
 msgid "Share Expense"
-msgstr ""
+msgstr "Compartilhar Despesa"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5654
 msgid "Share expense form"
-msgstr ""
+msgstr "Formulário de compartilhamento de despesa"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5664
 msgid "Split with"
@@ -9770,7 +9790,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5701
 msgid "Settlement form"
-msgstr ""
+msgstr "Formulário de quitação"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5710
 msgid "Settlement Amount"
@@ -9794,7 +9814,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5749
 msgid "Settle All"
-msgstr ""
+msgstr "Quitar Tudo"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5750
 msgid "Record Payment"
@@ -9802,7 +9822,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5755
 msgid "Settlement History"
-msgstr ""
+msgstr "Histórico de Quitação"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5781
 msgid "Confirm Factory Reset"
@@ -9842,7 +9862,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5794
 msgid "All shared expenses and contacts"
-msgstr ""
+msgstr "Todos os contatos e despesas compartilhadas"
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5796
 msgid "Only audit logs will be preserved for compliance purposes."
@@ -9862,7 +9882,7 @@ msgstr ""
 
 #: /var/www/html/apps-extra/budget/templates/index.php:5810
 msgid "You must type DELETE (all caps) exactly to proceed"
-msgstr ""
+msgstr "Digite DELETE (em maiúsculas) exatamente para prosseguir"
 
 #: /var/www/html/apps-extra/budget/vendor/nextcloud/ocp/OCP/Federation/Exceptions/ActionNotSupportedException.php:27
 #, php-format
