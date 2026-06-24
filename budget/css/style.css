@@ -13520,6 +13520,13 @@ tr.pending-transaction td:first-child {
     font-family: var(--font-mono, monospace);
 }
 
+/* The remainder (last) split row is auto-calculated and read-only (#303). */
+.split-row input.inline-split-remainder {
+    background: var(--color-background-dark);
+    color: var(--color-text-maxcontrast);
+    cursor: not-allowed;
+}
+
 .split-remove-btn {
     width: 32px;
     height: 32px;

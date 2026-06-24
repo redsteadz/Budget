@@ -1878,6 +1878,18 @@ export default class TransactionsModule {
             document.querySelectorAll('#transaction-tags-container input[type="checkbox"]:checked')
         ).map(cb => parseInt(cb.value));
 
+        // If splitting is on, validate the parts before we create/update anything
+        // (otherwise the server rejects the splits and we'd be left with an
+        // unsplit transaction).
+        const splitToggleEl = document.getElementById('transaction-split-toggle');
+        if (splitToggleEl?.checked) {
+            const splitCheck = this.validateInlineSplits();
+            if (!splitCheck.ok) {
+                showError(splitCheck.message);
+                return;
+            }
+        }
+
         try {
             let response;
             if (id) {
@@ -2002,11 +2014,11 @@ export default class TransactionsModule {
             }
         };
 
-        // Rebalance splits when the main amount changes so they keep summing to
-        // it (the last split absorbs the difference); a no-op when not splitting.
+        // When the main amount changes, recompute the remainder (last) split row
+        // so the parts keep summing to it; a no-op when not splitting.
         const amountInput = document.getElementById('transaction-amount');
         if (amountInput) {
-            amountInput.addEventListener('input', () => this.rebalanceInlineSplits(amountInput));
+            amountInput.addEventListener('input', () => this.recomputeRemainderRow());
         }
 
         // Add row button
@@ -2022,7 +2034,7 @@ export default class TransactionsModule {
         container.innerHTML = '';
         this.addInlineSplitRow(true);
         this.addInlineSplitRow(false);
-        this.updateInlineSplitRemaining();
+        this.refreshInlineSplitRows();
     }
 
     addInlineSplitRow(isFirst = false, existingSplit = null) {
@@ -2062,19 +2074,21 @@ export default class TransactionsModule {
         `;
 
         const amountInput = row.querySelector('.inline-split-amount');
+        // Editing an (editable, non-remainder) row recomputes the remainder row.
+        // The remainder row is read-only, so it never fires this itself.
         amountInput.addEventListener('input', () => {
-            this.rebalanceInlineSplits(amountInput);
+            this.recomputeRemainderRow();
         });
 
         row.querySelector('.split-remove-btn').addEventListener('click', (e) => {
             if (!e.currentTarget.classList.contains('disabled')) {
                 row.remove();
-                this.updateInlineSplitRemaining();
+                this.refreshInlineSplitRows();
             }
         });
 
         container.appendChild(row);
-        this.updateInlineSplitRemaining();
+        this.refreshInlineSplitRows();
     }
 
     updateInlineSplitRemaining() {
@@ -2087,40 +2101,86 @@ export default class TransactionsModule {
         const remaining = totalAmount - allocated;
         const el = document.getElementById('inline-split-remaining');
         if (el) {
-            el.textContent = remaining === 0
+            const balanced = Math.abs(remaining) < 0.01;
+            el.textContent = balanced
                 ? t('budget', 'Fully allocated')
                 : t('budget', 'Remaining: {amount}', { amount: remaining.toFixed(2) });
-            el.style.color = Math.abs(remaining) < 0.01 ? 'var(--color-success)' : 'var(--color-warning)';
+            // A readable green when balanced (the theme's success green was too
+            // dark on the dark background), and the app's standard negative-amount
+            // red while there's still an amount left to allocate.
+            el.style.color = balanced ? '#4caf50' : 'var(--budget-color-negative)';
         }
     }
 
     /**
-     * Keep the splits summing to the transaction amount: when one split amount
-     * is edited, the last *other* split row absorbs the remainder. This makes
-     * editing an existing split's parts stay balanced against the transaction
-     * total (#297 follow-up) — and still auto-fills a fresh second row.
+     * Designate the last split row as the read-only "remainder" row and make all
+     * the others editable. Every other row is entered by hand; the remainder row
+     * always holds total − (sum of the others), so editing any editable row (or
+     * adding/removing rows) never clobbers a value the user typed (#303). Call
+     * this after any structural change (add/remove/load); editing a value only
+     * needs recomputeRemainderRow().
      */
-    rebalanceInlineSplits(editedInput) {
-        const totalAmount = parseFloat(document.getElementById('transaction-amount')?.value) || 0;
-        const inputs = Array.from(
-            document.querySelectorAll('#inline-splits-container .split-row .inline-split-amount')
-        );
+    refreshInlineSplitRows() {
+        const rows = Array.from(document.querySelectorAll('#inline-splits-container .split-row'));
+        rows.forEach((row, i) => {
+            const input = row.querySelector('.inline-split-amount');
+            const label = row.querySelector('.split-amount-field label');
+            const isRemainder = rows.length >= 2 && i === rows.length - 1;
+            input.readOnly = isRemainder;
+            input.classList.toggle('inline-split-remainder', isRemainder);
+            input.title = isRemainder
+                ? t('budget', 'Auto-calculated from the transaction total minus the other splits')
+                : '';
+            if (label) {
+                label.textContent = isRemainder ? t('budget', 'Amount (remaining)') : t('budget', 'Amount');
+            }
+        });
+        this.recomputeRemainderRow();
+    }
 
-        if (inputs.length >= 2) {
-            // Balancer = the last input that isn't the one being edited.
-            let balancer = null;
-            for (let i = inputs.length - 1; i >= 0; i--) {
-                if (inputs[i] !== editedInput) { balancer = inputs[i]; break; }
-            }
-            if (balancer) {
-                let sumOthers = 0;
-                inputs.forEach(inp => { if (inp !== balancer) sumOthers += parseFloat(inp.value) || 0; });
-                const remaining = Math.round((totalAmount - sumOthers) * 100) / 100;
-                balancer.value = remaining > 0 ? remaining.toFixed(2) : '0.00';
-            }
+    /**
+     * Set the remainder (last) row to total − (sum of the editable rows above it),
+     * then refresh the running "Remaining" indicator. Over-allocation shows as a
+     * 0.00 remainder and a negative "Remaining", which the save guard rejects.
+     */
+    recomputeRemainderRow() {
+        const rows = Array.from(document.querySelectorAll('#inline-splits-container .split-row'));
+        if (rows.length >= 2) {
+            const totalAmount = parseFloat(document.getElementById('transaction-amount')?.value) || 0;
+            const lastInput = rows[rows.length - 1].querySelector('.inline-split-amount');
+            let sumOthers = 0;
+            rows.slice(0, -1).forEach(r => {
+                sumOthers += parseFloat(r.querySelector('.inline-split-amount')?.value) || 0;
+            });
+            const remainder = Math.round((totalAmount - sumOthers) * 100) / 100;
+            lastInput.value = remainder > 0 ? remainder.toFixed(2) : '0.00';
         }
-
         this.updateInlineSplitRemaining();
+    }
+
+    /**
+     * Pre-submit guard for inline splits: at least two parts with an amount, and
+     * they must add up to the transaction total (mirrors the server-side check so
+     * the user gets a friendly message instead of a silently-unsplit transaction).
+     * @return {{ok: boolean, message?: string}}
+     */
+    validateInlineSplits() {
+        const total = parseFloat(document.getElementById('transaction-amount')?.value) || 0;
+        const amounts = Array.from(
+            document.querySelectorAll('#inline-splits-container .split-row .inline-split-amount')
+        ).map(i => parseFloat(i.value) || 0).filter(a => a > 0);
+
+        if (amounts.length < 2) {
+            return { ok: false, message: t('budget', 'A split needs at least two parts with an amount.') };
+        }
+        const sum = Math.round(amounts.reduce((a, b) => a + b, 0) * 100) / 100;
+        if (Math.abs(sum - total) >= 0.01) {
+            return {
+                ok: false,
+                message: t('budget', 'Split amounts must add up to the transaction total ({total}).', { total: total.toFixed(2) }),
+            };
+        }
+        return { ok: true };
     }
 
     async loadExistingSplits(transactionId) {
@@ -2150,7 +2210,7 @@ export default class TransactionsModule {
             this.addInlineSplitRow(false);
         }
 
-        this.updateInlineSplitRemaining();
+        this.refreshInlineSplitRows();
     }
 
     async saveInlineSplits(transactionId) {
