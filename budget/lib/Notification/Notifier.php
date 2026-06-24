@@ -396,7 +396,7 @@ class Notifier implements INotifier {
 
                 // TRANSLATORS: {category}, {percent}, {amount} are placeholders — do NOT translate them. Keep all {placeholder} names exactly as-is.
                 $notification->setRichMessage(
-                    $l->t('{category} spending is {percent}% above your typical level — {amount} so far this month.'),
+                    $l->t('{category} spending is {percent}%% above your typical level — {amount} so far this month.'),
                     [
                         'category' => ['type' => 'highlight', 'id' => 'category', 'name' => $parameters['categoryName']],
                         'percent' => ['type' => 'highlight', 'id' => 'percent', 'name' => $parameters['percentAbove']],

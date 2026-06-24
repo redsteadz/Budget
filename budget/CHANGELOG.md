@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Editing a split transaction with three or more parts no longer zeroes or overwrites the other splits. The last split row is now a read-only "remaining" amount (transaction total minus the other parts), and the dialog blocks saving until the parts add up ([#303](https://github.com/otherworld-dev/Budget/issues/303))
+- Spending-anomaly notifications no longer crash with "The arguments array must contain 1 items, 0 given" — a stray `%` in the notification text made Nextcloud's translation layer fail, spamming the log every time notifications were rendered ([#305](https://github.com/otherworld-dev/Budget/issues/305))
 
 ## [2.34.0] - 2026-06-24
 
