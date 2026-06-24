@@ -65,6 +65,36 @@ class PensionContributionMapper extends QBMapper {
     }
 
     /**
+     * Contributions for a pension that are linked to a bank transaction (#304).
+     *
+     * @return PensionContribution[]
+     */
+    public function findLinkedByPension(int $pensionId, string $userId): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('pension_id', $qb->createNamedParameter($pensionId, IQueryBuilder::PARAM_INT)))
+            ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
+            ->andWhere($qb->expr()->isNotNull('transaction_id'));
+
+        return $this->findEntities($qb);
+    }
+
+    /**
+     * Break the link to a bank transaction (when that transaction is deleted),
+     * leaving the contribution as a plain manual record (#304 deletion safety).
+     */
+    public function unlinkByTransaction(int $transactionId): void {
+        $qb = $this->db->getQueryBuilder();
+        $qb->update($this->getTableName())
+            ->set('transaction_id', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+            ->set('source_account_id', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+            ->where($qb->expr()->eq('transaction_id', $qb->createNamedParameter($transactionId, IQueryBuilder::PARAM_INT)));
+
+        $qb->executeStatement();
+    }
+
+    /**
      * Get total contributions for a pension.
      */
     public function getTotalByPension(int $pensionId, string $userId): float {
@@ -72,7 +102,12 @@ class PensionContributionMapper extends QBMapper {
         $qb->select($qb->func()->sum('amount'))
             ->from($this->getTableName())
             ->where($qb->expr()->eq('pension_id', $qb->createNamedParameter($pensionId, IQueryBuilder::PARAM_INT)))
-            ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)));
+            ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
+            // Exclude drawdowns (#304/withdrawals); pre-existing rows have NULL kind.
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->isNull('kind'),
+                $qb->expr()->neq('kind', $qb->createNamedParameter(PensionContribution::KIND_WITHDRAWAL))
+            ));
 
         $result = $qb->executeQuery();
         $sum = $result->fetchOne();

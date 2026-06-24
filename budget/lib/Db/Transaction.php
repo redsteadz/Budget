@@ -46,6 +46,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setStatus(?string $status)
  * @method bool getExcludedFromForecast()
  * @method void setExcludedFromForecast(bool $excludedFromForecast)
+ * @method int|null getPensionContribId()
+ * @method void setPensionContribId(?int $pensionContribId)
  */
 class Transaction extends Entity implements JsonSerializable {
     protected $accountId;
@@ -67,6 +69,7 @@ class Transaction extends Entity implements JsonSerializable {
     protected $status;
     protected $excludedFromForecast;
     protected $reconSessionId;   // reconciliation session this row was ticked into
+    protected $pensionContribId; // pension contribution this bank leg funds (#304); excluded from spending
 
     public function __construct() {
         $this->addType('id', 'integer');
@@ -79,6 +82,7 @@ class Transaction extends Entity implements JsonSerializable {
         $this->addType('billId', 'integer');
         $this->addType('excludedFromForecast', 'boolean');
         $this->addType('reconSessionId', 'integer');
+        $this->addType('pensionContribId', 'integer');
     }
 
     /**
@@ -107,6 +111,7 @@ class Transaction extends Entity implements JsonSerializable {
             'status' => $this->getStatus() ?? 'cleared',
             'excludedFromForecast' => $this->getExcludedFromForecast() ?? false,
             'reconSessionId' => $this->getReconSessionId(),
+            'pensionContribId' => $this->getPensionContribId(),
         ];
     }
 }

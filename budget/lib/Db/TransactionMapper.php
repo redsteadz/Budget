@@ -776,6 +776,7 @@ class TransactionMapper extends QBMapper {
                 'isSplit' => (bool)($row['is_split'] ?? false),
                 'billId' => ($row['bill_id'] ?? null) ? (int)$row['bill_id'] : null,
                 'status' => $row['status'] ?? 'cleared',
+                'pensionContribId' => ($row['pension_contrib_id'] ?? null) ? (int)$row['pension_contrib_id'] : null,
                 'accountName' => $row['account_name'],
                 'accountCurrency' => $row['account_currency'] ?? 'USD',
                 'categoryName' => $row['category_name'],
@@ -2027,8 +2028,9 @@ class TransactionMapper extends QBMapper {
             // Within date window
             ->andWhere($qb->expr()->gte('t.date', $qb->createNamedParameter($startDate)))
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)))
-            // Not already linked
+            // Not already linked (incl. pension-funding legs, #304)
             ->andWhere($qb->expr()->isNull('t.linked_transaction_id'))
+            ->andWhere($qb->expr()->isNull('t.pension_contrib_id'))
             // Not the same transaction
             ->andWhere($qb->expr()->neq('t.id', $qb->createNamedParameter($transactionId, IQueryBuilder::PARAM_INT)))
             ->orderBy('t.date', 'ASC');
@@ -2094,6 +2096,24 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * Clear the pension_contrib_id marker on any bank legs that pointed at the
+     * given (about-to-be-deleted) pension contributions (#304). The bank
+     * transactions survive as plain debits/credits.
+     *
+     * @param int[] $contributionIds
+     */
+    public function clearPensionContribByIds(array $contributionIds): void {
+        if (empty($contributionIds)) {
+            return;
+        }
+        $qb = $this->db->getQueryBuilder();
+        $qb->update($this->getTableName())
+            ->set('pension_contrib_id', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+            ->where($qb->expr()->in('pension_contrib_id', $qb->createNamedParameter($contributionIds, IQueryBuilder::PARAM_INT_ARRAY)));
+        $qb->executeStatement();
+    }
+
+    /**
      * Find all unlinked transactions for a user with their potential matches
      * Returns transactions grouped with match counts for bulk matching
      *
@@ -2115,7 +2135,8 @@ class TransactionMapper extends QBMapper {
             ->from($this->getTableName(), 't')
             ->innerJoin('t', 'budget_accounts', 'a', $countQb->expr()->eq('t.account_id', 'a.id'))
             ->where($countQb->expr()->eq('a.user_id', $countQb->createNamedParameter($userId)))
-            ->andWhere($countQb->expr()->isNull('t.linked_transaction_id'));
+            ->andWhere($countQb->expr()->isNull('t.linked_transaction_id'))
+            ->andWhere($countQb->expr()->isNull('t.pension_contrib_id'));
 
         $countResult = $countQb->executeQuery();
         $total = (int)$countResult->fetchOne();
@@ -2132,6 +2153,7 @@ class TransactionMapper extends QBMapper {
             ->innerJoin('t', 'budget_accounts', 'a', $qb->expr()->eq('t.account_id', 'a.id'))
             ->where($qb->expr()->eq('a.user_id', $qb->createNamedParameter($userId)))
             ->andWhere($qb->expr()->isNull('t.linked_transaction_id'))
+            ->andWhere($qb->expr()->isNull('t.pension_contrib_id'))
             ->orderBy('t.date', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -2413,8 +2435,15 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
-     * Exclude scheduled future transactions from report queries.
-     * Allows: cleared transactions, NULL status (pre-migration), and scheduled transactions whose date has arrived.
+     * Exclude rows that must not count toward spending/income/report aggregates:
+     *  - scheduled future transactions (allows cleared, NULL status (pre-migration),
+     *    and scheduled transactions whose date has arrived); and
+     *  - bank legs that fund a pension contribution / withdrawal (#304) — the money
+     *    moved to/from a pension, so it is a transfer, never spending or income.
+     *
+     * Called by every spending/income/category/tag/trend/cash-flow aggregate (and
+     * never by balance or list queries, where the pension leg must still appear),
+     * so it is the single place both exclusions belong.
      */
     private function excludeScheduledFuture(IQueryBuilder $qb, string $alias = 't'): void {
         $today = date('Y-m-d');
@@ -2425,6 +2454,7 @@ class TransactionMapper extends QBMapper {
                 $qb->expr()->lte("{$alias}.date", $qb->createNamedParameter($today))
             )
         );
+        $qb->andWhere($qb->expr()->isNull("{$alias}.pension_contrib_id"));
     }
 
     // ==================== TAG-BASED REPORTING METHODS ====================

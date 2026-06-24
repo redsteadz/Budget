@@ -7,6 +7,7 @@ namespace OCA\Budget\Controller;
 use OCA\Budget\AppInfo\Application;
 use OCA\Budget\Db\PensionAccount;
 use OCA\Budget\Service\PensionProjector;
+use OCA\Budget\Service\PensionRecurringService;
 use OCA\Budget\Service\PensionService;
 use OCA\Budget\Service\GranularShareService;
 use OCA\Budget\Service\ValidationService;
@@ -46,7 +47,8 @@ class PensionController extends Controller {
         IUserManager $userManager,
         IL10N $l,
         ?string $userId,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        private PensionRecurringService $recurringService
     ) {
         parent::__construct(Application::APP_ID, $request);
         $this->service = $service;
@@ -122,6 +124,7 @@ class PensionController extends Controller {
             $retirementAge = isset($data['retirementAge']) ? (int)$data['retirementAge'] : null;
             $annualIncome = isset($data['annualIncome']) ? (float)$data['annualIncome'] : null;
             $transferValue = isset($data['transferValue']) ? (float)$data['transferValue'] : null;
+            $projectionTarget = isset($data['projectionTarget']) && $data['projectionTarget'] !== '' ? (float)$data['projectionTarget'] : null;
 
             // Validate required fields
             if (!$name || !$type) {
@@ -175,6 +178,9 @@ class PensionController extends Controller {
             if ($transferValue !== null && $transferValue < 0) {
                 return new DataResponse(['error' => $this->l->t('Transfer value cannot be negative')], Http::STATUS_BAD_REQUEST);
             }
+            if ($projectionTarget !== null && $projectionTarget < 0) {
+                return new DataResponse(['error' => $this->l->t('Projection target cannot be negative')], Http::STATUS_BAD_REQUEST);
+            }
 
             $pension = $this->service->create(
                 $this->getEffectiveUserId(),
@@ -187,7 +193,8 @@ class PensionController extends Controller {
                 $expectedReturnRate,
                 $retirementAge,
                 $annualIncome,
-                $transferValue
+                $transferValue,
+                $projectionTarget
             );
             return new DataResponse($pension, Http::STATUS_CREATED);
         } catch (\Exception $e) {
@@ -218,6 +225,7 @@ class PensionController extends Controller {
             $retirementAge = isset($data['retirementAge']) ? (int)$data['retirementAge'] : null;
             $annualIncome = isset($data['annualIncome']) ? (float)$data['annualIncome'] : null;
             $transferValue = isset($data['transferValue']) ? (float)$data['transferValue'] : null;
+            $projectionTarget = isset($data['projectionTarget']) && $data['projectionTarget'] !== '' ? (float)$data['projectionTarget'] : null;
 
             // Validate name if provided
             if ($name !== null) {
@@ -281,7 +289,8 @@ class PensionController extends Controller {
                 $expectedReturnRate,
                 $retirementAge,
                 $annualIncome,
-                $transferValue
+                $transferValue,
+                $projectionTarget
             );
             return new DataResponse($pension);
         } catch (\Exception $e) {
@@ -401,6 +410,10 @@ class PensionController extends Controller {
             $amount = isset($data['amount']) ? (float)$data['amount'] : null;
             $date = $data['date'] ?? null;
             $note = $data['note'] ?? null;
+            // Optional: a bank account this contribution was transferred from (#304).
+            $sourceAccountId = isset($data['sourceAccountId']) && $data['sourceAccountId'] !== '' && $data['sourceAccountId'] !== null
+                ? (int)$data['sourceAccountId']
+                : null;
 
             if ($amount === null || $date === null) {
                 return new DataResponse(['error' => $this->l->t('Amount and date are required')], Http::STATUS_BAD_REQUEST);
@@ -426,10 +439,62 @@ class PensionController extends Controller {
                 $note = $noteValidation['sanitized'];
             }
 
-            $contribution = $this->service->createContribution($id, $this->getEffectiveUserId(), $amount, $date, $note);
+            if ($sourceAccountId !== null) {
+                $contribution = $this->service->createContributionWithTransfer($id, $this->getEffectiveUserId(), $amount, $date, $sourceAccountId, $note);
+            } else {
+                $contribution = $this->service->createContribution($id, $this->getEffectiveUserId(), $amount, $date, $note);
+            }
             return new DataResponse($contribution, Http::STATUS_CREATED);
         } catch (\Exception $e) {
             return $this->handleError($e, $this->l->t('Failed to create contribution'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
+        }
+    }
+
+    /**
+     * Record a withdrawal/drawdown (optionally paid into a bank account).
+     *
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function createWithdrawal(int $id): DataResponse {
+        try {
+            $data = $this->request->getParams();
+
+            $amount = isset($data['amount']) ? (float)$data['amount'] : null;
+            $date = $data['date'] ?? null;
+            $note = $data['note'] ?? null;
+            $destAccountId = isset($data['destAccountId']) && $data['destAccountId'] !== '' && $data['destAccountId'] !== null
+                ? (int)$data['destAccountId']
+                : null;
+
+            if ($amount === null || $date === null) {
+                return new DataResponse(['error' => $this->l->t('Amount and date are required')], Http::STATUS_BAD_REQUEST);
+            }
+            if ($amount <= 0) {
+                return new DataResponse(['error' => $this->l->t('Amount must be greater than zero')], Http::STATUS_BAD_REQUEST);
+            }
+
+            $dateValidation = $this->validationService->validateDate($date, $this->l->t('Date'), true);
+            if (!$dateValidation['valid']) {
+                return new DataResponse(['error' => $dateValidation['error']], Http::STATUS_BAD_REQUEST);
+            }
+
+            if ($note !== null && $note !== '') {
+                $noteValidation = $this->validationService->validateDescription($note, false);
+                if (!$noteValidation['valid']) {
+                    return new DataResponse(['error' => $noteValidation['error']], Http::STATUS_BAD_REQUEST);
+                }
+                $note = $noteValidation['sanitized'];
+            }
+
+            if ($destAccountId !== null) {
+                $withdrawal = $this->service->createWithdrawalWithTransfer($id, $this->getEffectiveUserId(), $amount, $date, $destAccountId, $note);
+            } else {
+                $withdrawal = $this->service->createWithdrawal($id, $this->getEffectiveUserId(), $amount, $date, $note);
+            }
+            return new DataResponse($withdrawal, Http::STATUS_CREATED);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to record withdrawal'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
         }
     }
 
@@ -443,6 +508,149 @@ class PensionController extends Controller {
             return new DataResponse(['message' => $this->l->t('Contribution deleted successfully')]);
         } catch (\Exception $e) {
             return $this->handleError($e, $this->l->t('Failed to delete contribution'), Http::STATUS_BAD_REQUEST, ['contributionId' => $contributionId]);
+        }
+    }
+
+    // =====================
+    // Charts & Activity
+    // =====================
+
+    /**
+     * Snapshot balance series for the detail-panel chart.
+     *
+     * @NoAdminRequired
+     */
+    public function balanceHistory(int $id): DataResponse {
+        try {
+            $history = $this->service->getBalanceHistory($id, $this->getEffectiveUserId());
+            return new DataResponse($history);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to retrieve balance history'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
+        }
+    }
+
+    /**
+     * Merged contributions/withdrawals/snapshots timeline for the detail panel.
+     *
+     * @NoAdminRequired
+     */
+    public function activity(int $id): DataResponse {
+        try {
+            $activity = $this->service->getActivity($id, $this->getEffectiveUserId());
+            return new DataResponse($activity);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to retrieve pension activity'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
+        }
+    }
+
+    // =====================
+    // Recurring Contributions (#251)
+    // =====================
+
+    /**
+     * @NoAdminRequired
+     */
+    public function recurring(int $id): DataResponse {
+        try {
+            $schedules = $this->recurringService->findByPension($id, $this->getEffectiveUserId());
+            return new DataResponse($schedules);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to retrieve recurring contributions'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
+        }
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function createRecurring(int $id): DataResponse {
+        try {
+            $data = $this->request->getParams();
+
+            $amount = isset($data['amount']) ? (float)$data['amount'] : null;
+            $frequency = $data['frequency'] ?? null;
+            $nextDueDate = $data['nextDueDate'] ?? null;
+            $sourceAccountId = isset($data['sourceAccountId']) && $data['sourceAccountId'] !== '' && $data['sourceAccountId'] !== null
+                ? (int)$data['sourceAccountId']
+                : null;
+            $autoPostEnabled = filter_var($data['autoPostEnabled'] ?? false, FILTER_VALIDATE_BOOLEAN);
+            $note = $data['note'] ?? null;
+
+            if ($amount === null || $frequency === null || $nextDueDate === null) {
+                return new DataResponse(['error' => $this->l->t('Amount, frequency and next date are required')], Http::STATUS_BAD_REQUEST);
+            }
+            if ($amount <= 0) {
+                return new DataResponse(['error' => $this->l->t('Amount must be greater than zero')], Http::STATUS_BAD_REQUEST);
+            }
+
+            $dateValidation = $this->validationService->validateDate($nextDueDate, $this->l->t('Next date'), true);
+            if (!$dateValidation['valid']) {
+                return new DataResponse(['error' => $dateValidation['error']], Http::STATUS_BAD_REQUEST);
+            }
+
+            if ($note !== null && $note !== '') {
+                $noteValidation = $this->validationService->validateDescription($note, false);
+                if (!$noteValidation['valid']) {
+                    return new DataResponse(['error' => $noteValidation['error']], Http::STATUS_BAD_REQUEST);
+                }
+                $note = $noteValidation['sanitized'];
+            }
+
+            $recur = $this->recurringService->create(
+                $id,
+                $this->getEffectiveUserId(),
+                $amount,
+                (string)$frequency,
+                $sourceAccountId,
+                $autoPostEnabled,
+                $nextDueDate,
+                $note
+            );
+            return new DataResponse($recur, Http::STATUS_CREATED);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to create recurring contribution'), Http::STATUS_BAD_REQUEST, ['pensionId' => $id]);
+        }
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function updateRecurring(int $recurId): DataResponse {
+        try {
+            $data = $this->request->getParams();
+            $recur = $this->recurringService->update($recurId, $this->getEffectiveUserId(), $data);
+            return new DataResponse($recur);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to update recurring contribution'), Http::STATUS_BAD_REQUEST, ['recurId' => $recurId]);
+        }
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 20, period: 60)]
+    public function destroyRecurring(int $recurId): DataResponse {
+        try {
+            $this->recurringService->delete($recurId, $this->getEffectiveUserId());
+            return new DataResponse(['message' => $this->l->t('Recurring contribution deleted')]);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to delete recurring contribution'), Http::STATUS_BAD_REQUEST, ['recurId' => $recurId]);
+        }
+    }
+
+    /**
+     * Post a scheduled contribution now (#251 "by hand").
+     *
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function postRecurring(int $recurId): DataResponse {
+        try {
+            $recur = $this->recurringService->postNow($recurId, $this->getEffectiveUserId());
+            return new DataResponse($recur);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to post contribution'), Http::STATUS_BAD_REQUEST, ['recurId' => $recurId]);
         }
     }
 

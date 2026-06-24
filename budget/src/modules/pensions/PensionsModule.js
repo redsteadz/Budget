@@ -271,10 +271,16 @@ export default class PensionsModule {
             };
         }
 
-        // Detail panel buttons
+        // Detail modal: close button + backdrop click
+        const detailPanel = document.getElementById('pension-detail-panel');
         const closeDetailBtn = document.getElementById('pension-close-btn');
         if (closeDetailBtn) {
             closeDetailBtn.onclick = () => this.closePensionDetails();
+        }
+        if (detailPanel) {
+            detailPanel.onclick = (e) => {
+                if (e.target === detailPanel) this.closePensionDetails();
+            };
         }
 
         const editDetailBtn = document.getElementById('pension-edit-btn');
@@ -294,6 +300,63 @@ export default class PensionsModule {
         const addContributionBtn = document.getElementById('add-contribution-btn');
         if (addContributionBtn) {
             addContributionBtn.onclick = () => this.showContributionModal();
+        }
+
+        // Withdrawal modal
+        const recordWithdrawalBtn = document.getElementById('record-withdrawal-btn');
+        if (recordWithdrawalBtn) {
+            recordWithdrawalBtn.onclick = () => this.showWithdrawalModal();
+        }
+        const withdrawalForm = document.getElementById('pension-withdrawal-form');
+        if (withdrawalForm) {
+            withdrawalForm.onsubmit = (e) => { e.preventDefault(); this.saveWithdrawal(); };
+        }
+        document.querySelectorAll('#pension-withdrawal-modal .cancel-btn').forEach(btn => {
+            btn.onclick = () => this.closeWithdrawalModal();
+        });
+
+        // Recurring contribution modal
+        const addRecurringBtn = document.getElementById('add-recurring-btn');
+        if (addRecurringBtn) {
+            addRecurringBtn.onclick = () => this.showRecurringModal();
+        }
+        const recurringForm = document.getElementById('pension-recurring-form');
+        if (recurringForm) {
+            recurringForm.onsubmit = (e) => { e.preventDefault(); this.saveRecurring(); };
+        }
+        document.querySelectorAll('#pension-recurring-modal .cancel-btn').forEach(btn => {
+            btn.onclick = () => this.closeRecurringModal();
+        });
+
+        // Real-terms projection toggle
+        const realToggle = document.getElementById('pension-projection-realterms');
+        if (realToggle) {
+            realToggle.onchange = () => this.renderProjectionChart();
+        }
+
+        // Activity delete (delegated)
+        const activityList = document.getElementById('pension-activity-list');
+        if (activityList) {
+            activityList.onclick = (e) => {
+                const btn = e.target.closest('.activity-delete-btn');
+                if (btn) {
+                    this.deleteActivityItem(btn.dataset.type, parseInt(btn.dataset.id, 10));
+                }
+            };
+        }
+
+        // Recurring post/delete (delegated)
+        const recurringList = document.getElementById('pension-recurring-list');
+        if (recurringList) {
+            recurringList.onclick = (e) => {
+                const postBtn = e.target.closest('.recurring-post-btn');
+                const deleteBtn = e.target.closest('.recurring-delete-btn');
+                if (postBtn) {
+                    this.postRecurringNow(parseInt(postBtn.dataset.id, 10));
+                } else if (deleteBtn) {
+                    this.deleteRecurring(parseInt(deleteBtn.dataset.id, 10));
+                }
+            };
         }
     }
 
@@ -339,6 +402,8 @@ export default class PensionsModule {
                 document.getElementById('pension-monthly').value = pension.monthlyContribution || '';
                 document.getElementById('pension-return').value = pension.expectedReturnRate ? (pension.expectedReturnRate * 100) : '';
                 document.getElementById('pension-retirement-age').value = pension.retirementAge || '';
+                const targetEl = document.getElementById('pension-target');
+                if (targetEl) targetEl.value = pension.projectionTarget || '';
             } else {
                 document.getElementById('pension-income').value = pension.annualIncome || '';
                 document.getElementById('pension-transfer').value = pension.transferValue || '';
@@ -382,6 +447,7 @@ export default class PensionsModule {
             data.monthlyContribution = formData.get('monthlyContribution') ? parseFloat(formData.get('monthlyContribution')) : null;
             data.expectedReturnRate = formData.get('expectedReturnRate') ? parseFloat(formData.get('expectedReturnRate')) / 100 : null;
             data.retirementAge = formData.get('retirementAge') ? parseInt(formData.get('retirementAge'), 10) : null;
+            data.projectionTarget = formData.get('projectionTarget') ? parseFloat(formData.get('projectionTarget')) : null;
         } else {
             data.annualIncome = formData.get('annualIncome') ? parseFloat(formData.get('annualIncome')) : null;
             data.transferValue = formData.get('transferValue') ? parseFloat(formData.get('transferValue')) : null;
@@ -479,20 +545,44 @@ export default class PensionsModule {
             valueEl.textContent = '--';
         }
 
-        panel.style.display = 'block';
-        panel.classList.add('active');
+        panel.style.display = 'flex';
 
-        // Load charts and activity
+        // Reset the real-terms toggle for each pension opened.
+        const realToggle = document.getElementById('pension-projection-realterms');
+        if (realToggle) realToggle.checked = false;
+
+        // Withdrawals only make sense for DC pensions (they have a pot).
+        const withdrawalBtn = document.getElementById('record-withdrawal-btn');
+        if (withdrawalBtn) withdrawalBtn.style.display = pension.isDefinedContribution ? '' : 'none';
+        const recurringSection = document.getElementById('pension-recurring-section');
+        if (recurringSection) recurringSection.style.display = pension.isDefinedContribution ? '' : 'none';
+
+        // Load charts, activity and schedules
         await this.loadPensionBalanceChart(pensionId);
         await this.loadPensionProjectionChart(pensionId);
         await this.loadPensionActivity(pensionId);
+        if (pension.isDefinedContribution) {
+            await this.loadPensionRecurring(pensionId);
+        }
     }
 
     closePensionDetails() {
         const panel = document.getElementById('pension-detail-panel');
         panel.style.display = 'none';
-        panel.classList.remove('active');
         this.currentPension = null;
+    }
+
+    /** Toggle a chart canvas vs an inline hint message. */
+    _setChartHint(canvasId, hintId, hintText) {
+        const canvas = document.getElementById(canvasId);
+        const hint = document.getElementById(hintId);
+        if (hintText) {
+            if (canvas) canvas.style.display = 'none';
+            if (hint) { hint.textContent = hintText; hint.style.display = ''; }
+        } else {
+            if (canvas) canvas.style.display = '';
+            if (hint) hint.style.display = 'none';
+        }
     }
 
     async loadPensionBalanceChart(pensionId) {
@@ -501,9 +591,18 @@ export default class PensionsModule {
                 headers: { 'requesttoken': OC.requestToken }
             });
 
-            if (!response.ok) return;
+            if (!response.ok) {
+                this._setChartHint('pension-balance-chart', 'pension-balance-hint', t('budget', 'Balance history is unavailable.'));
+                return;
+            }
 
             const data = await response.json();
+            if (!data.values || data.values.length < 2) {
+                this._setChartHint('pension-balance-chart', 'pension-balance-hint', t('budget', 'Add at least two balance updates to see history.'));
+                return;
+            }
+            this._setChartHint('pension-balance-chart', 'pension-balance-hint', null);
+
             const canvas = document.getElementById('pension-balance-chart');
             const ctx = canvas.getContext('2d');
 
@@ -552,91 +651,221 @@ export default class PensionsModule {
                 headers: { 'requesttoken': OC.requestToken }
             });
 
-            if (!response.ok) return;
-
-            const data = await response.json();
-            const canvas = document.getElementById('pension-projection-chart');
-            const ctx = canvas.getContext('2d');
-
-            // Destroy existing chart
-            if (this.charts.pensionProjection) {
-                this.charts.pensionProjection.destroy();
+            if (!response.ok) {
+                this._setChartHint('pension-projection-chart', 'pension-projection-hint', t('budget', 'Projection is unavailable.'));
+                return;
             }
 
-            this.charts.pensionProjection = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: t('budget', 'Projected Value'),
-                        data: data.values,
-                        borderColor: '#46ba61',
-                        backgroundColor: 'rgba(70, 186, 97, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: (value) => formatters.formatCurrencyCompact(value, data.currency, this.settings)
-                            }
-                        }
-                    }
-                }
-            });
+            const data = await response.json();
+            this.currentProjection = data;
+            this.renderProjectionSummary(data);
+
+            // Only DC pensions have a year-by-year growth projection.
+            if (!data.growthProjection || data.growthProjection.length < 2) {
+                this._setChartHint('pension-projection-chart', 'pension-projection-hint', t('budget', 'No projection available for this pension type.'));
+                return;
+            }
+            this._setChartHint('pension-projection-chart', 'pension-projection-hint', null);
+            this.renderProjectionChart();
         } catch (error) {
             console.error('Failed to load pension projection chart:', error);
+            this._setChartHint('pension-projection-chart', 'pension-projection-hint', t('budget', 'Projection is unavailable.'));
         }
     }
 
+    /** (Re)draw the projection chart from this.currentProjection, honouring the real-terms toggle. */
+    renderProjectionChart() {
+        const data = this.currentProjection;
+        if (!data || !data.growthProjection) return;
+        const canvas = document.getElementById('pension-projection-chart');
+        if (!canvas) return;
+
+        const realTerms = !!(document.getElementById('pension-projection-realterms')?.checked);
+        const labels = data.growthProjection.map(p => p.year);
+        const values = data.growthProjection.map(p => realTerms ? (p.valueReal ?? p.value) : p.value);
+        const currency = this.currentPension?.currency || formatters.getPrimaryCurrency(this.app.accounts, this.settings);
+
+        const datasets = [{
+            label: realTerms ? t('budget', "Projected value (today's money)") : t('budget', 'Projected value'),
+            data: values,
+            borderColor: '#46ba61',
+            backgroundColor: 'rgba(70, 186, 97, 0.1)',
+            fill: true,
+            tension: 0.4
+        }];
+
+        // Target line (flat dataset) when a target is set.
+        if (data.projectionTarget) {
+            datasets.push({
+                label: t('budget', 'Target'),
+                data: labels.map(() => data.projectionTarget),
+                borderColor: '#e9967a',
+                borderDash: [6, 4],
+                borderWidth: 1,
+                pointRadius: 0,
+                fill: false
+            });
+        }
+
+        if (this.charts.pensionProjection) {
+            this.charts.pensionProjection.destroy();
+        }
+        this.charts.pensionProjection = new Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: !!data.projectionTarget } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: (value) => formatters.formatCurrencyCompact(value, currency, this.settings)
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /** Text summary above the projection chart: target + progress. */
+    renderProjectionSummary(data) {
+        const el = document.getElementById('pension-projection-target-summary');
+        if (!el) return;
+        if (!data.projectionTarget || data.projectedValue === undefined) {
+            el.style.display = 'none';
+            return;
+        }
+        const currency = this.currentPension?.currency || formatters.getPrimaryCurrency(this.app.accounts, this.settings);
+        const projected = formatters.formatCurrency(data.projectedValue, currency, this.settings);
+        const target = formatters.formatCurrency(data.projectionTarget, currency, this.settings);
+        const pct = data.progressPercent ?? 0;
+        el.textContent = t('budget', 'Projected {projected} of {target} target ({pct} there)', {
+            projected, target, pct: `${pct}%`
+        });
+        el.style.display = '';
+    }
+
     async loadPensionActivity(pensionId) {
+        const container = document.getElementById('pension-activity-list');
+        if (!container) return;
         try {
             const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/${pensionId}/activity`), {
                 headers: { 'requesttoken': OC.requestToken }
             });
 
-            if (!response.ok) return;
+            if (!response.ok) {
+                container.innerHTML = `<div class="no-data">${t('budget', 'Activity is unavailable.')}</div>`;
+                return;
+            }
 
             const data = await response.json();
-            const container = document.getElementById('pension-activity-list');
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<div class="empty-state-small">${t('budget', 'No activity yet')}</div>`;
+                container.innerHTML = `<div class="no-data">${t('budget', 'No activity yet')}</div>`;
                 return;
             }
 
             const currency = this.currentPension.currency || formatters.getPrimaryCurrency(this.app.accounts, this.settings);
+            const accountName = (id) => {
+                const acc = (this.app.accounts || []).find(a => a.id === id);
+                return acc ? acc.name : t('budget', 'an account');
+            };
 
             container.innerHTML = data.map(activity => {
-                const typeLabels = {
-                    snapshot: t('budget', 'Balance Update'),
-                    contribution: t('budget', 'Contribution')
-                };
-                const typeLabel = typeLabels[activity.type] || activity.type;
-                const icon = activity.type === 'contribution' ? 'icon-add' : 'icon-checkmark';
+                // type: contribution | transfer_in | withdrawal | snapshot
+                let typeLabel;
+                let icon;
+                let amountClass = '';
+                let sign = '';
+                switch (activity.type) {
+                    case 'transfer_in':
+                        typeLabel = t('budget', 'Contribution from {account}', { account: accountName(activity.sourceAccountId) });
+                        icon = 'icon-category-organization';
+                        amountClass = 'positive';
+                        sign = '+';
+                        break;
+                    case 'withdrawal':
+                        typeLabel = activity.sourceAccountId
+                            ? t('budget', 'Withdrawal to {account}', { account: accountName(activity.sourceAccountId) })
+                            : t('budget', 'Withdrawal');
+                        icon = 'icon-history';
+                        amountClass = 'negative';
+                        sign = '−';
+                        break;
+                    case 'snapshot':
+                        typeLabel = t('budget', 'Balance Update');
+                        icon = 'icon-checkmark';
+                        break;
+                    case 'contribution':
+                    default:
+                        typeLabel = t('budget', 'Contribution');
+                        icon = 'icon-add';
+                        amountClass = 'positive';
+                        sign = '+';
+                        break;
+                }
+
+                const linkedBadge = activity.transactionId
+                    ? `<span class="activity-link-badge" title="${t('budget', 'Linked to a bank transaction')}">${t('budget', 'linked')}</span>`
+                    : '';
+                // Snapshots are corrections, not deletable through here without losing history;
+                // contributions/withdrawals get a delete affordance.
+                const deletable = activity.type !== 'snapshot';
+                const deleteBtn = deletable
+                    ? `<button class="icon-button activity-delete-btn" data-type="contribution" data-id="${activity.id}" title="${t('budget', 'Delete')}"><span class="icon-delete" aria-hidden="true"></span></button>`
+                    : `<button class="icon-button activity-delete-btn" data-type="snapshot" data-id="${activity.id}" title="${t('budget', 'Delete')}"><span class="icon-delete" aria-hidden="true"></span></button>`;
 
                 return `
-                    <div class="pension-activity-item">
+                    <div class="activity-item">
                         <div class="activity-icon ${icon}"></div>
                         <div class="activity-details">
-                            <div class="activity-type">${typeLabel}</div>
+                            <div class="activity-type">${typeLabel} ${linkedBadge}</div>
                             <div class="activity-date">${formatters.formatDate(activity.date, this.settings)}</div>
                             ${activity.note ? `<div class="activity-note">${dom.escapeHtml(activity.note)}</div>` : ''}
                         </div>
-                        <div class="activity-amount">${formatters.formatCurrency(activity.amount, currency, this.settings)}</div>
+                        <div class="activity-amount ${amountClass}">${sign}${formatters.formatCurrency(activity.amount, currency, this.settings)}</div>
+                        ${deleteBtn}
                     </div>
                 `;
             }).join('');
         } catch (error) {
             console.error('Failed to load pension activity:', error);
+            container.innerHTML = `<div class="no-data">${t('budget', 'Activity is unavailable.')}</div>`;
+        }
+    }
+
+    /** Delete a contribution/withdrawal or snapshot from the activity list. */
+    async deleteActivityItem(type, id) {
+        const isSnapshot = type === 'snapshot';
+        const message = isSnapshot
+            ? t('budget', 'Delete this balance update?')
+            : t('budget', 'Delete this entry? If it is linked to a bank transaction, that transaction will be removed too.');
+        if (!confirm(message)) return;
+
+        const url = isSnapshot
+            ? OC.generateUrl(`/apps/budget/api/pensions/snapshots/${id}`)
+            : OC.generateUrl(`/apps/budget/api/pensions/contributions/${id}`);
+
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || t('budget', 'Failed to delete'));
+            }
+            await this.loadPensions();
+            this.renderPensions();
+            if (this.currentPension) {
+                await this.showPensionDetails(this.currentPension.id);
+            }
+            if (this.app.loadAccounts) await this.app.loadAccounts();
+            showSuccess(t('budget', 'Deleted'));
+        } catch (error) {
+            showError(error.message);
         }
     }
 
@@ -692,12 +921,28 @@ export default class PensionsModule {
         }
     }
 
+    /**
+     * Populate a <select> with the user's accounts. The first option is a
+     * blank "no account" choice (for the optional source-account selectors).
+     */
+    _populateAccountSelect(selectId, blankLabel) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        const accounts = this.app.accounts || [];
+        const opts = [`<option value="">${dom.escapeHtml(blankLabel)}</option>`];
+        accounts.forEach(a => {
+            opts.push(`<option value="${a.id}">${dom.escapeHtml(a.name)}</option>`);
+        });
+        select.innerHTML = opts.join('');
+    }
+
     showContributionModal() {
         if (!this.currentPension) return;
 
         const modal = document.getElementById('pension-contribution-modal');
         document.getElementById('pension-contribution-form').reset();
         document.getElementById('contribution-pension-id').value = this.currentPension.id;
+        this._populateAccountSelect('contribution-source-account', t('budget', 'Not from a tracked account'));
         setDateValue('contribution-date', formatters.getTodayDateString());
 
         modal.style.display = 'flex';
@@ -711,6 +956,7 @@ export default class PensionsModule {
         const form = document.getElementById('pension-contribution-form');
         const formData = new FormData(form);
         const pensionId = formData.get('pensionId');
+        const sourceAccountId = formData.get('sourceAccountId');
 
         try {
             const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/${pensionId}/contributions`), {
@@ -722,7 +968,8 @@ export default class PensionsModule {
                 body: JSON.stringify({
                     amount: parseFloat(formData.get('amount')),
                     date: formData.get('date'),
-                    note: formData.get('note') || null
+                    note: formData.get('note') || null,
+                    sourceAccountId: sourceAccountId ? parseInt(sourceAccountId, 10) : null
                 })
             });
 
@@ -732,8 +979,195 @@ export default class PensionsModule {
             }
 
             this.closeContributionModal();
+            await this.loadPensions();
+            this.renderPensions();
             await this.showPensionDetails(parseInt(pensionId));
+            // The linked bank transaction changes account balances.
+            if (this.app.loadAccounts) await this.app.loadAccounts();
             showSuccess(t('budget', 'Contribution logged'));
+        } catch (error) {
+            showError(error.message);
+        }
+    }
+
+    // ===== Withdrawals / drawdown =====
+
+    showWithdrawalModal() {
+        if (!this.currentPension) return;
+        const modal = document.getElementById('pension-withdrawal-modal');
+        document.getElementById('pension-withdrawal-form').reset();
+        document.getElementById('withdrawal-pension-id').value = this.currentPension.id;
+        this._populateAccountSelect('withdrawal-dest-account', t('budget', 'Not into a tracked account'));
+        setDateValue('withdrawal-date', formatters.getTodayDateString());
+        modal.style.display = 'flex';
+    }
+
+    closeWithdrawalModal() {
+        document.getElementById('pension-withdrawal-modal').style.display = 'none';
+    }
+
+    async saveWithdrawal() {
+        const form = document.getElementById('pension-withdrawal-form');
+        const formData = new FormData(form);
+        const pensionId = formData.get('pensionId');
+        const destAccountId = formData.get('destAccountId');
+
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/${pensionId}/withdrawals`), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'requesttoken': OC.requestToken },
+                body: JSON.stringify({
+                    amount: parseFloat(formData.get('amount')),
+                    date: formData.get('date'),
+                    note: formData.get('note') || null,
+                    destAccountId: destAccountId ? parseInt(destAccountId, 10) : null
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || t('budget', 'Failed to record withdrawal'));
+            }
+
+            this.closeWithdrawalModal();
+            await this.loadPensions();
+            this.renderPensions();
+            await this.showPensionDetails(parseInt(pensionId));
+            if (this.app.loadAccounts) await this.app.loadAccounts();
+            showSuccess(t('budget', 'Withdrawal recorded'));
+        } catch (error) {
+            showError(error.message);
+        }
+    }
+
+    // ===== Recurring contributions (#251) =====
+
+    async loadPensionRecurring(pensionId) {
+        const container = document.getElementById('pension-recurring-list');
+        if (!container) return;
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/${pensionId}/recurring`), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) {
+                container.innerHTML = '';
+                return;
+            }
+            const schedules = await response.json();
+            this.renderPensionRecurring(schedules);
+        } catch (error) {
+            console.error('Failed to load recurring contributions:', error);
+        }
+    }
+
+    renderPensionRecurring(schedules) {
+        const container = document.getElementById('pension-recurring-list');
+        if (!container) return;
+        if (!schedules || schedules.length === 0) {
+            container.innerHTML = `<div class="no-data">${t('budget', 'No scheduled contributions')}</div>`;
+            return;
+        }
+        const currency = this.currentPension?.currency || formatters.getPrimaryCurrency(this.app.accounts, this.settings);
+        const freqLabels = {
+            monthly: t('budget', 'Monthly'),
+            quarterly: t('budget', 'Quarterly'),
+            yearly: t('budget', 'Yearly'),
+        };
+        container.innerHTML = schedules.map(s => {
+            const freq = freqLabels[s.frequency] || s.frequency;
+            const amount = formatters.formatCurrency(s.amount, currency, this.settings);
+            const next = formatters.formatDate(s.nextDueDate, this.settings);
+            const auto = s.autoPostEnabled ? t('budget', 'auto') : t('budget', 'manual');
+            return `
+                <div class="recurring-item" data-id="${s.id}">
+                    <div class="recurring-details">
+                        <div class="recurring-main">${amount} · ${freq} <span class="recurring-badge">${auto}</span></div>
+                        <div class="recurring-sub">${t('budget', 'Next: {date}', { date: next })}</div>
+                    </div>
+                    <div class="recurring-actions">
+                        <button class="icon-button recurring-post-btn" data-id="${s.id}" title="${t('budget', 'Post now')}"><span class="icon-confirm" aria-hidden="true"></span></button>
+                        <button class="icon-button recurring-delete-btn" data-id="${s.id}" title="${t('budget', 'Delete')}"><span class="icon-delete" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    showRecurringModal() {
+        if (!this.currentPension) return;
+        const modal = document.getElementById('pension-recurring-modal');
+        document.getElementById('pension-recurring-form').reset();
+        document.getElementById('recurring-pension-id').value = this.currentPension.id;
+        this._populateAccountSelect('recurring-source-account', t('budget', 'Not from a tracked account'));
+        setDateValue('recurring-next-date', formatters.getTodayDateString());
+        modal.style.display = 'flex';
+    }
+
+    closeRecurringModal() {
+        document.getElementById('pension-recurring-modal').style.display = 'none';
+    }
+
+    async saveRecurring() {
+        const form = document.getElementById('pension-recurring-form');
+        const formData = new FormData(form);
+        const pensionId = formData.get('pensionId');
+        const sourceAccountId = formData.get('sourceAccountId');
+
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/${pensionId}/recurring`), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'requesttoken': OC.requestToken },
+                body: JSON.stringify({
+                    amount: parseFloat(formData.get('amount')),
+                    frequency: formData.get('frequency'),
+                    nextDueDate: formData.get('nextDueDate'),
+                    sourceAccountId: sourceAccountId ? parseInt(sourceAccountId, 10) : null,
+                    autoPostEnabled: !!form.querySelector('[name="autoPostEnabled"]')?.checked,
+                    note: formData.get('note') || null
+                })
+            });
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || t('budget', 'Failed to save recurring contribution'));
+            }
+            this.closeRecurringModal();
+            await this.loadPensionRecurring(parseInt(pensionId));
+            showSuccess(t('budget', 'Recurring contribution saved'));
+        } catch (error) {
+            showError(error.message);
+        }
+    }
+
+    async deleteRecurring(recurId) {
+        if (!confirm(t('budget', 'Delete this scheduled contribution?'))) return;
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/recurring/${recurId}`), {
+                method: 'DELETE',
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) throw new Error(t('budget', 'Failed to delete'));
+            if (this.currentPension) await this.loadPensionRecurring(this.currentPension.id);
+            showSuccess(t('budget', 'Deleted'));
+        } catch (error) {
+            showError(error.message);
+        }
+    }
+
+    async postRecurringNow(recurId) {
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/pensions/recurring/${recurId}/post`), {
+                method: 'POST',
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || t('budget', 'Failed to post contribution'));
+            }
+            await this.loadPensions();
+            this.renderPensions();
+            if (this.currentPension) await this.showPensionDetails(this.currentPension.id);
+            if (this.app.loadAccounts) await this.app.loadAccounts();
+            showSuccess(t('budget', 'Contribution posted'));
         } catch (error) {
             showError(error.message);
         }

@@ -32,6 +32,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setAnnualIncome(?float $annualIncome)
  * @method float|null getTransferValue()
  * @method void setTransferValue(?float $transferValue)
+ * @method float|null getProjectionTarget()
+ * @method void setProjectionTarget(?float $projectionTarget)
  * @method string getCreatedAt()
  * @method void setCreatedAt(string $createdAt)
  * @method string getUpdatedAt()
@@ -69,6 +71,7 @@ class PensionAccount extends Entity implements JsonSerializable {
     protected $retirementAge;
     protected $annualIncome;
     protected $transferValue;
+    protected $projectionTarget;
     protected $createdAt;
     protected $updatedAt;
 
@@ -80,6 +83,7 @@ class PensionAccount extends Entity implements JsonSerializable {
         $this->addType('retirementAge', 'integer');
         $this->addType('annualIncome', 'float');
         $this->addType('transferValue', 'float');
+        $this->addType('projectionTarget', 'float');
     }
 
     /**
@@ -117,6 +121,7 @@ class PensionAccount extends Entity implements JsonSerializable {
             'retirementAge' => $this->getRetirementAge(),
             'annualIncome' => $this->getAnnualIncome(),
             'transferValue' => $this->getTransferValue(),
+            'projectionTarget' => $this->getProjectionTarget(),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
             'isDefinedContribution' => $this->isDefinedContribution(),

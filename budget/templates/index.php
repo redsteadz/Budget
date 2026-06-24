@@ -3573,7 +3573,7 @@ style('budget', 'budget-app');
                     </div>
                     <div class="summary-content">
                         <div class="summary-value" id="pensions-projected-income">--</div>
-                        <div class="summary-label"><?php p($l->t('Projected Annual Income')); ?></div>
+                        <div class="summary-label"><?php p($l->t('Projected Income at Retirement')); ?></div>
                     </div>
                 </div>
                 <div class="summary-card">
@@ -3613,7 +3613,8 @@ style('budget', 'budget-app');
             </div>
 
             <!-- Pension Detail Panel (shown when a pension is selected) -->
-            <div id="pension-detail-panel" class="pension-detail-panel" style="display: none;">
+            <div id="pension-detail-panel" class="modal" style="display: none;">
+              <div class="modal-content pension-detail-modal">
                 <div class="panel-header">
                     <h3 id="pension-detail-name"><?php p($l->t('Pension Details')); ?></h3>
                     <div class="panel-actions">
@@ -3666,6 +3667,10 @@ style('budget', 'budget-app');
                             <span class="icon-add" aria-hidden="true"></span>
                             <?php p($l->t('Log Contribution')); ?>
                         </button>
+                        <button id="record-withdrawal-btn" class="secondary">
+                            <span class="icon-history" aria-hidden="true"></span>
+                            <?php p($l->t('Record Withdrawal')); ?>
+                        </button>
                     </div>
 
                     <!-- Balance History Chart -->
@@ -3673,14 +3678,37 @@ style('budget', 'budget-app');
                         <h4><?php p($l->t('Balance History')); ?></h4>
                         <div class="chart-container">
                             <canvas id="pension-balance-chart"></canvas>
+                            <div id="pension-balance-hint" class="chart-hint" style="display: none;"></div>
                         </div>
                     </div>
 
                     <!-- Projection Chart -->
                     <div class="pension-chart-section">
-                        <h4><?php p($l->t('Projected Growth')); ?></h4>
+                        <div class="pension-chart-header">
+                            <h4><?php p($l->t('Projected Growth')); ?></h4>
+                            <label class="pension-realterms-toggle">
+                                <input type="checkbox" id="pension-projection-realterms">
+                                <?php p($l->t("Today's money")); ?>
+                            </label>
+                        </div>
+                        <div id="pension-projection-target-summary" class="pension-projection-summary" style="display: none;"></div>
                         <div class="chart-container">
                             <canvas id="pension-projection-chart"></canvas>
+                            <div id="pension-projection-hint" class="chart-hint" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Scheduled (recurring) contributions -->
+                    <div id="pension-recurring-section" class="pension-recurring-section">
+                        <div class="pension-chart-header">
+                            <h4><?php p($l->t('Scheduled Contributions')); ?></h4>
+                            <button id="add-recurring-btn" class="secondary compact">
+                                <span class="icon-add" aria-hidden="true"></span>
+                                <?php p($l->t('Set up recurring')); ?>
+                            </button>
+                        </div>
+                        <div id="pension-recurring-list" class="recurring-list">
+                            <!-- Recurring schedules rendered here -->
                         </div>
                     </div>
 
@@ -3692,6 +3720,7 @@ style('budget', 'budget-app');
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
         </div>
 
@@ -3775,6 +3804,12 @@ style('budget', 'budget-app');
                             <input type="number" id="pension-retirement-age" name="retirementAge" min="18" max="100" placeholder="65">
                             <small class="form-text"><?php p($l->t('Age you plan to start drawing this pension')); ?></small>
                         </div>
+
+                        <div class="form-group">
+                            <label for="pension-target"><?php p($l->t('Target Pot at Retirement')); ?></label>
+                            <input type="number" id="pension-target" name="projectionTarget" min="0" step="0.01" placeholder="500000.00">
+                            <small class="form-text"><?php p($l->t('Goal pot value used for the projection progress bar (leave blank for the default)')); ?></small>
+                        </div>
                     </div>
 
                     <!-- DB/State Pension Fields -->
@@ -3850,6 +3885,13 @@ style('budget', 'budget-app');
                         <input type="date" id="contribution-date" name="date" required>
                     </div>
                     <div class="form-group">
+                        <label for="contribution-source-account"><?php p($l->t('Came from account')); ?></label>
+                        <select id="contribution-source-account" name="sourceAccountId">
+                            <option value=""><?php p($l->t('Not from a tracked account')); ?></option>
+                        </select>
+                        <small class="form-text"><?php p($l->t('Optional: records a matching withdrawal in that account and keeps it out of your spending')); ?></small>
+                    </div>
+                    <div class="form-group">
                         <label for="contribution-note"><?php p($l->t('Note')); ?></label>
                         <input type="text" id="contribution-note" name="note" placeholder="<?php p($l->t('e.g., Bonus top-up')); ?>">
                     </div>
@@ -3857,6 +3899,89 @@ style('budget', 'budget-app');
                     <div class="modal-actions">
                         <button type="button" class="cancel-btn"><?php p($l->t('Cancel')); ?></button>
                         <button type="submit" class="primary"><?php p($l->t('Log')); ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Record Withdrawal Modal -->
+        <div id="pension-withdrawal-modal" class="modal" style="display: none;">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3><?php p($l->t('Record Withdrawal')); ?></h3>
+                    <button class="modal-close cancel-btn" aria-label="<?php p($l->t('Close')); ?>">&times;</button>
+                </div>
+                <form id="pension-withdrawal-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="withdrawal-amount"><?php p($l->t('Amount')); ?> *</label>
+                        <input type="number" id="withdrawal-amount" name="amount" min="0.01" step="0.01" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="withdrawal-date"><?php p($l->t('Date')); ?> *</label>
+                        <input type="date" id="withdrawal-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdrawal-dest-account"><?php p($l->t('Paid into account')); ?></label>
+                        <select id="withdrawal-dest-account" name="destAccountId">
+                            <option value=""><?php p($l->t('Not into a tracked account')); ?></option>
+                        </select>
+                        <small class="form-text"><?php p($l->t('Optional: records a matching deposit in that account')); ?></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdrawal-note"><?php p($l->t('Note')); ?></label>
+                        <input type="text" id="withdrawal-note" name="note" placeholder="<?php p($l->t('e.g., Tax-free lump sum')); ?>">
+                    </div>
+                    <input type="hidden" id="withdrawal-pension-id" name="pensionId" value="">
+                    <div class="modal-actions">
+                        <button type="button" class="cancel-btn"><?php p($l->t('Cancel')); ?></button>
+                        <button type="submit" class="primary"><?php p($l->t('Record')); ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recurring Contribution Modal -->
+        <div id="pension-recurring-modal" class="modal" style="display: none;">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3><?php p($l->t('Scheduled Contribution')); ?></h3>
+                    <button class="modal-close cancel-btn" aria-label="<?php p($l->t('Close')); ?>">&times;</button>
+                </div>
+                <form id="pension-recurring-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="recurring-amount"><?php p($l->t('Amount')); ?> *</label>
+                        <input type="number" id="recurring-amount" name="amount" min="0.01" step="0.01" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="recurring-frequency"><?php p($l->t('Frequency')); ?> *</label>
+                        <select id="recurring-frequency" name="frequency" required>
+                            <option value="monthly"><?php p($l->t('Monthly')); ?></option>
+                            <option value="quarterly"><?php p($l->t('Quarterly')); ?></option>
+                            <option value="yearly"><?php p($l->t('Yearly')); ?></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recurring-next-date"><?php p($l->t('Next Date')); ?> *</label>
+                        <input type="date" id="recurring-next-date" name="nextDueDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recurring-source-account"><?php p($l->t('From account')); ?></label>
+                        <select id="recurring-source-account" name="sourceAccountId">
+                            <option value=""><?php p($l->t('Not from a tracked account')); ?></option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-checkbox">
+                        <label><input type="checkbox" name="autoPostEnabled"> <?php p($l->t('Auto-post when due')); ?></label>
+                        <small class="form-text"><?php p($l->t('Automatically record the contribution (and transfer, if an account is set) on the due date')); ?></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="recurring-note"><?php p($l->t('Note')); ?></label>
+                        <input type="text" id="recurring-note" name="note" placeholder="<?php p($l->t('Optional note')); ?>">
+                    </div>
+                    <input type="hidden" id="recurring-pension-id" name="pensionId" value="">
+                    <div class="modal-actions">
+                        <button type="button" class="cancel-btn"><?php p($l->t('Cancel')); ?></button>
+                        <button type="submit" class="primary"><?php p($l->t('Save')); ?></button>
                     </div>
                 </form>
             </div>

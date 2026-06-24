@@ -10,6 +10,7 @@ use OCA\Budget\Db\PensionContribution;
 use OCA\Budget\Db\PensionSnapshot;
 use OCA\Budget\Service\GranularShareService;
 use OCA\Budget\Service\PensionProjector;
+use OCA\Budget\Service\PensionRecurringService;
 use OCA\Budget\Service\PensionService;
 use OCA\Budget\Service\ValidationService;
 use OCP\Accounts\IAccountManager;
@@ -51,6 +52,7 @@ class PensionControllerTest extends TestCase {
 		$granularShareService->method('canAccess')->willReturn(true);
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
+		$recurringService = $this->createMock(PensionRecurringService::class);
 
 		$this->controller = new PensionController(
 			$this->request,
@@ -62,7 +64,8 @@ class PensionControllerTest extends TestCase {
 			$userManager,
 			$this->l,
 			'user1',
-			$this->logger
+			$this->logger,
+			$recurringService
 		);
 	}
 
@@ -164,7 +167,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode(['name' => '', 'type' => 'workplace']));
@@ -198,7 +202,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode([
@@ -355,7 +360,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode(['name' => '']));
@@ -513,7 +519,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode(['balance' => 50000, 'date' => 'bad']));
@@ -640,7 +647,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode(['amount' => 500, 'date' => 'bad']));
@@ -661,7 +669,8 @@ class PensionControllerTest extends TestCase {
 		$accountManager = $this->createMock(IAccountManager::class);
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
-			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger
+			$this->request, $this->service, $this->projector, $vs, $granularShareService, $accountManager, $userManager, $this->l, 'user1', $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->mockInput(json_encode([
@@ -796,7 +805,8 @@ class PensionControllerTest extends TestCase {
 		$userManager = $this->createMock(IUserManager::class);
 		$controller = new PensionController(
 			$this->request, $this->service, $this->projector,
-			$this->validationService, $granularShareService, $accountManager, $userManager, $this->l, null, $this->logger
+			$this->validationService, $granularShareService, $accountManager, $userManager, $this->l, null, $this->logger,
+			$this->createMock(PensionRecurringService::class)
 		);
 
 		$this->expectException(\TypeError::class);

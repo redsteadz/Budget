@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace OCA\Budget\Service;
 
+use OCA\Budget\Db\AccountMapper;
 use OCA\Budget\Db\PensionAccount;
 use OCA\Budget\Db\PensionAccountMapper;
 use OCA\Budget\Db\PensionContribution;
 use OCA\Budget\Db\PensionContributionMapper;
+use OCA\Budget\Db\PensionRecurringContributionMapper;
 use OCA\Budget\Db\PensionSnapshot;
 use OCA\Budget\Db\PensionSnapshotMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IDBConnection;
 
 class PensionService {
     private PensionAccountMapper $pensionMapper;
@@ -22,7 +25,11 @@ class PensionService {
         PensionAccountMapper $pensionMapper,
         PensionSnapshotMapper $snapshotMapper,
         PensionContributionMapper $contributionMapper,
-        CurrencyConversionService $conversionService
+        CurrencyConversionService $conversionService,
+        private TransactionService $transactionService,
+        private AccountMapper $accountMapper,
+        private PensionRecurringContributionMapper $recurringMapper,
+        private IDBConnection $db
     ) {
         $this->pensionMapper = $pensionMapper;
         $this->snapshotMapper = $snapshotMapper;
@@ -59,7 +66,8 @@ class PensionService {
         ?float $expectedReturnRate = null,
         ?int $retirementAge = null,
         ?float $annualIncome = null,
-        ?float $transferValue = null
+        ?float $transferValue = null,
+        ?float $projectionTarget = null
     ): PensionAccount {
         $pension = new PensionAccount();
         $pension->setUserId($userId);
@@ -73,6 +81,7 @@ class PensionService {
         $pension->setRetirementAge($retirementAge);
         $pension->setAnnualIncome($annualIncome);
         $pension->setTransferValue($transferValue);
+        $pension->setProjectionTarget($projectionTarget);
 
         $now = date('Y-m-d H:i:s');
         $pension->setCreatedAt($now);
@@ -103,10 +112,14 @@ class PensionService {
         ?float $expectedReturnRate = null,
         ?int $retirementAge = null,
         ?float $annualIncome = null,
-        ?float $transferValue = null
+        ?float $transferValue = null,
+        ?float $projectionTarget = null
     ): PensionAccount {
         $pension = $this->pensionMapper->find($id, $userId);
 
+        if ($projectionTarget !== null) {
+            $pension->setProjectionTarget($projectionTarget);
+        }
         if ($name !== null) {
             $pension->setName($name);
         }
@@ -149,9 +162,18 @@ class PensionService {
     public function delete(int $id, string $userId): void {
         $pension = $this->pensionMapper->find($id, $userId);
 
-        // Delete related snapshots and contributions
+        // Detach any bank legs that funded contributions/withdrawals (#304) so
+        // they survive as plain transactions rather than dangling pension markers.
+        $linked = $this->contributionMapper->findLinkedByPension($id, $userId);
+        if (!empty($linked)) {
+            $contribIds = array_map(static fn($c) => $c->getId(), $linked);
+            $this->transactionService->clearPensionContribMarkers($contribIds);
+        }
+
+        // Delete related snapshots, contributions and recurring schedules
         $this->snapshotMapper->deleteByPension($id, $userId);
         $this->contributionMapper->deleteByPension($id, $userId);
+        $this->recurringMapper->deleteByPension($id, $userId);
 
         $this->pensionMapper->delete($pension);
     }
@@ -232,9 +254,140 @@ class PensionService {
         $contribution->setAmount($amount);
         $contribution->setDate($date);
         $contribution->setNote($note);
+        $contribution->setKind(PensionContribution::KIND_CONTRIBUTION);
         $contribution->setCreatedAt(date('Y-m-d H:i:s'));
 
         return $this->contributionMapper->insert($contribution);
+    }
+
+    /**
+     * Record a contribution funded by a transfer from a bank account (#304): the
+     * money leaving the account becomes a linked bank debit (excluded from
+     * spending) and a pension contribution, created atomically.
+     *
+     * The entered amount is the contribution in the pension's currency; the bank
+     * debit is converted to the account's currency. The pension's current_balance
+     * is intentionally NOT changed (a snapshot is the valuation source of truth —
+     * bumping it would double-count against the bank balance in net worth).
+     *
+     * @throws DoesNotExistException if the pension or account is not found
+     */
+    public function createContributionWithTransfer(
+        int $pensionId,
+        string $userId,
+        float $amount,
+        string $date,
+        int $sourceAccountId,
+        ?string $note = null
+    ): PensionContribution {
+        return $this->createLinkedEntry($pensionId, $userId, $amount, $date, $sourceAccountId, $note, PensionContribution::KIND_CONTRIBUTION);
+    }
+
+    /**
+     * Record a withdrawal/drawdown paid into a bank account (the reverse of
+     * #304): a linked bank credit (excluded from income) plus a withdrawal row.
+     *
+     * @throws DoesNotExistException
+     */
+    public function createWithdrawalWithTransfer(
+        int $pensionId,
+        string $userId,
+        float $amount,
+        string $date,
+        int $destAccountId,
+        ?string $note = null
+    ): PensionContribution {
+        return $this->createLinkedEntry($pensionId, $userId, $amount, $date, $destAccountId, $note, PensionContribution::KIND_WITHDRAWAL);
+    }
+
+    /**
+     * Record a withdrawal with no linked bank account (manual).
+     */
+    public function createWithdrawal(
+        int $pensionId,
+        string $userId,
+        float $amount,
+        string $date,
+        ?string $note = null
+    ): PensionContribution {
+        $this->pensionMapper->find($pensionId, $userId);
+
+        $withdrawal = new PensionContribution();
+        $withdrawal->setUserId($userId);
+        $withdrawal->setPensionId($pensionId);
+        $withdrawal->setAmount($amount);
+        $withdrawal->setDate($date);
+        $withdrawal->setNote($note);
+        $withdrawal->setKind(PensionContribution::KIND_WITHDRAWAL);
+        $withdrawal->setCreatedAt(date('Y-m-d H:i:s'));
+
+        return $this->contributionMapper->insert($withdrawal);
+    }
+
+    /**
+     * Shared implementation for contribution/withdrawal funded by a bank leg.
+     */
+    private function createLinkedEntry(
+        int $pensionId,
+        string $userId,
+        float $amount,
+        string $date,
+        int $accountId,
+        ?string $note,
+        string $kind
+    ): PensionContribution {
+        $pension = $this->pensionMapper->find($pensionId, $userId);
+        $account = $this->accountMapper->find($accountId, $userId); // verifies ownership
+
+        $isWithdrawal = $kind === PensionContribution::KIND_WITHDRAWAL;
+        $bankType = $isWithdrawal ? 'credit' : 'debit';
+
+        // Contribution is recorded in the pension's currency; the bank leg in the
+        // account's currency (converted with cached rates, graceful fallback).
+        $pensionCurrency = $pension->getCurrency() ?: ($account->getCurrency() ?: 'GBP');
+        $accountCurrency = $account->getCurrency() ?: $pensionCurrency;
+        $bankAmount = round((float)$this->conversionService->convertLocal($amount, $pensionCurrency, $accountCurrency, $date), 2);
+
+        $description = $isWithdrawal
+            ? 'Pension withdrawal: ' . $pension->getName()
+            : 'Pension contribution: ' . $pension->getName();
+
+        $this->db->beginTransaction();
+        try {
+            $tx = $this->transactionService->create(
+                $userId,
+                $accountId,
+                $date,
+                $description,
+                $bankAmount,
+                $bankType,
+                null,            // categoryId — keep out of category spending
+                $pension->getName(), // vendor
+                null,            // reference
+                $note            // notes
+            );
+
+            $contribution = new PensionContribution();
+            $contribution->setUserId($userId);
+            $contribution->setPensionId($pensionId);
+            $contribution->setAmount($amount);
+            $contribution->setDate($date);
+            $contribution->setNote($note);
+            $contribution->setTransactionId($tx->getId());
+            $contribution->setSourceAccountId($accountId);
+            $contribution->setKind($kind);
+            $contribution->setCreatedAt(date('Y-m-d H:i:s'));
+            $contribution = $this->contributionMapper->insert($contribution);
+
+            // Mark the bank leg so it's excluded from spending/income aggregates.
+            $this->transactionService->markPensionContribLink($tx->getId(), $userId, $contribution->getId());
+
+            $this->db->commit();
+            return $contribution;
+        } catch (\Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -242,7 +395,25 @@ class PensionService {
      */
     public function deleteContribution(int $contributionId, string $userId): void {
         $contribution = $this->contributionMapper->find($contributionId, $userId);
-        $this->contributionMapper->delete($contribution);
+
+        // If funded by a bank transfer (#304), remove the linked bank transaction
+        // too (which restores the account balance). Atomic so both go together.
+        $txId = $contribution->getTransactionId();
+        $this->db->beginTransaction();
+        try {
+            if ($txId !== null) {
+                try {
+                    $this->transactionService->delete($txId, $userId);
+                } catch (DoesNotExistException $e) {
+                    // Bank leg already gone — nothing to clean up.
+                }
+            }
+            $this->contributionMapper->delete($contribution);
+            $this->db->commit();
+        } catch (\Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     // =====================
@@ -320,5 +491,94 @@ class PensionService {
         // Verify pension exists and belongs to user
         $this->pensionMapper->find($pensionId, $userId);
         return $this->contributionMapper->getTotalByPension($pensionId, $userId);
+    }
+
+    // =====================
+    // Charts & Activity
+    // =====================
+
+    /**
+     * Snapshot balance series for the detail-panel chart (date ASC). If there
+     * are no snapshots but a balance is known, returns a single synthetic point
+     * so the chart isn't empty.
+     *
+     * @return array{labels: string[], values: float[], currency: string}
+     * @throws DoesNotExistException
+     */
+    public function getBalanceHistory(int $pensionId, string $userId): array {
+        $pension = $this->pensionMapper->find($pensionId, $userId);
+
+        // findByPension is date DESC; reverse for a left-to-right chart.
+        $snapshots = array_reverse($this->snapshotMapper->findByPension($pensionId, $userId));
+
+        $labels = [];
+        $values = [];
+        foreach ($snapshots as $snapshot) {
+            $labels[] = $snapshot->getDate();
+            $values[] = (float)$snapshot->getBalance();
+        }
+
+        if (empty($values) && $pension->getCurrentBalance() !== null) {
+            $labels[] = date('Y-m-d');
+            $values[] = (float)$pension->getCurrentBalance();
+        }
+
+        return [
+            'labels' => $labels,
+            'values' => $values,
+            'currency' => $pension->getCurrency() ?: 'GBP',
+        ];
+    }
+
+    /**
+     * Merged, most-recent-first activity timeline for a pension: contributions,
+     * withdrawals (incl. ones linked to a bank transfer, #304) and balance
+     * snapshots. One row per real-world event — the bank leg is not emitted
+     * separately.
+     *
+     * @throws DoesNotExistException
+     */
+    public function getActivity(int $pensionId, string $userId): array {
+        $this->pensionMapper->find($pensionId, $userId);
+
+        $items = [];
+
+        foreach ($this->contributionMapper->findByPension($pensionId, $userId) as $c) {
+            $isWithdrawal = $c->getKind() === PensionContribution::KIND_WITHDRAWAL;
+            if ($isWithdrawal) {
+                $type = 'withdrawal';
+            } else {
+                $type = $c->getTransactionId() !== null ? 'transfer_in' : 'contribution';
+            }
+            $items[] = [
+                'type' => $type,
+                'id' => $c->getId(),
+                'date' => $c->getDate(),
+                'amount' => (float)$c->getAmount(),
+                'note' => $c->getNote(),
+                'transactionId' => $c->getTransactionId(),
+                'sourceAccountId' => $c->getSourceAccountId(),
+            ];
+        }
+
+        foreach ($this->snapshotMapper->findByPension($pensionId, $userId) as $s) {
+            $items[] = [
+                'type' => 'snapshot',
+                'id' => $s->getId(),
+                'date' => $s->getDate(),
+                'amount' => (float)$s->getBalance(),
+                'note' => null,
+                'transactionId' => null,
+                'sourceAccountId' => null,
+            ];
+        }
+
+        // Most recent first; stable within a day.
+        usort($items, static function (array $a, array $b) {
+            $cmp = strcmp((string)$b['date'], (string)$a['date']);
+            return $cmp !== 0 ? $cmp : (($b['id'] ?? 0) <=> ($a['id'] ?? 0));
+        });
+
+        return $items;
     }
 }

@@ -9,6 +9,7 @@ use OCA\Budget\Db\PensionAccountMapper;
 use OCA\Budget\Service\CurrencyConversionService;
 use OCA\Budget\Service\PensionProjector;
 use OCA\Budget\Service\PensionService;
+use OCA\Budget\Service\SettingService;
 use PHPUnit\Framework\TestCase;
 
 class PensionProjectorTest extends TestCase {
@@ -16,16 +17,20 @@ class PensionProjectorTest extends TestCase {
     private PensionAccountMapper $pensionMapper;
     private PensionService $pensionService;
     private CurrencyConversionService $conversionService;
+    /** @var SettingService&\PHPUnit\Framework\MockObject\MockObject */
+    private $settingService;
 
     protected function setUp(): void {
         $this->pensionMapper = $this->createMock(PensionAccountMapper::class);
         $this->pensionService = $this->createMock(PensionService::class);
         $this->conversionService = $this->createMock(CurrencyConversionService::class);
+        $this->settingService = $this->createMock(SettingService::class);
 
         $this->projector = new PensionProjector(
             $this->pensionMapper,
             $this->pensionService,
-            $this->conversionService
+            $this->conversionService,
+            $this->settingService
         );
     }
 
@@ -345,5 +350,47 @@ class PensionProjectorTest extends TestCase {
             $result['growthProjection'][0]['value'],
             $result['growthProjection'][1]['value']
         );
+    }
+
+    // ===== Configurable target + inflation (#251 follow-up) =====
+
+    public function testProjectionUsesPerPensionTarget(): void {
+        $pension = $this->makePension();
+        $pension->setProjectionTarget(250000.0);
+        $this->pensionMapper->method('find')->willReturn($pension);
+
+        $result = $this->projector->getProjection(1, 'user1', 40);
+
+        $this->assertSame(250000.0, $result['projectionTarget']);
+        $this->assertArrayHasKey('requiredMonthlyForTarget', $result);
+        // Back-compat alias kept for one release
+        $this->assertArrayHasKey('requiredMonthlyFor500k', $result);
+        $this->assertSame($result['requiredMonthlyForTarget'], $result['requiredMonthlyFor500k']);
+    }
+
+    public function testProjectionRealValueBelowNominalWithInflation(): void {
+        $this->pensionMapper->method('find')->willReturn($this->makePension());
+        $this->settingService->method('get')->willReturnCallback(
+            fn($u, $k) => $k === 'pension_inflation_rate' ? '0.03' : null
+        );
+
+        $result = $this->projector->getProjection(1, 'user1', 40); // 25 years to retirement
+
+        $this->assertGreaterThan(0, $result['projectedValueReal']);
+        $this->assertLessThan($result['projectedValueNominal'], $result['projectedValueReal']);
+        $this->assertSame($result['projectedValue'], $result['projectedValueNominal']);
+        // Growth points carry a real-terms value too
+        $this->assertArrayHasKey('valueReal', $result['growthProjection'][0]);
+    }
+
+    public function testProjectionFallsBackToUserTargetSetting(): void {
+        $this->pensionMapper->method('find')->willReturn($this->makePension()); // no per-pension target
+        $this->settingService->method('get')->willReturnCallback(
+            fn($u, $k) => $k === 'pension_target' ? '300000' : null
+        );
+
+        $result = $this->projector->getProjection(1, 'user1', 40);
+
+        $this->assertSame(300000.0, $result['projectionTarget']);
     }
 }

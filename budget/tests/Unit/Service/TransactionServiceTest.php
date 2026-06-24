@@ -38,6 +38,7 @@ class TransactionServiceTest extends TestCase {
         $dismissedImportMapper = $this->createMock(DismissedImportMapper::class);
         $this->attachmentMapper = $this->createMock(\OCA\Budget\Db\AttachmentMapper::class);
         $auditService = $this->createMock(\OCA\Budget\Service\AuditService::class);
+        $pensionContributionMapper = $this->createMock(\OCA\Budget\Db\PensionContributionMapper::class);
 
         $this->service = new TransactionService(
             $this->mapper,
@@ -47,7 +48,8 @@ class TransactionServiceTest extends TestCase {
             $this->expenseShareMapper,
             $dismissedImportMapper,
             $this->attachmentMapper,
-            $auditService
+            $auditService,
+            $pensionContributionMapper
         );
     }
 

@@ -33,7 +33,8 @@ class TransactionService {
         ExpenseShareMapper $expenseShareMapper,
         DismissedImportMapper $dismissedImportMapper,
         private \OCA\Budget\Db\AttachmentMapper $attachmentMapper,
-        private AuditService $auditService
+        private AuditService $auditService,
+        private \OCA\Budget\Db\PensionContributionMapper $pensionContributionMapper
     ) {
         $this->mapper = $mapper;
         $this->accountMapper = $accountMapper;
@@ -555,6 +556,13 @@ class TransactionService {
             $this->mapper->unlinkTransaction($id);
         }
 
+        // If this bank leg funded a pension contribution/withdrawal (#304),
+        // detach it so the pension record survives as a plain manual entry
+        // rather than pointing at a deleted transaction.
+        if ($transaction->getPensionContribId() !== null) {
+            $this->pensionContributionMapper->unlinkByTransaction($id);
+        }
+
         // Record dismissed import ID for bank-synced transactions so they
         // don't get re-imported on the next sync. Only applies to provider-
         // prefixed IDs (e.g. "simplefin:xxx", "gocardless:xxx"), not CSV imports.
@@ -577,6 +585,31 @@ class TransactionService {
 
         // Recompute from the ledger now that the row is gone
         $this->recalculateAccountBalance($transaction->getAccountId(), $userId);
+    }
+
+    /**
+     * Clear the pension_contrib_id marker from any bank legs that pointed at the
+     * given (about-to-be-deleted) pension contributions (#304). The transactions
+     * survive as ordinary debits/credits.
+     *
+     * @param int[] $contributionIds
+     */
+    public function clearPensionContribMarkers(array $contributionIds): void {
+        $this->mapper->clearPensionContribByIds($contributionIds);
+    }
+
+    /**
+     * Mark a bank transaction as the funding leg of a pension contribution (#304)
+     * so it is excluded from spending/income aggregates. Does not affect the
+     * account balance, so no recompute is needed.
+     *
+     * @throws DoesNotExistException
+     */
+    public function markPensionContribLink(int $txId, string $userId, ?int $contribId): void {
+        $tx = $this->mapper->find($txId, $userId);
+        $tx->setPensionContribId($contribId);
+        $tx->setUpdatedAt(date('Y-m-d H:i:s'));
+        $this->mapper->update($tx);
     }
 
     /**

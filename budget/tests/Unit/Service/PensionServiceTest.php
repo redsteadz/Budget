@@ -10,8 +10,12 @@ use OCA\Budget\Db\PensionContribution;
 use OCA\Budget\Db\PensionContributionMapper;
 use OCA\Budget\Db\PensionSnapshot;
 use OCA\Budget\Db\PensionSnapshotMapper;
+use OCA\Budget\Db\AccountMapper;
+use OCA\Budget\Db\PensionRecurringContributionMapper;
 use OCA\Budget\Service\CurrencyConversionService;
 use OCA\Budget\Service\PensionService;
+use OCA\Budget\Service\TransactionService;
+use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
 class PensionServiceTest extends TestCase {
@@ -20,18 +24,34 @@ class PensionServiceTest extends TestCase {
     private PensionSnapshotMapper $snapshotMapper;
     private PensionContributionMapper $contributionMapper;
     private CurrencyConversionService $conversionService;
+    /** @var TransactionService&\PHPUnit\Framework\MockObject\MockObject */
+    private $transactionService;
+    /** @var AccountMapper&\PHPUnit\Framework\MockObject\MockObject */
+    private $accountMapper;
+    /** @var PensionRecurringContributionMapper&\PHPUnit\Framework\MockObject\MockObject */
+    private $recurringMapper;
+    /** @var IDBConnection&\PHPUnit\Framework\MockObject\MockObject */
+    private $db;
 
     protected function setUp(): void {
         $this->pensionMapper = $this->createMock(PensionAccountMapper::class);
         $this->snapshotMapper = $this->createMock(PensionSnapshotMapper::class);
         $this->contributionMapper = $this->createMock(PensionContributionMapper::class);
         $this->conversionService = $this->createMock(CurrencyConversionService::class);
+        $this->transactionService = $this->createMock(TransactionService::class);
+        $this->accountMapper = $this->createMock(AccountMapper::class);
+        $this->recurringMapper = $this->createMock(PensionRecurringContributionMapper::class);
+        $this->db = $this->createMock(IDBConnection::class);
 
         $this->service = new PensionService(
             $this->pensionMapper,
             $this->snapshotMapper,
             $this->contributionMapper,
-            $this->conversionService
+            $this->conversionService,
+            $this->transactionService,
+            $this->accountMapper,
+            $this->recurringMapper,
+            $this->db
         );
     }
 
@@ -258,5 +278,131 @@ class PensionServiceTest extends TestCase {
 
         $this->assertEquals(0.0, $result['totalPensionWorth']);
         $this->assertEquals(0, $result['pensionCount']);
+    }
+
+    // ===== Charts & Activity (#251 panel fix) =====
+
+    public function testGetBalanceHistorySynthesizesPointWhenNoSnapshots(): void {
+        $pension = $this->makePension(['currentBalance' => 12345.0, 'currency' => 'GBP']);
+        $this->pensionMapper->method('find')->willReturn($pension);
+        $this->snapshotMapper->method('findByPension')->willReturn([]);
+
+        $result = $this->service->getBalanceHistory(1, 'user1');
+
+        $this->assertCount(1, $result['values']);
+        $this->assertSame(12345.0, $result['values'][0]);
+        $this->assertSame('GBP', $result['currency']);
+    }
+
+    public function testGetBalanceHistoryReturnsAscendingSeries(): void {
+        $this->pensionMapper->method('find')->willReturn($this->makePension(['currency' => 'GBP']));
+        // findByPension returns DESC; the service reverses to chronological order
+        $this->snapshotMapper->method('findByPension')->willReturn([
+            $this->makeSnapshot('2026-03-01', 2000.0),
+            $this->makeSnapshot('2026-02-01', 1000.0),
+        ]);
+
+        $result = $this->service->getBalanceHistory(1, 'user1');
+
+        $this->assertSame(['2026-02-01', '2026-03-01'], $result['labels']);
+        $this->assertSame([1000.0, 2000.0], $result['values']);
+    }
+
+    public function testGetActivityMergesAndSortsDesc(): void {
+        $this->pensionMapper->method('find')->willReturn($this->makePension());
+        $this->contributionMapper->method('findByPension')->willReturn([
+            $this->makeContribution('2026-03-10', 500.0, PensionContribution::KIND_CONTRIBUTION, 99, 7), // linked -> transfer_in
+            $this->makeContribution('2026-03-05', 300.0, PensionContribution::KIND_WITHDRAWAL, null, null),
+        ]);
+        $this->snapshotMapper->method('findByPension')->willReturn([
+            $this->makeSnapshot('2026-03-08', 9000.0),
+        ]);
+
+        $result = $this->service->getActivity(1, 'user1');
+
+        $this->assertCount(3, $result);
+        $this->assertSame('2026-03-10', $result[0]['date']);
+        $this->assertSame('transfer_in', $result[0]['type']);
+        $this->assertSame('2026-03-08', $result[1]['date']);
+        $this->assertSame('snapshot', $result[1]['type']);
+        $this->assertSame('2026-03-05', $result[2]['date']);
+        $this->assertSame('withdrawal', $result[2]['type']);
+    }
+
+    // ===== #304 contribution funded by a bank transfer =====
+
+    public function testCreateContributionWithTransferCreatesLinkedBankLeg(): void {
+        $this->pensionMapper->method('find')->willReturn($this->makePension(['id' => 1, 'name' => 'Work', 'currency' => 'GBP']));
+
+        $account = new \OCA\Budget\Db\Account();
+        $account->setCurrency('GBP');
+        $this->accountMapper->method('find')->willReturn($account);
+        $this->conversionService->method('convertLocal')->willReturnCallback(fn($amt) => (string)$amt);
+
+        $tx = new \OCA\Budget\Db\Transaction();
+        $tx->setId(555);
+        $this->transactionService->expects($this->once())->method('create')
+            ->willReturnCallback(function (...$args) use ($tx) {
+                $this->assertSame('debit', $args[5]);   // bank leg is a debit
+                $this->assertNull($args[6]);            // no category
+                return $tx;
+            });
+
+        $this->contributionMapper->expects($this->once())->method('insert')
+            ->willReturnCallback(function (PensionContribution $c) {
+                $this->assertSame(555, $c->getTransactionId());
+                $this->assertSame(10, $c->getSourceAccountId());
+                $this->assertSame(PensionContribution::KIND_CONTRIBUTION, $c->getKind());
+                $c->setId(77);
+                return $c;
+            });
+
+        $this->transactionService->expects($this->once())->method('markPensionContribLink')
+            ->with(555, 'user1', 77);
+
+        $result = $this->service->createContributionWithTransfer(1, 'user1', 500.0, '2026-03-01', 10, 'note');
+        $this->assertSame(500.0, $result->getAmount());
+    }
+
+    public function testDeleteContributionRemovesLinkedTransaction(): void {
+        $contribution = $this->makeContribution('2026-03-01', 500.0, PensionContribution::KIND_CONTRIBUTION, 555, 10);
+        $contribution->setId(77);
+        $this->contributionMapper->method('find')->willReturn($contribution);
+
+        $this->transactionService->expects($this->once())->method('delete')->with(555, 'user1');
+        $this->contributionMapper->expects($this->once())->method('delete')->with($contribution);
+
+        $this->service->deleteContribution(77, 'user1');
+    }
+
+    public function testDeletePensionClearsLinkedMarkersAndRecurring(): void {
+        $pension = $this->makePension();
+        $this->pensionMapper->method('find')->willReturn($pension);
+        $linked = $this->makeContribution('2026-03-01', 500.0, PensionContribution::KIND_CONTRIBUTION, 555, 10);
+        $linked->setId(77);
+        $this->contributionMapper->method('findLinkedByPension')->willReturn([$linked]);
+
+        $this->transactionService->expects($this->once())->method('clearPensionContribMarkers')->with([77]);
+        $this->recurringMapper->expects($this->once())->method('deleteByPension')->with(1, 'user1');
+        $this->pensionMapper->expects($this->once())->method('delete')->with($pension);
+
+        $this->service->delete(1, 'user1');
+    }
+
+    private function makeSnapshot(string $date, float $balance): PensionSnapshot {
+        $s = new PensionSnapshot();
+        $s->setDate($date);
+        $s->setBalance($balance);
+        return $s;
+    }
+
+    private function makeContribution(string $date, float $amount, string $kind, ?int $txId, ?int $accountId): PensionContribution {
+        $c = new PensionContribution();
+        $c->setDate($date);
+        $c->setAmount($amount);
+        $c->setKind($kind);
+        $c->setTransactionId($txId);
+        $c->setSourceAccountId($accountId);
+        return $c;
     }
 }

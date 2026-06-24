@@ -12367,9 +12367,21 @@ tr.pending-transaction td:first-child {
 /* Pensions Summary */
 .pensions-summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
+}
+
+/* Keep large projected values inside the summary cards (flexbox min-width:0
+   lets the value shrink/wrap instead of overrunning the card border). */
+.pensions-summary .summary-content {
+    min-width: 0;
+}
+
+.pensions-summary .summary-value {
+    font-size: clamp(18px, 1.7vw, 24px);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
 .pensions-age-hint {
@@ -12519,20 +12531,14 @@ tr.pending-transaction td:first-child {
 }
 
 /* Pension Detail Panel */
-.pension-detail-panel {
-    position: fixed;
-    right: 0;
-    top: 50px;
-    width: 450px;
-    height: calc(100vh - 50px);
-    background: var(--color-main-background);
-    border-left: 1px solid var(--color-border);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    overflow-y: auto;
+/* Pension detail is a centered modal (uses the shared .modal overlay). */
+.pension-detail-modal {
+    max-width: 640px;
+    width: 90%;
+    padding: 0;
 }
 
-.pension-detail-panel .panel-header {
+.pension-detail-modal .panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12541,19 +12547,21 @@ tr.pending-transaction td:first-child {
     position: sticky;
     top: 0;
     background: var(--color-main-background);
+    border-radius: 10px 10px 0 0;
+    z-index: 1;
 }
 
-.pension-detail-panel .panel-header h3 {
+.pension-detail-modal .panel-header h3 {
     margin: 0;
     font-size: 18px;
 }
 
-.pension-detail-panel .panel-actions {
+.pension-detail-modal .panel-actions {
     display: flex;
     gap: 8px;
 }
 
-.pension-detail-panel .panel-content {
+.pension-detail-modal .panel-content {
     padding: 20px;
 }
 
@@ -12653,6 +12661,141 @@ tr.pending-transaction td:first-child {
     color: var(--color-text-maxcontrast);
     padding: 20px;
     font-size: 13px;
+}
+
+/* Pension activity / recurring / chart additions (revamp) */
+.activity-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-type {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.activity-note {
+    font-size: 12px;
+    color: var(--color-text-maxcontrast);
+}
+
+.activity-amount {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.activity-amount.positive {
+    color: #4caf50;
+}
+
+.activity-amount.negative {
+    color: var(--budget-color-negative);
+}
+
+.activity-link-badge,
+.pension-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+    vertical-align: middle;
+}
+
+.activity-delete-btn {
+    opacity: 0.5;
+}
+
+.activity-delete-btn:hover {
+    opacity: 1;
+}
+
+.chart-hint {
+    text-align: center;
+    color: var(--color-text-maxcontrast);
+    font-size: 13px;
+    padding: 24px 12px;
+}
+
+.pension-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.pension-chart-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.pension-realterms-toggle {
+    font-size: 12px;
+    color: var(--color-text-maxcontrast);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.pension-projection-summary {
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+    margin-bottom: 8px;
+}
+
+.pension-recurring-section {
+    margin-bottom: 24px;
+}
+
+.recurring-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recurring-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: var(--color-background-dark);
+    border-radius: 6px;
+}
+
+.recurring-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.recurring-main {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.recurring-sub {
+    font-size: 12px;
+    color: var(--color-text-maxcontrast);
+}
+
+.recurring-badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: var(--color-background-darker, rgba(127, 127, 127, 0.15));
+    color: var(--color-text-maxcontrast);
+}
+
+button.secondary.compact {
+    padding: 4px 8px;
+    font-size: 12px;
 }
 
 /* Pension Modal Styles */

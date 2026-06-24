@@ -52,6 +52,9 @@ class SettingController extends Controller {
         'budget_period' => 'monthly',
         'budget_start_day' => '1',
         'budget_alert_threshold' => '80',
+        'pension_target' => '500000',
+        'pension_inflation_rate' => '0.025',
+        'pension_projection_mode' => 'nominal',
         'dashboard_hero_config' => '{"order":["netWorth","income","expenses","savings","pension"],"visibility":{"netWorth":true,"income":true,"expenses":true,"savings":true,"pension":true}}',
         'dashboard_widgets_config' => '{"order":["trendChart","spendingChart","netWorthHistory","recentTransactions","accounts","budgetAlerts","upcomingBills","budgetProgress","savingsGoals","debtPayoff"],"visibility":{"trendChart":true,"spendingChart":true,"netWorthHistory":true,"recentTransactions":true,"accounts":true,"budgetAlerts":true,"upcomingBills":true,"budgetProgress":true,"savingsGoals":true,"debtPayoff":true}}',
         'dashboard_locked' => 'true', // Dashboard starts locked

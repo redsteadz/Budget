@@ -16,12 +16,18 @@ class PensionProjector {
     public function __construct(
         PensionAccountMapper $pensionMapper,
         PensionService $pensionService,
-        CurrencyConversionService $conversionService
+        CurrencyConversionService $conversionService,
+        private SettingService $settingService
     ) {
         $this->pensionMapper = $pensionMapper;
         $this->pensionService = $pensionService;
         $this->conversionService = $conversionService;
     }
+
+    /** Default projection target when neither the pension nor the user overrides it. */
+    private const DEFAULT_TARGET = 500000.0;
+    /** Default assumed inflation when computing "today's money" projections. */
+    private const DEFAULT_INFLATION = 0.025;
 
     /**
      * Get projection for a single pension.
@@ -32,12 +38,34 @@ class PensionProjector {
         $pension = $this->pensionMapper->find($pensionId, $userId);
 
         if ($pension->isDefinedContribution()) {
-            return $this->projectDCPension($pension, $currentAge);
+            return $this->projectDCPension($pension, $currentAge, $userId);
         } elseif ($pension->isDefinedBenefit()) {
             return $this->projectDBPension($pension, $currentAge);
         } else {
             return $this->projectStatePension($pension, $currentAge);
         }
+    }
+
+    /**
+     * Resolve the projection target for a pension: its own override, else the
+     * user's default, else the built-in default.
+     */
+    private function resolveTarget(PensionAccount $pension, string $userId): float {
+        $perPension = $pension->getProjectionTarget();
+        if ($perPension !== null && $perPension > 0) {
+            return (float)$perPension;
+        }
+        $userDefault = $this->settingService->get($userId, 'pension_target');
+        if ($userDefault !== null && (float)$userDefault > 0) {
+            return (float)$userDefault;
+        }
+        return self::DEFAULT_TARGET;
+    }
+
+    /** The user's assumed inflation rate for "today's money" projections. */
+    private function resolveInflation(string $userId): float {
+        $value = $this->settingService->get($userId, 'pension_inflation_rate');
+        return $value !== null ? (float)$value : self::DEFAULT_INFLATION;
     }
 
     /**
@@ -101,7 +129,7 @@ class PensionProjector {
     /**
      * Project a defined contribution pension.
      */
-    private function projectDCPension(PensionAccount $pension, ?int $currentAge = null): array {
+    private function projectDCPension(PensionAccount $pension, ?int $currentAge = null, ?string $userId = null): array {
         $currentBalance = $pension->getCurrentBalance() ?? 0;
         $monthlyContribution = $pension->getMonthlyContribution() ?? 0;
         $annualReturnRate = $pension->getExpectedReturnRate() ?? 0.05;
@@ -120,25 +148,35 @@ class PensionProjector {
             $monthsToRetirement
         );
 
-        // Calculate required contribution to reach a target (e.g., 25x desired income)
-        $targetPot = 500000; // Example target
+        // Configurable target (per-pension override, else user default, else 500k)
+        // and the contribution needed to reach it.
+        $target = $userId !== null ? $this->resolveTarget($pension, $userId) : self::DEFAULT_TARGET;
         $requiredMonthly = $this->calculateRequiredContribution(
             $currentBalance,
-            $targetPot,
+            $target,
             $annualReturnRate / 12,
             $monthsToRetirement
         );
 
-        // Generate growth projections for chart
+        // Inflation-adjusted ("today's money") view: deflate the nominal pot by
+        // the assumed inflation over the years to retirement.
+        $inflationRate = $userId !== null ? $this->resolveInflation($userId) : self::DEFAULT_INFLATION;
+        $deflator = $yearsToRetirement > 0 ? pow(1 + $inflationRate, $yearsToRetirement) : 1.0;
+        $projectedValueReal = $deflator > 0 ? $projectedValue / $deflator : $projectedValue;
+
+        // Generate growth projections for chart (nominal + real per year)
         $growthProjection = $this->generateGrowthProjection(
             $currentBalance,
             $monthlyContribution,
             $annualReturnRate / 12,
-            $yearsToRetirement
+            $yearsToRetirement,
+            $inflationRate
         );
 
         // Estimated annual income (4% withdrawal rate)
         $estimatedAnnualIncome = $projectedValue * 0.04;
+
+        $progressPercent = $target > 0 ? round(min(100, ($projectedValue / $target) * 100), 1) : 0.0;
 
         return [
             'pensionId' => $pension->getId(),
@@ -150,8 +188,15 @@ class PensionProjector {
             'retirementAge' => $retirementAge,
             'yearsToRetirement' => $yearsToRetirement,
             'projectedValue' => round($projectedValue, 2),
+            'projectedValueNominal' => round($projectedValue, 2),
+            'projectedValueReal' => round($projectedValueReal, 2),
+            'projectionTarget' => round($target, 2),
+            'progressPercent' => $progressPercent,
+            'inflationRate' => $inflationRate,
             'estimatedAnnualIncome' => round($estimatedAnnualIncome, 2),
             'estimatedMonthlyIncome' => round($estimatedAnnualIncome / 12, 2),
+            'requiredMonthlyForTarget' => round($requiredMonthly, 2),
+            // Back-compat alias (deprecated): kept for one release for older frontends.
             'requiredMonthlyFor500k' => round($requiredMonthly, 2),
             'growthProjection' => $growthProjection,
             'recommendations' => $this->generateDCRecommendations($pension, $projectedValue, $yearsToRetirement),
@@ -270,7 +315,8 @@ class PensionProjector {
         float $presentValue,
         float $monthlyPayment,
         float $monthlyRate,
-        int $years
+        int $years,
+        float $inflationRate = 0.0
     ): array {
         $projection = [];
         $currentYear = (int) date('Y');
@@ -278,10 +324,12 @@ class PensionProjector {
         for ($year = 0; $year <= $years; $year++) {
             $months = $year * 12;
             $value = $this->calculateFutureValue($presentValue, $monthlyPayment, $monthlyRate, $months);
+            $deflator = $inflationRate > 0 ? pow(1 + $inflationRate, $year) : 1.0;
 
             $projection[] = [
                 'year' => $currentYear + $year,
                 'value' => round($value, 2),
+                'valueReal' => round($value / $deflator, 2),
             ];
         }
 

@@ -229,9 +229,17 @@ return [
         ['name' => 'pension#createSnapshot', 'url' => '/api/pensions/{id}/snapshots', 'verb' => 'POST'],
         ['name' => 'pension#contributions', 'url' => '/api/pensions/{id}/contributions', 'verb' => 'GET'],
         ['name' => 'pension#createContribution', 'url' => '/api/pensions/{id}/contributions', 'verb' => 'POST'],
+        ['name' => 'pension#createWithdrawal', 'url' => '/api/pensions/{id}/withdrawals', 'verb' => 'POST'],
+        ['name' => 'pension#balanceHistory', 'url' => '/api/pensions/{id}/balance-history', 'verb' => 'GET'],
+        ['name' => 'pension#activity', 'url' => '/api/pensions/{id}/activity', 'verb' => 'GET'],
+        ['name' => 'pension#recurring', 'url' => '/api/pensions/{id}/recurring', 'verb' => 'GET'],
+        ['name' => 'pension#createRecurring', 'url' => '/api/pensions/{id}/recurring', 'verb' => 'POST'],
         ['name' => 'pension#projection', 'url' => '/api/pensions/{id}/projection', 'verb' => 'GET'],
         ['name' => 'pension#destroySnapshot', 'url' => '/api/pensions/snapshots/{snapshotId}', 'verb' => 'DELETE'],
         ['name' => 'pension#destroyContribution', 'url' => '/api/pensions/contributions/{contributionId}', 'verb' => 'DELETE'],
+        ['name' => 'pension#updateRecurring', 'url' => '/api/pensions/recurring/{recurId}', 'verb' => 'PUT'],
+        ['name' => 'pension#destroyRecurring', 'url' => '/api/pensions/recurring/{recurId}', 'verb' => 'DELETE'],
+        ['name' => 'pension#postRecurring', 'url' => '/api/pensions/recurring/{recurId}/post', 'verb' => 'POST'],
 
         // Asset routes - specific paths before {id} wildcard
         ['name' => 'asset#index', 'url' => '/api/assets', 'verb' => 'GET'],

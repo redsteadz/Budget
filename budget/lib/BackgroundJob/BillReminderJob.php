@@ -6,8 +6,10 @@ namespace OCA\Budget\BackgroundJob;
 
 use OCA\Budget\AppInfo\Application;
 use OCA\Budget\Db\BillMapper;
+use OCA\Budget\Db\PensionRecurringContributionMapper;
 use OCA\Budget\Db\RecurringIncomeMapper;
 use OCA\Budget\Service\BillService;
+use OCA\Budget\Service\PensionRecurringService;
 use OCA\Budget\Service\RecurringIncomeService;
 use OCA\Budget\Service\SettingService;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -39,6 +41,8 @@ class BillReminderJob extends TimedJob {
         $billService = Server::get(BillService::class);
         $incomeMapper = Server::get(RecurringIncomeMapper::class);
         $incomeService = Server::get(RecurringIncomeService::class);
+        $pensionRecurMapper = Server::get(PensionRecurringContributionMapper::class);
+        $pensionRecurService = Server::get(PensionRecurringService::class);
         $notificationManager = Server::get(INotificationManager::class);
         $db = Server::get(IDBConnection::class);
         $logger = Server::get(LoggerInterface::class);
@@ -51,6 +55,8 @@ class BillReminderJob extends TimedJob {
             $autoPayFailedCount = 0;
             $autoCreateIncomeCount = 0;
             $autoCreateIncomeFailedCount = 0;
+            $pensionPostCount = 0;
+            $pensionPostFailedCount = 0;
             $today = new \DateTime();
             $today->setTime(0, 0, 0);
 
@@ -65,6 +71,11 @@ class BillReminderJob extends TimedJob {
                     $autoCreate = $this->processAutoCreateIncomeForUser($userId, $incomeMapper, $incomeService, $notificationManager, $settingService, $logger);
                     $autoCreateIncomeCount += $autoCreate['success'];
                     $autoCreateIncomeFailedCount += $autoCreate['failed'];
+
+                    // Process auto-post for recurring pension contributions (#251)
+                    $pensionPost = $this->processAutoPostPensionsForUser($userId, $pensionRecurMapper, $pensionRecurService, $logger);
+                    $pensionPostCount += $pensionPost['success'];
+                    $pensionPostFailedCount += $pensionPost['failed'];
 
                     $bills = $billMapper->findActive($userId);
 
@@ -109,9 +120,9 @@ class BillReminderJob extends TimedJob {
                 }
             }
 
-            if ($notificationCount > 0 || $autoPayCount > 0 || $autoCreateIncomeCount > 0) {
+            if ($notificationCount > 0 || $autoPayCount > 0 || $autoCreateIncomeCount > 0 || $pensionPostCount > 0) {
                 $logger->info(
-                    "Bill reminder job completed: {$notificationCount} reminders sent, {$autoPayCount} bills auto-paid, {$autoPayFailedCount} auto-pay failures, {$autoCreateIncomeCount} income auto-created, {$autoCreateIncomeFailedCount} income auto-create failures",
+                    "Bill reminder job completed: {$notificationCount} reminders sent, {$autoPayCount} bills auto-paid, {$autoPayFailedCount} auto-pay failures, {$autoCreateIncomeCount} income auto-created, {$autoCreateIncomeFailedCount} income auto-create failures, {$pensionPostCount} pension contributions posted, {$pensionPostFailedCount} pension post failures",
                     ['app' => 'budget']
                 );
             }
@@ -231,7 +242,55 @@ class BillReminderJob extends TimedJob {
         }
         $result2->closeCursor();
 
+        // Users with auto-post pension contribution schedules (#251)
+        $qb3 = $db->getQueryBuilder();
+        $qb3->selectDistinct('user_id')
+            ->from('budget_pen_recur')
+            ->where($qb3->expr()->eq('is_active', $qb3->createNamedParameter(true)))
+            ->andWhere($qb3->expr()->eq('auto_post_enabled', $qb3->createNamedParameter(true)));
+
+        $result3 = $qb3->executeQuery();
+        while ($row = $result3->fetch()) {
+            $userIds[$row['user_id']] = true;
+        }
+        $result3->closeCursor();
+
         return array_keys($userIds);
+    }
+
+    /**
+     * Auto-post due recurring pension contributions for a user (#251).
+     *
+     * @return array{success: int, failed: int}
+     */
+    private function processAutoPostPensionsForUser(
+        string $userId,
+        PensionRecurringContributionMapper $recurMapper,
+        PensionRecurringService $recurService,
+        LoggerInterface $logger
+    ): array {
+        $successCount = 0;
+        $failedCount = 0;
+
+        try {
+            $due = $recurMapper->findDueForAutoPost($userId);
+            foreach ($due as $schedule) {
+                $result = $recurService->processAutoPost($schedule->getId(), $userId);
+                if ($result['success']) {
+                    $successCount++;
+                } else {
+                    $failedCount++;
+                    $logger->warning(
+                        "Pension auto-post failed for schedule {$schedule->getId()} (user {$userId}): " . ($result['message'] ?? 'unknown'),
+                        ['app' => 'budget']
+                    );
+                }
+            }
+        } catch (\Exception $e) {
+            $logger->warning("Pension auto-post processing failed for user {$userId}: " . $e->getMessage(), ['app' => 'budget']);
+        }
+
+        return ['success' => $successCount, 'failed' => $failedCount];
     }
 
     /**

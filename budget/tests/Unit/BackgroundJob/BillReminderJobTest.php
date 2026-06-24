@@ -7,8 +7,10 @@ namespace OCA\Budget\Tests\Unit\BackgroundJob;
 use OCA\Budget\BackgroundJob\BillReminderJob;
 use OCA\Budget\Db\Bill;
 use OCA\Budget\Db\BillMapper;
+use OCA\Budget\Db\PensionRecurringContributionMapper;
 use OCA\Budget\Db\RecurringIncomeMapper;
 use OCA\Budget\Service\BillService;
+use OCA\Budget\Service\PensionRecurringService;
 use OCA\Budget\Service\RecurringIncomeService;
 use OCA\Budget\Service\SettingService;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -31,6 +33,10 @@ class BillReminderJobTest extends TestCase {
 	private IDBConnection $db;
 	private LoggerInterface $logger;
 	private SettingService $settingService;
+	/** @var PensionRecurringContributionMapper&\PHPUnit\Framework\MockObject\MockObject */
+	private $pensionRecurMapper;
+	/** @var PensionRecurringService&\PHPUnit\Framework\MockObject\MockObject */
+	private $pensionRecurService;
 
 	protected function setUp(): void {
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
@@ -42,6 +48,8 @@ class BillReminderJobTest extends TestCase {
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->settingService = $this->createMock(SettingService::class);
+		$this->pensionRecurMapper = $this->createMock(PensionRecurringContributionMapper::class);
+		$this->pensionRecurService = $this->createMock(PensionRecurringService::class);
 
 		$container = $this->createMock(ContainerInterface::class);
 		$container->method('get')->willReturnMap([
@@ -49,6 +57,8 @@ class BillReminderJobTest extends TestCase {
 			[BillService::class, $this->billService],
 			[RecurringIncomeMapper::class, $this->incomeMapper],
 			[RecurringIncomeService::class, $this->incomeService],
+			[PensionRecurringContributionMapper::class, $this->pensionRecurMapper],
+			[PensionRecurringService::class, $this->pensionRecurService],
 			[INotificationManager::class, $this->notificationManager],
 			[IDBConnection::class, $this->db],
 			[LoggerInterface::class, $this->logger],
@@ -56,8 +66,9 @@ class BillReminderJobTest extends TestCase {
 		]);
 		\OC::$server = $container;
 
-		// Default: no income due for auto-create
+		// Default: no income due for auto-create, no pension schedules due
 		$this->incomeMapper->method('findDueForAutoCreate')->willReturn([]);
+		$this->pensionRecurMapper->method('findDueForAutoPost')->willReturn([]);
 
 		$this->job = new BillReminderJob($this->timeFactory);
 	}
