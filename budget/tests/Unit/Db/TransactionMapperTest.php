@@ -879,6 +879,48 @@ class TransactionMapperTest extends TestCase {
         $this->assertEquals(3000.00, $data[0]['expenses']);
     }
 
+    /**
+     * The income-vs-expense trend (#219) must left-join budget_categories so it
+     * can drop transactions in excluded-from-reports categories. Guards against
+     * the exclusion wiring being silently removed (this bug regressed repeatedly
+     * when exclusion lived in scattered PHP filters instead of the query).
+     */
+    public function testGetMonthlyTrendDataLeftJoinsCategoriesForExclusion(): void {
+        $joinedTables = [];
+        $this->qb->expects($this->atLeastOnce())
+            ->method('leftJoin')
+            ->willReturnCallback(function ($from, $table, $alias, $cond = null) use (&$joinedTables) {
+                $joinedTables[] = $table;
+                return $this->qb;
+            });
+        $this->result->method('fetchAll')->willReturn([]);
+        $this->result->method('closeCursor');
+        $this->qb->method('executeQuery')->willReturn($this->result);
+
+        $this->mapper->getMonthlyTrendData('user1', null, '2026-01-01', '2026-01-31');
+
+        $this->assertContains('budget_categories', $joinedTables,
+            'getMonthlyTrendData must left-join budget_categories to exclude flagged categories (#219)');
+    }
+
+    public function testGetMonthlyTrendDataByAccountLeftJoinsCategoriesForExclusion(): void {
+        $joinedTables = [];
+        $this->qb->expects($this->atLeastOnce())
+            ->method('leftJoin')
+            ->willReturnCallback(function ($from, $table, $alias, $cond = null) use (&$joinedTables) {
+                $joinedTables[] = $table;
+                return $this->qb;
+            });
+        $this->result->method('fetchAll')->willReturn([]);
+        $this->result->method('closeCursor');
+        $this->qb->method('executeQuery')->willReturn($this->result);
+
+        $this->mapper->getMonthlyTrendDataByAccount('user1', '2026-01-01', '2026-01-31');
+
+        $this->assertContains('budget_categories', $joinedTables,
+            'getMonthlyTrendDataByAccount must left-join budget_categories to exclude flagged categories (#219)');
+    }
+
     // ===== getTagTrendByMonth =====
 
     public function testGetTagTrendByMonthReturnsEmptyForEmptyTagIds(): void {

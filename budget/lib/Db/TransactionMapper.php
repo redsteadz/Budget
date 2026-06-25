@@ -66,6 +66,34 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * Add a condition that drops transactions whose CATEGORY is flagged
+     * excluded_from_reports (#219). NULL/unflagged categories are kept. Use this
+     * overload when budget_categories is already joined under $alias.
+     *
+     * This is the single SQL-level choke point for category exclusion: every
+     * report/insight aggregate must route through here (or its left-join
+     * companion below) so a new report can't silently re-introduce the leak the
+     * way the old per-consumer PHP filtering did.
+     */
+    private function excludeReportExcludedCategories(IQueryBuilder $qb, string $alias = 'c'): void {
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->isNull($alias . '.excluded_from_reports'),
+            $qb->expr()->eq($alias . '.excluded_from_reports', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL))
+        ));
+    }
+
+    /**
+     * Left-join budget_categories and drop transactions whose category is flagged
+     * excluded_from_reports (#219). For aggregates that don't otherwise need the
+     * category table (e.g. monthly income/expense trends). A LEFT join keeps
+     * uncategorised (NULL category) transactions, which are never "excluded".
+     */
+    private function leftJoinExcludeReportCategories(IQueryBuilder $qb, string $txAlias = 't', string $catAlias = 'exc'): void {
+        $qb->leftJoin($txAlias, 'budget_categories', $catAlias, $qb->expr()->eq($txAlias . '.category_id', $catAlias . '.id'));
+        $this->excludeReportExcludedCategories($qb, $catAlias);
+    }
+
+    /**
      * @throws DoesNotExistException
      */
     public function find(int $id, string $userId): Transaction {
@@ -825,6 +853,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter($transactionType)));
 
         $this->excludeScheduledFuture($qb);
+        $this->excludeReportExcludedCategories($qb, 'c');
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -889,6 +918,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.is_split', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)));
 
         $this->excludeScheduledFuture($qb);
+        $this->excludeReportExcludedCategories($qb, 'c');
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1844,6 +1874,9 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
         $this->excludeScheduledFuture($qb);
+        // Income-vs-expense trend must drop transactions in excluded-from-reports
+        // categories (#219); uncategorised transactions are kept.
+        $this->leftJoinExcludeReportCategories($qb, 't', 'exc');
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1906,6 +1939,9 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->lte('t.date', $qb->createNamedParameter($endDate)));
 
         $this->excludeScheduledFuture($qb);
+        // Income-vs-expense trend must drop transactions in excluded-from-reports
+        // categories (#219); uncategorised transactions are kept.
+        $this->leftJoinExcludeReportCategories($qb, 't', 'exc');
 
         if ($excludeTransfers) {
             $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));
