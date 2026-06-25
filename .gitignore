@@ -55,3 +55,8 @@ budget/js/budget-app.js.LICENSE.txt
 .claude/
 CLAUDE.md
 .claudeignore
+
+# Marketing website (origin-only; force-added to origin, stripped from the GitHub
+# graft alongside .claude, and blocked by the pre-push hook). Deployed separately
+# to budget.otherworld.dev.
+website/

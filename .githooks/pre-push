@@ -1,11 +1,12 @@
 #!/bin/sh
 #
-# pre-push guard: never let .claude/ (config, memory, signing keys) reach GitHub.
+# pre-push guard: never let .claude/ or website/ reach GitHub.
 #
 # A leaked .claude/certificates/budget.key once hit public GitHub via a plain
 # `git push github master` whose history contained the .claude commits. This
 # hook aborts any push to a github.com remote if the pushed history touches
-# .claude. The self-hosted origin (which intentionally tracks .claude) is not
+# .claude (config, memory, signing keys) or website/ (the marketing site, kept
+# origin-only). The self-hosted origin (which intentionally tracks both) is not
 # affected.
 #
 # Versioned in the repo at .githooks/. Activate per clone with:
@@ -37,12 +38,12 @@ while read -r local_ref local_sha remote_ref remote_sha; do
 		range="$remote_sha..$local_sha"
 	fi
 
-	if [ -n "$(git log --oneline "$range" -- .claude 2>/dev/null)" ]; then
+	if [ -n "$(git log --oneline "$range" -- .claude website 2>/dev/null)" ]; then
 		echo "" >&2
-		echo "pre-push BLOCKED: '$local_ref' has .claude/ in its history." >&2
+		echo "pre-push BLOCKED: '$local_ref' has .claude/ or website/ in its history." >&2
 		echo "  Refusing to push it to GitHub ($remote_url)." >&2
-		echo "  GitHub must never receive .claude (config, memory, signing keys)." >&2
-		echo "  Push a .claude-free history instead (filter/cherry-pick onto github's clean base)." >&2
+		echo "  GitHub must never receive .claude (config, memory, signing keys) or website/ (origin-only)." >&2
+		echo "  Push a clean history instead (graft onto github's base, stripping .claude and website)." >&2
 		echo "" >&2
 		status=1
 	fi
