@@ -1952,6 +1952,33 @@ export default class DashboardModule {
         `;
     }
 
+    updatePensionProjectionWidget() {
+        const container = document.getElementById('pension-projection-widget-content');
+        if (!container) return;
+
+        const data = this.widgetData.pensionProjection;
+        if (!data || !data.pensionCount) {
+            container.innerHTML = `<div class="empty-state-small">${t('budget', 'No pensions to project')}</div>`;
+            return;
+        }
+
+        const ageHint = (data.currentAge === null || data.currentAge === undefined)
+            ? `<div class="widget-subtext">${t('budget', 'Set your date of birth in your Nextcloud profile for an accurate horizon')}</div>`
+            : '';
+
+        container.innerHTML = `
+            <div class="widget-stat">
+                <div class="widget-stat-value">${this.formatCurrency(data.totalProjectedValue || 0)}</div>
+                <div class="widget-stat-label">${t('budget', 'Projected at retirement')}</div>
+            </div>
+            <div class="widget-stat">
+                <div class="widget-stat-value">${this.formatCurrency(data.totalProjectedAnnualIncome || 0)}</div>
+                <div class="widget-stat-label">${t('budget', 'Projected income / yr')}</div>
+            </div>
+            ${ageHint}
+        `;
+    }
+
     updateUnmatchedTransfersWidget() {
         const container = document.getElementById('unmatched-transfers-list');
         if (!container) return;
@@ -3108,6 +3135,17 @@ export default class DashboardModule {
             this.addTileControls();
         }
 
+        // Lazy-load + render data for a just-added widget so it populates
+        // immediately instead of only after a page refresh.
+        if (this.app.needsLazyLoad(widgetId) && !this.isDuplicateInstance(widgetId) && !this.widgetDataLoaded[widgetId]) {
+            await this.app.loadWidgetData(widgetId);
+            const suffix = category === 'hero' ? 'Hero' : 'Widget';
+            const updateMethod = `update${widgetId.charAt(0).toUpperCase() + widgetId.slice(1)}${suffix}`;
+            if (typeof this[updateMethod] === 'function') {
+                this[updateMethod]();
+            }
+        }
+
         this.updateAddTilesMenu();
         await this.saveDashboardVisibility();
     }
@@ -3697,6 +3735,15 @@ export default class DashboardModule {
                         { headers: { 'requesttoken': OC.requestToken } }
                     );
                     this.widgetData.largeTransactions = await largeResp.json();
+                    break;
+                }
+
+                case 'pensionProjection': {
+                    const pensionResp = await fetch(
+                        OC.generateUrl('/apps/budget/api/pensions/projection'),
+                        { headers: { 'requesttoken': OC.requestToken } }
+                    );
+                    this.widgetData.pensionProjection = pensionResp.ok ? await pensionResp.json() : null;
                     break;
                 }
 
@@ -4384,6 +4431,7 @@ export default class DashboardModule {
             // Phase 2+ widgets
             'monthlyComparison': () => this.updateMonthlyComparisonWidget?.(),
             'largeTransactions': () => this.updateLargeTransactionsWidget?.(),
+            'pensionProjection': () => this.updatePensionProjectionWidget?.(),
             'weeklyTrend': () => this.updateWeeklyTrendWidget?.(),
             'categoryTrends': () => this.updateCategoryTrendsWidget?.(),
             'billsDueSoon': () => this.updateBillsDueSoonWidget?.(),

@@ -2262,6 +2262,10 @@ export default class TransactionsModule {
             message += '\n\n' + t('budget', 'This transaction was reconciled against a bank statement. Deleting it will make past reconciliations no longer match.');
         }
 
+        if (transaction?.pensionContribId) {
+            message += '\n\n' + t('budget', 'This transaction funds a pension contribution. Deleting it will unlink it from that contribution (the contribution itself is kept).');
+        }
+
         if (!confirm(message)) {
             return;
         }

@@ -1115,6 +1115,9 @@ class BudgetApp {
             const attachmentBadge = attachmentCount
                 ? `<span class="attachment-indicator" title="${n('budget', '%n receipt attached', '%n receipts attached', attachmentCount)}">&#x1F4CE;${attachmentCount > 1 ? ' ' + attachmentCount : ''}</span>`
                 : '';
+            const pensionBadge = transaction.pensionContribId
+                ? `<span class="pension-indicator" title="${t('budget', 'Funds a pension contribution — excluded from spending')}">${t('budget', 'Pension')}</span>`
+                : '';
             return `
                 <tr class="transaction-row ${isLinked ? 'is-linked' : ''}${transaction.reconciled ? ' is-reconciled' : ''}${transaction.status === 'scheduled' ? ' scheduled-transaction' : ''}${transaction.status === 'pending' ? ' pending-transaction' : ''}" data-transaction-id="${transaction.id}">
                     <td class="select-column">
@@ -1135,7 +1138,7 @@ class BudgetApp {
                         <div class="transaction-description">
                             <span class="primary-text cell-display">${this.escapeHtml(transaction.description) || t('budget', 'No description')}</span>
                             ${transaction.reference ? `<span class="secondary-text">${this.escapeHtml(transaction.reference)}</span>` : ''}
-                            ${(linkedBadge || splitBadge || sharedBadge || pendingBadge || forecastExcludedBadge || attachmentBadge) ? `<div class="transaction-badges">${pendingBadge}${forecastExcludedBadge}${attachmentBadge}${linkedBadge}${splitBadge}${sharedBadge}</div>` : ''}
+                            ${(linkedBadge || splitBadge || sharedBadge || pendingBadge || forecastExcludedBadge || attachmentBadge || pensionBadge) ? `<div class="transaction-badges">${pendingBadge}${forecastExcludedBadge}${attachmentBadge}${linkedBadge}${splitBadge}${sharedBadge}${pensionBadge}</div>` : ''}
                         </div>
                     </td>
                     <td class="vendor-column editable-cell"

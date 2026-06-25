@@ -848,6 +848,15 @@ style('budget', 'budget-app');
                         </div>
                     </div>
 
+                    <div id="pension-projection-card" class="dashboard-card dashboard-tile-s" data-widget-id="pensionProjection" data-widget-category="widget" style="display: none;">
+                        <div class="card-header">
+                            <h3><?php p($l->t('Pension Projection')); ?></h3>
+                        </div>
+                        <div id="pension-projection-widget-content" class="widget-content">
+                            <div class="empty-state-small"><?php p($l->t('Loading...')); ?></div>
+                        </div>
+                    </div>
+
                     <!-- Phase 2: Lazy-Loaded Widget Tiles -->
                     <div id="monthly-comparison-card" class="dashboard-card dashboard-tile-m" data-widget-id="monthlyComparison" data-widget-category="widget" style="display: none;">
                         <div class="card-header">

@@ -68,6 +68,7 @@ export const DASHBOARD_WIDGETS = {
         goalsSummary: { id: 'goals-summary-card', name: t('budget', 'Savings Goals Summary'), defaultSize: 's', allowedSizes: ['xs', 's', 'm', 'l'], defaultVisible: false, category: 'goals', settingsSchema: {} },
         paymentBreakdown: { id: 'payment-breakdown-card', name: t('budget', 'Payment Methods'), defaultSize: 's', allowedSizes: ['xs', 's', 'm', 'l'], defaultVisible: false, category: 'insights', settingsSchema: {} },
         reconciliationStatus: { id: 'reconciliation-card', name: t('budget', 'Reconciliation Status'), defaultSize: 's', allowedSizes: ['xs', 's', 'm', 'l'], defaultVisible: false, category: 'transactions', settingsSchema: {} },
+        pensionProjection: { id: 'pension-projection-card', name: t('budget', 'Pension Projection'), defaultSize: 's', allowedSizes: ['xs', 's', 'm', 'l'], defaultVisible: false, category: 'insights', settingsSchema: {} },
 
         // Phase 2 - Moderate Complexity (lazy loaded)
         monthlyComparison: { id: 'monthly-comparison-card', name: t('budget', 'Monthly Comparison'), defaultSize: 'hero', defaultVisible: false, category: 'insights', settingsSchema: { dateRange: true, accountSelector: true, showLegend: true } },
