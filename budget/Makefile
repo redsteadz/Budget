@@ -100,6 +100,7 @@ build: clean composer build-js
 	--exclude=".eslintrc.js" \
 	--exclude="psalm.xml" \
 	--exclude="*.log" \
+	--exclude=".htaccess" \
 	./ $(build_dir)/$(app_name)
 
 # Create tarball for app store

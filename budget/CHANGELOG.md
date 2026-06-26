@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Code-integrity **"Some files have not passed the integrity check"** errors reporting `FILE_MISSING` for `js/.htaccess` and `vendor/tecnickcom/tcpdf/tools/.htaccess`. The app no longer ships any `.htaccess` files — the Nextcloud App Store strips them from the published archive, which left the signature expecting files that were no longer present. Neither file was needed (the JS one only set a redundant cache header) ([#307](https://github.com/otherworld-dev/Budget/issues/307))
+
 ## [2.35.1] - 2026-06-25
 
 ### Fixed
