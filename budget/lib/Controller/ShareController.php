@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OCA\Budget\Controller;
 
 use OCA\Budget\AppInfo\Application;
+use OCA\Budget\Service\AutoShareService;
 use OCA\Budget\Service\GranularShareService;
 use OCA\Budget\Service\ShareService;
 use OCA\Budget\Traits\ApiErrorHandlerTrait;
@@ -24,6 +25,7 @@ class ShareController extends Controller {
     private GranularShareService $granularShareService;
     private IL10N $l;
     private string $userId;
+    private ?AutoShareService $autoShareService;
 
     public function __construct(
         IRequest $request,
@@ -31,7 +33,8 @@ class ShareController extends Controller {
         GranularShareService $granularShareService,
         IL10N $l,
         string $userId,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?AutoShareService $autoShareService = null
     ) {
         parent::__construct(Application::APP_ID, $request);
         $this->shareService = $shareService;
@@ -39,6 +42,7 @@ class ShareController extends Controller {
         $this->l = $l;
         $this->userId = $userId;
         $this->setLogger($logger);
+        $this->autoShareService = $autoShareService;
     }
 
     /**
@@ -228,6 +232,46 @@ class ShareController extends Controller {
             return $this->handleNotFoundError($e, $this->l->t('Share'));
         } catch (\Exception $e) {
             return $this->handleError($e, $this->l->t('Failed to update share configuration'));
+        }
+    }
+
+    /**
+     * Get auto-share rules for a share (owner only): a map of entity type to the
+     * permission newly-created entities of that type are shared at. (#306)
+     *
+     * @NoAdminRequired
+     */
+    public function getAutoConfig(int $id): DataResponse {
+        try {
+            $configs = $this->autoShareService->getConfigs($this->userId, $id);
+            $map = [];
+            foreach ($configs as $cfg) {
+                $map[$cfg->getEntityType()] = $cfg->getPermission();
+            }
+            return new DataResponse($map);
+        } catch (\InvalidArgumentException $e) {
+            return $this->handleValidationError($e);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to retrieve auto-share configuration'));
+        }
+    }
+
+    /**
+     * Enable or disable auto-sharing of an entity type for a share.
+     * Body: { "enabled": true, "permission": "read" } (#306)
+     *
+     * @NoAdminRequired
+     */
+    public function updateAutoConfig(int $id, string $type): DataResponse {
+        try {
+            $enabled = filter_var($this->request->getParam('enabled', false), FILTER_VALIDATE_BOOLEAN);
+            $permission = $this->request->getParam('permission', 'read');
+            $this->autoShareService->setConfig($this->userId, $id, $type, $enabled, (string) $permission);
+            return new DataResponse(['status' => 'success']);
+        } catch (\InvalidArgumentException $e) {
+            return $this->handleValidationError($e);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to update auto-share configuration'));
         }
     }
 }

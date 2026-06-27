@@ -215,6 +215,9 @@ export default class SharingModule {
         try {
             // Only fetch the share config — use cached app state for entity lists
             const config = await this.fetchApi(`/apps/budget/api/shares/${shareId}/items`);
+            // Auto-share rules (map of entity type -> permission). Tolerate older
+            // backends without the endpoint by falling back to none.
+            const autoConfig = await this.fetchApi(`/apps/budget/api/shares/${shareId}/auto-config`).catch(() => ({}));
 
             // Use app state for entity lists (already loaded by loadInitialData)
             const accounts = this.app.accounts || [];
@@ -229,14 +232,14 @@ export default class SharingModule {
                 bill: this.app.bills || [],
                 recurring_income: this.app.recurringIncome || [],
                 savings_goal: this.app.savingsGoals || [],
-            });
+            }, autoConfig || {});
         } catch (error) {
             console.error('Failed to load config:', error);
             panel.innerHTML = `<p class="sharing-error">${t('budget', 'Failed to load configuration')}</p>`;
         }
     }
 
-    renderConfigPanel(panel, shareId, config, entities) {
+    renderConfigPanel(panel, shareId, config, entities, autoConfig = {}) {
         const sections = [
             { type: 'account', label: t('budget', 'Accounts'), nameField: 'name' },
             { type: 'category', label: t('budget', 'Categories'), nameField: 'name' },
@@ -258,6 +261,10 @@ export default class SharingModule {
                             <div class="share-config-section-header">
                                 <h4>${section.label}</h4>
                                 <div class="share-config-header-actions">
+                                    <label class="share-config-autoshare-label" title="${t('budget', 'Automatically share new items of this type at the permission selected here')}">
+                                        <input type="checkbox" class="share-config-autoshare" data-type="${section.type}" ${autoConfig[section.type] ? 'checked' : ''} />
+                                        <span>${t('budget', 'Auto-share new')}</span>
+                                    </label>
                                     <button class="btn btn-small btn-select-all" data-type="${section.type}">${t('budget', 'Select All')}</button>
                                     <select class="share-config-permission" data-type="${section.type}">
                                         <option value="read" ${currentConfig.permission === 'read' ? 'selected' : ''}>${t('budget', 'Read only')}</option>
@@ -332,6 +339,18 @@ export default class SharingModule {
                 });
             } catch (e) {
                 errors.push(type);
+            }
+
+            // Persist the "auto-share new" rule for this type at the same permission.
+            const autoToggle = section.querySelector('.share-config-autoshare');
+            try {
+                await this.fetchApi(`/apps/budget/api/shares/${shareId}/auto-config/${type}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled: !!(autoToggle && autoToggle.checked), permission }),
+                });
+            } catch (e) {
+                errors.push(type + ' (auto-share)');
             }
         }
 

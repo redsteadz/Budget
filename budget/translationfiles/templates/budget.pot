@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2026-06-25 14:52+0000\n"
+"POT-Creation-Date: 2026-06-27 02:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -495,19 +495,19 @@ msgid "Name and amount are required"
 msgstr ""
 
 #: /app/lib/Controller/BillController.php:165
-#: /app/lib/Service/BillService.php:198 /app/lib/Service/BillService.php:276
+#: /app/lib/Service/BillService.php:202 /app/lib/Service/BillService.php:284
 msgid "Auto-pay requires an account to be set"
 msgstr ""
 
 #: /app/lib/Controller/BillController.php:173
 #: /app/lib/Controller/BillController.php:543
-#: /app/lib/Service/BillService.php:203
+#: /app/lib/Service/BillService.php:207
 msgid "Transfer requires a destination account"
 msgstr ""
 
 #: /app/lib/Controller/BillController.php:181
 #: /app/lib/Controller/BillController.php:571
-#: /app/lib/Service/BillService.php:208
+#: /app/lib/Service/BillService.php:212
 #: /app/src/modules/transfers/TransfersModule.js:618
 msgid "Cannot transfer to the same account"
 msgstr ""
@@ -1664,62 +1664,70 @@ msgstr ""
 msgid "Failed to get system info"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:54
-#: /app/lib/Controller/ShareController.php:68
+#: /app/lib/Controller/ShareController.php:58
+#: /app/lib/Controller/ShareController.php:72
 msgid "Failed to retrieve shares"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:82
+#: /app/lib/Controller/ShareController.php:86
 msgid "Failed to retrieve pending shares"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:99
+#: /app/lib/Controller/ShareController.php:103
 msgid "Failed to create share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:115
-#: /app/lib/Controller/ShareController.php:133
-#: /app/lib/Controller/ShareController.php:151
-#: /app/lib/Controller/ShareController.php:169
-#: /app/lib/Controller/ShareController.php:194
-#: /app/lib/Controller/ShareController.php:228
+#: /app/lib/Controller/ShareController.php:119
+#: /app/lib/Controller/ShareController.php:137
+#: /app/lib/Controller/ShareController.php:155
+#: /app/lib/Controller/ShareController.php:173
+#: /app/lib/Controller/ShareController.php:198
+#: /app/lib/Controller/ShareController.php:232
 msgid "Share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:117
-#: /app/src/modules/sharing/SharingModule.js:385
+#: /app/lib/Controller/ShareController.php:121
+#: /app/src/modules/sharing/SharingModule.js:404
 msgid "Failed to accept share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:135
-#: /app/src/modules/sharing/SharingModule.js:393
+#: /app/lib/Controller/ShareController.php:139
+#: /app/src/modules/sharing/SharingModule.js:412
 msgid "Failed to decline share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:153
-#: /app/src/modules/sharing/SharingModule.js:403
+#: /app/lib/Controller/ShareController.php:157
+#: /app/src/modules/sharing/SharingModule.js:422
 msgid "Failed to revoke share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:171
-#: /app/src/modules/sharing/SharingModule.js:413
+#: /app/lib/Controller/ShareController.php:175
+#: /app/src/modules/sharing/SharingModule.js:432
 msgid "Failed to leave share"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:188
+#: /app/lib/Controller/ShareController.php:192
 msgid "Share not found"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:196
+#: /app/lib/Controller/ShareController.php:200
 msgid "Failed to retrieve share configuration"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:212
+#: /app/lib/Controller/ShareController.php:216
 msgid "Invalid entity IDs"
 msgstr ""
 
-#: /app/lib/Controller/ShareController.php:230
+#: /app/lib/Controller/ShareController.php:234
 msgid "Failed to update share configuration"
+msgstr ""
+
+#: /app/lib/Controller/ShareController.php:255
+msgid "Failed to retrieve auto-share configuration"
+msgstr ""
+
+#: /app/lib/Controller/ShareController.php:274
+msgid "Failed to update auto-share configuration"
 msgstr ""
 
 #: /app/lib/Controller/SharedExpenseController.php:65
@@ -2111,7 +2119,7 @@ msgid "overdue"
 msgstr ""
 
 #: /app/lib/Dashboard/UpcomingBillsWidget.php:119
-#: /app/lib/Notification/Notifier.php:56
+#: /app/lib/Notification/Notifier.php:57
 msgid "due today"
 msgstr ""
 
@@ -2121,7 +2129,7 @@ msgid_plural "due in %n days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /app/lib/Notification/Notifier.php:30 /app/lib/Service/DigestService.php:150
+#: /app/lib/Notification/Notifier.php:31 /app/lib/Service/DigestService.php:150
 #: /app/specialAppInfoFakeDummyForL10nScript.php:2 /app/src/main.js:859
 #: /app/src/modules/categories/CategoriesModule.js:688
 #: /app/src/modules/categories/CategoriesModule.js:1788
@@ -2131,118 +2139,118 @@ msgstr[1] ""
 msgid "Budget"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:45
+#: /app/lib/Notification/Notifier.php:46
 msgid "Bill reminder: {bill}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:59
+#: /app/lib/Notification/Notifier.php:60
 msgid "due tomorrow"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:60
+#: /app/lib/Notification/Notifier.php:61
 #, php-format
 msgid "due in %s days"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:65
+#: /app/lib/Notification/Notifier.php:66
 msgid "{bill} ({amount}) is {dueText}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:98
+#: /app/lib/Notification/Notifier.php:99
 msgid "Overdue bill: {bill}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:110
+#: /app/lib/Notification/Notifier.php:111
 msgid "1 day overdue"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:111
+#: /app/lib/Notification/Notifier.php:112
 #, php-format
 msgid "%s days overdue"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:115
+#: /app/lib/Notification/Notifier.php:116
 msgid "{bill} ({amount}) is {overdueText}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:148
+#: /app/lib/Notification/Notifier.php:149
 msgid "Bill auto-paid: {bill}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:160
+#: /app/lib/Notification/Notifier.php:161
 msgid "{bill} ({amount}) was automatically paid. Next due: {nextDueDate}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:193
+#: /app/lib/Notification/Notifier.php:194
 msgid "Auto-pay failed: {bill}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:205
+#: /app/lib/Notification/Notifier.php:206
 msgid ""
 "Failed to auto-pay {bill} ({amount}). Auto-pay has been disabled. Reason: "
 "{reason}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:238
+#: /app/lib/Notification/Notifier.php:239
 msgid "Income auto-created: {income}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:250
+#: /app/lib/Notification/Notifier.php:251
 msgid ""
 "{income} ({amount}) transaction was automatically created. Next expected: "
 "{nextExpectedDate}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:283
+#: /app/lib/Notification/Notifier.php:284
 msgid "Auto-create failed: {income}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:295
+#: /app/lib/Notification/Notifier.php:296
 msgid ""
 "Failed to auto-create transaction for {income} ({amount}). Reason: {reason}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:328
+#: /app/lib/Notification/Notifier.php:329
 msgid "{user} shared their budget with you"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:340
+#: /app/lib/Notification/Notifier.php:341
 msgid ""
 "{user} has invited you to view their budget. Open Budget to accept or "
 "decline."
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:363
+#: /app/lib/Notification/Notifier.php:364
 #: /app/lib/Service/DigestService.php:127
 msgid "Your monthly budget digest"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:364
+#: /app/lib/Notification/Notifier.php:365
 #: /app/lib/Service/DigestService.php:126
 msgid "Your weekly budget digest"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:369
+#: /app/lib/Notification/Notifier.php:370
 msgid ""
 "Income {income}, spending {expenses} ({net} net). {bills} bills due soon."
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:391
+#: /app/lib/Notification/Notifier.php:392
 msgid "Unusual spending in {category}"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:399
+#: /app/lib/Notification/Notifier.php:400
 #, php-format
 msgid ""
 "{category} spending is {percent}%% above your typical level — {amount} so "
 "far this month."
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:420
+#: /app/lib/Notification/Notifier.php:421
 msgid "Your Budget report for {month} is ready"
 msgstr ""
 
-#: /app/lib/Notification/Notifier.php:428
+#: /app/lib/Notification/Notifier.php:429
 msgid "{file} was saved to your Files."
 msgstr ""
 
@@ -2250,7 +2258,7 @@ msgstr ""
 msgid "Budget transactions"
 msgstr ""
 
-#: /app/lib/Service/AccountService.php:95
+#: /app/lib/Service/AccountService.php:103
 msgid ""
 "Cannot delete account with existing transactions. Please delete all "
 "transactions first."
@@ -2276,7 +2284,7 @@ msgstr ""
 
 #: /app/lib/Service/Bill/BillIcsService.php:54 /app/src/main.js:861
 #: /app/src/modules/dashboard/DashboardModule.js:4590
-#: /app/src/modules/sharing/SharingModule.js:243 /app/templates/index.php:113
+#: /app/src/modules/sharing/SharingModule.js:246 /app/templates/index.php:113
 #: /app/templates/index.php:2418 /app/templates/index.php:5034
 msgid "Bills"
 msgstr ""
@@ -2286,46 +2294,46 @@ msgstr ""
 msgid "Bill due: %1$s"
 msgstr ""
 
-#: /app/lib/Service/BillService.php:562
+#: /app/lib/Service/BillService.php:570
 msgid "Cannot skip a one-time bill"
 msgstr ""
 
-#: /app/lib/Service/BillService.php:566
+#: /app/lib/Service/BillService.php:574
 msgid "Cannot skip an inactive bill"
 msgstr ""
 
-#: /app/lib/Service/BillService.php:974
+#: /app/lib/Service/BillService.php:982
 msgid "Auto-pay is not enabled for this bill"
 msgstr ""
 
-#: /app/lib/Service/BillService.php:987
+#: /app/lib/Service/BillService.php:995
 msgid "Bill has no account associated"
 msgstr ""
 
-#: /app/lib/Service/BillService.php:997
+#: /app/lib/Service/BillService.php:1005
 msgid "Bill auto-paid successfully"
 msgstr ""
 
-#: /app/lib/Service/CategoryService.php:135
-#: /app/lib/Service/CategoryService.php:170
+#: /app/lib/Service/CategoryService.php:137
+#: /app/lib/Service/CategoryService.php:176
 msgid "A category with this name already exists at this level"
 msgstr ""
 
-#: /app/lib/Service/CategoryService.php:160
+#: /app/lib/Service/CategoryService.php:166
 msgid "Category cannot be its own parent"
 msgstr ""
 
-#: /app/lib/Service/CategoryService.php:188
+#: /app/lib/Service/CategoryService.php:194
 msgid ""
 "Cannot delete this category because it has transactions assigned to it. "
 "Please reassign or delete them first."
 msgstr ""
 
-#: /app/lib/Service/CategoryService.php:350
+#: /app/lib/Service/CategoryService.php:356
 msgid "A budget adjustment already exists for this month"
 msgstr ""
 
-#: /app/lib/Service/CategoryService.php:426
+#: /app/lib/Service/CategoryService.php:432
 msgid "No budget snapshot found for this category and month"
 msgstr ""
 
@@ -2830,7 +2838,7 @@ msgid "Recent Transactions"
 msgstr ""
 
 #: /app/src/config/dashboardWidgets.js:39 /app/src/main.js:855
-#: /app/src/modules/sharing/SharingModule.js:241 /app/templates/index.php:53
+#: /app/src/modules/sharing/SharingModule.js:244 /app/templates/index.php:53
 #: /app/templates/index.php:659 /app/templates/index.php:728
 #: /app/templates/index.php:1028 /app/templates/index.php:1110
 #: /app/templates/index.php:5026
@@ -2851,7 +2859,7 @@ msgid "Budget Progress"
 msgstr ""
 
 #: /app/src/config/dashboardWidgets.js:43 /app/src/main.js:863
-#: /app/src/modules/sharing/SharingModule.js:245 /app/templates/index.php:133
+#: /app/src/modules/sharing/SharingModule.js:248 /app/templates/index.php:133
 #: /app/templates/index.php:707 /app/templates/index.php:2723
 msgid "Savings Goals"
 msgstr ""
@@ -3006,7 +3014,7 @@ msgid ""
 msgstr ""
 
 #: /app/src/main.js:857 /app/src/modules/dashboard/DashboardModule.js:4280
-#: /app/src/modules/sharing/SharingModule.js:242 /app/templates/index.php:73
+#: /app/src/modules/sharing/SharingModule.js:245 /app/templates/index.php:73
 #: /app/templates/index.php:1735 /app/templates/index.php:5022
 msgid "Categories"
 msgstr ""
@@ -8157,77 +8165,86 @@ msgstr ""
 msgid "Leave"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:235
+#: /app/src/modules/sharing/SharingModule.js:238
 msgid "Failed to load configuration"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:244 /app/templates/index.php:2622
+#: /app/src/modules/sharing/SharingModule.js:247 /app/templates/index.php:2622
 msgid "Recurring Income"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:261
-#: /app/src/modules/sharing/SharingModule.js:305 /app/templates/index.php:1779
+#: /app/src/modules/sharing/SharingModule.js:264
+msgid ""
+"Automatically share new items of this type at the permission selected here"
+msgstr ""
+
+#: /app/src/modules/sharing/SharingModule.js:266
+msgid "Auto-share new"
+msgstr ""
+
+#: /app/src/modules/sharing/SharingModule.js:268
+#: /app/src/modules/sharing/SharingModule.js:312 /app/templates/index.php:1779
 msgid "Select All"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:263
+#: /app/src/modules/sharing/SharingModule.js:270
 msgid "Read only"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:264
+#: /app/src/modules/sharing/SharingModule.js:271
 msgid "Read & Write"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:289
+#: /app/src/modules/sharing/SharingModule.js:296
 msgid "Save Configuration"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:305
+#: /app/src/modules/sharing/SharingModule.js:312
 #: /app/src/modules/transactions/TransactionsModule.js:4077
 msgid "Deselect All"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:339
+#: /app/src/modules/sharing/SharingModule.js:358
 msgid "Failed to save some sections: {types}"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:341
+#: /app/src/modules/sharing/SharingModule.js:360
 msgid "Share configuration saved"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:367
+#: /app/src/modules/sharing/SharingModule.js:386
 msgid "Please enter a username"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:374
+#: /app/src/modules/sharing/SharingModule.js:393
 msgid "Invitation sent to {user}"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:376
+#: /app/src/modules/sharing/SharingModule.js:395
 msgid "Failed to share budget"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:382
+#: /app/src/modules/sharing/SharingModule.js:401
 msgid "Share accepted — reloading budget data"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:391
+#: /app/src/modules/sharing/SharingModule.js:410
 msgid "Share declined"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:397
+#: /app/src/modules/sharing/SharingModule.js:416
 msgid "Are you sure? The user will lose access to your budget."
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:400
+#: /app/src/modules/sharing/SharingModule.js:419
 msgid "Share revoked"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:407
+#: /app/src/modules/sharing/SharingModule.js:426
 msgid "Are you sure you want to leave this shared budget?"
 msgstr ""
 
-#: /app/src/modules/sharing/SharingModule.js:410
+#: /app/src/modules/sharing/SharingModule.js:429
 msgid "Left shared budget — reloading your data"
 msgstr ""
 

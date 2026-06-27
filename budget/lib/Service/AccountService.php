@@ -7,6 +7,7 @@ namespace OCA\Budget\Service;
 use OCA\Budget\Db\Account;
 use OCA\Budget\Db\AccountMapper;
 use OCA\Budget\Db\InterestRateMapper;
+use OCA\Budget\Db\ShareItem;
 use OCA\Budget\Db\TransactionMapper;
 use OCA\Budget\Service\GranularShareService;
 use OCP\AppFramework\Db\Entity;
@@ -21,6 +22,7 @@ class AccountService extends AbstractCrudService {
     private CurrencyConversionService $conversionService;
     private GranularShareService $granularShareService;
     private IL10N $l;
+    private ?AutoShareService $autoShareService;
 
     public function __construct(
         AccountMapper $mapper,
@@ -28,7 +30,8 @@ class AccountService extends AbstractCrudService {
         InterestRateMapper $interestRateMapper,
         CurrencyConversionService $conversionService,
         GranularShareService $granularShareService,
-        IL10N $l
+        IL10N $l,
+        ?AutoShareService $autoShareService = null
     ) {
         $this->mapper = $mapper;
         $this->transactionMapper = $transactionMapper;
@@ -36,6 +39,7 @@ class AccountService extends AbstractCrudService {
         $this->conversionService = $conversionService;
         $this->granularShareService = $granularShareService;
         $this->l = $l;
+        $this->autoShareService = $autoShareService;
     }
 
     public function create(
@@ -82,7 +86,11 @@ class AccountService extends AbstractCrudService {
         $account->setExcludedFromReports($excludedFromReports);
         $this->setTimestamps($account, true);
 
-        return $this->mapper->insert($account);
+        $account = $this->mapper->insert($account);
+        if ($this->autoShareService !== null) {
+            $this->autoShareService->autoShareNewEntity($userId, ShareItem::TYPE_ACCOUNT, $account->getId());
+        }
+        return $account;
     }
 
     /**

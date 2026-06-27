@@ -12,6 +12,7 @@ use OCA\Budget\Db\TagSetMapper;
 use OCA\Budget\Db\TagMapper;
 use OCA\Budget\Db\TransactionTagMapper;
 use OCA\Budget\Db\TransactionMapper;
+use OCA\Budget\Db\ShareItem;
 use OCP\AppFramework\Db\Entity;
 use OCP\IL10N;
 
@@ -35,7 +36,8 @@ class CategoryService extends AbstractCrudService {
         TransactionTagMapper $transactionTagMapper,
         IL10N $l,
         private BudgetCarryoverService $carryoverService,
-        private RecurringBudgetService $recurringBudgetService
+        private RecurringBudgetService $recurringBudgetService,
+        private ?AutoShareService $autoShareService = null
     ) {
         $this->mapper = $mapper;
         $this->transactionMapper = $transactionMapper;
@@ -147,7 +149,11 @@ class CategoryService extends AbstractCrudService {
         $category->setExcludedFromReports($excludedFromReports);
         $this->setTimestamps($category, true);
 
-        return $this->mapper->insert($category);
+        $category = $this->mapper->insert($category);
+        if ($this->autoShareService !== null) {
+            $this->autoShareService->autoShareNewEntity($userId, ShareItem::TYPE_CATEGORY, $category->getId());
+        }
+        return $category;
     }
 
     /**

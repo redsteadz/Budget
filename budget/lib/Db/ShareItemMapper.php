@@ -152,6 +152,26 @@ class ShareItemMapper extends QBMapper {
     }
 
     /**
+     * Add a single entity to a share if it isn't already shared (used by
+     * auto-share when a new entity is created). Returns true if a row was added.
+     */
+    public function shareEntity(int $shareId, string $entityType, int $entityId, string $permission): bool {
+        if ($this->isEntityShared($shareId, $entityType, $entityId)) {
+            return false;
+        }
+        $now = date('Y-m-d H:i:s');
+        $item = new ShareItem();
+        $item->setShareId($shareId);
+        $item->setEntityType($entityType);
+        $item->setEntityId($entityId);
+        $item->setPermission($permission);
+        $item->setCreatedAt($now);
+        $item->setUpdatedAt($now);
+        $this->insert($item);
+        return true;
+    }
+
+    /**
      * Delete all items for a share (cascade on revoke/leave)
      */
     public function deleteByShareId(int $shareId): void {

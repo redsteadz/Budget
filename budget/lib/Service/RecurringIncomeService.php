@@ -6,6 +6,7 @@ namespace OCA\Budget\Service;
 
 use OCA\Budget\Db\RecurringIncome;
 use OCA\Budget\Db\RecurringIncomeMapper;
+use OCA\Budget\Db\ShareItem;
 use OCA\Budget\Service\Bill\FrequencyCalculator;
 use OCA\Budget\Service\Income\RecurringIncomeDetector;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -22,19 +23,22 @@ class RecurringIncomeService extends AbstractCrudService {
     private RecurringIncomeDetector $recurringDetector;
     private TransactionService $transactionService;
     private LoggerInterface $logger;
+    private ?AutoShareService $autoShareService;
 
     public function __construct(
         RecurringIncomeMapper $mapper,
         FrequencyCalculator $frequencyCalculator,
         RecurringIncomeDetector $recurringDetector,
         TransactionService $transactionService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?AutoShareService $autoShareService = null
     ) {
         $this->mapper = $mapper;
         $this->frequencyCalculator = $frequencyCalculator;
         $this->recurringDetector = $recurringDetector;
         $this->transactionService = $transactionService;
         $this->logger = $logger;
+        $this->autoShareService = $autoShareService;
     }
 
     public function findActive(string $userId): array {
@@ -91,7 +95,11 @@ class RecurringIncomeService extends AbstractCrudService {
         $nextExpected = $this->frequencyCalculator->calculateNextDueDate($frequency, $expectedDay, $expectedMonth);
         $income->setNextExpectedDate($nextExpected);
 
-        return $this->mapper->insert($income);
+        $income = $this->mapper->insert($income);
+        if ($this->autoShareService !== null) {
+            $this->autoShareService->autoShareNewEntity($userId, ShareItem::TYPE_RECURRING_INCOME, $income->getId());
+        }
+        return $income;
     }
 
     public function update(int $id, string $userId, array $updates): RecurringIncome {

@@ -18678,6 +18678,21 @@ input.flatpickr-input[type="hidden"] + .flatpickr-input {
     white-space: nowrap;
 }
 
+.share-config-autoshare-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+    color: var(--color-text-maxcontrast);
+}
+
+.share-config-autoshare-label input {
+    margin: 0;
+    cursor: pointer;
+}
+
 .share-config-permission {
     padding: 4px 8px;
     border: 1px solid var(--color-border-dark);

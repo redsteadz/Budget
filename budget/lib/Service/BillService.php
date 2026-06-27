@@ -7,6 +7,7 @@ namespace OCA\Budget\Service;
 use OCA\Budget\Db\AccountMapper;
 use OCA\Budget\Db\Bill;
 use OCA\Budget\Db\BillMapper;
+use OCA\Budget\Db\ShareItem;
 use OCA\Budget\Service\Bill\FrequencyCalculator;
 use OCA\Budget\Service\Bill\RecurringBillDetector;
 use OCA\Budget\Service\CurrencyConversionService;
@@ -29,6 +30,7 @@ class BillService {
     private CurrencyConversionService $currencyConversion;
     private TransactionSplitService $splitService;
     private LoggerInterface $logger;
+    private ?AutoShareService $autoShareService;
 
     public function __construct(
         BillMapper $mapper,
@@ -39,7 +41,8 @@ class BillService {
         AccountMapper $accountMapper,
         CurrencyConversionService $currencyConversion,
         TransactionSplitService $splitService,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?AutoShareService $autoShareService = null
     ) {
         $this->mapper = $mapper;
         $this->frequencyCalculator = $frequencyCalculator;
@@ -50,6 +53,7 @@ class BillService {
         $this->currencyConversion = $currencyConversion;
         $this->splitService = $splitService;
         $this->logger = $logger;
+        $this->autoShareService = $autoShareService;
     }
 
     /**
@@ -259,6 +263,10 @@ class BillService {
                 // Log error but don't fail bill creation
                 $this->logger->warning("Failed to create transaction for bill {$bill->getId()}: {$e->getMessage()}");
             }
+        }
+
+        if ($this->autoShareService !== null) {
+            $this->autoShareService->autoShareNewEntity($userId, ShareItem::TYPE_BILL, $bill->getId());
         }
 
         return $bill;

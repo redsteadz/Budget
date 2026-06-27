@@ -6,16 +6,19 @@ namespace OCA\Budget\Service;
 
 use OCA\Budget\Db\SavingsGoal;
 use OCA\Budget\Db\SavingsGoalMapper;
+use OCA\Budget\Db\ShareItem;
 use OCA\Budget\Db\TransactionTagMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 class GoalsService {
     private SavingsGoalMapper $mapper;
     private TransactionTagMapper $transactionTagMapper;
+    private ?AutoShareService $autoShareService;
 
-    public function __construct(SavingsGoalMapper $mapper, TransactionTagMapper $transactionTagMapper) {
+    public function __construct(SavingsGoalMapper $mapper, TransactionTagMapper $transactionTagMapper, ?AutoShareService $autoShareService = null) {
         $this->mapper = $mapper;
         $this->transactionTagMapper = $transactionTagMapper;
+        $this->autoShareService = $autoShareService;
     }
 
     /**
@@ -81,6 +84,9 @@ class GoalsService {
         $goal->setCreatedAt(date('Y-m-d H:i:s'));
 
         $inserted = $this->mapper->insert($goal);
+        if ($this->autoShareService !== null) {
+            $this->autoShareService->autoShareNewEntity($userId, ShareItem::TYPE_SAVINGS_GOAL, $inserted->getId());
+        }
         return $this->enrichGoalWithTagAmount($inserted);
     }
 

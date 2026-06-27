@@ -368,6 +368,8 @@ return [
         ['name' => 'share#leave', 'url' => '/api/shares/{id}/leave', 'verb' => 'POST'],
         ['name' => 'share#getConfig', 'url' => '/api/shares/{id}/items', 'verb' => 'GET'],
         ['name' => 'share#updateTypeItems', 'url' => '/api/shares/{id}/items/{type}', 'verb' => 'PUT'],
+        ['name' => 'share#getAutoConfig', 'url' => '/api/shares/{id}/auto-config', 'verb' => 'GET'],
+        ['name' => 'share#updateAutoConfig', 'url' => '/api/shares/{id}/auto-config/{type}', 'verb' => 'PUT'],
 
         // Exchange rate routes
         ['name' => 'exchangeRate#index', 'url' => '/api/exchange-rates', 'verb' => 'GET'],
