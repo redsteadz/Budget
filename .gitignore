@@ -46,6 +46,7 @@ seed-data.php
 seed-extra.php
 test-data/
 test-categories-chart.csv
+.phpunit.result.cache
 update-production.sh
 budget/js/budget-app.js.map
 budget/js/budget-app.js.LICENSE.txt
