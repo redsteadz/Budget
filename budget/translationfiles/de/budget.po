@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-07-02 21:44+0000\n"
-"PO-Revision-Date: 2026-06-15 23:01+0000\n"
+"PO-Revision-Date: 2026-07-03 23:24+0000\n"
 "Last-Translator: SGiersch <Forum@SGiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: /app/js/budget-app.js:2
 msgid "hero"
-msgstr ""
+msgstr "Hauptbereich"
 
 #: /app/js/budget-app.js:2
 #, fuzzy
@@ -31,11 +31,11 @@ msgstr "Budget"
 
 #: /app/js/budget-app.js:2
 msgid "type"
-msgstr ""
+msgstr "typ"
 
 #: /app/js/budget-app.js:2
 msgid "name"
-msgstr ""
+msgstr "name"
 
 #: /app/js/budget-app.js:2
 #, fuzzy
@@ -214,7 +214,7 @@ msgstr "Ungültige Währungskennziffer"
 
 #: /app/lib/Controller/AccountController.php:733
 msgid "Invalid date format. Use YYYY-MM-DD"
-msgstr ""
+msgstr "Ungültiges Datumsformat. Verwende YYYY-MM-DD"
 
 #: /app/lib/Controller/AccountController.php:739
 #, fuzzy
@@ -430,7 +430,7 @@ msgstr "Fehler beim Hochladen der Datei"
 
 #: /app/lib/Controller/AttachmentController.php:112
 msgid "Attachment removed"
-msgstr ""
+msgstr "Anhang entfernt"
 
 #: /app/lib/Controller/AttachmentController.php:114
 #, fuzzy
@@ -453,7 +453,7 @@ msgstr "Rentenversicherer oder Verwalter des Rentensystems"
 
 #: /app/lib/Controller/BankSyncController.php:81
 msgid "This provider does not support institution listing"
-msgstr ""
+msgstr "Dieser Anbieter unterstützt keine Auflistung von Finanzinstituten"
 
 #: /app/lib/Controller/BankSyncController.php:87
 #, fuzzy
