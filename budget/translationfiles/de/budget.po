@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2026-07-03 23:07+0000\n"
-"PO-Revision-Date: 2026-07-03 23:24+0000\n"
+"PO-Revision-Date: 2026-07-05 06:01+0000\n"
 "Last-Translator: SGiersch <Forum@SGiersch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/nextcloud-budget/"
 "budget/de/>\n"
@@ -24,10 +24,8 @@ msgid "hero"
 msgstr "Hauptbereich"
 
 #: /app/js/budget-app.js:2
-#, fuzzy
-#| msgid "Budget"
 msgid "widget"
-msgstr "Budget"
+msgstr "Kachel"
 
 #: /app/js/budget-app.js:2
 msgid "type"
@@ -38,14 +36,10 @@ msgid "name"
 msgstr "name"
 
 #: /app/js/budget-app.js:2
-#, fuzzy
-#| msgid "Balance"
 msgid "balance"
-msgstr "Saldo"
+msgstr "saldo"
 
 #: /app/js/budget-app.js:2
-#, fuzzy
-#| msgid "Currency"
 msgid "currency"
 msgstr "Währung"
 
@@ -187,23 +181,17 @@ msgid "Failed to reconcile account"
 msgstr "Kontenabgleich fehlgeschlagen"
 
 #: /app/lib/Controller/AccountController.php:668
-#, fuzzy
-#| msgid "No matching transactions found"
 msgid "Too many transactions (max 500)"
-msgstr "Keine übereinstimmenden Buchungen gefunden"
+msgstr "Zu viele Transaktionen (max. 500)"
 
 #: /app/lib/Controller/AccountController.php:675
 #: /app/src/modules/transactions/TransactionsModule.js:1279
-#, fuzzy
-#| msgid "Failed to delete contribution"
 msgid "Failed to complete reconciliation"
-msgstr "Beitrag konnte nicht gelöscht werden"
+msgstr "Abgleich konnte nicht abgeschlossen werden"
 
 #: /app/lib/Controller/AccountController.php:724
-#, fuzzy
-#| msgid "Expected return rate must be between 0%% and 100%%"
 msgid "Interest rate must be between 0 and 999.9999"
-msgstr "Die erwartete Rendite muss zwischen 0 %% und 100 %% liegen"
+msgstr "Der Zinssatz muss zwischen 0 und 999,9999"
 
 #: /app/lib/Controller/AccountController.php:729
 #: /app/src/modules/accounts/AccountsModule.js:839
@@ -2525,11 +2513,11 @@ msgstr ""
 
 #: /app/lib/Notification/Notifier.php:421
 msgid "Your Budget report for {month} is ready"
-msgstr ""
+msgstr "Dein Budgetbericht für {month} ist verfügbar"
 
 #: /app/lib/Notification/Notifier.php:429
 msgid "{file} was saved to your Files."
-msgstr ""
+msgstr "{file} wurde in deinen Dateien gespeichert."
 
 #: /app/lib/Search/TransactionSearchProvider.php:39
 #, fuzzy
@@ -2550,6 +2538,8 @@ msgid ""
 "No accounts are enabled for sync. Open Account Mappings to enable and map "
 "your accounts."
 msgstr ""
+"Für die Synchronisierung sind keine Konten aktiviert. Öffne die "
+"Kontozuordnungen, um deine Konten zu aktivieren und zuzuordnen."
 
 #: /app/lib/Service/BankSync/BankSyncService.php:196
 #, php-format
@@ -3429,12 +3419,18 @@ msgid ""
 "rearrange, add, or remove tiles. Click the gear icon on the Accounts tile to "
 "reorder or hide accounts."
 msgstr ""
+"Deine Finanzübersicht mit anpassbaren Kacheln. Entsperre das Dashboard, um "
+"Kacheln neu anzuordnen, hinzuzufügen oder zu entfernen. Über das "
+"Zahnradsymbol in der Kachel kannst du Konten neu anordnen oder ausblenden."
 
 #: /app/src/main.js:860
 msgid ""
 "Manage bank accounts, credit cards, cash, and crypto across 45+ currencies. "
 "Click an account to see its transaction history and balance details."
 msgstr ""
+"Verwalte Bankkonten, Kreditkarten, Bargeld und Kryptowährungen in über 45 "
+"Währungen. Klicke auf ein Konto, um den Transaktionsverlauf und die "
+"Kontostanddetails anzuzeigen."
 
 #: /app/src/main.js:861 /app/src/modules/dashboard/DashboardModule.js:4617
 #: /app/templates/index.php:63 /app/templates/index.php:1304
@@ -3449,6 +3445,9 @@ msgid ""
 "Add, edit, filter, and bulk-manage transactions. Use the Filters button for "
 "advanced search. Split transactions across categories."
 msgstr ""
+"Füge Transaktionen hinzu, bearbeite und filtere sie oder verwalte mehrere "
+"Transaktionen gleichzeitig. Verwende die Schaltfläche „Filter“ für die "
+"erweiterte Suche. Teile Transaktionen auf mehrere Kategorien auf."
 
 #: /app/src/main.js:862 /app/src/modules/dashboard/DashboardModule.js:4311
 #: /app/src/modules/sharing/SharingModule.js:245 /app/templates/index.php:73
@@ -3461,6 +3460,9 @@ msgid ""
 "Organise transactions with a hierarchical category tree. Drag to reorder. "
 "Click a category to see spending analytics."
 msgstr ""
+"Organisiere deine Transaktionen in einer hierarchischen Kategorienstruktur. "
+"Ziehe Kategorien, um sie neu anzuordnen. Klicke auf eine Kategorie, um "
+"Ausgabenanalysen anzuzeigen."
 
 #: /app/src/main.js:863 /app/src/modules/accounts/AccountsModule.js:1292
 #: /app/src/modules/bills/BillsModule.js:1577
@@ -3482,6 +3484,8 @@ msgid ""
 "Create tag sets per category for multi-dimensional tracking (e.g. store, "
 "project, payment method)."
 msgstr ""
+"Erstelle Tag-Sets für jede Kategorie, um Transaktionen nach mehreren "
+"Kriterien auszuwerten (z. B. Geschäft, Projekt oder Zahlungsmethode)."
 
 #: /app/src/main.js:864
 msgid ""
@@ -3489,6 +3493,10 @@ msgid ""
 "and yearly periods. Use \"Adjust budgets from this month\" to set different "
 "values for future months."
 msgstr ""
+"Lege Ausgabenlimits für jede Kategorie fest. Wechsle zwischen wöchentlichen, "
+"monatlichen, vierteljährlichen und jährlichen Budgetzeiträumen. Nutze „"
+"Budgets ab diesem Monat anpassen“, um für zukünftige Monate andere Werte "
+"festzulegen."
 
 #: /app/src/main.js:865 /app/src/modules/categories/CategoriesModule.js:614
 #: /app/src/modules/categories/CategoriesModule.js:704
@@ -3516,40 +3524,46 @@ msgid ""
 "Track recurring income sources. Use \"Detect Income\" to auto-find patterns. "
 "Mark income as received to create transactions."
 msgstr ""
+"Verwalte wiederkehrende Einnahmen. Nutze „Einnahmen erkennen“, um "
+"wiederkehrende Muster automatisch zu erkennen. Markiere Einnahmen als "
+"eingegangen, um die entsprechenden Transaktionen zu erstellen."
 
 #: /app/src/main.js:866
 msgid ""
 "Track recurring payments with auto-pay, custom frequencies, and "
 "notifications. View the bills calendar in Reports."
 msgstr ""
+"Verwalte wiederkehrende Zahlungen mit automatischer Zahlung, individuellen "
+"Wiederholungsintervallen und Benachrichtigungen. Den Rechnungskalender "
+"findest du in den Berichten."
 
 #: /app/src/main.js:867 /app/templates/index.php:123
 msgid "Transfers"
 msgstr "Umbuchungen"
 
 #: /app/src/main.js:867
-#, fuzzy
-#| msgid ""
-#| "Set up automatic transfers between your accounts to automate savings or "
-#| "bill payments."
 msgid ""
 "Set up recurring or one-time transfers between your accounts with auto-pay "
 "support."
 msgstr ""
-"Richten Sie automatische Überweisungen zwischen Ihren Konten ein, um das "
-"Sparen oder die Rechnungszahlungen zu automatisieren."
+"Richte wiederkehrende oder einmalige Überweisungen zwischen deinen Konten "
+"ein – inklusive automatischer Ausführung."
 
 #: /app/src/main.js:868
 msgid ""
 "Set financial targets and track progress. Link goals to tags for automatic "
 "amount calculation."
 msgstr ""
+"Lege finanzielle Ziele fest und verfolge deinen Fortschritt. Verknüpfe Ziele "
+"mit Tags, damit die Beträge automatisch berechnet werden."
 
 #: /app/src/main.js:869
 msgid ""
 "Plan debt repayment using avalanche (highest interest first) or snowball "
 "(smallest balance first) strategies."
 msgstr ""
+"Plane die Rückzahlung deiner Schulden mit der Avalanche-Methode (höchster "
+"Zinssatz zuerst) oder der Snowball-Methode (kleinster Saldo zuerst)."
 
 #: /app/src/main.js:870 /app/templates/index.php:153
 #: /app/templates/index.php:3543
@@ -3557,14 +3571,9 @@ msgid "Pensions"
 msgstr "Renten"
 
 #: /app/src/main.js:870
-#, fuzzy
-#| msgid ""
-#| "Track your pension accounts to visualize your retirement savings and "
-#| "projections."
 msgid "Track retirement accounts with contributions and growth projections."
 msgstr ""
-"Behalte deine Rentenkonten im Blick, um dir einen Überblick über deine "
-"Altersvorsorge und die entsprechenden Prognosen zu verschaffen."
+"Verwalte Altersvorsorgekonten, erfasse Beiträge und nutze Wachstumsprognosen."
 
 #: /app/src/main.js:871 /app/src/modules/dashboard/DashboardModule.js:2435
 #: /app/templates/index.php:163 /app/templates/index.php:1088
@@ -3573,16 +3582,12 @@ msgid "Assets"
 msgstr "Vermögenswerte"
 
 #: /app/src/main.js:871
-#, fuzzy
-#| msgid ""
-#| "Track your non-cash assets like property, vehicles, and collectibles to "
-#| "see your full net worth."
 msgid ""
 "Track non-liquid assets like property, vehicles, and collectibles with value "
 "snapshots over time."
 msgstr ""
-"Erfasse Sachwerte wie Immobilien, Fahrzeuge und Sammlerstücke, um das "
-"gesamte Vermögen zu ermitteln."
+"Verwalte nicht liquide Vermögenswerte wie Immobilien, Fahrzeuge und "
+"Sammlerstücke und dokumentiere ihre Wertentwicklung im Zeitverlauf."
 
 #: /app/src/main.js:872 /app/templates/index.php:173
 #: /app/templates/index.php:4475 /app/templates/index.php:6559
@@ -3594,6 +3599,8 @@ msgid ""
 "Split expenses with contacts and track who owes whom. Record settlements to "
 "clear debts."
 msgstr ""
+"Teile Ausgaben mit deinen Kontakten und behalte im Blick, wer wem Geld "
+"schuldet. Erfasse Ausgleichszahlungen, um offene Schulden zu begleichen."
 
 #: /app/src/main.js:873 /app/templates/index.php:183
 msgid "Forecast"
@@ -3604,6 +3611,8 @@ msgid ""
 "Predict future account balances using historical spending patterns and "
 "scenario modeling."
 msgstr ""
+"Prognostiziere zukünftige Kontostände anhand deines bisherigen "
+"Ausgabeverhaltens und mithilfe von Szenarioanalysen."
 
 #: /app/src/main.js:874 /app/templates/index.php:193
 msgid "Reports"
@@ -3614,6 +3623,8 @@ msgid ""
 "Six report types: budget analysis, spending by category, income vs expenses, "
 "year-over-year, bills calendar, and net worth history."
 msgstr ""
+"Sechs Berichtstypen: Budgetanalyse, Ausgaben nach Kategorie, Einnahmen vs. "
+"Ausgaben, Jahresvergleich, Rechnungskalender und Verlauf des Nettovermögens."
 
 #: /app/src/main.js:875 /app/src/modules/rules/RulesModule.js:138
 #: /app/templates/index.php:216 /app/templates/index.php:1324
@@ -3683,7 +3694,7 @@ msgstr ""
 
 #: /app/src/main.js:891
 msgid "Read full guide"
-msgstr ""
+msgstr "Vollständige Anleitung lesen"
 
 #: /app/src/main.js:895
 msgid "Quick Links"
@@ -3691,23 +3702,19 @@ msgstr ""
 
 #: /app/src/main.js:897
 msgid "Getting Started Guide"
-msgstr ""
+msgstr "Einstiegshilfe"
 
 #: /app/src/main.js:898
 msgid "Importing Bank Statements"
-msgstr ""
+msgstr "Bankauszüge importieren"
 
 #: /app/src/main.js:899
-#, fuzzy
-#| msgid "Budget Sharing"
 msgid "Budget Tracking"
-msgstr "Budget teilen"
+msgstr "Budgetverfolgung"
 
 #: /app/src/main.js:900
-#, fuzzy
-#| msgid "Auto-apply Import Rules"
 msgid "Auto-Categorisation Rules"
-msgstr "Importregeln automatisch anwenden"
+msgstr "Automatische Kategorisierungsregeln"
 
 #: /app/src/main.js:1098 /app/src/modules/accounts/AccountsModule.js:1023
 #: /app/src/modules/reports/ReportsModule.js:1780
@@ -4190,10 +4197,10 @@ msgid "Total Interest"
 msgstr "Gesamtzinsen"
 
 #: /app/src/main.js:2803
-#, fuzzy
-#| msgid "Failed to compare strategies"
 msgid "No scenarios yet. Create one to compare strategies."
-msgstr "Fehler beim Vergleich der Strategien"
+msgstr ""
+"Noch keine Szenarien vorhanden. Erstelle ein Szenario, um verschiedene "
+"Strategien zu vergleichen."
 
 #: /app/src/main.js:2808 /app/src/main.js:3063
 msgid "Snowball"
@@ -6056,10 +6063,8 @@ msgid "Remove adjustment"
 msgstr "Aktion löschen"
 
 #: /app/src/modules/categories/CategoriesModule.js:1451
-#, fuzzy
-#| msgid "Auto-detect from amount"
 msgid "Adjust budgets from this month"
-msgstr "Auto-Erkennung über Betrag"
+msgstr "Budgets von diesem Monat anpassen"
 
 #: /app/src/modules/categories/CategoriesModule.js:1464
 msgid ""
@@ -6218,10 +6223,8 @@ msgstr "Niedrig"
 
 #: /app/src/modules/dashboard/DashboardModule.js:586
 #: /app/src/modules/dashboard/DashboardModule.js:4250
-#, fuzzy
-#| msgid "Last 3 Months"
 msgid "Last 30 days"
-msgstr "Letzte 3 Monate"
+msgstr "Letzte 30 Tage"
 
 #: /app/src/modules/dashboard/DashboardModule.js:587
 #: /app/src/modules/dashboard/DashboardModule.js:4251
@@ -7764,7 +7767,7 @@ msgstr "%n konto"
 
 #: /app/src/modules/reports/ReportsModule.js:339 /app/templates/index.php:3064
 msgid "Saved reports…"
-msgstr ""
+msgstr "Gespeicherte Berichte…"
 
 #: /app/src/modules/reports/ReportsModule.js:420
 #, fuzzy
@@ -10163,10 +10166,8 @@ msgstr "Noch keine wiederkehrenden Umbuchungen"
 
 #: /app/src/modules/transfers/TransfersModule.js:62
 #: /app/src/modules/transfers/TransfersModule.js:947
-#, fuzzy
-#| msgid "Find Transfer Matches"
 msgid "Find Transfers"
-msgstr "Finde übereinstimmende Umbuchungen"
+msgstr "Überweisungen suchen"
 
 #: /app/src/modules/transfers/TransfersModule.js:64
 msgid "Add new transfer"
@@ -10504,7 +10505,7 @@ msgstr "Optionen & Einstellungen"
 
 #: /app/templates/index.php:276
 msgid "Help & Docs"
-msgstr ""
+msgstr "Hilfe & Dokumentation"
 
 #: /app/templates/index.php:296
 msgid "Add tiles"
@@ -10623,7 +10624,7 @@ msgstr ""
 
 #: /app/templates/index.php:975
 msgid "Standalone"
-msgstr ""
+msgstr "Eigenständig"
 
 #: /app/templates/index.php:993
 msgid "Select type"
@@ -11363,10 +11364,8 @@ msgid "Subscribe to your bills as a calendar"
 msgstr "Export des Rechnungskalender schlug fehl"
 
 #: /app/templates/index.php:2422
-#, fuzzy
-#| msgid "Bills Calendar"
 msgid "Calendar"
-msgstr "Rechnungskalender"
+msgstr "Kalender"
 
 #: /app/templates/index.php:2424
 msgid "Auto-detect recurring bills from transactions"
@@ -11753,10 +11752,8 @@ msgid "Export as PDF"
 msgstr "Exportieren als PDF"
 
 #: /app/templates/index.php:3061
-#, fuzzy
-#| msgid "Reports"
 msgid "Saved Reports"
-msgstr "Berichte"
+msgstr "Gespeicherte Berichte"
 
 #: /app/templates/index.php:3066
 #, fuzzy
@@ -12449,30 +12446,28 @@ msgid "Debt Payoff Planner"
 msgstr "Schuldentilgungsplaner"
 
 #: /app/templates/index.php:4344
-#, fuzzy
-#| msgid "Extra Monthly Payment"
 msgid "Monthly Payment"
-msgstr "Zusätzliche monatliche Zahlung"
+msgstr "Monatliche Zahlung"
 
 #: /app/templates/index.php:4348
 msgid "Debt Free By"
-msgstr ""
+msgstr "Schuldenfrei bis"
 
 #: /app/templates/index.php:4360
 msgid "Repayment Timeline"
-msgstr ""
+msgstr "Tilgungszeitplan"
 
 #: /app/templates/index.php:4362
 msgid "Area"
-msgstr ""
+msgstr "Flächig"
 
 #: /app/templates/index.php:4363
 msgid "Lines"
-msgstr ""
+msgstr "Linien"
 
 #: /app/templates/index.php:4374
 msgid "Scenarios"
-msgstr ""
+msgstr "Szenarien"
 
 #: /app/templates/index.php:4382
 msgid "Payoff Order"
@@ -13512,6 +13507,10 @@ msgid ""
 "and budgets. The account still appears in your accounts list and on its own "
 "page."
 msgstr ""
+"Dieses Konto wird weiterhin verwaltet, seine Transaktionen und sein Saldo "
+"werden jedoch aus allen Gesamtübersichten ausgeschlossen – einschließlich "
+"Berichten, Dashboard, Prognosen, Nettovermögen und Budgets. Das Konto "
+"erscheint weiterhin in deiner Kontenliste und auf seiner Detailseite."
 
 #: /app/templates/index.php:5487
 msgid "Save account"
@@ -14492,17 +14491,15 @@ msgstr ""
 
 #: /app/templates/index.php:6746 /app/templates/index.php:6749
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: /app/templates/index.php:6756
 msgid "Full Documentation"
-msgstr ""
+msgstr "Vollständige Dokumentation"
 
 #: /app/templates/index.php:6757
-#, fuzzy
-#| msgid "Reports"
 msgid "Report an Issue"
-msgstr "Berichte"
+msgstr "Fehler melden"
 
 #: /app/templates/quick-add.php:8
 #, fuzzy
