@@ -67,6 +67,7 @@ return [
         ['name' => 'transaction#getMatches', 'url' => '/api/transactions/{id}/matches', 'verb' => 'GET'],
         ['name' => 'transaction#link', 'url' => '/api/transactions/{id}/link/{targetId}', 'verb' => 'POST'],
         ['name' => 'transaction#unlink', 'url' => '/api/transactions/{id}/link', 'verb' => 'DELETE'],
+        ['name' => 'transaction#convertToTransfer', 'url' => '/api/transactions/{id}/convert-to-transfer', 'verb' => 'POST'],
         ['name' => 'transaction#getSplits', 'url' => '/api/transactions/{id}/splits', 'verb' => 'GET'],
         ['name' => 'transaction#split', 'url' => '/api/transactions/{id}/splits', 'verb' => 'POST'],
         ['name' => 'transaction#unsplit', 'url' => '/api/transactions/{id}/splits', 'verb' => 'DELETE'],

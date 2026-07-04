@@ -732,6 +732,78 @@ class TransactionServiceTest extends TestCase {
         $this->service->linkTransactions(1, 2, 'user1');
     }
 
+    // ===== convertToTransfer() =====
+
+    public function testConvertToTransferCreatesOppositeLegAndLinks(): void {
+        $source = $this->makeTransaction(['id' => 1, 'accountId' => 10, 'amount' => 75.00, 'type' => 'debit', 'vendor' => 'Bank']);
+        $counterpart = null;
+
+        $this->mapper->method('find')->willReturnCallback(
+            function (int $id) use ($source, &$counterpart) {
+                return $id === 1 ? $source : $counterpart;
+            }
+        );
+        $this->mapper->method('insert')->willReturnCallback(
+            function (Transaction $tx) use (&$counterpart) {
+                $tx->setId(2);
+                $counterpart = $tx;
+                return $tx;
+            }
+        );
+        $this->accountMapper->method('find')->willReturnCallback(
+            fn (int $id) => $this->makeAccount(['id' => $id, 'currency' => 'USD'])
+        );
+
+        $this->mapper->expects($this->once())
+            ->method('linkTransactions')
+            ->with(1, 2);
+
+        $result = $this->service->convertToTransfer(1, 20, 'user1');
+
+        $this->assertArrayHasKey('transaction', $result);
+        $this->assertArrayHasKey('linkedTransaction', $result);
+        $this->assertSame(20, $counterpart->getAccountId());
+        $this->assertSame('credit', $counterpart->getType());
+        $this->assertSame(75.00, $counterpart->getAmount());
+        $this->assertSame($source->getDate(), $counterpart->getDate());
+    }
+
+    public function testConvertToTransferRejectsSameAccount(): void {
+        $source = $this->makeTransaction(['id' => 1, 'accountId' => 10]);
+        $this->mapper->method('find')->willReturn($source);
+        $this->mapper->expects($this->never())->method('insert');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('same account');
+
+        $this->service->convertToTransfer(1, 10, 'user1');
+    }
+
+    public function testConvertToTransferRejectsAlreadyLinked(): void {
+        $source = $this->makeTransaction(['id' => 1, 'accountId' => 10, 'linkedTransactionId' => 99]);
+        $this->mapper->method('find')->willReturn($source);
+        $this->mapper->expects($this->never())->method('insert');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('already linked');
+
+        $this->service->convertToTransfer(1, 20, 'user1');
+    }
+
+    public function testConvertToTransferRejectsCurrencyMismatch(): void {
+        $source = $this->makeTransaction(['id' => 1, 'accountId' => 10]);
+        $this->mapper->method('find')->willReturn($source);
+        $this->accountMapper->method('find')->willReturnCallback(
+            fn (int $id) => $this->makeAccount(['id' => $id, 'currency' => $id === 10 ? 'USD' : 'EUR'])
+        );
+        $this->mapper->expects($this->never())->method('insert');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('same currency');
+
+        $this->service->convertToTransfer(1, 20, 'user1');
+    }
+
     // ===== unlinkTransaction() =====
 
     public function testUnlinkTransactionSuccess(): void {

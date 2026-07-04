@@ -135,7 +135,19 @@ Transfers move money between two of your accounts. When you create a transfer, t
 
 Transfer transactions display a transfer badge in the transaction list so you can distinguish them from regular credits and debits.
 
-> **Note:** You cannot convert an existing credit or debit transaction into a transfer, or change a transfer into a regular transaction. If you need to correct this, delete the transfer and create the correct transaction type.
+### Converting an Existing Transaction into a Transfer
+
+An imported or manually added credit/debit can be turned into a transfer after the fact — useful when a bank-imported payment is really a transfer to one of your own accounts (for example, a payment toward a loan tracked as its own account).
+
+1. Open the transaction's action menu and choose **Match transfer**.
+2. If the matching transaction already exists in the other account, click **Link as Transfer** next to it.
+3. If the other account has no matching transaction (common for accounts with nothing to import, like a loan account), use the **"No match? Create the other side"** section: pick the account and click **Create and link**. The app creates the opposite transaction there and links the pair as a transfer.
+
+Only accounts using the same currency are offered — for cross-currency transfers, create the other side manually with the converted amount and link it via step 2 instead.
+
+After importing bank statements the app also scans automatically and links any pairs it finds, so manual matching is only needed when one side is missing or ambiguous.
+
+> **Note:** A transfer cannot be changed back into a regular transaction in one step — unlink the pair, then delete the leg you don't want.
 
 > **Warning:** Deleting one side of a transfer does not automatically delete the other side. If you delete a transfer transaction, check the linked account and remove the counterpart manually if needed.
 

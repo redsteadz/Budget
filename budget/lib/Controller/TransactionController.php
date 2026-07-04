@@ -447,6 +447,23 @@ class TransactionController extends Controller {
     }
 
     /**
+     * Convert a transaction into a transfer by creating its opposite leg
+     * in another account and linking the pair
+     *
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function convertToTransfer(int $id, int $targetAccountId): DataResponse {
+        try {
+            $result = $this->service->convertToTransfer($id, $targetAccountId, $this->getEffectiveUserId());
+            return new DataResponse($result);
+        } catch (\Exception $e) {
+            // Use validation error handler to show actual message (e.g., "already linked")
+            return $this->handleValidationError($e);
+        }
+    }
+
+    /**
      * Unlink a transaction from its transfer partner
      *
      * @NoAdminRequired

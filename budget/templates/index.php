@@ -6240,6 +6240,14 @@ style('budget', 'budget-app');
             </div>
             <div id="matching-list" class="matching-list"></div>
         </div>
+        <div id="matching-convert" class="matching-convert">
+            <h4><?php p($l->t('No match? Create the other side')); ?></h4>
+            <p class="hint"><?php p($l->t('Creates the opposite transaction in the account you pick and links the pair as a transfer. Useful when the other account has nothing to import (e.g. a loan account).')); ?></p>
+            <div class="matching-convert-controls">
+                <select id="matching-convert-account" aria-label="<?php p($l->t('Counterpart account')); ?>"></select>
+                <button type="button" id="matching-convert-btn" class="primary"><?php p($l->t('Create and link')); ?></button>
+            </div>
+        </div>
         <div class="modal-buttons">
             <button type="button" class="secondary cancel-btn" aria-label="<?php p($l->t('Close dialog')); ?>"><?php p($l->t('Close')); ?></button>
         </div>

@@ -11637,6 +11637,34 @@ button.danger:hover {
     opacity: 0.8;
 }
 
+/* Create-the-other-side section (#313) */
+.matching-convert {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.matching-convert h4 {
+    margin: 0 0 4px;
+}
+
+.matching-convert .hint {
+    font-size: 13px;
+    color: var(--color-text-maxcontrast);
+    margin: 0 0 12px;
+}
+
+.matching-convert-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.matching-convert-controls select {
+    flex: 1;
+    min-width: 0;
+}
+
 /* Matching list */
 .matching-list {
     display: flex;

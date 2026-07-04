@@ -498,6 +498,11 @@ class BudgetApp {
                 const sourceId = parseInt(e.target.getAttribute('data-source-id'));
                 const targetId = parseInt(e.target.getAttribute('data-target-id'));
                 this.handleLinkMatch(sourceId, targetId);
+            } else if (e.target.id === 'matching-convert-btn') {
+                const matchingModal = document.getElementById('matching-modal');
+                const sourceId = parseInt(matchingModal?.dataset.transactionId);
+                const targetAccountId = parseInt(document.getElementById('matching-convert-account')?.value);
+                this.handleConvertToTransfer(sourceId, targetAccountId);
             } else if (e.target.classList.contains('undo-match-btn')) {
                 const transactionId = parseInt(e.target.getAttribute('data-tx-id'));
                 this.handleBulkMatchUndo(transactionId);
@@ -3257,6 +3262,20 @@ class BudgetApp {
         sourceDetails.querySelector('.source-amount').className = `source-amount ${typeClass}`;
         sourceDetails.querySelector('.source-account').textContent = account?.name || t('budget', 'Unknown Account');
 
+        // Offer creating the missing opposite leg in another same-currency
+        // account — for accounts with nothing to import there is never an
+        // existing transaction to match (#313)
+        modal.dataset.transactionId = transactionId;
+        const convertSelect = document.getElementById('matching-convert-account');
+        const convertSection = document.getElementById('matching-convert');
+        if (convertSelect && convertSection) {
+            const candidates = (this.accounts || []).filter(a =>
+                a.id !== transaction.accountId && (a.currency || this.getPrimaryCurrency()) === currency);
+            convertSelect.innerHTML = candidates.map(a =>
+                `<option value="${a.id}">${this.escapeHtml(a.name)}</option>`).join('');
+            convertSection.style.display = candidates.length ? '' : 'none';
+        }
+
         // Show modal and loading state
         modal.style.display = 'flex';
         loadingEl.style.display = 'flex';
@@ -3311,6 +3330,51 @@ class BudgetApp {
             await this.loadTransactions();
         } catch (error) {
             showError(error.message || t('budget', 'Failed to link transactions'));
+        }
+    }
+
+    /**
+     * Create the opposite leg of a transfer in another account and link the pair
+     */
+    async convertToTransfer(transactionId, targetAccountId) {
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/transactions/${transactionId}/convert-to-transfer`), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'requesttoken': OC.requestToken
+                },
+                body: JSON.stringify({ targetAccountId })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to convert transaction to transfer:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Handle "Create and link" from the matching modal (#313)
+     */
+    async handleConvertToTransfer(transactionId, targetAccountId) {
+        if (!transactionId || !targetAccountId) {
+            showWarning(t('budget', 'Select an account for the other side of the transfer'));
+            return;
+        }
+        try {
+            await this.convertToTransfer(transactionId, targetAccountId);
+            showSuccess(t('budget', 'Transfer created and linked'));
+
+            // Close modal and refresh transactions
+            document.getElementById('matching-modal').style.display = 'none';
+            await this.loadTransactions();
+        } catch (error) {
+            showError(error.message || t('budget', 'Failed to create transfer'));
         }
     }
 

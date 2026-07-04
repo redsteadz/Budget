@@ -874,6 +874,48 @@ class TransactionService {
     }
 
     /**
+     * Convert a transaction into a transfer by creating the missing opposite
+     * leg in another account and linking the pair (#313). For accounts with
+     * no importable feed (e.g. a loan account) there is never an existing
+     * counterpart to match against, so one is created on demand.
+     *
+     * @throws \Exception if the transaction cannot be converted
+     */
+    public function convertToTransfer(int $transactionId, int $targetAccountId, string $userId): array {
+        $transaction = $this->find($transactionId, $userId);
+
+        // Validate before creating the counterpart so a failed conversion
+        // never leaves an orphaned transaction behind
+        if ($transaction->getLinkedTransactionId() !== null) {
+            throw new \Exception('Transaction is already linked to another transaction');
+        }
+        if ($transaction->getAccountId() === $targetAccountId) {
+            throw new \Exception('Cannot transfer within the same account');
+        }
+
+        // Also verifies both accounts belong to the user
+        $sourceAccount = $this->accountMapper->find($transaction->getAccountId(), $userId);
+        $targetAccount = $this->accountMapper->find($targetAccountId, $userId);
+        if ($sourceAccount->getCurrency() !== $targetAccount->getCurrency()) {
+            throw new \Exception('Counterpart account must use the same currency');
+        }
+
+        $counterpart = $this->create(
+            userId: $userId,
+            accountId: $targetAccountId,
+            date: $transaction->getDate(),
+            description: $transaction->getDescription() ?? '',
+            amount: $transaction->getAmount(),
+            type: $transaction->getType() === 'debit' ? 'credit' : 'debit',
+            vendor: $transaction->getVendor(),
+            notes: 'Auto-created transfer counterpart',
+            status: $transaction->getStatus()
+        );
+
+        return $this->linkTransactions($transactionId, $counterpart->getId(), $userId);
+    }
+
+    /**
      * Unlink a transaction from its transfer partner
      */
     public function unlinkTransaction(int $transactionId, string $userId): array {

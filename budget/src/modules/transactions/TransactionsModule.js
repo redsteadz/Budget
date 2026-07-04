@@ -2460,6 +2460,20 @@ export default class TransactionsModule {
         sourceDetails.querySelector('.source-amount').className = `source-amount ${typeClass}`;
         sourceDetails.querySelector('.source-account').textContent = account?.name || t('budget', 'Unknown Account');
 
+        // Offer creating the missing opposite leg in another same-currency
+        // account — for accounts with nothing to import there is never an
+        // existing transaction to match (#313)
+        modal.dataset.transactionId = transactionId;
+        const convertSelect = document.getElementById('matching-convert-account');
+        const convertSection = document.getElementById('matching-convert');
+        if (convertSelect && convertSection) {
+            const candidates = (this.accounts || []).filter(a =>
+                a.id !== transaction.accountId && (a.currency || this.getPrimaryCurrency()) === currency);
+            convertSelect.innerHTML = candidates.map(a =>
+                `<option value="${a.id}">${this.escapeHtml(a.name)}</option>`).join('');
+            convertSection.style.display = candidates.length ? '' : 'none';
+        }
+
         // Show modal and loading state
         modal.style.display = 'flex';
         loadingEl.style.display = 'flex';

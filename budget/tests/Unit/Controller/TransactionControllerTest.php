@@ -300,6 +300,27 @@ class TransactionControllerTest extends TestCase {
 		$this->assertSame('already linked', $response->getData()['error']);
 	}
 
+	// ── convertToTransfer ───────────────────────────────────────────
+
+	public function testConvertToTransferReturnsResult(): void {
+		$result = ['transaction' => [], 'linkedTransaction' => []];
+		$this->service->method('convertToTransfer')->willReturn($result);
+
+		$response = $this->controller->convertToTransfer(1, 20);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
+	public function testConvertToTransferHandlesValidationError(): void {
+		$this->service->method('convertToTransfer')
+			->willThrowException(new \RuntimeException('Counterpart account must use the same currency'));
+
+		$response = $this->controller->convertToTransfer(1, 20);
+
+		$this->assertSame(Http::STATUS_BAD_REQUEST, $response->getStatus());
+		$this->assertSame('Counterpart account must use the same currency', $response->getData()['error']);
+	}
+
 	// ── unlink ──────────────────────────────────────────────────────
 
 	public function testUnlinkReturnsResult(): void {
