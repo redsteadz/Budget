@@ -8,10 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- The **account selector** saved in the gear settings of insight tiles (Monthly Comparison, Large Transactions, Weekly Spending, Year-over-Year) was silently ignored — the tiles always showed all-accounts data. The saved account now actually scopes the tile's numbers
 - Importing transactions that trigger the **Auto-Link as Transfer** rule action no longer shows *"Cannot use object of type Transaction as array"* on the import screen. The import itself always completed — the error came from the transfer-linking step afterwards, which also means those transfers were never actually linked ([#314](https://github.com/otherworld-dev/Budget/issues/314))
 - The **Recent Transactions** dashboard tile now honors its **"Rows to show"** setting above 8 — the display respected the setting but the data fetch was hardcoded to 8 rows, so values of 9–20 silently showed only 8
 
 ### Added
+- **Hide shared categories from your own reports.** Categories shared with you gain a per-viewer **"Hide from my reports"** toggle on the Categories page. Unlike the owner's "Exclude from reports" flag — which stays owner-only because it changes every viewer's reports at once — this only affects your own reports and dashboards; the owner and other viewers see no difference. Applied at the SQL layer through the same choke points as the owner flag, so every report and insight tile honors it consistently
+
+- **"Exclude shared accounts" on the remaining dashboard tiles.** The per-tile toggle added in v2.37 now also covers **Budget Progress, Monthly Comparison, Large Transactions, Weekly Spending, Category Trends, Cash Flow Forecast and Year-over-Year** (shown in the gear menu when you have shared accounts). Bills, income and pension tiles are deliberately not included — they show entity data, not account aggregates
+
 - **Clickable spending charts.** Clicking a slice (or bar) on the **Spending by Category** dashboard tile or the Reports page pie chart jumps to the transaction list filtered to that category, scoped to the chart's date range and account. Tiles set to "top-level only" include the subcategories in the filter so the listed transactions match the clicked amount ([#317](https://github.com/otherworld-dev/Budget/issues/317))
 
 - **Per-bill opt-out of pre-created transactions.** The **"Create future transaction for this bill"** checkbox is now a persistent bill setting instead of a one-shot option at creation. Bills with it unticked never get a scheduled placeholder — not at creation, not after marking paid, not after skipping — and toggling it on an existing bill adds or removes the pending placeholder immediately. Previously the checkbox only affected the moment a bill was created, while every payment re-enabled pre-booking unconditionally, so unticking it never actually opted a bill out ([#311](https://github.com/otherworld-dev/Budget/issues/311))

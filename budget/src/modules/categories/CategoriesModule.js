@@ -72,13 +72,16 @@ export default class CategoriesModule {
 
     async loadCategories() {
         try {
-            const [treeResponse, countsResponse] = await Promise.all([
+            const [treeResponse, countsResponse, mutesResponse] = await Promise.all([
                 fetch(OC.generateUrl('/apps/budget/api/categories/tree'), {
                     headers: { 'requesttoken': OC.requestToken }
                 }),
                 fetch(OC.generateUrl('/apps/budget/api/categories/transaction-counts'), {
                     headers: { 'requesttoken': OC.requestToken }
                 }),
+                fetch(OC.generateUrl('/apps/budget/api/categories/report-mutes'), {
+                    headers: { 'requesttoken': OC.requestToken }
+                }).catch(() => ({ ok: false })),
             ]);
             if (treeResponse.ok) {
                 const fullTree = await treeResponse.json();
@@ -93,6 +96,10 @@ export default class CategoriesModule {
             }
             if (countsResponse.ok) {
                 this.serverTransactionCounts = await countsResponse.json();
+            }
+            if (mutesResponse.ok) {
+                // Categories this user hid from their own reports (shared ones)
+                this.reportMutedIds = new Set(await mutesResponse.json());
             }
             this.renderCategoriesTree();
             this.setupCategoriesEventListeners();
@@ -249,6 +256,7 @@ export default class CategoriesModule {
             const shared = !!category._shared;
             const canWrite = !!category._canWrite;
             const sharedOwner = category._sharedByName || category._sharedBy || '';
+            const mutedForMe = shared && !!this.reportMutedIds?.has(category.id);
 
             return `
                 <div class="category-node" data-level="${level}">
@@ -279,11 +287,17 @@ export default class CategoriesModule {
                                     : shared
                                     ? `<span class="category-shared-badge" title="${t('budget', 'Shared by {owner}', { owner: sharedOwner })}">${t('budget', 'Shared')} · ${sharedOwner}</span>`
                                     : ''}
+                                ${mutedForMe ? `<span class="category-muted-badge" title="${t('budget', 'Hidden from your reports — the owner and other viewers are unaffected')}">${t('budget', 'Hidden from my reports')}</span>` : ''}
                                 ${transactionCount > 0 ? `<span class="transaction-count">${transactionCount}</span>` : ''}
                             </div>
                         </div>
 
-                        ${shared ? '' : `<button class="category-delete-btn"
+                        ${shared ? `<button class="category-mute-btn ${mutedForMe ? 'muted' : ''}"
+                                data-category-id="${category.id}"
+                                data-muted="${mutedForMe ? '1' : '0'}"
+                                title="${mutedForMe ? t('budget', 'Show in my reports') : t('budget', 'Hide from my reports')}">
+                            <span class="icon-toggle" aria-hidden="true"></span>
+                        </button>` : `<button class="category-delete-btn"
                                 data-category-id="${category.id}"
                                 title="${t('budget', 'Delete {name}', { name: category.name })}">
                             <span class="icon-delete" aria-hidden="true"></span>
@@ -317,6 +331,7 @@ export default class CategoriesModule {
                 if (e.target.closest('.category-toggle')) return;
                 if (e.target.closest('.category-checkbox')) return;
                 if (e.target.closest('.category-delete-btn')) return;
+                if (e.target.closest('.category-mute-btn')) return;
                 // Read-shared categories are read-only references — no edit panel.
                 // Write-shared items carry data-write-shared="1" instead (set in
                 // renderCategoryNodes), so they pass through here and open the edit
@@ -353,6 +368,41 @@ export default class CategoriesModule {
         });
 
         // Inline delete buttons
+        // Per-viewer report mute on shared categories: hides the category from
+        // this user's reports only (owner's excluded-from-reports flag untouched)
+        document.querySelectorAll('.category-mute-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const categoryId = parseInt(btn.dataset.categoryId);
+                const muted = btn.dataset.muted !== '1';
+                try {
+                    const response = await fetch(OC.generateUrl(`/apps/budget/api/categories/${categoryId}/report-mute`), {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'requesttoken': OC.requestToken
+                        },
+                        body: JSON.stringify({ muted })
+                    });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!this.reportMutedIds) this.reportMutedIds = new Set();
+                    if (muted) {
+                        this.reportMutedIds.add(categoryId);
+                    } else {
+                        this.reportMutedIds.delete(categoryId);
+                    }
+                    showSuccess(muted
+                        ? t('budget', 'Category hidden from your reports')
+                        : t('budget', 'Category shown in your reports again'));
+                    this.renderCategoriesTree();
+                    this.setupCategoriesEventListeners();
+                } catch (error) {
+                    console.error('Failed to update report mute:', error);
+                    showError(t('budget', 'Failed to update report preference'));
+                }
+            });
+        });
+
         document.querySelectorAll('.category-delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();

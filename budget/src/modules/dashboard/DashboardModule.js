@@ -1457,6 +1457,9 @@ export default class DashboardModule {
             if (settings.accountId) {
                 url += `&accountId=${settings.accountId}`;
             }
+            if (settings.excludeShared) {
+                url += '&excludeShared=1';
+            }
             const response = await fetch(
                 OC.generateUrl(url),
                 { headers: { 'requesttoken': OC.requestToken } }
@@ -3737,6 +3740,23 @@ export default class DashboardModule {
         }
     }
 
+    /**
+     * Query-string scope suffix for an insight tile, from its saved settings:
+     * accountId (when the endpoint supports it) and excludeShared (#286).
+     * These settings were saved by the gear menu but never applied to the
+     * lazy-load fetches — every consumer below now threads them through.
+     */
+    _tileScopeParams(widgetKey, { account = true } = {}) {
+        const settings = this.dashboardConfig?.widgets?.tileSettings?.[widgetKey] || {};
+        let params = '';
+        if (account) {
+            const accountId = this._validAccountId(settings.accountId);
+            if (accountId) params += `&accountId=${accountId}`;
+        }
+        if (settings.excludeShared) params += '&excludeShared=1';
+        return params;
+    }
+
     // Phase 2: Lazy loading infrastructure
     needsLazyLoad(widgetKey) {
         // Phase 1 tiles don't need lazy loading (use existing data)
@@ -3748,8 +3768,8 @@ export default class DashboardModule {
         return !phase1Tiles.includes(widgetKey);
     }
 
-    async loadWidgetData(widgetKey) {
-        if (this.widgetDataLoaded[widgetKey]) return; // Already loaded
+    async loadWidgetData(widgetKey, force = false) {
+        if (this.widgetDataLoaded[widgetKey] && !force) return; // Already loaded
 
         try {
             switch(widgetKey) {
@@ -3774,13 +3794,14 @@ export default class DashboardModule {
                         end: formatters.getMonthEnd(lastMonthDate.getFullYear(), lastMonthDate.getMonth() + 1)
                     };
 
+                    const mcScope = this._tileScopeParams('monthlyComparison');
                     const [currentResp, previousResp] = await Promise.all([
                         fetch(
-                            OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${thisMonth.start}&endDate=${thisMonth.end}`),
+                            OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${thisMonth.start}&endDate=${thisMonth.end}${mcScope}`),
                             { headers: { 'requesttoken': OC.requestToken } }
                         ),
                         fetch(
-                            OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${lastMonth.start}&endDate=${lastMonth.end}`),
+                            OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${lastMonth.start}&endDate=${lastMonth.end}${mcScope}`),
                             { headers: { 'requesttoken': OC.requestToken } }
                         )
                     ]);
@@ -3794,7 +3815,7 @@ export default class DashboardModule {
 
                 case 'largeTransactions': {
                     const largeResp = await fetch(
-                        OC.generateUrl('/apps/budget/api/transactions?limit=10&sort=amount'),
+                        OC.generateUrl(`/apps/budget/api/transactions?limit=10&sort=amount${this._tileScopeParams('largeTransactions')}`),
                         { headers: { 'requesttoken': OC.requestToken } }
                     );
                     this.widgetData.largeTransactions = await largeResp.json();
@@ -3813,7 +3834,7 @@ export default class DashboardModule {
                 // Phase 3 cases
                 case 'cashFlowForecast': {
                     const forecastResp = await fetch(
-                        OC.generateUrl('/apps/budget/api/forecast/live?days=90'),
+                        OC.generateUrl(`/apps/budget/api/forecast/live?days=90${this._tileScopeParams('cashFlowForecast', { account: false })}`),
                         { headers: { 'requesttoken': OC.requestToken } }
                     );
                     this.widgetData.cashFlowForecast = await forecastResp.json();
@@ -3822,7 +3843,7 @@ export default class DashboardModule {
 
                 case 'yoyComparison': {
                     const yoyResp = await fetch(
-                        OC.generateUrl('/apps/budget/api/yoy/years?years=2'),
+                        OC.generateUrl(`/apps/budget/api/yoy/years?years=2${this._tileScopeParams('yoyComparison')}`),
                         { headers: { 'requesttoken': OC.requestToken } }
                     );
                     this.widgetData.yoyComparison = await yoyResp.json();
@@ -3880,7 +3901,7 @@ export default class DashboardModule {
                     const weekStart = new Date();
                     weekStart.setDate(weekEnd.getDate() - 7);
                     const weekResp = await fetch(
-                        OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${formatters.formatDateForAPI(weekStart)}&endDate=${formatters.formatDateForAPI(weekEnd)}`),
+                        OC.generateUrl(`/apps/budget/api/reports/summary?startDate=${formatters.formatDateForAPI(weekStart)}&endDate=${formatters.formatDateForAPI(weekEnd)}${this._tileScopeParams('weeklyTrend')}`),
                         { headers: { 'requesttoken': OC.requestToken } }
                     );
                     const weekData = await weekResp.json();
@@ -3929,9 +3950,11 @@ export default class DashboardModule {
                         end: formatters.getMonthEnd(ctLastDate.getFullYear(), ctLastDate.getMonth() + 1)
                     };
 
+                    // categories/spending only supports excludeShared (no accountId param)
+                    const ctScope = this._tileScopeParams('categoryTrends', { account: false });
                     const [ctCurrentResp, ctPrevResp] = await Promise.all([
-                        fetch(OC.generateUrl(`/apps/budget/api/categories/spending?startDate=${ctThisMonth.start}&endDate=${ctThisMonth.end}`), { headers: { 'requesttoken': OC.requestToken } }),
-                        fetch(OC.generateUrl(`/apps/budget/api/categories/spending?startDate=${ctLastMonth.start}&endDate=${ctLastMonth.end}`), { headers: { 'requesttoken': OC.requestToken } })
+                        fetch(OC.generateUrl(`/apps/budget/api/categories/spending?startDate=${ctThisMonth.start}&endDate=${ctThisMonth.end}${ctScope}`), { headers: { 'requesttoken': OC.requestToken } }),
+                        fetch(OC.generateUrl(`/apps/budget/api/categories/spending?startDate=${ctLastMonth.start}&endDate=${ctLastMonth.end}${ctScope}`), { headers: { 'requesttoken': OC.requestToken } })
                     ]);
 
                     const ctCurrent = await ctCurrentResp.json();
@@ -4507,16 +4530,18 @@ export default class DashboardModule {
             'debtPayoff': () => this.updateDebtPayoffWidget?.(),
             'debtChart': () => this.renderDebtChartWidget(),
             'debtProgress': () => this.renderDebtProgressWidget(),
-            // Phase 2+ widgets
-            'monthlyComparison': () => this.updateMonthlyComparisonWidget?.(),
-            'largeTransactions': () => this.updateLargeTransactionsWidget?.(),
+            // Phase 2+ widgets. Scoped tiles force a refetch (their settings
+            // are applied at fetch time in loadWidgetData) then re-render;
+            // repainting the cached data would silently ignore the change.
+            'monthlyComparison': () => this.loadWidgetData('monthlyComparison', true).then(() => this.updateMonthlyComparisonWidget?.()),
+            'largeTransactions': () => this.loadWidgetData('largeTransactions', true).then(() => this.updateLargeTransactionsWidget?.()),
             'pensionProjection': () => this.updatePensionProjectionWidget?.(),
-            'weeklyTrend': () => this.updateWeeklyTrendWidget?.(),
-            'categoryTrends': () => this.updateCategoryTrendsWidget?.(),
+            'weeklyTrend': () => this.loadWidgetData('weeklyTrend', true).then(() => this.updateWeeklyTrendWidget?.()),
+            'categoryTrends': () => this.loadWidgetData('categoryTrends', true).then(() => this.updateCategoryTrendsWidget?.()),
             'billsDueSoon': () => this.updateBillsDueSoonWidget?.(),
             'incomeTracking': () => this.updateIncomeTrackingWidget?.(),
-            'cashFlowForecast': () => this.updateCashFlowForecastWidget?.(),
-            'yoyComparison': () => this.updateYoyComparisonWidget?.(),
+            'cashFlowForecast': () => this.loadWidgetData('cashFlowForecast', true).then(() => this.updateCashFlowForecastWidget?.()),
+            'yoyComparison': () => this.loadWidgetData('yoyComparison', true).then(() => this.updateYoyComparisonWidget?.()),
             // Hero widgets
             'accountIncome': () => this.updateAccountIncomeHero?.(),
             'accountExpenses': () => this.updateAccountExpensesHero?.(),

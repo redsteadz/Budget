@@ -355,15 +355,49 @@ class CategoryController extends Controller {
     }
 
     /**
+     * Ids of categories this user muted from their own reports
+     *
      * @NoAdminRequired
      */
-    public function allSpending(string $startDate, string $endDate, string $transactionType = 'debit'): DataResponse {
+    public function reportMutes(): DataResponse {
+        try {
+            return new DataResponse($this->service->getMutedCategoryIds($this->getEffectiveUserId()));
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to load report preferences'));
+        }
+    }
+
+    /**
+     * Hide/show a category in THIS user's reports only. Works for any category
+     * the user can see (own or shared with them); never touches the owner's
+     * excluded-from-reports flag.
+     *
+     * @NoAdminRequired
+     */
+    public function setReportMute(int $id, bool $muted = true): DataResponse {
+        try {
+            $userId = $this->getEffectiveUserId();
+            $visibleIds = $this->granularShareService->getVisibleCategoryIds($userId);
+            if (!in_array($id, $visibleIds, true)) {
+                return new DataResponse(['error' => $this->l->t('Category not found')], Http::STATUS_NOT_FOUND);
+            }
+            $this->service->setReportMute($id, $userId, $muted);
+            return new DataResponse(['categoryId' => $id, 'muted' => $muted]);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to update report preference'));
+        }
+    }
+
+    /**
+     * @NoAdminRequired
+     */
+    public function allSpending(string $startDate, string $endDate, string $transactionType = 'debit', ?bool $excludeShared = null): DataResponse {
         try {
             // Validate transaction type
             if (!in_array($transactionType, ['debit', 'credit'], true)) {
                 $transactionType = 'debit';
             }
-            $visibleAccountIds = $this->getVisibleAccountIds();
+            $visibleAccountIds = $this->getEffectiveAccountIds((bool) $excludeShared);
             $spending = $this->service->getAllCategorySpending($this->userId, $startDate, $endDate, $visibleAccountIds, $transactionType);
             return new DataResponse($spending);
         } catch (\Exception $e) {

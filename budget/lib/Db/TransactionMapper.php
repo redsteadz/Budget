@@ -75,11 +75,30 @@ class TransactionMapper extends QBMapper {
      * companion below) so a new report can't silently re-introduce the leak the
      * way the old per-consumer PHP filtering did.
      */
-    private function excludeReportExcludedCategories(IQueryBuilder $qb, string $alias = 'c'): void {
+    private function excludeReportExcludedCategories(IQueryBuilder $qb, string $alias = 'c', ?string $viewerUserId = null): void {
         $qb->andWhere($qb->expr()->orX(
             $qb->expr()->isNull($alias . '.excluded_from_reports'),
             $qb->expr()->eq($alias . '.excluded_from_reports', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL))
         ));
+        if ($viewerUserId !== null) {
+            $this->excludeViewerMutedCategories($qb, $alias, $viewerUserId);
+        }
+    }
+
+    /**
+     * Per-viewer companion to the owner flag above: drop transactions whose
+     * category the VIEWING user muted ("hide from my reports" on a category
+     * shared with them). The owner's excluded_from_reports flag stays
+     * owner-only because it is one switch affecting every viewer's reports;
+     * this join gives each viewer their own switch (budget_cat_mutes).
+     */
+    private function excludeViewerMutedCategories(IQueryBuilder $qb, string $catAlias, string $viewerUserId): void {
+        $muteAlias = $catAlias . '_mut';
+        $qb->leftJoin($catAlias, 'budget_cat_mutes', $muteAlias, $qb->expr()->andX(
+            $qb->expr()->eq($muteAlias . '.category_id', $catAlias . '.id'),
+            $qb->expr()->eq($muteAlias . '.user_id', $qb->createNamedParameter($viewerUserId))
+        ));
+        $qb->andWhere($qb->expr()->isNull($muteAlias . '.id'));
     }
 
     /**
@@ -88,9 +107,9 @@ class TransactionMapper extends QBMapper {
      * category table (e.g. monthly income/expense trends). A LEFT join keeps
      * uncategorised (NULL category) transactions, which are never "excluded".
      */
-    private function leftJoinExcludeReportCategories(IQueryBuilder $qb, string $txAlias = 't', string $catAlias = 'exc'): void {
+    private function leftJoinExcludeReportCategories(IQueryBuilder $qb, string $txAlias = 't', string $catAlias = 'exc', ?string $viewerUserId = null): void {
         $qb->leftJoin($txAlias, 'budget_categories', $catAlias, $qb->expr()->eq($txAlias . '.category_id', $catAlias . '.id'));
-        $this->excludeReportExcludedCategories($qb, $catAlias);
+        $this->excludeReportExcludedCategories($qb, $catAlias, $viewerUserId);
     }
 
     /**
@@ -853,7 +872,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.type', $qb->createNamedParameter($transactionType)));
 
         $this->excludeScheduledFuture($qb);
-        $this->excludeReportExcludedCategories($qb, 'c');
+        $this->excludeReportExcludedCategories($qb, 'c', $userId);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -918,7 +937,7 @@ class TransactionMapper extends QBMapper {
             ->andWhere($qb->expr()->eq('t.is_split', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)));
 
         $this->excludeScheduledFuture($qb);
-        $this->excludeReportExcludedCategories($qb, 'c');
+        $this->excludeReportExcludedCategories($qb, 'c', $userId);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1879,7 +1898,7 @@ class TransactionMapper extends QBMapper {
         $this->excludeScheduledFuture($qb);
         // Income-vs-expense trend must drop transactions in excluded-from-reports
         // categories (#219); uncategorised transactions are kept.
-        $this->leftJoinExcludeReportCategories($qb, 't', 'exc');
+        $this->leftJoinExcludeReportCategories($qb, 't', 'exc', $userId);
 
         if ($accountId !== null) {
             $qb->andWhere($qb->expr()->eq('t.account_id', $qb->createNamedParameter($accountId, IQueryBuilder::PARAM_INT)));
@@ -1944,7 +1963,7 @@ class TransactionMapper extends QBMapper {
         $this->excludeScheduledFuture($qb);
         // Income-vs-expense trend must drop transactions in excluded-from-reports
         // categories (#219); uncategorised transactions are kept.
-        $this->leftJoinExcludeReportCategories($qb, 't', 'exc');
+        $this->leftJoinExcludeReportCategories($qb, 't', 'exc', $userId);
 
         if ($excludeTransfers) {
             $qb->andWhere($qb->expr()->isNull('t.linked_transaction_id'));

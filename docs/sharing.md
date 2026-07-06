@@ -41,6 +41,8 @@ Categories shared with you appear on your **Categories** page alongside your own
 
 Even with Edit permission, some aspects of a category stay with its owner: the **type** (income or expense), the **parent** category, the **budget**, whether it is **excluded from reports**, and **deleting** it. These change how the owner's budget and reports are calculated, so they remain owner-controlled.
 
+If you don't want a shared category counted in **your own** reports, use the **Hide from my reports** toggle on its row (visible on hover). This affects only what you see — the owner's reports and other viewers are untouched, and the category still works for classifying transactions. Toggle it back with **Show in my reports** at any time.
+
 ## Managing Shares
 
 To view and manage your active shares:

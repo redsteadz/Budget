@@ -6,6 +6,7 @@ namespace OCA\Budget\Service;
 
 use OCA\Budget\Db\Category;
 use OCA\Budget\Db\CategoryMapper;
+use OCA\Budget\Db\CategoryMuteMapper;
 use OCA\Budget\Db\BudgetSnapshot;
 use OCA\Budget\Db\BudgetSnapshotMapper;
 use OCA\Budget\Db\TagSetMapper;
@@ -37,7 +38,8 @@ class CategoryService extends AbstractCrudService {
         IL10N $l,
         private BudgetCarryoverService $carryoverService,
         private RecurringBudgetService $recurringBudgetService,
-        private ?AutoShareService $autoShareService = null
+        private ?AutoShareService $autoShareService = null,
+        private ?CategoryMuteMapper $categoryMuteMapper = null
     ) {
         $this->mapper = $mapper;
         $this->transactionMapper = $transactionMapper;
@@ -804,6 +806,27 @@ class CategoryService extends AbstractCrudService {
     /**
      * Delete all categories for a user
      */
+    /**
+     * Per-viewer report mute (card: write-shared excludedFromReports).
+     * Hides a category from THIS user's reports only — the owner's
+     * excluded_from_reports flag (which affects every viewer) is untouched.
+     */
+    public function setReportMute(int $categoryId, string $userId, bool $muted): void {
+        if ($this->categoryMuteMapper === null) {
+            return;
+        }
+        if ($muted) {
+            $this->categoryMuteMapper->addMute($userId, $categoryId);
+        } else {
+            $this->categoryMuteMapper->removeMute($userId, $categoryId);
+        }
+    }
+
+    /** @return int[] Category ids this user muted from their own reports */
+    public function getMutedCategoryIds(string $userId): array {
+        return $this->categoryMuteMapper?->findMutedCategoryIds($userId) ?? [];
+    }
+
     public function deleteAll(string $userId): int {
         $categories = $this->findAll($userId);
         $count = 0;

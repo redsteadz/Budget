@@ -304,6 +304,38 @@ class CategoryControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_BAD_REQUEST, $response->getStatus());
 	}
 
+	// ── per-viewer report mutes ─────────────────────────────────────
+
+	public function testReportMutesReturnsIds(): void {
+		$this->service->method('getMutedCategoryIds')->with('user1')->willReturn([4, 9]);
+
+		$response = $this->controller->reportMutes();
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame([4, 9], $response->getData());
+	}
+
+	public function testSetReportMuteStoresForVisibleCategory(): void {
+		$this->granularShareService->method('getVisibleCategoryIds')->with('user1')->willReturn([4, 9]);
+		$this->service->expects($this->once())
+			->method('setReportMute')
+			->with(9, 'user1', true);
+
+		$response = $this->controller->setReportMute(9, true);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertTrue($response->getData()['muted']);
+	}
+
+	public function testSetReportMuteRejectsInvisibleCategory(): void {
+		$this->granularShareService->method('getVisibleCategoryIds')->willReturn([4]);
+		$this->service->expects($this->never())->method('setReportMute');
+
+		$response = $this->controller->setReportMute(999, true);
+
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+	}
+
 	// ── allSpending ─────────────────────────────────────────────────
 
 	public function testAllSpendingReturnsData(): void {
@@ -316,6 +348,22 @@ class CategoryControllerTest extends TestCase {
 
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 		$this->assertSame($spending, $response->getData());
+	}
+
+	public function testAllSpendingExcludeSharedScopesToOwnAccounts(): void {
+		// excludeShared narrows the account scope to the user's own accounts
+		// (shared-with-me accounts dropped) before hitting the service (#286)
+		$this->granularShareService->method('getOwnAccountIds')->willReturn([1, 2]);
+		$this->granularShareService->expects($this->never())->method('getVisibleAccountIds');
+
+		$this->service->expects($this->once())
+			->method('getAllCategorySpending')
+			->with('user1', '2025-01-01', '2025-03-31', [1, 2], 'debit')
+			->willReturn([]);
+
+		$response = $this->controller->allSpending('2025-01-01', '2025-03-31', 'debit', true);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 	}
 
 	// ── spending ────────────────────────────────────────────────────
