@@ -41,7 +41,7 @@ A visual breakdown of where your money goes, displayed as pie charts and bar cha
 
 ### What It Shows
 
-- **Pie Chart** — Proportional spending by category. Hover over slices to see amounts and percentages.
+- **Pie Chart** — Proportional spending by category. Hover over slices to see amounts and percentages. **Click a slice** to jump to the transaction list filtered to that category and the report's date range.
 - **Bar Chart** — Ranked list of categories by total spending, making it easy to identify your largest expenses.
 - **Subcategory Drill-Down** — Click a category to see spending broken down by its subcategories.
 

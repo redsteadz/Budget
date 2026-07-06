@@ -3416,6 +3416,28 @@ class BudgetApp {
     }
 
     /**
+     * Jump to the Transactions view filtered to a category — used by the
+     * spending pie charts (#317). categoryId may be a single id, an array of
+     * ids (an aggregated top-level slice plus its subcategories), or null
+     * for uncategorized spending. The date range mirrors the chart's period
+     * so the listed transactions match the clicked slice.
+     */
+    openTransactionsForCategory(categoryId, { dateFrom = '', dateTo = '', accountId = '' } = {}) {
+        const category = Array.isArray(categoryId)
+            ? categoryId.join(',')
+            : (categoryId ? String(categoryId) : 'uncategorized');
+        this.transactionFilters = {
+            category,
+            type: 'debit',
+            dateFrom: dateFrom || '',
+            dateTo: dateTo || '',
+            account: accountId ? String(accountId) : '',
+        };
+        this.currentPage = 1;
+        this.showView('transactions');
+    }
+
+    /**
      * Highlight a transaction row with a flash animation and scroll to it
      */
     highlightTransactionRow(row) {

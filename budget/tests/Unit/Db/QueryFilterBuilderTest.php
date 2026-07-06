@@ -102,6 +102,37 @@ class QueryFilterBuilderTest extends TestCase {
         $this->builder->applyTransactionFilters($this->qb, ['category' => 10], 't');
     }
 
+    public function testCategoryFilterCommaListAppliesIn(): void {
+        // A chart drill-down from an aggregated top-level slice passes the
+        // parent id plus its subcategory ids as a comma list (#317)
+        $capturedIds = null;
+        $this->qb->method('createNamedParameter')
+            ->willReturnCallback(function ($value) use (&$capturedIds) {
+                if (is_array($value)) {
+                    $capturedIds = $value;
+                }
+                return ':param';
+            });
+
+        $this->expr->expects($this->once())
+            ->method('in')
+            ->with('t.category_id', ':param');
+        $this->expr->expects($this->never())->method('eq');
+
+        $this->builder->applyTransactionFilters($this->qb, ['category' => '10,12,15'], 't');
+
+        $this->assertSame([10, 12, 15], $capturedIds);
+    }
+
+    public function testCategoryFilterSingleIdStringAppliesEq(): void {
+        $this->expr->expects($this->once())
+            ->method('eq')
+            ->with('t.category_id', ':param');
+        $this->expr->expects($this->never())->method('in');
+
+        $this->builder->applyTransactionFilters($this->qb, ['category' => '10'], 't');
+    }
+
     public function testUncategorizedFilterUsesIsNull(): void {
         $this->expr->expects($this->once())
             ->method('isNull')

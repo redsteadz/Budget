@@ -305,7 +305,7 @@ export default class DashboardModule {
 
             // Update Charts (using 6-month trend data)
             if (trendData.spending) {
-                this.updateSpendingChart(trendData.spending);
+                this.updateSpendingChart(trendData.spending, 'spendingChart', { dateFrom: sixMonthsAgo, dateTo: endOfMonth });
             }
             if (trendData.trends) {
                 this.updateTrendChart(trendData.trends);
@@ -2197,7 +2197,23 @@ export default class DashboardModule {
     // Chart Updates
     // ===========================
 
-    updateSpendingChart(spending, instanceId = 'spendingChart') {
+    /** A category id plus all its descendant ids (drill-down from an aggregated top-level slice) */
+    categoryWithDescendants(catId) {
+        const cats = this.app.categories || [];
+        const ids = [parseInt(catId)];
+        const collect = (parentId) => {
+            for (const c of cats) {
+                if (c.parentId === parentId) {
+                    ids.push(c.id);
+                    collect(c.id);
+                }
+            }
+        };
+        collect(parseInt(catId));
+        return ids;
+    }
+
+    updateSpendingChart(spending, instanceId = 'spendingChart', range = null) {
         let canvas;
         if (this.isDuplicateInstance(instanceId)) {
             const card = this.getWidgetCard(instanceId);
@@ -2242,6 +2258,24 @@ export default class DashboardModule {
         const data = sortedData.map(item => Math.abs(item.total || item.amount || 0));
         const colors = sortedData.map(item => item.color || '#999');
 
+        // Slice click → transactions view filtered to that category, scoped
+        // to the charted period and the tile's account (#317)
+        const tileAccountId = this._validAccountId(spendingSettings.accountId);
+        const handleSliceClick = (event, elements) => {
+            if (!elements || elements.length === 0) return;
+            const item = sortedData[elements[0].index];
+            if (!item) return;
+            let catId = item.id ?? item.categoryId ?? null;
+            if (catId && spendingSettings.topLevelOnly) {
+                catId = this.categoryWithDescendants(catId);
+            }
+            this.app.openTransactionsForCategory(catId, {
+                dateFrom: range?.dateFrom || '',
+                dateTo: range?.dateTo || '',
+                accountId: tileAccountId || '',
+            });
+        };
+
         const spendingChartType = spendingSettings.chartType || 'doughnut';
         const isSpendingBar = spendingChartType === 'bar';
         this.charts[instanceId] = new Chart(ctx, {
@@ -2258,11 +2292,17 @@ export default class DashboardModule {
                 responsive: true,
                 maintainAspectRatio: false,
                 ...(isSpendingBar ? { indexAxis: 'y' } : {}),
+                onClick: handleSliceClick,
+                onHover: (event, elements) => {
+                    const target = event.native?.target;
+                    if (target) target.style.cursor = elements.length ? 'pointer' : 'default';
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: (context) => `${context.label}: ${this.formatCurrency(context.raw)}`
+                            label: (context) => `${context.label}: ${this.formatCurrency(context.raw)}`,
+                            footer: () => t('budget', 'Click to view transactions')
                         }
                     }
                 },
@@ -2825,7 +2865,9 @@ export default class DashboardModule {
                     break;
             }
 
-            let url = `/apps/budget/api/reports/spending?startDate=${formatters.formatDateForAPI(startDate)}&endDate=${formatters.formatDateForAPI(endDate)}`;
+            const startStr = formatters.formatDateForAPI(startDate);
+            const endStr = formatters.formatDateForAPI(endDate);
+            let url = `/apps/budget/api/reports/spending?startDate=${startStr}&endDate=${endStr}`;
             if (accountId) {
                 url += `&accountId=${accountId}`;
             }
@@ -2840,7 +2882,7 @@ export default class DashboardModule {
             const data = await response.json();
 
             if (data.data) {
-                this.updateSpendingChart(data.data, instanceId);
+                this.updateSpendingChart(data.data, instanceId, { dateFrom: startStr, dateTo: endStr });
             }
         } catch (error) {
             console.error('Failed to refresh spending chart:', error);

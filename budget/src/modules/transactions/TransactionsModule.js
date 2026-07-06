@@ -340,9 +340,30 @@ export default class TransactionsModule {
             categoryFilter.innerHTML = `<option value="">${t('budget', 'All Categories')}</option><option value="uncategorized">${t('budget', 'Uncategorized')}</option>`;
             dom.populateCategorySelect(categoryFilter, this.categoryTree || this.categories);
             if (this.app.transactionFilters?.category) {
-                categoryFilter.value = this.app.transactionFilters.category;
+                // A comma id-list (chart drill-down from an aggregated slice,
+                // #317) shows its first id — the parent category
+                categoryFilter.value = String(this.app.transactionFilters.category).split(',')[0];
             }
         }
+
+        // Restore other pre-set filters (e.g. arriving from a spending-chart
+        // drill-down, #317) so the panel reflects what is actually applied
+        const presetFilters = this.app.transactionFilters || {};
+        const typeFilter = document.getElementById('filter-type');
+        if (typeFilter && presetFilters.type) {
+            typeFilter.value = presetFilters.type;
+        }
+        const restoreDate = (id, value) => {
+            const input = document.getElementById(id);
+            if (!input || !value) return;
+            if (input._flatpickr) {
+                input._flatpickr.setDate(value, false);
+            } else {
+                input.value = value;
+            }
+        };
+        restoreDate('filter-date-from', presetFilters.dateFrom);
+        restoreDate('filter-date-to', presetFilters.dateTo);
 
         // Populate reconcile account select
         const reconcileAccount = document.getElementById('reconcile-account');

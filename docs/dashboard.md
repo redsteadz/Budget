@@ -82,7 +82,7 @@ Widget tiles provide detailed views, lists, charts, and actionable information:
 | **Upcoming Bills** | Bills due soon with amounts and due dates |
 | **Budget Progress** | Visual progress bars for budget categories |
 | **Savings Goals** | Progress toward savings targets |
-| **Spending by Category** | Chart showing spending distribution |
+| **Spending by Category** | Chart showing spending distribution — click a slice or bar to see that category's transactions for the charted period |
 | **Top Categories** | Highest-spending categories this period |
 | **Recent Transactions** | Latest transactions across accounts |
 | **Account Performance** | Account balance trends over time |

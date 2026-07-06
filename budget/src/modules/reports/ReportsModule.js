@@ -868,7 +868,10 @@ export default class ReportsModule {
         const totalSpending = categoryData.totals?.amount || 0;
 
         // Render category chart
-        this.renderReportSpendingChart(categoryData.data || [], totalSpending);
+        this.renderReportSpendingChart(categoryData.data || [], totalSpending, {
+            dateFrom: params.get('startDate') || '',
+            dateTo: params.get('endDate') || '',
+        });
 
         // Render category table
         this.renderReportCategoryTable(categoryData.data || [], totalSpending, currency);
@@ -877,7 +880,7 @@ export default class ReportsModule {
         this.renderReportVendorTable(vendorData.data || [], currency);
     }
 
-    renderReportSpendingChart(data, totalSpending) {
+    renderReportSpendingChart(data, totalSpending, range = null) {
         const canvas = document.getElementById('report-spending-chart');
         if (!canvas) return;
 
@@ -894,6 +897,13 @@ export default class ReportsModule {
         ];
         const colors = sortedData.map((d, i) => d.color || defaultColors[i % defaultColors.length]);
 
+        // Slice click → transactions view filtered to that category and the
+        // report's date range (#317). Account scope carries over only when
+        // the report is limited to exactly one account — the transactions
+        // filter is single-account.
+        const selectedAccounts = this.getSelectedReportAccountIds();
+        const singleAccountId = selectedAccounts.length === 1 ? selectedAccounts[0] : '';
+
         this.reportCharts.spending = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -909,6 +919,20 @@ export default class ReportsModule {
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '60%',
+                onClick: (event, elements) => {
+                    if (!elements || elements.length === 0) return;
+                    const item = sortedData[elements[0].index];
+                    if (!item) return;
+                    this.app.openTransactionsForCategory(item.id ?? item.categoryId ?? null, {
+                        dateFrom: range?.dateFrom || '',
+                        dateTo: range?.dateTo || '',
+                        accountId: singleAccountId,
+                    });
+                },
+                onHover: (event, elements) => {
+                    const target = event.native?.target;
+                    if (target) target.style.cursor = elements.length ? 'pointer' : 'default';
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -917,7 +941,8 @@ export default class ReportsModule {
                                 const value = context.raw;
                                 const pct = totalSpending > 0 ? ((value / totalSpending) * 100).toFixed(1) : 0;
                                 return `${context.label}: ${this.formatCurrency(value)} (${pct}%)`;
-                            }
+                            },
+                            footer: () => t('budget', 'Click to view transactions')
                         }
                     }
                 }

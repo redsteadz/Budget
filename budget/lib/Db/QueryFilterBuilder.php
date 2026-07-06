@@ -27,15 +27,25 @@ class QueryFilterBuilder {
             ));
         }
 
-        // Category filter
+        // Category filter — accepts a single id or a comma-separated id list
+        // (a pie-chart drill-down from an aggregated top-level slice passes
+        // the parent plus all its subcategories, #317)
         if (!empty($filters['category'])) {
             if ($filters['category'] === 'uncategorized') {
                 $qb->andWhere($qb->expr()->isNull("{$alias}.category_id"));
             } else {
-                $qb->andWhere($qb->expr()->eq(
-                    "{$alias}.category_id",
-                    $qb->createNamedParameter($filters['category'], IQueryBuilder::PARAM_INT)
-                ));
+                $ids = array_values(array_filter(array_map('intval', explode(',', (string) $filters['category']))));
+                if (count($ids) > 1) {
+                    $qb->andWhere($qb->expr()->in(
+                        "{$alias}.category_id",
+                        $qb->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)
+                    ));
+                } else {
+                    $qb->andWhere($qb->expr()->eq(
+                        "{$alias}.category_id",
+                        $qb->createNamedParameter($ids[0] ?? 0, IQueryBuilder::PARAM_INT)
+                    ));
+                }
             }
         }
 
