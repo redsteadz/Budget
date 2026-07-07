@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.38.0] - 2026-07-07
 
 ### Fixed
 - The **account selector** saved in the gear settings of insight tiles (Monthly Comparison, Large Transactions, Weekly Spending, Year-over-Year) was silently ignored — the tiles always showed all-accounts data. The saved account now actually scopes the tile's numbers

@@ -1,6 +1,10 @@
 OC.L10N.register(
     "budget",
     {
+    "widget" : "Rozpočet",
+    "balance" : "Zůstatek",
+    "currency" : "Kryptoměna",
+    "institution" : "Instituce",
     "Failed to retrieve accounts" : "Nepodařilo se získat účty",
     "Account not found" : "Účet nenalezen",
     "Account" : "Účet",

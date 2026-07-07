@@ -1,6 +1,8 @@
 OC.L10N.register(
     "budget",
     {
+    "widget" : "Budget",
+    "institution" : "Établissement",
     "Failed to retrieve accounts" : "La récupération des comptes a échoué",
     "Account not found" : "Nom du titulaire",
     "Account" : "Compte",
@@ -385,6 +387,8 @@ OC.L10N.register(
     "1 account" : "Compte",
     "Saved report deleted" : "Snapshot supprimé",
     "Move account" : "Compte",
+    "Invalid JSON: {error}" : "Données JSON invalide",
+    "Rule JSON copied to clipboard" : "Impossible d’importer les données",
     "Failed to run group rules: {error}" : "Impossible d’exécuter les scénarios de prévision",
     "Import Source" : "Règle d’import",
     "Failed to save admin settings" : "Impossible de récupérer les actifs",

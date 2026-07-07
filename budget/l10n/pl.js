@@ -1,6 +1,7 @@
 OC.L10N.register(
     "budget",
     {
+    "institution" : "Instytucja",
     "Failed to retrieve accounts" : "Nie udało się pobrać kont",
     "Account not found" : "Nie znaleziono konta",
     "Account" : "Konto",
