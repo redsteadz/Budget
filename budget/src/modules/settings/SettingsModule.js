@@ -203,6 +203,7 @@ export default class SettingsModule {
             'PHP': '₱', 'MYR': 'RM', 'VND': '₫', 'TWD': 'NT$',
             'SGD': 'S$', 'HKD': 'HK$', 'PKR': 'Rs', 'BDT': '৳',
             'AUD': 'A$', 'NZD': 'NZ$', 'AED': 'AED', 'SAR': 'SAR',
+            'QAR': 'QAR', 'JOD': 'JOD',
             'ILS': '₪', 'EGP': 'E£', 'NGN': '₦', 'KES': 'KSh',
             'ZAR': 'R',
         };

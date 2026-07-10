@@ -67,6 +67,8 @@ enum Currency: string {
     // Middle East & Africa
     case AED = 'AED';  // UAE Dirham
     case SAR = 'SAR';  // Saudi Riyal
+    case QAR = 'QAR';  // Qatari Riyal
+    case JOD = 'JOD';  // Jordanian Dinar
     case ILS = 'ILS';  // Israeli New Shekel
     case EGP = 'EGP';  // Egyptian Pound
     case NGN = 'NGN';  // Nigerian Naira
@@ -161,6 +163,8 @@ enum Currency: string {
             // Middle East & Africa
             self::AED => 'AED',
             self::SAR => 'SAR',
+            self::QAR => 'QAR',
+            self::JOD => 'JOD',
             self::ILS => '₪',
             self::EGP => 'E£',
             self::NGN => '₦',
@@ -201,6 +205,7 @@ enum Currency: string {
     public function decimals(): int {
         return match ($this) {
             self::JPY, self::KRW, self::VND, self::CLP, self::ISK, self::HUF, self::IDR, self::PYG => 0,
+            self::JOD => 3,
             self::XRP, self::ADA, self::ATOM, self::ALGO, self::USDT, self::USDC => 6,
             self::XLM => 7,
             self::BTC, self::ETH, self::SOL, self::DOGE, self::DOT, self::LTC,
@@ -271,6 +276,8 @@ enum Currency: string {
             // Middle East & Africa
             self::AED => 'UAE Dirham',
             self::SAR => 'Saudi Riyal',
+            self::QAR => 'Qatari Riyal',
+            self::JOD => 'Jordanian Dinar',
             self::ILS => 'Israeli New Shekel',
             self::EGP => 'Egyptian Pound',
             self::NGN => 'Nigerian Naira',

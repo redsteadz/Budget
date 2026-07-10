@@ -65,6 +65,8 @@ const CURRENCY_CONFIG = {
     // Middle East & Africa
     'AED': { symbol: 'AED', position: 'prefix' },
     'SAR': { symbol: 'SAR', position: 'prefix' },
+    'QAR': { symbol: 'QAR', position: 'prefix' },
+    'JOD': { symbol: 'JOD', position: 'prefix', decimals: 3 },
     'ILS': { symbol: '₪', position: 'prefix' },
     'EGP': { symbol: 'E£', position: 'prefix' },
     'NGN': { symbol: '₦', position: 'prefix' },
