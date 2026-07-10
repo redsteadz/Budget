@@ -118,6 +118,10 @@ class RecurringIncomeService extends AbstractCrudService {
                 // Convert camelCase to snake_case for database column names
                 $columnName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
                 $directDbUpdates[$columnName] = null;
+                    if (property_exists($income, $key)) {
+                        $setter = 'set' . ucfirst($key);
+                        $income->$setter(null);
+                    }
                 continue;
             }
 
@@ -130,8 +134,6 @@ class RecurringIncomeService extends AbstractCrudService {
         // Apply direct database updates for null values first
         if (!empty($directDbUpdates)) {
             $this->mapper->updateFields($id, $userId, $directDbUpdates);
-            // Reload entity to reflect the changes
-            $income = $this->find($id, $userId);
         }
 
         // Recalculate next expected date if needed
