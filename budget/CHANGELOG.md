@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Editing a **monthly recurring income** never saved the changes — the app showed *"Income saved successfully"* but the Expected Day (and every other field) kept its old value. Any update whose payload contained an empty field (a monthly income always sends its yearly-only "expected month" as empty) reloaded the entity mid-save and threw away the edits. Thanks to @redsteadz for the fix ([#324](https://github.com/otherworld-dev/Budget/issues/324), [#325](https://github.com/otherworld-dev/Budget/pull/325))
+
 ## [2.38.0] - 2026-07-07
 
 ### Fixed

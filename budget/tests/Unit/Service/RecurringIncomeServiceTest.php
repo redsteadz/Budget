@@ -336,52 +336,51 @@ class RecurringIncomeServiceTest extends TestCase {
         $this->assertCount(2, $result);
         $this->assertEquals('Salary', $result[0]->getName());
         $this->assertEquals('Freelance', $result[1]->getName());
-  }
+    }
 
-  // == updateAfterCreation ====
-  public function testUpdatePersistsNonNullChangesWhenRequestAlsoContainsNullFields(): void {
-      $income = $this->makeIncome([
-          'expectedDay' => 25,
-          'expectedMonth' => 6,
-          'nextExpectedDate' => '2026-04-25',
-      ]);
+    public function testUpdatePersistsNonNullChangesWhenRequestAlsoContainsNullFields(): void {
+        $income = $this->makeIncome([
+            'expectedDay' => 25,
+            'expectedMonth' => 6,
+            'nextExpectedDate' => '2026-04-25',
+        ]);
 
-      $savedIncome = null;
+        $savedIncome = null;
 
-      $this->mapper->expects($this->exactly(2))
-          ->method('find')
-          ->with(1, 'user1')
-          ->willReturnCallback(function () use ($income, &$savedIncome) {
-              return $savedIncome ?? $income;
-          });
+        $this->mapper->expects($this->exactly(2))
+            ->method('find')
+            ->with(1, 'user1')
+            ->willReturnCallback(function () use ($income, &$savedIncome) {
+                return $savedIncome ?? $income;
+            });
 
-      $this->frequencyCalculator->expects($this->once())
-          ->method('calculateNextDueDate')
-          ->with('monthly', 15, null, null)
-          ->willReturn('2026-04-15');
+        $this->frequencyCalculator->expects($this->once())
+            ->method('calculateNextDueDate')
+            ->with('monthly', 15, null, null)
+            ->willReturn('2026-04-15');
 
-      $this->mapper->expects($this->once())
-          ->method('updateFields')
-          ->with(1, 'user1', ['expected_month' => null]);
+        $this->mapper->expects($this->once())
+            ->method('updateFields')
+            ->with(1, 'user1', ['expected_month' => null]);
 
-      $this->mapper->expects($this->once())
-          ->method('update')
-          ->willReturnCallback(function (RecurringIncome $i) use (&$savedIncome) {
-              $this->assertSame(15, $i->getExpectedDay());
-              $this->assertNull($i->getExpectedMonth());
-              $this->assertSame('2026-04-15', $i->getNextExpectedDate());
+        $this->mapper->expects($this->once())
+            ->method('update')
+            ->willReturnCallback(function (RecurringIncome $i) use (&$savedIncome) {
+                $this->assertSame(15, $i->getExpectedDay());
+                $this->assertNull($i->getExpectedMonth());
+                $this->assertSame('2026-04-15', $i->getNextExpectedDate());
 
-              $savedIncome = $i;
-              return $i;
-          });
+                $savedIncome = $i;
+                return $i;
+            });
 
-      $result = $this->service->update(1, 'user1', [
-          'expectedDay' => 15,
-          'expectedMonth' => null,
-      ]);
+        $result = $this->service->update(1, 'user1', [
+            'expectedDay' => 15,
+            'expectedMonth' => null,
+        ]);
 
-      $this->assertSame(15, $result->getExpectedDay());
-      $this->assertNull($result->getExpectedMonth());
-      $this->assertSame('2026-04-15', $result->getNextExpectedDate());
-  }
+        $this->assertSame(15, $result->getExpectedDay());
+        $this->assertNull($result->getExpectedMonth());
+        $this->assertSame('2026-04-15', $result->getNextExpectedDate());
+    }
 }

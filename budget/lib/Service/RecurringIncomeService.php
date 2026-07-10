@@ -118,10 +118,10 @@ class RecurringIncomeService extends AbstractCrudService {
                 // Convert camelCase to snake_case for database column names
                 $columnName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $key));
                 $directDbUpdates[$columnName] = null;
-                    if (property_exists($income, $key)) {
-                        $setter = 'set' . ucfirst($key);
-                        $income->$setter(null);
-                    }
+                if (property_exists($income, $key)) {
+                    $setter = 'set' . ucfirst($key);
+                    $income->$setter(null);
+                }
                 continue;
             }
 
