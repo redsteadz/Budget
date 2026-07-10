@@ -276,10 +276,10 @@ export default class ImportModule {
      * The user can still re-toggle them before importing (their value wins).
      */
     applyTemplateOptions(template) {
-        const showDuplicates = document.getElementById('show-duplicates');
-        if (showDuplicates && typeof template.skipDuplicates === 'boolean') {
-            // The control is "show duplicates" — the inverse of "skip duplicates".
-            showDuplicates.checked = !template.skipDuplicates;
+        const importDuplicates = document.getElementById('import-duplicates');
+        if (importDuplicates && typeof template.skipDuplicates === 'boolean') {
+            // The control is "import duplicates" — the inverse of "skip duplicates".
+            importDuplicates.checked = !template.skipDuplicates;
         }
         const applyRules = document.getElementById('apply-rules');
         if (applyRules && typeof template.applyRules === 'boolean') {
@@ -324,7 +324,7 @@ export default class ImportModule {
         }
 
         const format = this.importFormat || 'csv';
-        const skipDuplicates = !(document.getElementById('show-duplicates')?.checked ?? true);
+        const skipDuplicates = !(document.getElementById('import-duplicates')?.checked ?? false);
         const requestBody = { name, format, skipDuplicates };
 
         if (format === 'csv') {
@@ -1033,11 +1033,13 @@ export default class ImportModule {
         const mapping = this.getCurrentMapping();
         const isMultiAccount = this.sourceAccounts && this.sourceAccounts.length > 0;
 
-        // Build request body based on import type
+        // Build request body based on import type. The preview always includes
+        // duplicates (flagged) so the user can see what would be skipped —
+        // whether they import is decided at execute time (#327).
         const requestBody = {
             fileId: this.currentImportData.fileId,
             mapping: mapping,
-            skipDuplicates: !(document.getElementById('show-duplicates')?.checked ?? true),
+            skipDuplicates: false,
             delimiter: document.getElementById('csv-delimiter')?.value || ','
         };
 
@@ -1102,7 +1104,10 @@ export default class ImportModule {
 
     updateImportSummary(result) {
         document.getElementById('total-transactions').textContent = result.totalRows || 0;
-        document.getElementById('new-transactions').textContent = result.validTransactions || 0;
+        // The preview includes flagged duplicates in validTransactions, so
+        // "new" is what remains once they are taken out
+        document.getElementById('new-transactions').textContent =
+            Math.max(0, (result.validTransactions || 0) - (result.duplicates || 0));
         document.getElementById('duplicate-transactions').textContent = result.duplicates || 0;
         // Auto-categorized count. Prefer the server's full-dataset count; the
         // transactions array is only a 50-row preview sample, so counting it
@@ -1186,13 +1191,13 @@ export default class ImportModule {
 
         if (!transactions || transactions.length === 0) {
             const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="6" style="text-align: center; padding: 20px;">${t('budget', 'No transactions to import')}</td>`;
+            row.innerHTML = `<td colspan="5" style="text-align: center; padding: 20px;">${t('budget', 'No transactions to import')}</td>`;
             tbody.appendChild(row);
             document.getElementById('preview-info').textContent = t('budget', 'No transactions found');
             return;
         }
 
-        transactions.slice(0, 50).forEach((transaction, index) => {
+        transactions.slice(0, 50).forEach((transaction) => {
             const row = document.createElement('tr');
             const amount = parseFloat(transaction.amount) || 0;
             const isDuplicate = transaction.isDuplicate || false;
@@ -1201,9 +1206,6 @@ export default class ImportModule {
                 : `<span class="status-badge status-success">${t('budget', 'New')}</span>`;
 
             row.innerHTML = `
-                <td>
-                    <input type="checkbox" ${isDuplicate ? '' : 'checked'} data-row-index="${transaction.rowIndex ?? index}">
-                </td>
                 <td>${transaction.date || ''}</td>
                 <td>${transaction.description || ''}</td>
                 <td class="${amount >= 0 ? 'positive' : 'negative'}">
@@ -1235,7 +1237,7 @@ export default class ImportModule {
 
         rows.forEach(row => {
             const statusBadge = row.querySelector('.status-badge');
-            const category = row.cells[4]?.textContent?.trim();
+            const category = row.cells[3]?.textContent?.trim();
 
             const isDuplicate = statusBadge?.textContent?.trim() === t('budget', 'Duplicate');
             const isUncategorized = category === t('budget', 'Uncategorized');
@@ -1400,11 +1402,13 @@ export default class ImportModule {
         const mapping = this.getCurrentMapping();
         const isMultiAccount = this.sourceAccounts && this.sourceAccounts.length > 0;
 
-        // Build request body based on import type
+        // Build request body based on import type. Duplicates are skipped
+        // unless the user explicitly opted in — "Show duplicates" is only a
+        // display filter and must not decide what gets imported (#327).
         const requestBody = {
             fileId: this.currentImportData.fileId,
             mapping: mapping,
-            skipDuplicates: !(document.getElementById('show-duplicates')?.checked ?? true),
+            skipDuplicates: !(document.getElementById('import-duplicates')?.checked ?? false),
             applyRules: true,
             delimiter: document.getElementById('csv-delimiter')?.value || ','
         };
@@ -1567,6 +1571,10 @@ export default class ImportModule {
         document.querySelectorAll('#import-step-2 select').forEach(select => {
             select.selectedIndex = 0;
         });
+
+        // Importing duplicates is a per-import opt-in — never carry it over
+        const importDuplicates = document.getElementById('import-duplicates');
+        if (importDuplicates) importDuplicates.checked = false;
 
         // Reset account selection UI
         const singleAccountSection = document.getElementById('single-account-selection');

@@ -2351,6 +2351,10 @@ style('budget', 'budget-app');
                                         <input type="checkbox" id="show-uncategorized" checked>
                                         <?php p($l->t('Show uncategorized')); ?>
                                     </label>
+                                    <label>
+                                        <input type="checkbox" id="import-duplicates">
+                                        <?php p($l->t('Import flagged duplicates too')); ?>
+                                    </label>
                                 </div>
                                 <div class="preview-pagination">
                                     <span id="preview-info"><?php p($l->t('Showing 0 of 0')); ?></span>
@@ -2361,7 +2365,6 @@ style('budget', 'budget-app');
                                 <table id="preview-table">
                                     <thead>
                                         <tr>
-                                            <th><?php p($l->t('Import')); ?></th>
                                             <th><?php p($l->t('Date')); ?></th>
                                             <th><?php p($l->t('Description')); ?></th>
                                             <th><?php p($l->t('Amount')); ?></th>

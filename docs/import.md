@@ -75,6 +75,8 @@ After mapping your columns, click **Preview** to see a table of parsed transacti
 - Confirm amounts have the right sign (positive for income, negative for expenses)
 - Check that descriptions and vendors look right
 
+Rows that match a transaction already in the account are flagged with a **Duplicate** badge. They are shown for review but skipped when you import — see [Duplicate Detection](#duplicate-detection). The **Show duplicates** and **Show uncategorized** checkboxes only filter what the preview displays; they do not change what is imported.
+
 > **Tip:** If something looks wrong in the preview, go back and adjust your column mapping or delimiter settings. No data is saved until you execute the import.
 
 ### 7. Execute Import
@@ -178,7 +180,7 @@ Duplicates are skipped during import and reported in the results summary. This m
 
 Detection is **occurrence-aware**: if one file legitimately contains several identical rows (e.g. two same-priced coffees on the same day), they all import as distinct transactions — and re-importing the same statement still skips every one of them. Re-importing an older statement also recovers any rows that earlier versions mis-flagged as duplicates.
 
-If you disable **Skip Duplicate Transactions**, the entire batch imports — including rows that match existing transactions.
+To deliberately import rows that are flagged as duplicates (for example, genuinely repeated payments your bank exported without a unique reference), tick **Import flagged duplicates too** in the preview step. The option applies to the whole batch and resets for every new import; saved import templates can also store it.
 
 > **Note:** Duplicate detection is based on exact matching. If your bank changes the description text between exports, the same transaction may not be recognized as a duplicate. If your export has a unique sequence number per transaction, map it to the **Reference** column — it is stored on each transaction and makes duplicate detection exact. (OFX imports use the bank's own unique transaction IDs automatically.)
 
@@ -211,4 +213,4 @@ Rolling back removes only the transactions from that specific import. Transactio
 ## Settings
 
 - **Auto-apply import rules** -- When enabled, import rules are applied automatically to new transactions during import. Disable this if you prefer to review transactions before categorizing.
-- **Skip duplicate transactions** -- Controls whether duplicate detection is active during import. Enabled by default.
+- **Import flagged duplicates too** -- Per-import option in the preview step. Off by default, so flagged duplicates are skipped unless you explicitly opt in.
