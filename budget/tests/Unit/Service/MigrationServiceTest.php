@@ -275,6 +275,88 @@ class MigrationServiceTest extends TestCase {
 		$this->assertEquals(1, $result['counts']['settings']);
 	}
 
+	public function testImportAllPreservesAllBillFields(): void {
+		// Restores used to copy only a handful of bill fields — custom
+		// recurrence patterns, transfer routing, auto-pay and more were
+		// silently dropped from every backup import
+		$zipContent = $this->createTestZip([
+			'manifest.json' => json_encode(['version' => '1.0.0', 'appId' => 'budget']),
+			'categories.json' => json_encode([]),
+			'accounts.json' => json_encode([
+				['id' => 200, 'name' => 'Checking', 'type' => 'checking'],
+				['id' => 201, 'name' => 'Savings', 'type' => 'savings'],
+			]),
+			'transactions.json' => json_encode([]),
+			'bills.json' => json_encode([
+				[
+					'id' => 300,
+					'name' => 'Hypothek',
+					'description' => 'Mortgage interest',
+					'amount' => 2912.00,
+					'frequency' => 'custom',
+					'customRecurrencePattern' => '{"months":[3,6,9,12]}',
+					'dueDay' => 28,
+					'accountId' => 200,
+					'destinationAccountId' => 201,
+					'isTransfer' => true,
+					'transferDescriptionPattern' => 'HYP {month}',
+					'autoPayEnabled' => true,
+					'reminderDays' => 5,
+					'tagIds' => [7, 8],
+					'startDate' => '2026-01-01',
+					'endDate' => '2030-12-31',
+					'remainingPayments' => 12,
+					'splitTemplate' => [['categoryId' => 100, 'percent' => 100]],
+					'excludedFromForecast' => true,
+					'createTransaction' => false,
+					'isActive' => true,
+					'lastPaidDate' => '2026-06-28',
+					'nextDueDate' => '2026-09-28',
+				],
+			]),
+			'import_rules.json' => json_encode([]),
+			'settings.json' => json_encode([]),
+		]);
+
+		$this->transactionMapper->method('findAll')->willReturn([]);
+		$this->billMapper->method('findAll')->willReturn([]);
+		$this->importRuleMapper->method('findAll')->willReturn([]);
+		$this->accountMapper->method('findAll')->willReturn([]);
+		$this->categoryMapper->method('findAll')->willReturn([]);
+
+		$this->accountMapper->method('insert')->willReturnCallback(function (Account $a) {
+			static $i = 0;
+			$a->setId([2, 3][$i++]);
+			return $a;
+		});
+
+		$this->billMapper->expects($this->once())
+			->method('insert')
+			->with($this->callback(function (Bill $b) {
+				$this->assertSame('{"months":[3,6,9,12]}', $b->getCustomRecurrencePattern());
+				$this->assertSame('Mortgage interest', $b->getDescription());
+				$this->assertTrue((bool) $b->getIsTransfer());
+				$this->assertSame(2, $b->getAccountId());
+				$this->assertSame(3, $b->getDestinationAccountId());
+				$this->assertSame('HYP {month}', $b->getTransferDescriptionPattern());
+				$this->assertTrue((bool) $b->getAutoPayEnabled());
+				$this->assertSame(5, $b->getReminderDays());
+				$this->assertSame([7, 8], $b->getTagIdsArray());
+				$this->assertSame('2026-01-01', $b->getStartDate());
+				$this->assertSame('2030-12-31', $b->getEndDate());
+				$this->assertSame(12, $b->getRemainingPayments());
+				$this->assertSame([['categoryId' => 100, 'percent' => 100]], $b->getSplitTemplateArray());
+				$this->assertTrue((bool) $b->getExcludedFromForecast());
+				$this->assertFalse((bool) $b->getCreateTransaction());
+				$this->assertSame('2026-06-28', $b->getLastPaidDate());
+				$this->assertSame('2026-09-28', $b->getNextDueDate());
+				return true;
+			}));
+
+		$result = $this->service->importAll('user1', $zipContent);
+		$this->assertTrue($result['success']);
+	}
+
 	public function testImportAllRollsBackOnError(): void {
 		$zipContent = $this->createTestZip([
 			'manifest.json' => json_encode(['version' => '1.0.0', 'appId' => 'budget']),

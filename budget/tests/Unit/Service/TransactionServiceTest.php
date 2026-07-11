@@ -551,6 +551,87 @@ class TransactionServiceTest extends TestCase {
         $this->service->createFromBill('user1', $bill, '2026-03-15');
     }
 
+    public function testCreateFromBillWithoutDateIsScheduledEvenWhenOverdue(): void {
+        // A next-occurrence placeholder (no explicit date) must always be
+        // scheduled — a past due date used to fall through to 'cleared' and
+        // the placeholder was counted in the balance immediately
+        $bill = $this->makeBill(['nextDueDate' => '2020-01-01']);
+        $account = $this->makeAccount();
+        $this->accountMapper->method('find')->willReturn($account);
+        $this->mapper->method('insert')->willReturnCallback(function (Transaction $tx) {
+            $tx->setId(1);
+            return $tx;
+        });
+        $this->accountMapper->method('updateBalance')->willReturn($account);
+
+        $result = $this->service->createFromBill('user1', $bill);
+
+        $this->assertEquals('scheduled', $result->getStatus());
+    }
+
+    public function testCreateFromBillWithExplicitPastDateIsCleared(): void {
+        // Explicit dates keep the heuristic: recording an actual (past)
+        // payment stays cleared
+        $bill = $this->makeBill(['nextDueDate' => '2020-01-01']);
+        $account = $this->makeAccount();
+        $this->accountMapper->method('find')->willReturn($account);
+        $this->mapper->method('insert')->willReturnCallback(function (Transaction $tx) {
+            $tx->setId(1);
+            return $tx;
+        });
+        $this->accountMapper->method('updateBalance')->willReturn($account);
+
+        $result = $this->service->createFromBill('user1', $bill, '2020-01-01');
+
+        $this->assertEquals('cleared', $result->getStatus());
+    }
+
+    // ===== findBillPaymentCandidates() =====
+
+    public function testFindBillPaymentCandidatesRejectsDateOnlyMatches(): void {
+        // A same-day debit with unrelated amount and name must NOT be offered
+        // as a match — junk candidates steered users into marking bills paid
+        // without recording the payment (#274)
+        $tx = $this->makeTransaction([
+            'amount' => 18.00,
+            'description' => 'Zigaretten',
+            'date' => '2026-06-28',
+        ]);
+        $this->mapper->method('findBillPaymentCandidates')->willReturn([$tx]);
+
+        $result = $this->service->findBillPaymentCandidates(10, 'Hypothek', 2912.00, '2026-06-28');
+
+        $this->assertSame([], $result);
+    }
+
+    public function testFindBillPaymentCandidatesKeepsAmountMatch(): void {
+        $tx = $this->makeTransaction([
+            'amount' => 2912.00,
+            'description' => 'Unrelated text',
+            'date' => '2026-06-28',
+        ]);
+        $this->mapper->method('findBillPaymentCandidates')->willReturn([$tx]);
+
+        $result = $this->service->findBillPaymentCandidates(10, 'Hypothek', 2912.00, '2026-06-28');
+
+        $this->assertCount(1, $result);
+        $this->assertContains('exact_amount', $result[0]['matchReasons']);
+    }
+
+    public function testFindBillPaymentCandidatesKeepsNameMatch(): void {
+        $tx = $this->makeTransaction([
+            'amount' => 5.00,
+            'description' => 'Hypothek Zins',
+            'date' => '2026-06-28',
+        ]);
+        $this->mapper->method('findBillPaymentCandidates')->willReturn([$tx]);
+
+        $result = $this->service->findBillPaymentCandidates(10, 'Hypothek', 2912.00, '2026-06-28');
+
+        $this->assertCount(1, $result);
+        $this->assertContains('partial_description', $result[0]['matchReasons']);
+    }
+
     // ===== createFromIncome() =====
 
     private function makeIncome(array $overrides = []): RecurringIncome {

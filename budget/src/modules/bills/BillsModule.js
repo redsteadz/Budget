@@ -1117,6 +1117,9 @@ export default class BillsModule {
         if (choice.action === 'link' && result.paymentTransactionRecorded !== false) {
             message = t('budget', 'Bill marked as paid. Linked to existing transaction.');
         } else if (choice.action === 'skip') {
+            // The user opted out of recording the payment — still warn, because
+            // this is exactly how balances silently drift from the bank (#274)
+            showWarning(t('budget', 'No transaction was recorded for this payment — your account balance will not reflect it.'));
             message = t('budget', 'Bill marked as paid. No transaction created.');
         } else if (result.paymentTransactionRecorded === false) {
             // The server marked the bill paid but recorded NO money movement
@@ -1154,6 +1157,11 @@ export default class BillsModule {
             const currency = bill.currency || this.app.settings?.default_currency || '';
             const formatAmount = (amount) => formatters.formatCurrency(amount, currency, this.settings);
 
+            // Only pre-select a candidate when it is a strong match — for weak
+            // matches the safe default is creating a new transaction, so a
+            // quick Confirm never links (or skips) by accident (#274)
+            const preselectFirst = candidates.length > 0 && candidates[0].score >= 50;
+
             const candidateRows = candidates.map((c, i) => {
                 const tx = c.transaction;
                 const reasons = c.matchReasons.map(r => {
@@ -1174,10 +1182,10 @@ export default class BillsModule {
                 }).join(', ');
 
                 const desc = tx.description || tx.vendor || t('budget', '(no description)');
-                const checked = i === 0 ? 'checked' : '';
+                const checked = (preselectFirst && i === 0) ? 'checked' : '';
 
                 return `
-                    <label class="matching-tx-option ${i === 0 ? 'recommended' : ''}">
+                    <label class="matching-tx-option ${(preselectFirst && i === 0) ? 'recommended' : ''}">
                         <input type="radio" name="matching-tx-choice" value="${tx.id}" ${checked}>
                         <div class="matching-tx-details">
                             <div class="matching-tx-primary">
@@ -1207,7 +1215,7 @@ export default class BillsModule {
                             ${candidateRows}
                         </div>
                         <label class="matching-tx-option matching-tx-create-new">
-                            <input type="radio" name="matching-tx-choice" value="create">
+                            <input type="radio" name="matching-tx-choice" value="create" ${preselectFirst ? '' : 'checked'}>
                             <div class="matching-tx-details">
                                 <span class="matching-tx-desc">${t('budget', 'Create a new transaction instead')}</span>
                             </div>
@@ -1216,6 +1224,7 @@ export default class BillsModule {
                             <input type="radio" name="matching-tx-choice" value="skip">
                             <div class="matching-tx-details">
                                 <span class="matching-tx-desc">${t('budget', 'Don\'t create any transaction (just mark as paid)')}</span>
+                                <span class="matching-tx-skip-warning">${t('budget', 'Your account balance will NOT reflect this payment.')}</span>
                             </div>
                         </label>
                     </div>

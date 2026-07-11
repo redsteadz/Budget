@@ -565,15 +565,31 @@ class MigrationService {
             $bill = new Bill();
             $bill->setUserId($userId);
             $bill->setName($billData['name']);
+            $bill->setDescription($billData['description'] ?? null);
             $bill->setAmount($billData['amount'] ?? 0.0);
             $bill->setFrequency($billData['frequency'] ?? 'monthly');
             $bill->setDueDay($billData['dueDay'] ?? null);
             $bill->setDueMonth($billData['dueMonth'] ?? null);
+            // Without the recurrence pattern a restored custom-frequency bill
+            // has no schedule left and advances one day at a time when paid
+            $bill->setCustomRecurrencePattern($billData['customRecurrencePattern'] ?? null);
             $bill->setAutoDetectPattern($billData['autoDetectPattern'] ?? null);
             $bill->setIsActive($billData['isActive'] ?? true);
             $bill->setLastPaidDate($billData['lastPaidDate'] ?? null);
             $bill->setNextDueDate($billData['nextDueDate'] ?? null);
             $bill->setNotes($billData['notes'] ?? null);
+            $bill->setReminderDays($billData['reminderDays'] ?? null);
+            $bill->setAutoPayEnabled($billData['autoPayEnabled'] ?? false);
+            $bill->setAutoPayFailed($billData['autoPayFailed'] ?? false);
+            $bill->setIsTransfer($billData['isTransfer'] ?? false);
+            $bill->setTransferDescriptionPattern($billData['transferDescriptionPattern'] ?? null);
+            $bill->setTagIdsArray(is_array($billData['tagIds'] ?? null) ? $billData['tagIds'] : []);
+            $bill->setStartDate($billData['startDate'] ?? null);
+            $bill->setEndDate($billData['endDate'] ?? null);
+            $bill->setRemainingPayments($billData['remainingPayments'] ?? null);
+            $bill->setSplitTemplateArray(is_array($billData['splitTemplate'] ?? null) ? $billData['splitTemplate'] : null);
+            $bill->setExcludedFromForecast($billData['excludedFromForecast'] ?? false);
+            $bill->setCreateTransaction($billData['createTransaction'] ?? true);
             $bill->setCreatedAt($billData['createdAt'] ?? date('Y-m-d H:i:s'));
 
             // Remap category ID
@@ -586,6 +602,12 @@ class MigrationService {
             $oldAccountId = $billData['accountId'] ?? null;
             if ($oldAccountId !== null && isset($idMaps['accounts'][$oldAccountId])) {
                 $bill->setAccountId($idMaps['accounts'][$oldAccountId]);
+            }
+
+            // Remap destination account ID (transfer bills)
+            $oldDestId = $billData['destinationAccountId'] ?? null;
+            if ($oldDestId !== null && isset($idMaps['accounts'][$oldDestId])) {
+                $bill->setDestinationAccountId($idMaps['accounts'][$oldDestId]);
             }
 
             $this->billMapper->insert($bill);

@@ -76,6 +76,10 @@ Click **Mark Paid** on any bill to record the payment. This:
 
 Marking a bill paid after its due date works the same way: the payment transaction is dated the day you mark it paid, and the due date still advances from the original schedule (a bill due on the 1st stays due on the 1st of the next month, even if you paid on the 2nd).
 
+### When the payment is already in your register
+
+If transactions that plausibly match the bill (by amount or name, near the due date) already exist — for example from a bank import — an **Existing Transaction Found** dialog appears before anything is created. Choose **link** to attach the existing transaction to the bill (nothing is recorded twice), or **Create a new transaction instead** if none of the candidates is the actual payment. The dialog also offers **"Don't create any transaction (just mark as paid)"** — use this only when the payment genuinely should not appear in this account's register, because your tracked balance will not reflect the payment and will drift from your bank.
+
 > **Important:** If the bill has **no account assigned** (or the transaction cannot be created), the bill is still marked paid but **no money movement is recorded** — your account balance will not reflect the payment. The app shows a clear warning when this happens. Assign an account to the bill, or add the transaction manually, so your tracked balance stays in step with your bank.
 
 ### Skipping a Payment

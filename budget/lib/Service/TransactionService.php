@@ -165,7 +165,16 @@ class TransactionService {
         }
 
         $date = $transactionDate ?? $bill->getNextDueDate();
-        $status = $status ?? (($date > date('Y-m-d')) ? 'scheduled' : 'cleared');
+        // No explicit date = pre-creating the bill's next occurrence. That is
+        // always a scheduled placeholder — no money has moved yet — even when
+        // the bill is overdue and its due date lies in the past. Past-dated
+        // placeholders used to fall through to 'cleared' and were counted in
+        // the account balance immediately, double-booking the payment.
+        if ($status === null) {
+            $status = $transactionDate === null
+                ? 'scheduled'
+                : (($date > date('Y-m-d')) ? 'scheduled' : 'cleared');
+        }
 
         // Handle transfers - create paired transactions
         if ($bill->getIsTransfer()) {
@@ -361,8 +370,13 @@ class TransactionService {
                 $reasons[] = 'within_7_days';
             }
 
-            // Skip if no meaningful match (must match on at least amount or name)
-            if ($score < 10) {
+            // Skip unless the transaction matches on amount, vendor or
+            // description. Date proximity alone must never qualify — a payment
+            // day fills the register with unrelated same-day debits, and
+            // offering those as "matches" steered users into marking bills
+            // paid without recording the payment (balance drift, #274).
+            $hasNonDateReason = (bool) array_diff($reasons, ['same_day', 'next_day', 'within_3_days', 'within_7_days']);
+            if (!$hasNonDateReason) {
                 continue;
             }
 
