@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2026-07-10 22:14+0000\n"
+"POT-Creation-Date: 2026-07-11 00:01+0000\n"
 "PO-Revision-Date: 2026-06-27 18:50+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/nextcloud-"
@@ -594,7 +594,7 @@ msgid "Failed to undo mark as paid"
 msgstr ""
 
 #: /app/lib/Controller/BillController.php:686
-#: /app/src/modules/bills/BillsModule.js:1341
+#: /app/src/modules/bills/BillsModule.js:1350
 msgid "Failed to skip bill payment"
 msgstr ""
 
@@ -627,7 +627,7 @@ msgid "Failed to retrieve bill status"
 msgstr "Falha ao buscar o estado das contas"
 
 #: /app/lib/Controller/BillController.php:789
-#: /app/src/modules/bills/BillsModule.js:1462
+#: /app/src/modules/bills/BillsModule.js:1471
 msgid "Failed to detect recurring bills"
 msgstr "Falha ao detetar contas recorrentes"
 
@@ -1233,7 +1233,7 @@ msgid "Failed to retrieve pensions"
 msgstr "Falha ao buscar os planos de previdência"
 
 #: /app/lib/Controller/PensionController.php:100 /app/src/main.js:1127
-#: /app/src/utils/formatters.js:198
+#: /app/src/utils/formatters.js:200
 msgid "Pension"
 msgstr "Previdência"
 
@@ -1680,13 +1680,13 @@ msgstr ""
 "apagará permanentemente TODOS os seus dados."
 
 #: /app/lib/Controller/SetupController.php:159 /app/src/main.js:2046
-#: /app/src/modules/settings/SettingsModule.js:339
+#: /app/src/modules/settings/SettingsModule.js:340
 msgid "Factory reset completed successfully. All data has been deleted."
 msgstr ""
 "Restauração de fábrica concluída com sucesso. Todos os dados foram apagados."
 
 #: /app/lib/Controller/SetupController.php:163 /app/src/main.js:2039
-#: /app/src/modules/settings/SettingsModule.js:332
+#: /app/src/modules/settings/SettingsModule.js:333
 msgid "Factory reset failed"
 msgstr ""
 
@@ -3078,7 +3078,7 @@ msgid ""
 msgstr ""
 
 #: /app/src/main.js:863 /app/src/modules/accounts/AccountsModule.js:1292
-#: /app/src/modules/bills/BillsModule.js:1580
+#: /app/src/modules/bills/BillsModule.js:1589
 #: /app/src/modules/reports/ReportsModule.js:487
 #: /app/src/modules/rules/RulesModule.js:794
 #: /app/src/modules/savings/SavingsModule.js:283
@@ -3518,7 +3518,7 @@ msgstr ""
 
 #: /app/src/main.js:1842 /app/src/main.js:1849 /app/src/main.js:1853
 #: /app/src/modules/bills/BillsModule.js:1001
-#: /app/src/modules/bills/BillsModule.js:1202
+#: /app/src/modules/bills/BillsModule.js:1210
 #: /app/src/modules/sharing/SharingModule.js:133
 #: /app/src/modules/transactions/TransactionsModule.js:4042
 #: /app/src/modules/transfers/TransfersModule.js:141
@@ -3575,17 +3575,17 @@ msgstr ""
 msgid "Repair failed: {error}"
 msgstr ""
 
-#: /app/src/main.js:2022 /app/src/modules/settings/SettingsModule.js:315
+#: /app/src/main.js:2022 /app/src/modules/settings/SettingsModule.js:316
 #: /app/src/modules/transactions/TransactionsModule.js:4210
 msgid "Deleting..."
 msgstr "A apagar..."
 
-#: /app/src/main.js:2060 /app/src/modules/settings/SettingsModule.js:353
+#: /app/src/main.js:2060 /app/src/modules/settings/SettingsModule.js:354
 #: /app/templates/index.php:6646
 msgid "Delete Everything"
 msgstr ""
 
-#: /app/src/main.js:2063 /app/src/modules/settings/SettingsModule.js:356
+#: /app/src/main.js:2063 /app/src/modules/settings/SettingsModule.js:357
 msgid "Failed to perform factory reset"
 msgstr ""
 
@@ -4344,30 +4344,30 @@ msgstr ""
 
 #: /app/src/modules/accounts/AccountsModule.js:2530
 #: /app/src/modules/dashboard/DashboardModule.js:884
-#: /app/src/utils/formatters.js:193 /app/templates/index.php:5335
+#: /app/src/utils/formatters.js:195 /app/templates/index.php:5335
 msgid "Credit Card"
 msgstr ""
 
 #: /app/src/modules/accounts/AccountsModule.js:2535
 #: /app/src/modules/dashboard/DashboardModule.js:885
-#: /app/src/utils/formatters.js:194
+#: /app/src/utils/formatters.js:196
 msgid "Investment"
 msgstr "Investimento"
 
 #: /app/src/modules/accounts/AccountsModule.js:2540
 #: /app/src/modules/dashboard/DashboardModule.js:887
-#: /app/src/utils/formatters.js:196
+#: /app/src/utils/formatters.js:198
 msgid "Loan"
 msgstr "Empréstimo"
 
 #: /app/src/modules/accounts/AccountsModule.js:2545
 #: /app/src/modules/dashboard/DashboardModule.js:886
-#: /app/src/utils/formatters.js:195 /app/templates/index.php:5340
+#: /app/src/utils/formatters.js:197 /app/templates/index.php:5340
 msgid "Cash"
 msgstr ""
 
 #: /app/src/modules/accounts/AccountsModule.js:2550
-#: /app/src/utils/formatters.js:199 /app/templates/index.php:5341
+#: /app/src/utils/formatters.js:201 /app/templates/index.php:5341
 msgid "Cryptocurrency"
 msgstr "Criptomoeda"
 
@@ -4755,7 +4755,7 @@ msgid "Failed to load bills"
 msgstr ""
 
 #: /app/src/modules/bills/BillsModule.js:93
-#: /app/src/modules/bills/BillsModule.js:1486
+#: /app/src/modules/bills/BillsModule.js:1495
 #: /app/src/modules/income/IncomeModule.js:717
 #: /app/src/modules/transfers/TransfersModule.js:976
 #, javascript-format
@@ -5051,107 +5051,117 @@ msgstr ""
 msgid "Bill marked as paid. Linked to existing transaction."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1120
+#: /app/src/modules/bills/BillsModule.js:1122
+msgid ""
+"No transaction was recorded for this payment — your account balance will not "
+"reflect it."
+msgstr ""
+
+#: /app/src/modules/bills/BillsModule.js:1123
 msgid "Bill marked as paid. No transaction created."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1129
+#: /app/src/modules/bills/BillsModule.js:1132
 msgid ""
 "The bill was marked as paid, but linking the selected transaction failed. "
 "You can link it manually from the transaction."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1131
+#: /app/src/modules/bills/BillsModule.js:1134
 msgid ""
 "No transaction was recorded for this payment — your account balance will not "
 "reflect it. Assign an account to the bill, or add the transaction manually."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1133
+#: /app/src/modules/bills/BillsModule.js:1136
 msgid "Bill marked as paid — without a transaction."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1137
+#: /app/src/modules/bills/BillsModule.js:1140
 msgid "Bill marked as paid. Transaction created."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1138
+#: /app/src/modules/bills/BillsModule.js:1141
 msgid "Bill marked as paid. Future transaction created."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1161
+#: /app/src/modules/bills/BillsModule.js:1169
 msgid "Exact amount"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1162
+#: /app/src/modules/bills/BillsModule.js:1170
 msgid "Similar amount (±5%)"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1163
+#: /app/src/modules/bills/BillsModule.js:1171
 msgid "Approximate amount (±20%)"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1164
+#: /app/src/modules/bills/BillsModule.js:1172
 msgid "Vendor matches"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1165
+#: /app/src/modules/bills/BillsModule.js:1173
 msgid "Vendor partially matches"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1166
+#: /app/src/modules/bills/BillsModule.js:1174
 msgid "Description matches"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1167
+#: /app/src/modules/bills/BillsModule.js:1175
 msgid "Description partially matches"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1168
+#: /app/src/modules/bills/BillsModule.js:1176
 msgid "Same day"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1169
+#: /app/src/modules/bills/BillsModule.js:1177
 msgid "±1 day"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1170
+#: /app/src/modules/bills/BillsModule.js:1178
 msgid "±3 days"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1171
+#: /app/src/modules/bills/BillsModule.js:1179
 msgid "±7 days"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1176
+#: /app/src/modules/bills/BillsModule.js:1184
 #: /app/src/modules/transactions/TransactionsModule.js:4125
 msgid "(no description)"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1189
+#: /app/src/modules/bills/BillsModule.js:1197
 msgid "Strong match"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1201
+#: /app/src/modules/bills/BillsModule.js:1209
 msgid "Existing Transaction Found"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1205
+#: /app/src/modules/bills/BillsModule.js:1213
 msgid ""
 "We found existing transactions that may already represent this bill payment "
 "({billName}, {amount}). Would you like to link one instead of creating a new "
 "transaction?"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1212
+#: /app/src/modules/bills/BillsModule.js:1220
 msgid "Create a new transaction instead"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1218
+#: /app/src/modules/bills/BillsModule.js:1226
 msgid "Don't create any transaction (just mark as paid)"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1223
+#: /app/src/modules/bills/BillsModule.js:1227
+msgid "Your account balance will NOT reflect this payment."
+msgstr ""
+
+#: /app/src/modules/bills/BillsModule.js:1232
 #: /app/src/modules/categories/CategoriesModule.js:1519
 #: /app/src/modules/transfers/TransfersModule.js:147
 #: /app/src/modules/transfers/TransfersModule.js:517
@@ -5177,32 +5187,32 @@ msgstr ""
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: /app/src/modules/bills/BillsModule.js:1224
+#: /app/src/modules/bills/BillsModule.js:1233
 #: /app/src/modules/categories/CategoriesModule.js:1518
 msgid "Confirm"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1294
-#: /app/src/modules/bills/BillsModule.js:1370
+#: /app/src/modules/bills/BillsModule.js:1303
+#: /app/src/modules/bills/BillsModule.js:1379
 #: /app/src/modules/income/IncomeModule.js:603
 msgid "Action undone"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1297
-#: /app/src/modules/bills/BillsModule.js:1373
+#: /app/src/modules/bills/BillsModule.js:1306
+#: /app/src/modules/bills/BillsModule.js:1382
 #: /app/src/modules/income/IncomeModule.js:606
 msgid "Failed to undo action: {message}"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1308
+#: /app/src/modules/bills/BillsModule.js:1317
 msgid "Skip this payment and advance to the next due date?"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1334
+#: /app/src/modules/bills/BillsModule.js:1343
 msgid "Payment skipped. Advanced to next due date."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1383
+#: /app/src/modules/bills/BillsModule.js:1392
 #: /app/src/modules/categories/CategoriesModule.js:1570
 #: /app/src/modules/income/IncomeModule.js:616
 #: /app/src/modules/transactions/TransactionsModule.js:3093
@@ -5210,36 +5220,36 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1442
+#: /app/src/modules/bills/BillsModule.js:1451
 #: /app/src/modules/income/IncomeModule.js:668
 #: /app/src/modules/transfers/TransfersModule.js:925
 msgid "Detecting..."
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1454
+#: /app/src/modules/bills/BillsModule.js:1463
 #: /app/src/modules/transfers/TransfersModule.js:937
 msgid "No recurring transactions detected"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1465 /app/templates/index.php:2429
+#: /app/src/modules/bills/BillsModule.js:1474 /app/templates/index.php:2429
 msgid "Detect Bills"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1502
+#: /app/src/modules/bills/BillsModule.js:1511
 msgid "Please select at least one bill to add"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1522
+#: /app/src/modules/bills/BillsModule.js:1531
 msgid "%n bill added successfully"
 msgid_plural "%n bills added successfully"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /app/src/modules/bills/BillsModule.js:1526
+#: /app/src/modules/bills/BillsModule.js:1535
 msgid "Failed to add selected bills"
 msgstr ""
 
-#: /app/src/modules/bills/BillsModule.js:1616
+#: /app/src/modules/bills/BillsModule.js:1625
 #: /app/src/modules/tagsets/TagSetsModule.js:687
 #: /app/src/modules/transfers/TransfersModule.js:859
 msgid "No tags defined"
@@ -5657,14 +5667,14 @@ msgstr ""
 
 #: /app/src/modules/dashboard/DashboardModule.js:882
 #: /app/src/modules/dashboard/DashboardModule.js:1825
-#: /app/src/utils/formatters.js:191
+#: /app/src/utils/formatters.js:193
 msgid "Checking"
 msgstr ""
 
 #: /app/src/modules/dashboard/DashboardModule.js:883
 #: /app/src/modules/dashboard/DashboardModule.js:1826
 #: /app/src/modules/reports/ReportsModule.js:1361
-#: /app/src/utils/formatters.js:192
+#: /app/src/utils/formatters.js:194
 msgid "Savings"
 msgstr ""
 
@@ -7041,75 +7051,75 @@ msgid "Failed to generate bills calendar"
 msgstr ""
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3488
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3488
 #: /app/templates/index.php:5541
 msgid "Jan"
 msgstr "Jan"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3489
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3489
 #: /app/templates/index.php:5542
 msgid "Feb"
 msgstr "Fev"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3490
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3490
 #: /app/templates/index.php:5543
 msgid "Mar"
 msgstr "Mar"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3491
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3491
 #: /app/templates/index.php:5544
 msgid "Apr"
 msgstr "Abr"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
 #: /app/src/modules/reports/ReportsModule.js:1834
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3379
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3379
 #: /app/templates/index.php:3492 /app/templates/index.php:5545
 #: /app/templates/index.php:5571 /app/templates/index.php:6024
 msgid "May"
 msgstr "Mai"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3493
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3493
 #: /app/templates/index.php:5546
 msgid "Jun"
 msgstr "Jun"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3494
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3494
 #: /app/templates/index.php:5547
 msgid "Jul"
 msgstr "Jul"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3495
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3495
 #: /app/templates/index.php:5548
 msgid "Aug"
 msgstr "Ago"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3496
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3496
 #: /app/templates/index.php:5549
 msgid "Sep"
 msgstr "Set"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3497
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3497
 #: /app/templates/index.php:5550
 msgid "Oct"
 msgstr "Out"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3498
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3498
 #: /app/templates/index.php:5551
 msgid "Nov"
 msgstr "Nov"
 
 #: /app/src/modules/reports/ReportsModule.js:1734
-#: /app/src/utils/formatters.js:171 /app/templates/index.php:3499
+#: /app/src/utils/formatters.js:173 /app/templates/index.php:3499
 #: /app/templates/index.php:5552
 msgid "Dec"
 msgstr "Dez"
@@ -8071,41 +8081,41 @@ msgstr ""
 msgid "Settings reset to defaults"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:366
-#: /app/src/modules/settings/SettingsModule.js:370
+#: /app/src/modules/settings/SettingsModule.js:367
+#: /app/src/modules/settings/SettingsModule.js:371
 msgid "URL copied to clipboard"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:414
+#: /app/src/modules/settings/SettingsModule.js:415
 msgid "Failed API Requests"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:422
+#: /app/src/modules/settings/SettingsModule.js:423
 msgid "JavaScript Errors"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:429
+#: /app/src/modules/settings/SettingsModule.js:430
 msgid "No failed API requests this session"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:432
+#: /app/src/modules/settings/SettingsModule.js:433
 msgid "No JavaScript errors this session"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:438
+#: /app/src/modules/settings/SettingsModule.js:439
 msgid "Server Logs (Budget)"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:443
+#: /app/src/modules/settings/SettingsModule.js:444
 msgid "No server errors logged"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:478
-#: /app/src/modules/settings/SettingsModule.js:487
+#: /app/src/modules/settings/SettingsModule.js:479
+#: /app/src/modules/settings/SettingsModule.js:488
 msgid "Copied to clipboard"
 msgstr ""
 
-#: /app/src/modules/settings/SettingsModule.js:492
+#: /app/src/modules/settings/SettingsModule.js:493
 msgid "Failed to load system info"
 msgstr ""
 
@@ -9457,7 +9467,7 @@ msgstr[1] ""
 msgid "Failed to add selected transfers"
 msgstr ""
 
-#: /app/src/utils/formatters.js:197 /app/templates/index.php:5338
+#: /app/src/utils/formatters.js:199 /app/templates/index.php:5338
 msgid "Mortgage"
 msgstr "Hipoteca"
 
