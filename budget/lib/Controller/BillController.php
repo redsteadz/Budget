@@ -621,6 +621,36 @@ class BillController extends Controller {
     }
 
     /**
+     * Bills recently marked paid without a recorded transaction (#274)
+     * @NoAdminRequired
+     */
+    public function unrecordedPayments(): DataResponse {
+        try {
+            $items = $this->service->findUnrecordedPayments($this->getEffectiveUserId());
+            return new DataResponse(['items' => $items, 'count' => count($items)]);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to check for unrecorded payments'));
+        }
+    }
+
+    /**
+     * Record the missing transaction for a payment marked paid without one (#274)
+     * @NoAdminRequired
+     */
+    #[UserRateLimit(limit: 30, period: 60)]
+    public function recordMissedPayment(int $id): DataResponse {
+        try {
+            $this->requireWriteAccess('bill', $id);
+            $result = $this->service->recordMissedPayment($id, $this->getEffectiveUserId());
+            return new DataResponse($result);
+        } catch (\InvalidArgumentException $e) {
+            return $this->handleError($e, $e->getMessage(), Http::STATUS_BAD_REQUEST, ['billId' => $id]);
+        } catch (\Exception $e) {
+            return $this->handleError($e, $this->l->t('Failed to record the payment'), Http::STATUS_BAD_REQUEST, ['billId' => $id]);
+        }
+    }
+
+    /**
      * Mark a bill as paid
      * @NoAdminRequired
      */

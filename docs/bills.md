@@ -82,6 +82,10 @@ If transactions that plausibly match the bill (by amount or name, near the due d
 
 > **Important:** If the bill has **no account assigned** (or the transaction cannot be created), the bill is still marked paid but **no money movement is recorded** — your account balance will not reflect the payment. The app shows a clear warning when this happens. Assign an account to the bill, or add the transaction manually, so your tracked balance stays in step with your bank.
 
+### Payments without a recorded transaction
+
+If any bill was marked paid in the last 60 days without a transaction being created or linked, a warning card appears at the top of the Bills page listing those payments. Your account balance does not reflect them, so it will drift from your real bank balance until they are recorded. Click **Record transaction** on an entry to book the missing payment — it is dated the day the bill was marked paid, linked to the bill, and created on both accounts for transfers. Payments skipped with the **Skip** button are not flagged (skipping is explicitly "no money moved").
+
 ### Skipping a Payment
 
 Click **Skip** to advance the due date to the next occurrence without creating a transaction. This is useful when a payment is waived, already handled outside the app, or you simply want to skip a period.

@@ -2436,6 +2436,14 @@ style('budget', 'budget-app');
             </div>
 
             <!-- Proactive recurring-bill suggestions -->
+            <div id="unrecorded-payments-card" class="unrecorded-payments-card" style="display: none;">
+                <div class="bill-suggestions-header">
+                    <h3><?php p($l->t('Payments without a recorded transaction')); ?> <span id="unrecorded-payments-count" class="badge"></span></h3>
+                </div>
+                <p class="bill-suggestions-hint"><?php p($l->t('These bills were marked as paid, but no transaction was recorded — your account balance does not reflect these payments.')); ?></p>
+                <div id="unrecorded-payments-list"></div>
+            </div>
+
             <div id="bill-suggestions-card" class="bill-suggestions-card" style="display: none;">
                 <div class="bill-suggestions-header">
                     <h3><?php p($l->t('Suggested recurring bills')); ?> <span id="bill-suggestions-count" class="badge"></span></h3>

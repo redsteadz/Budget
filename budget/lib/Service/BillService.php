@@ -95,6 +95,104 @@ class BillService {
     }
 
     /**
+     * Bills whose most recent payment has no recorded transaction (#274).
+     *
+     * Marking a bill paid without creating or linking a transaction leaves
+     * the account balance out of step with the bank. This returns recent
+     * occurrences (last $sinceDays days) so the Bills page can surface them.
+     * Deliberate skips (Skip button) never set the last-paid date and are
+     * not flagged.
+     */
+    public function findUnrecordedPayments(string $userId, int $sinceDays = 60): array {
+        $cutoff = date('Y-m-d', strtotime("-{$sinceDays} days"));
+        $candidates = [];
+        foreach ($this->mapper->findAll($userId) as $bill) {
+            $lastPaid = $bill->getLastPaidDate();
+            if ($lastPaid !== null && $lastPaid >= $cutoff) {
+                $candidates[] = $bill;
+            }
+        }
+        if (empty($candidates)) {
+            return [];
+        }
+
+        $billIds = array_map(static fn(Bill $b) => $b->getId(), $candidates);
+        $txDatesByBill = [];
+        foreach ($this->transactionService->findRecordedBillTransactions($billIds) as $tx) {
+            $txDatesByBill[$tx->getBillId()][] = $tx->getDate();
+        }
+
+        $currencyMap = $this->buildCurrencyMap($userId);
+        $unrecorded = [];
+        foreach ($candidates as $bill) {
+            if ($this->hasRecordedPayment($bill->getLastPaidDate(), $txDatesByBill[$bill->getId()] ?? [])) {
+                continue;
+            }
+            $unrecorded[] = [
+                'billId' => $bill->getId(),
+                'name' => $bill->getName(),
+                'amount' => (float) $bill->getAmount(),
+                'lastPaidDate' => $bill->getLastPaidDate(),
+                'accountId' => $bill->getAccountId(),
+                'currency' => $bill->getAccountId() !== null
+                    ? ($currencyMap[$bill->getAccountId()] ?? null)
+                    : null,
+            ];
+        }
+
+        usort($unrecorded, static fn($a, $b) => strcmp($b['lastPaidDate'], $a['lastPaidDate']));
+        return $unrecorded;
+    }
+
+    /**
+     * Record the missing transaction for a payment that was marked paid
+     * without one (#274). Creates a cleared transaction (both legs for
+     * transfers) dated the bill's last paid date and linked to the bill.
+     */
+    public function recordMissedPayment(int $id, string $userId): array {
+        $bill = $this->find($id, $userId);
+
+        $lastPaid = $bill->getLastPaidDate();
+        if ($lastPaid === null) {
+            throw new \InvalidArgumentException($this->l->t('This bill has never been marked as paid'));
+        }
+        if ($bill->getAccountId() === null) {
+            throw new \InvalidArgumentException($this->l->t('Assign an account to the bill first'));
+        }
+
+        // Idempotence guard: refuse when a payment transaction already exists
+        $existingDates = array_map(
+            static fn($tx) => $tx->getDate(),
+            $this->transactionService->findRecordedBillTransactions([$id])
+        );
+        if ($this->hasRecordedPayment($lastPaid, $existingDates)) {
+            throw new \InvalidArgumentException($this->l->t('A transaction for this payment already exists'));
+        }
+
+        $transaction = $this->transactionService->createFromBill($userId, $bill, $lastPaid, 'cleared');
+        $this->applySplitTemplate($bill, $transaction, $userId);
+
+        return ['transaction' => $transaction];
+    }
+
+    /**
+     * Whether any of the given transaction dates plausibly records a payment
+     * made on $paidDate. Linked payments can be dated a few days off the
+     * paid date (the matching dialog offers a ±7 day window), so allow slack.
+     */
+    private function hasRecordedPayment(?string $paidDate, array $txDates): bool {
+        if ($paidDate === null) {
+            return false;
+        }
+        foreach ($txDates as $txDate) {
+            if (abs(strtotime($txDate) - strtotime($paidDate)) <= 14 * 86400) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Build a map of accountId => currency for the user's accounts.
      */
     private function buildCurrencyMap(string $userId): array {

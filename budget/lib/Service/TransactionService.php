@@ -298,6 +298,17 @@ class TransactionService {
     }
 
     /**
+     * All non-scheduled transactions linked to the given bills.
+     * Used to detect bill payments that were never recorded (#274).
+     *
+     * @param int[] $billIds
+     * @return Transaction[]
+     */
+    public function findRecordedBillTransactions(array $billIds): array {
+        return $this->mapper->findRecordedByBillIds($billIds);
+    }
+
+    /**
      * Find candidate transactions that might match a bill payment.
      * Scores each candidate based on amount, vendor, description, and date proximity.
      *

@@ -993,6 +993,35 @@ class BillControllerTest extends TestCase {
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 	}
 
+	// ── unrecorded payments (#274) ──────────────────────────────────
+
+	public function testUnrecordedPaymentsReturnsItems(): void {
+		$items = [['billId' => 7, 'name' => 'Hypothek', 'amount' => 2912.00, 'lastPaidDate' => '2026-06-28']];
+		$this->service->method('findUnrecordedPayments')->with('user1')->willReturn($items);
+
+		$response = $this->controller->unrecordedPayments();
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame(1, $response->getData()['count']);
+	}
+
+	public function testRecordMissedPaymentReturnsTransaction(): void {
+		$this->service->method('recordMissedPayment')->with(7, 'user1')->willReturn(['transaction' => ['id' => 900]]);
+
+		$response = $this->controller->recordMissedPayment(7);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+	}
+
+	public function testRecordMissedPaymentRejectsInvalid(): void {
+		$this->service->method('recordMissedPayment')
+			->willThrowException(new \InvalidArgumentException('A transaction for this payment already exists'));
+
+		$response = $this->controller->recordMissedPayment(7);
+
+		$this->assertSame(Http::STATUS_BAD_REQUEST, $response->getStatus());
+	}
+
 	// ── markPaid ────────────────────────────────────────────────────
 
 	public function testMarkPaidReturnsBill(): void {

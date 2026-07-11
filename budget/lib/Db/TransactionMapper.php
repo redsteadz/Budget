@@ -1550,6 +1550,33 @@ class TransactionMapper extends QBMapper {
     }
 
     /**
+     * Find all NON-scheduled transactions linked to any of the given bills.
+     * Used to detect payments that were marked paid without a recorded
+     * transaction (#274) — scheduled placeholders don't count as payments.
+     *
+     * @param int[] $billIds
+     * @return Transaction[]
+     */
+    public function findRecordedByBillIds(array $billIds): array {
+        if (empty($billIds)) {
+            return [];
+        }
+
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from($this->getTableName())
+            ->where($qb->expr()->in('bill_id', $qb->createNamedParameter($billIds, IQueryBuilder::PARAM_INT_ARRAY)))
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->neq('status', $qb->createNamedParameter('scheduled')),
+                    $qb->expr()->isNull('status')
+                )
+            );
+
+        return $this->findEntities($qb);
+    }
+
+    /**
      * Find candidate transactions that might match a bill payment.
      * Searches for cleared debits in the same account, within a date window,
      * that aren't already linked to another bill.

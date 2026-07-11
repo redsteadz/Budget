@@ -10242,6 +10242,25 @@ button.danger:hover {
     background: var(--color-background-hover, #f5f5f5);
 }
 
+/* Payments marked paid without a recorded transaction (#274) — same layout
+   as the suggestions card, warning-coloured border */
+.unrecorded-payments-card {
+    margin-bottom: 16px;
+    padding: 14px 18px;
+    border: 1px solid var(--color-warning, #e65100);
+    border-radius: var(--border-radius-large, 10px);
+    background: var(--color-background-hover, #f5f5f5);
+}
+
+.unrecorded-payment-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px solid var(--color-border, #ededed);
+}
+
 .bill-suggestions-header {
     display: flex;
     align-items: center;

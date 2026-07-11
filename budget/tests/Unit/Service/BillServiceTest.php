@@ -727,4 +727,83 @@ class BillServiceTest extends TestCase {
 
 		$this->assertSame(0, $this->service->autoMatchPaidFromImport('user1', [$this->makeImportedTx()]));
 	}
+
+	// ── unrecorded payments (#274) ──────────────────────────────────
+
+	public function testFindUnrecordedPaymentsFlagsPaidBillWithoutTransaction(): void {
+		$paidDate = date('Y-m-d', strtotime('-10 days'));
+		$bill = $this->makeBill(['id' => 7, 'name' => 'Hypothek', 'amount' => 2912.00, 'lastPaidDate' => $paidDate]);
+		$this->mapper->method('findAll')->willReturn([$bill]);
+		$this->transactionService->method('findRecordedBillTransactions')->willReturn([]);
+
+		$result = $this->service->findUnrecordedPayments('user1');
+
+		$this->assertCount(1, $result);
+		$this->assertSame(7, $result[0]['billId']);
+		$this->assertSame('Hypothek', $result[0]['name']);
+		$this->assertSame($paidDate, $result[0]['lastPaidDate']);
+	}
+
+	public function testFindUnrecordedPaymentsIgnoresRecordedPayment(): void {
+		$paidDate = date('Y-m-d', strtotime('-10 days'));
+		$bill = $this->makeBill(['id' => 7, 'lastPaidDate' => $paidDate]);
+		$this->mapper->method('findAll')->willReturn([$bill]);
+
+		// Linked payment dated 3 days off the paid date still counts
+		$tx = $this->makeImportedTx(['date' => date('Y-m-d', strtotime('-13 days'))]);
+		$tx->setBillId(7);
+		$this->transactionService->method('findRecordedBillTransactions')->willReturn([$tx]);
+
+		$this->assertSame([], $this->service->findUnrecordedPayments('user1'));
+	}
+
+	public function testFindUnrecordedPaymentsIgnoresOldAndNeverPaidBills(): void {
+		$old = $this->makeBill(['id' => 1, 'lastPaidDate' => date('Y-m-d', strtotime('-90 days'))]);
+		$never = $this->makeBill(['id' => 2, 'lastPaidDate' => null]);
+		$this->mapper->method('findAll')->willReturn([$old, $never]);
+		$this->transactionService->expects($this->never())->method('findRecordedBillTransactions');
+
+		$this->assertSame([], $this->service->findUnrecordedPayments('user1'));
+	}
+
+	public function testRecordMissedPaymentCreatesClearedTransactionOnPaidDate(): void {
+		$paidDate = date('Y-m-d', strtotime('-10 days'));
+		$bill = $this->makeBill(['id' => 7, 'lastPaidDate' => $paidDate]);
+		$this->mapper->method('find')->willReturn($bill);
+		$this->transactionService->method('findRecordedBillTransactions')->willReturn([]);
+
+		$created = $this->makeImportedTx(['id' => 900, 'date' => $paidDate]);
+		$this->transactionService->expects($this->once())
+			->method('createFromBill')
+			->with('user1', $bill, $paidDate, 'cleared')
+			->willReturn($created);
+
+		$result = $this->service->recordMissedPayment(7, 'user1');
+
+		$this->assertSame(900, $result['transaction']->getId());
+	}
+
+	public function testRecordMissedPaymentRefusesWhenAlreadyRecorded(): void {
+		$paidDate = date('Y-m-d', strtotime('-10 days'));
+		$bill = $this->makeBill(['id' => 7, 'lastPaidDate' => $paidDate]);
+		$this->mapper->method('find')->willReturn($bill);
+
+		$tx = $this->makeImportedTx(['date' => $paidDate]);
+		$tx->setBillId(7);
+		$this->transactionService->method('findRecordedBillTransactions')->willReturn([$tx]);
+		$this->transactionService->expects($this->never())->method('createFromBill');
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->service->recordMissedPayment(7, 'user1');
+	}
+
+	public function testRecordMissedPaymentRefusesWithoutAccount(): void {
+		// makeBill's `?? 1` default swallows a null override, so unset explicitly
+		$bill = $this->makeBill(['id' => 7, 'lastPaidDate' => date('Y-m-d')]);
+		$bill->setAccountId(null);
+		$this->mapper->method('find')->willReturn($bill);
+
+		$this->expectException(\InvalidArgumentException::class);
+		$this->service->recordMissedPayment(7, 'user1');
+	}
 }

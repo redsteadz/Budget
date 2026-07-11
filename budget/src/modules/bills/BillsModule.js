@@ -50,9 +50,83 @@ export default class BillsModule {
 
             // Proactive suggestions (non-blocking)
             this.loadBillSuggestions();
+
+            // Payments marked paid without a recorded transaction (non-blocking, #274)
+            this.loadUnrecordedPayments();
         } catch (error) {
             console.error('Failed to load bills:', error);
             showError(t('budget', 'Failed to load bills'));
+        }
+    }
+
+    /**
+     * Surface bills recently marked paid with no recorded transaction — the
+     * account balance does not reflect those payments (#274). Offers a
+     * one-click "Record transaction" repair.
+     */
+    async loadUnrecordedPayments() {
+        const card = document.getElementById('unrecorded-payments-card');
+        const list = document.getElementById('unrecorded-payments-list');
+        if (!card || !list) return;
+
+        try {
+            const response = await fetch(OC.generateUrl('/apps/budget/api/bills/unrecorded-payments'), {
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) {
+                card.style.display = 'none';
+                return;
+            }
+            const data = await response.json();
+            const items = data.items || [];
+
+            if (items.length === 0) {
+                card.style.display = 'none';
+                return;
+            }
+
+            const countBadge = document.getElementById('unrecorded-payments-count');
+            if (countBadge) countBadge.textContent = String(data.count);
+
+            list.innerHTML = items.map(item => `
+                <div class="unrecorded-payment-row">
+                    <div class="bill-suggestion-info">
+                        <strong>${dom.escapeHtml(item.name)}</strong>
+                        <span class="bill-suggestion-meta">${t('budget', 'Marked paid on {date}', { date: formatters.formatDate(item.lastPaidDate, this.settings) })} &middot; ${formatters.formatCurrency(item.amount, item.currency, this.settings)}</span>
+                    </div>
+                    <div class="bill-suggestion-actions">
+                        ${item.accountId
+                            ? `<button class="primary unrecorded-payment-record" data-bill-id="${item.billId}">${t('budget', 'Record transaction')}</button>`
+                            : `<span class="bill-suggestion-meta">${t('budget', 'Assign an account to the bill first')}</span>`}
+                    </div>
+                </div>
+            `).join('');
+
+            list.querySelectorAll('.unrecorded-payment-record').forEach(btn => {
+                btn.addEventListener('click', (e) => this.recordMissedPayment(parseInt(e.currentTarget.dataset.billId)));
+            });
+
+            card.style.display = 'block';
+        } catch (error) {
+            card.style.display = 'none';
+        }
+    }
+
+    async recordMissedPayment(billId) {
+        try {
+            const response = await fetch(OC.generateUrl(`/apps/budget/api/bills/${billId}/record-payment`), {
+                method: 'POST',
+                headers: { 'requesttoken': OC.requestToken }
+            });
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
+            showSuccess(t('budget', 'Transaction recorded'));
+            await this.loadBillsView();
+            await this.app.loadAccounts();
+        } catch (error) {
+            showError(error.message || t('budget', 'Failed to record the payment'));
         }
     }
 

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **The Bills page now flags payments without a recorded transaction.** A warning card lists bills that were marked paid in the last 60 days without a transaction being created or linked — the situation where the app balance silently detaches from the bank. Each entry has a one-click **Record transaction** repair that books the missing payment (dated the day it was marked paid, both legs for transfers, splits applied). Deliberate skips via the *Skip* button are not flagged ([#274](https://github.com/otherworld-dev/Budget/issues/274))
 - **QAR (Qatari Riyal)** and **JOD (Jordanian Dinar)** are now available as account currencies. JOD amounts use the currency's native 3 decimal places. Automatic exchange rates cover both. Requested in [#321](https://github.com/otherworld-dev/Budget/issues/321)
 
 ### Fixed
